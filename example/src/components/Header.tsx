@@ -87,7 +87,7 @@ export default function Header() {
         </div>
 
         <div className="mx-auto mt-8 flex cursor-pointer flex-col items-center justify-center rounded-[2rem] lg:mt-0">
-          <video className="w-[800px] rounded-lg" src="/demo.mp4" autoPlay muted loop />
+          <video className="w-[800px] rounded-lg" src="https://hellocsv.github.io/HelloCSV/demo.mp4" autoPlay muted loop />
         </div>
       </div>
     </div>
