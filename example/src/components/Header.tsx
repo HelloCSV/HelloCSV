@@ -1,5 +1,4 @@
 import 'tippy.js/dist/tippy.css'; // optional for styling
-import tippy from 'tippy.js';
 import { TableCellsIcon } from '@heroicons/react/24/outline';
 import { GitHubIcon } from './Icons';
 import rainbow from '../assets/images/rainbow.jpg';
@@ -15,7 +14,7 @@ export default function Header() {
       <div className="relative bg-gradient-to-b from-[rgba(0,0,0,0.25)] to-[rgba(0,0,0,0)] py-4 font-semibold text-white">
         <div className="mx-auto mt-4 flex max-w-6xl flex-row justify-between px-4">
           <div className="rubik flex flex-row items-center gap-2">
-            <TableCellsIcon className="size-6" />
+            <img src="/logo-white.png" className="w-8" />
             <span class="text-lg">
               <span class="font-thin">Hello</span><span className="ml-[1px] font-semibold">CSV</span>
             </span>
@@ -47,26 +46,6 @@ export default function Header() {
             <br />✓ Only ~130KB gzipped.
           </div>
 
-          <div className="mb-12 flex cursor-pointer">
-            <button
-              className="cursor-pointer rounded-md bg-slate-800 px-4 py-4 text-sm text-white"
-              onClick={(e) => {
-                navigator.clipboard.writeText('npm install hello-csv');
-                tippy(e.currentTarget as HTMLElement, {
-                  showOnCreate: true,
-                  onHidden: (instance) => {
-                    instance.destroy();
-                  },
-                  content: 'Copied!',
-                  placement: 'top',
-                });
-              }}
-            >
-              <pre>
-                <code>$ npm install hello-csv</code>
-              </pre>
-            </button>
-          </div>
           <div className="flex">
             {/* TODO: Once we get the modal working, we will have this open the importer in a modal */}
             <button
@@ -87,7 +66,7 @@ export default function Header() {
         </div>
 
         <div className="mx-auto mt-8 flex cursor-pointer flex-col items-center justify-center rounded-[2rem] lg:mt-0">
-          <video className="w-[800px] rounded-lg" src="https://hellocsv.github.io/HelloCSV/demo.mp4" autoPlay muted loop />
+          <video className="w-[800px] rounded-lg" src="https://hellocsv.github.io/HelloCSV/demo.mp4" autoPlay muted loop controls />
         </div>
       </div>
     </div>

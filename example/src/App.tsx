@@ -7,11 +7,24 @@ import {
   EmployeeSheetImporter,
   EmployeeImporter,
 } from './components/importers';
+import InstallTabs from './components/InstallTabs';
 
 const App = () => {
   return (
     <div className="min-h-screen w-full">
       <Header />
+
+      <div className="content">
+        <div className="documentation-container">
+          <h3 className="font-title">
+            Installation
+          </h3>
+          <p>
+            Works with any Javascript application, <span className="font-semibold italic">even if you don't use React.</span>.
+          </p>
+        </div>
+        <InstallTabs />
+      </div>
 
       <div className="mb-16">
         <div className="content">
@@ -35,7 +48,7 @@ const App = () => {
               Drop in an uploader into your app in seconds
             </h3>
             <p>
-              
+              A simple, yet powerful Javascript API to fit your needs. Transform, validate, clean, and slice your data.
             </p>
           </div>
 
