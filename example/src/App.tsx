@@ -30,7 +30,7 @@ const App = () => {
         </div>
       </div>
 
-      <div className="section bg-gray-100">
+      <div className="section">
         <div className="content">
           <a id="introduction"></a>
           <div className="documentation-container">
@@ -68,7 +68,7 @@ const App = () => {
         </div>
       </div>
 
-      <div className="section bg-gray-100">
+      <div className="section">
         <EmployeeImporter />
       </div>
 
