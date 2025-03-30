@@ -42,3 +42,13 @@ footer {
     clip-path: polygon(0 0, 100% 0%, 115% 85%, 0 100%);
   }
 }
+
+.section {
+	position: relative;
+	transform: skewY(-3deg);
+	z-index: -1;
+}
+
+.section > * {
+    transform: skewY(3deg);  /* Apply opposite skew to children */
+}
