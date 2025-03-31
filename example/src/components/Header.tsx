@@ -1,6 +1,6 @@
 import 'tippy.js/dist/tippy.css'; // optional for styling
 import rainbow from '../assets/images/rainbow.jpg';
-import logo from '../assets/images/logo-white.png';
+import logo from '../assets/images/logo.png';
 import demo from '../assets/images/demo.mp4';
 
 export default function Header() {
