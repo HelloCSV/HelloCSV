@@ -1,8 +1,8 @@
 import { useState } from 'preact/hooks';
 import Importer, { ImporterState } from 'hello-csv/peer';
-import example1 from '../../assets/datasets/example-1.csv?url';
 import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
+import example1 from '../../assets/datasets/example-1.csv?url';
 
 export default function EmployeeImporter() {
   const [ready, setReady] = useState(false);

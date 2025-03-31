@@ -4,8 +4,8 @@ import Importer, {
   SheetRow,
   ImporterState,
 } from 'hello-csv/peer';
-import studentsAndSchoolsExample from '../../assets/datasets/students_and_schools.csv?url';
 import Content from '../Content';
+import studentsAndSchoolsExample from '../../assets/datasets/students_and_schools.csv?url';
 
 const SCHOOLS_SHEET: SheetDefinition = {
   id: 'schools',
