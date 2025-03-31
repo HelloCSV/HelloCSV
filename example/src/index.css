@@ -41,21 +41,16 @@ footer {
 		overflow: hidden;
     clip-path: polygon(0 0, 100% 0%, 115% 85%, 0 100%);
   }
-}
 
-.section {
-	transform: skewY(-3deg);
-	z-index: -1;
+	.section {
+		@apply -skew-y-3 -z-1;
+	}
+
+	.section > * {
+		@apply skew-y-3;
+	}
 }
 
 .section:nth-of-type(odd) {
 	@apply bg-gray-100;
-}
-
-.section:nth-of-type(even) {
-	@apply bg-white;
-}
-
-.section > * {
-	transform: skewY(3deg);  /* Apply opposite skew to children */
 }
