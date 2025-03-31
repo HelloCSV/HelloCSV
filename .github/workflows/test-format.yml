@@ -1,5 +1,15 @@
-name: test_format
-on: [push]
+name: Run format check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
 jobs:
   format_check:
     timeout-minutes: 10

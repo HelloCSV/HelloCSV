@@ -1,5 +1,15 @@
-name: test_lint
-on: [push]
+name: Lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  workflow_dispatch:
+
 jobs:
   lint:
     timeout-minutes: 10
