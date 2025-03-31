@@ -9,9 +9,9 @@ import {
 } from './components/importers';
 import InstallTabs from './components/InstallTabs';
 
-const App = () => {
+export default function App() {
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full overflow-x-hidden">
       <Header />
 
       <div className="section">
@@ -21,15 +21,13 @@ const App = () => {
             <p>
               Works with any Javascript application,{' '}
               <span className="font-semibold italic">
-                even if you don't use React.
+                {"even if you don't use React."}
               </span>
-              .
             </p>
           </div>
           <InstallTabs />
         </div>
       </div>
-
       <div className="section">
         <div className="content">
           <a id="introduction"></a>
@@ -42,7 +40,7 @@ const App = () => {
             </p>
             <br />
             <p>
-              The best part? It's{' '}
+              {"The best part? It's "}
               <span className="underline decoration-blue-500 decoration-4 underline-offset-6">
                 free and open source.
               </span>
@@ -79,6 +77,4 @@ const App = () => {
       <Footer />
     </div>
   );
-};
-
-export default App;
+}

@@ -32,7 +32,7 @@ export default function HeaderMapper({
   const [hoveredCsvHeader, setHoveredCsvHeader] = useState<string | null>(null);
 
   const data = parsed.data;
-  const csvHeaders = parsed.meta.fields!; // TODO THIS BRANCH: Check why it can be undefined
+  const csvHeaders = parsed.meta.fields!;
 
   const mappingSelectOptions = useMappingAvailableSelectOptions(
     sheetDefinitions,
