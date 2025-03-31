@@ -36,7 +36,9 @@
     "prepublishOnly": "npm run build",
     "predeploy": "cd example && npm install && npm run build",
     "deploy": "gh-pages -d example/dist",
-    "postpublish": "npm run deploy"
+    "postpublish": "npm run deploy",
+    "lint": "eslint --max-warnings=0 \"src/**/*.{ts,tsx}\" --rule \"react-hooks/exhaustive-deps: off\"",
+    "format_check": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\""
   },
   "exports": {
     "./peer": {
