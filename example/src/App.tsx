@@ -28,6 +28,7 @@ export default function App() {
           <InstallTabs />
         </div>
       </div>
+
       <div className="section">
         <div className="content">
           <a id="introduction"></a>
