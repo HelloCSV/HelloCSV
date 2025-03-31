@@ -12,13 +12,13 @@ const navigation = {
   ],
   social: [
     {
-      name: 'Documentation', // TODO: Include a link here or remove
-      href: '#',
+      name: 'Documentation',
+      href: 'https://github.com/HelloCSV/HelloCSV',
       icon: (props: any) => <BookOpenIcon {...props} />,
     },
     {
       name: 'GitHub',
-      href: '#',
+      href: 'https://github.com/HelloCSV/HelloCSV',
       icon: (props: any) => <GitHubIcon {...props} />,
     },
   ],
