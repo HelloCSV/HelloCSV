@@ -61,10 +61,12 @@ function ImporterBody({
     targetRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [mode]);
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const currentSheetData = sheetData.find(
     (sheet) => sheet.sheetId === currentSheetId
   )!;
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const currentSheetDefinition = sheets.find(
     (sheet) => sheet.id === currentSheetId
   )!;
@@ -82,6 +84,7 @@ function ImporterBody({
     parseCsv({
       file,
       onCompleted: async (newParsed) => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const csvHeaders = newParsed.meta.fields!;
 
         const suggestedMappings =
@@ -118,6 +121,7 @@ function ImporterBody({
   }
 
   async function onMappingsSet() {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const mappedData = getMappedData(sheets, columnMappings ?? [], parsedFile!);
 
     const newMappedData =
@@ -197,6 +201,7 @@ function ImporterBody({
 
         {mode === 'mapping' && (
           <HeaderMapper
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             parsed={parsedFile!}
             sheetDefinitions={sheets}
             currentMapping={columnMappings ?? []}

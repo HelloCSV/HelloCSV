@@ -10,6 +10,7 @@ export function parseCsv({
   file: File;
   onCompleted: (data: ParsedFile) => void;
 }) {
+  // eslint-disable-next-line import/no-named-as-default-member
   Papa.parse<CSVParsedData>(file, {
     skipEmptyLines: true,
     header: true,
