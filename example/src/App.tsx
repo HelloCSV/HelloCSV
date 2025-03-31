@@ -9,6 +9,8 @@ import {
 } from './components/importers';
 import InstallTabs from './components/InstallTabs';
 import Section from './components/Section';
+import Content from './components/Content';
+import DocumentContainer from './components/DocumentContainer';
 
 export default function App() {
   return (
@@ -16,8 +18,8 @@ export default function App() {
       <Header />
 
       <Section>
-        <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
-          <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+        <Content>
+          <DocumentContainer>
             <h3 className="mb-6 text-2xl font-bold lg:text-4xl">
               Installation
             </h3>
@@ -27,15 +29,15 @@ export default function App() {
                 {"even if you don't use React."}
               </span>
             </p>
-          </div>
+          </DocumentContainer>
           <InstallTabs />
-        </div>
+        </Content>
       </Section>
 
       <Section className="bg-gray-100">
-        <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
+        <Content>
           <a id="introduction"></a>
-          <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+          <DocumentContainer>
             <h3 className="mb-6 text-2xl font-bold lg:text-4xl">
               Building a CSV uploader is hard
             </h3>
@@ -51,14 +53,14 @@ export default function App() {
                 free and open source.
               </span>
             </p>
-          </div>
-        </div>
+          </DocumentContainer>
+        </Content>
       </Section>
 
       <Section>
-        <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
+        <Content>
           <a id="getting-started"></a>
-          <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+          <DocumentContainer>
             <h3 className="mb-6 text-2xl font-bold lg:text-4xl">
               Drop in an uploader into your app in seconds
             </h3>
@@ -66,10 +68,10 @@ export default function App() {
               A simple, yet powerful Javascript API to fit your needs.
               Transform, validate, clean, and slice your data.
             </p>
-          </div>
+          </DocumentContainer>
 
           <CodeBlock code={EXAMPLE_CODE} />
-        </div>
+        </Content>
       </Section>
 
       <Section className="bg-gray-100">

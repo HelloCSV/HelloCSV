@@ -4,6 +4,8 @@ import Importer, {
   SheetRow,
   ImporterState,
 } from 'hello-csv/peer';
+import Content from '../Content';
+import DocumentContainer from '../DocumentContainer';
 import example2 from '../../assets/datasets/example-2.csv?url';
 
 const COMPANY_SHEET: SheetDefinition = {
@@ -108,9 +110,9 @@ export default function StudentsImporter() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
+    <Content>
       <a id="multiple-sheets"></a>
-      <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+      <DocumentContainer>
         <h3 className="mb-6 text-2xl font-bold lg:text-4xl">Multiple Sheets</h3>
         <div className="container leading-8">
           <p>Sometimes, you need to upload multiple sheets at once.</p>
@@ -136,7 +138,7 @@ export default function StudentsImporter() {
           </a>
           .
         </p>
-      </div>
+      </DocumentContainer>
       <div className="mt-4 flex h-[800px] rounded-lg border border-gray-200 bg-white p-6 px-8">
         <Importer
           sheets={[EMPLOYEE_SHEET, COMPANY_SHEET]}
@@ -161,6 +163,6 @@ export default function StudentsImporter() {
           <h4>Check the console for the output!</h4>
         </div>
       )}
-    </div>
+    </Content>
   );
 }

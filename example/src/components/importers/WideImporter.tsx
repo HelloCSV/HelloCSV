@@ -5,6 +5,7 @@ import Importer, {
   ImporterState,
 } from 'hello-csv/peer';
 import studentsAndSchoolsExample from '../../assets/datasets/students_and_schools.csv?url';
+import Content from '../Content';
 
 const SCHOOLS_SHEET: SheetDefinition = {
   id: 'schools',
@@ -166,7 +167,7 @@ export default function ComplexImporter() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
+    <Content>
       <h1>
         Want to see a demo? Try uploading{' '}
         <a
@@ -200,6 +201,6 @@ export default function ComplexImporter() {
           </div>
         )}
       </div>
-    </div>
+    </Content>
   );
 }

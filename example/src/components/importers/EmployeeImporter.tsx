@@ -1,6 +1,8 @@
 import { useState } from 'preact/hooks';
 import Importer, { ImporterState } from 'hello-csv/peer';
 import example1 from '../../assets/datasets/example-1.csv?url';
+import Content from '../Content';
+import DocumentContainer from '../DocumentContainer';
 
 export default function EmployeeImporter() {
   const [ready, setReady] = useState(false);
@@ -19,9 +21,9 @@ export default function EmployeeImporter() {
     setReady(true);
   };
   return (
-    <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
+    <Content>
       <a id="basic-example"></a>
-      <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+      <DocumentContainer>
         <h3 className="mb-6 text-2xl font-bold lg:text-4xl">Basic Example</h3>
         <div className="container leading-8">
           <p>
@@ -37,7 +39,7 @@ export default function EmployeeImporter() {
           </a>
           .
         </p>
-      </div>
+      </DocumentContainer>
       <div className="mt-4 flex max-h-[800px] rounded-lg border border-gray-200 bg-white p-6 px-8">
         <Importer
           maxFileSizeInBytes={10 * 1024 * 1024} // 10MB
@@ -130,6 +132,6 @@ export default function EmployeeImporter() {
           <h4>Check the console for the output!</h4>
         </div>
       )}
-    </div>
+    </Content>
   );
 }
