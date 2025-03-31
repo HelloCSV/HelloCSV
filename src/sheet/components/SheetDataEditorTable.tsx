@@ -147,7 +147,6 @@ export default function SheetDataEditorTable({
                 <td key={cell.id} className={cellClass}>
                   <SheetDataEditorCell
                     columnDefinition={
-                      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                       sheetDefinition.columns.find((c) => c.id === columnId)!
                     }
                     allData={allData}

@@ -32,7 +32,6 @@ export default function HeaderMapper({
   const [hoveredCsvHeader, setHoveredCsvHeader] = useState<string | null>(null);
 
   const data = parsed.data;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const csvHeaders = parsed.meta.fields!;
 
   const mappingSelectOptions = useMappingAvailableSelectOptions(

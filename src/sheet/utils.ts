@@ -58,7 +58,6 @@ export function findRowIndex(
   sheetId: string,
   row: SheetRow
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return allData.find((d) => d.sheetId === sheetId)!.rows.indexOf(row);
 }
 
@@ -104,7 +103,6 @@ export function useFilteredRowData(
     if (searchPhrase.trim() !== '') {
       rows = rows.filter((row) =>
         Object.values(row).some((cellValue) =>
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           normalizeValue(cellValue)?.includes(normalizeValue(searchPhrase)!)
         )
       );

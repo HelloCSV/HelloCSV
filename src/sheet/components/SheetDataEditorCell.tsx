@@ -40,7 +40,7 @@ export default function SheetDataEditorCell({
         inputRef.current.focus();
       }
     }
-  }, [editMode]);
+  }, [editMode, clearRowsSelection]);
 
   const extractedValue =
     columnDefinition.type === 'enum'
