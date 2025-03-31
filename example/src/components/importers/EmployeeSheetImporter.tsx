@@ -108,27 +108,28 @@ export default function StudentsImporter() {
   };
 
   return (
-    <div className="content">
+    <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
       <a id="multiple-sheets"></a>
-      <div className="documentation-container">
-        <h3 className="font-title">
-          Multiple Sheets
-        </h3>
+      <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+        <h3 className="mb-6 text-2xl font-bold lg:text-4xl">Multiple Sheets</h3>
         <div className="container leading-8">
+          <p>Sometimes, you need to upload multiple sheets at once.</p>
           <p>
-            Sometimes, you need to upload multiple sheets at once.
+            For example, imagine we want to upload both{' '}
+            <code className="rounded-md bg-gray-200 p-1">employees</code> and{' '}
+            <code className="rounded-md bg-gray-200 p-1">companies</code>.
           </p>
           <p>
-            For example, imagine we want to upload both <code className="bg-gray-200 p-1 rounded-md">employees</code> and <code className="bg-gray-200 p-1 rounded-md">companies</code>.
+            However, there is a{' '}
+            <span className="font-semibold">many-to-one</span> relationship
+            between employees and companies.
           </p>
           <p>
-            However, there is a <span className="font-semibold">many-to-one</span> relationship between employees and companies.
-          </p>
-          <p>
-            In this case, HelloCSV allows you to upload a single file, and parse it into two different sheets.
+            In this case, HelloCSV allows you to upload a single file, and parse
+            it into two different sheets.
           </p>
         </div>
-        <p className="mt-8 text-lg underline decoration-blue-500 underline-offset-6 decoration-4">
+        <p className="mt-8 text-lg underline decoration-blue-500 decoration-4 underline-offset-6">
           Try uploading{' '}
           <a className="text-blue-500 hover:text-blue-600" href={example2}>
             this file

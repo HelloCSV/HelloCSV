@@ -166,7 +166,7 @@ export default function ComplexImporter() {
   };
 
   return (
-    <div className="content">
+    <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
       <h1>
         Want to see a demo? Try uploading{' '}
         <a

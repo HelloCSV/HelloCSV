@@ -8,16 +8,19 @@ import {
   EmployeeImporter,
 } from './components/importers';
 import InstallTabs from './components/InstallTabs';
+import Section from './components/Section';
 
 export default function App() {
   return (
     <div className="min-h-screen w-full overflow-x-hidden">
       <Header />
 
-      <div className="section">
-        <div className="content">
-          <div className="documentation-container">
-            <h3 className="font-title">Installation</h3>
+      <Section>
+        <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
+          <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+            <h3 className="mb-6 text-2xl font-bold lg:text-4xl">
+              Installation
+            </h3>
             <p>
               Works with any Javascript application,{' '}
               <span className="font-semibold italic">
@@ -27,13 +30,15 @@ export default function App() {
           </div>
           <InstallTabs />
         </div>
-      </div>
+      </Section>
 
-      <div className="section">
-        <div className="content">
+      <Section className="bg-gray-100">
+        <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
           <a id="introduction"></a>
-          <div className="documentation-container">
-            <h3 className="font-title">Building a CSV uploader is hard</h3>
+          <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+            <h3 className="mb-6 text-2xl font-bold lg:text-4xl">
+              Building a CSV uploader is hard
+            </h3>
             <p className="text-lg">
               HelloCSV is a javascript library that makes it easy to drop in a
               powerful, intuitive, and elegant CSV uploader that works with any
@@ -48,13 +53,13 @@ export default function App() {
             </p>
           </div>
         </div>
-      </div>
+      </Section>
 
-      <div className="section">
-        <div className="content">
+      <Section>
+        <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
           <a id="getting-started"></a>
-          <div className="documentation-container">
-            <h3 className="font-title">
+          <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+            <h3 className="mb-6 text-2xl font-bold lg:text-4xl">
               Drop in an uploader into your app in seconds
             </h3>
             <p>
@@ -65,15 +70,15 @@ export default function App() {
 
           <CodeBlock code={EXAMPLE_CODE} />
         </div>
-      </div>
+      </Section>
 
-      <div className="section">
+      <Section className="bg-gray-100">
         <EmployeeImporter />
-      </div>
+      </Section>
 
-      <div className="section mb-16">
+      <Section>
         <EmployeeSheetImporter />
-      </div>
+      </Section>
 
       <Footer />
     </div>

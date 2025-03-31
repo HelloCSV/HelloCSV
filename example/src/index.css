@@ -4,53 +4,9 @@
   font-family: 'Rubik', sans-serif;
 }
 
-footer {
-	@apply h-96 bg-[#263E52] text-[#f4f4f4] text-2xl font-light pt-40 pb-40;
-}
-
-.theme-wrapper {
-	@apply flex flex-wrap;
-}
-
-.theme-card {
-	@apply w-40 h-40 bg-[#f4f4f4] rounded-lg shadow-lg;
-}
-
-.theme-card {
-	@apply hover:bg-[#eee] transition-all duration-300 cursor-pointer flex-grow p-4 m-2 rounded-lg shadow-lg;
-}
-
-.theme-card .theme-color {
-	@apply flex-grow m-2 rounded-lg h-12;
-}
-
-.font-title {
-	@apply text-2xl lg:text-4xl font-bold mb-6 font-bold;
-}
-
-.content {
-	@apply py-10 lg:py-24 max-w-6xl mx-auto px-4 text-lg space-y-2;
-}
-
-.documentation-container {
-	@apply m-auto lg:px-8 text-gray-800 md:w-[650px] mb-12;
-}
-
 @media (min-width: 1024px) {
   .clip-diagonal {
-		overflow: hidden;
+    @apply overflow-hidden;
     clip-path: polygon(0 0, 100% 0%, 115% 85%, 0 100%);
   }
-
-	.section {
-		@apply -skew-y-3 -z-1;
-	}
-
-	.section > * {
-		@apply skew-y-3;
-	}
-}
-
-.section:nth-of-type(odd) {
-	@apply bg-gray-100;
 }

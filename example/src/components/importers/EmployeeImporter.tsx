@@ -19,21 +19,18 @@ export default function EmployeeImporter() {
     setReady(true);
   };
   return (
-    <div className="content">
+    <div className="mx-auto max-w-6xl space-y-2 px-4 py-10 text-lg lg:py-24">
       <a id="basic-example"></a>
-      <div className="documentation-container">
-        <h3 className="font-title">
-          Basic Example
-        </h3>
+      <div className="m-auto mb-12 text-gray-800 md:w-[650px] lg:px-8">
+        <h3 className="mb-6 text-2xl font-bold lg:text-4xl">Basic Example</h3>
         <div className="container leading-8">
           <p>
-            Imagine we are trying to set up an uploader that uploads a CSV of <code className="bg-gray-200 p-1 rounded-md">employees</code>.
+            Imagine we are trying to set up an uploader that uploads a CSV of{' '}
+            <code className="rounded-md bg-gray-200 p-1">employees</code>.
           </p>
-          <p>
-            HelloCSV makes this a breeze.
-          </p>
+          <p>HelloCSV makes this a breeze.</p>
         </div>
-        <p className="mt-8 text-lg underline decoration-blue-500 underline-offset-6 decoration-4">
+        <p className="mt-8 text-lg underline decoration-blue-500 decoration-4 underline-offset-6">
           Try uploading{' '}
           <a className="text-blue-500 hover:text-blue-600" href={example1}>
             this file
