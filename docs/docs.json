@@ -1,12 +1,17 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "HelloCSV",
+  "logo": {
+    "light": "/images/logo.png",
+    "dark": "/images/logo.png"
+  },
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
     "dark": "#15803D"
   },
+  "favicon": "/images/logo.png",
   "navigation": {
     "tabs": [
       {
@@ -15,9 +20,43 @@
           {
             "group": "Get Started",
             "pages": [
-              "introduction",
-              "quickstart",
-              "development"
+              "get-started/introduction",
+              "get-started/why",
+              "get-started/usage",
+              "get-started/demo"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "api/importer-props",
+              "api/sheet-definition-props",
+              "api/column-types",
+              "api/common-column-props",
+              "api/importer-state",
+              "api/sheet-state",
+              "api/validators",
+              "api/transformers",
+              "api/importer-validation-error"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["configuration/peer-vs-bundled", "configuration/react"]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "customization/height-and-width",
+              "customization/theme-styles"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "development/setup",
+              "development/no-build-example",
+              "development/docs"
             ]
           }
         ]
@@ -27,13 +66,8 @@
       "anchors": [
         {
           "anchor": "Demo",
-          "href": "https://mintlify.com/docs",
+          "href": "https://hellocsv.github.io/HelloCSV/",
           "icon": "play"
-        },
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/community",
-          "icon": "book-open-cover"
         },
         {
           "anchor": "Source Code",
@@ -43,15 +77,11 @@
       ]
     }
   },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
   "navbar": {
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@hellocsv.io"
+        "href": "mailto:hi@hellocsv.com"
       }
     ],
     "primary": {
@@ -62,10 +92,7 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/HelloCSV/HelloCSV"
     }
   }
 }
-

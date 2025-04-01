@@ -1,0 +1,102 @@
+---
+title: "Importer Props"
+---
+
+This section details each property available for the Importer component.
+
+## sheets
+
+**Type:** `SheetDefinition[]`
+
+**Required:** Yes
+
+**Description:**  
+Array of sheet definitions for importing data. This property defines the structure of the data to be imported.
+
+---
+
+## onComplete
+
+**Type:** `(data: ImporterState, onProgress: (progress: number) => void) => Promise<void>`
+
+**Required:** Yes
+
+**Description:**  
+A callback function invoked when the import process completes. It receives the final data and a progress callback.
+
+---
+
+## theme
+
+**Type:** `'default' | 'theme-1' | 'theme-2'`
+
+**Required:** No (Default: `default`)
+
+**Description:**  
+Determines the visual theme of the importer component.
+
+---
+
+## onDataColumnsMapped
+
+**Type:** `(data: SheetState) => Promise<SheetState> | SheetState`
+
+**Required:** No
+
+**Description:**  
+Callback executed after CSV columns are mapped to the sheet definitions. Allows for custom post-mapping processing.
+
+---
+
+## allowManualDataEntry
+
+**Type:** `boolean`
+
+**Required:** No (Default: `false`)
+
+**Description:**  
+Indicates whether manual data entry is allowed during the preview phase.
+
+---
+
+## locale
+
+**Type:** `'en' | 'fr'`
+
+**Required:** No (Default: `en`)
+
+**Description:**  
+Specifies the locale for internationalization purposes.
+
+---
+
+## preventUploadOnValidationErrors
+
+**Type:** `boolean | (errors: ImporterValidationError[]) => boolean`
+
+**Required:** No (Default: `false`)
+
+**Description:**  
+Controls whether file upload should be prevented when validation errors occur. Can be a boolean or a function that returns a boolean.
+
+---
+
+## maxFileSizeInBytes
+
+**Type:** `number`
+
+**Required:** No (Default: `20971520` i.e., 20MB)
+
+**Description:**  
+Sets the maximum allowed file size in bytes. Files exceeding this limit will be rejected.
+
+---
+
+## customSuggestedMapper
+
+**Type:** `(sheetDefinitions: SheetDefinition[], csvHeaders: string[]) => ColumnMapping[] | Promise<ColumnMapping[]>`
+
+**Required:** No
+
+**Description:**  
+Provides a custom function to generate suggested mappings based on CSV headers.
