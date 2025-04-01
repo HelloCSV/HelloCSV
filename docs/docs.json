@@ -29,15 +29,15 @@
           {
             "group": "API Reference",
             "pages": [
-              "api/importer-props",
-              "api/sheet-definition-props",
-              "api/column-types",
-              "api/common-column-props",
-              "api/importer-state",
-              "api/sheet-state",
-              "api/validators",
-              "api/transformers",
-              "api/importer-validation-error"
+              "api-reference/importer-props",
+              "api-reference/sheet-definition-props",
+              "api-reference/column-types",
+              "api-reference/common-column-props",
+              "api-reference/importer-state",
+              "api-reference/sheet-state",
+              "api-reference/validators",
+              "api-reference/transformers",
+              "api-reference/importer-validation-error"
             ]
           },
           {
