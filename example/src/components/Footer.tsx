@@ -3,7 +3,7 @@ import { GitHubIcon } from './Icons';
 const navigation = {
   main: [
     { name: 'About', href: '#' },
-    { name: 'Documentation', href: 'https://github.com/HelloCSV/HelloCSV' },
+    { name: 'Documentation', href: 'https://hellocsv.mintlify.app/' },
     { name: 'GitHub', href: 'https://github.com/HelloCSV/HelloCSV' },
     {
       name: 'Support',
@@ -13,7 +13,7 @@ const navigation = {
   social: [
     {
       name: 'Documentation',
-      href: 'https://github.com/HelloCSV/HelloCSV',
+      href: 'https://hellocsv.mintlify.app/',
       icon: (props: any) => <BookOpenIcon {...props} />,
     },
     {

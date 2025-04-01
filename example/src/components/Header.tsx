@@ -68,7 +68,7 @@ export default function Header() {
             </a>
             <a
               className="text-md px-4 py-2.5"
-              href="https://github.com/HelloCSV/HelloCSV"
+              href="https://hellocsv.mintlify.app/"
               target="_blank"
               rel="noreferrer"
             >
