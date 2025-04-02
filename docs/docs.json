@@ -3,8 +3,8 @@
   "theme": "mint",
   "name": "HelloCSV",
   "logo": {
-    "light": "/images/logo.png",
-    "dark": "/images/logo.png"
+    "light": "/images/logo-light.svg",
+    "dark": "/images/logo-dark.svg"
   },
   "colors": {
     "primary": "#4f39f6",
