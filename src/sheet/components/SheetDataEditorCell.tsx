@@ -40,7 +40,9 @@ export default function SheetDataEditorCell({
         inputRef.current.focus();
       }
     }
-  }, [editMode, clearRowsSelection]);
+    // We don't want to include clearRowsSelection in the dependencies array, since it's should impact the clearing itself
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editMode]);
 
   const extractedValue =
     columnDefinition.type === 'enum'
