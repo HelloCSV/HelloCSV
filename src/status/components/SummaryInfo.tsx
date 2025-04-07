@@ -10,16 +10,12 @@ type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 type Props = {
   sheetData: SheetState[];
   mode: Mode;
-  importStatistics?: ImportStatistics;
+  statistics?: ImportStatistics;
   rowFile?: File;
 };
 
-export default function SummaryInfo({
-  sheetData,
-  importStatistics,
-  rowFile,
-}: Props) {
-  const totalRows = getTotalRows(sheetData);
+export default function SummaryInfo({ sheetData, statistics, rowFile }: Props) {
+  const totalRows = statistics?.totalRows || getTotalRows(sheetData);
 
   return (
     <div className="flex flex-row px-4 pt-3 pb-2">
@@ -66,10 +62,10 @@ export default function SummaryInfo({
               <div className="text-md my-2 font-medium">
                 {totalRows} records processed
               </div>
-              {importStatistics && (
+              {statistics && (
                 <div className="my-2 text-sm text-gray-500">
-                  {importStatistics.recordsImported} records imported ·{' '}
-                  {importStatistics.recordsFailed} records failed to import
+                  {statistics.imported} records imported · {statistics.failed}{' '}
+                  records failed to import
                 </div>
               )}
             </div>

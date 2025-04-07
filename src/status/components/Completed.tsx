@@ -8,20 +8,20 @@ type Mode = Extract<ImporterMode, 'completed'>;
 
 export default function Completed({
   sheetData,
-  importStatistics,
+  statistics,
   mode,
   rowFile,
   resetState,
 }: {
   sheetData: SheetState[];
-  importStatistics?: ImportStatistics;
+  statistics?: ImportStatistics;
   mode: Mode;
   rowFile?: File;
   resetState: () => void;
 }) {
   const { t } = useTranslations();
   const totalRecords = getTotalRows(sheetData);
-  const recordsImported = importStatistics?.recordsImported ?? 0;
+  const recordsImported = statistics?.imported ?? 0;
 
   return (
     <div className="flex flex-col space-y-6">
@@ -29,7 +29,7 @@ export default function Completed({
         variant="success"
         header={t('importStatus.importSuccessful')}
         description={t(
-          `importStatus.successDescription${importStatistics ? 'WithStats' : ''}`,
+          `importStatus.successDescription${statistics ? 'WithStats' : ''}`,
           {
             totalRecords,
             recordsImported,
@@ -39,7 +39,7 @@ export default function Completed({
       <Summary
         mode={mode}
         sheetData={sheetData}
-        importStatistics={importStatistics}
+        statistics={statistics}
         rowFile={rowFile}
       />
       <div className="mt-auto flex-none">

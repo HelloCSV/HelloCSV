@@ -1,4 +1,5 @@
 export interface ImportStatistics {
-  recordsImported: number;
-  recordsFailed: number;
+  totalRows: number;
+  imported: number;
+  failed: number;
 }

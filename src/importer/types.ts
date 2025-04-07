@@ -101,7 +101,7 @@ export type ImporterAction =
   | { type: 'SHEET_CHANGED'; payload: { sheetId: string } } // Calls onComplete callback with state.sheetData, changes mode to 'submit'
   | { type: 'SUBMIT' } // Calls onComplete callback with state.sheetData, changes mode to 'submit'
   | { type: 'PROGRESS'; payload: { progress: number } } // Updates importProgress
-  | { type: 'COMPLETED' } // Changes the mode to 'completed'
+  | { type: 'COMPLETED'; payload: { importStatistics?: ImportStatistics } } // Changes the mode to 'completed'
   | { type: 'FAILED' } // Changes the mode to 'failed' when importing failed
   | { type: 'PREVIEW' } // Changes the mode to 'preview' - used when uploading failed and user wants to retry
   | { type: 'MAPPING' } // Changes the mode to 'mapping' - used to go back to mappings screen in case there were some mapping issues

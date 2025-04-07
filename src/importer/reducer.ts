@@ -155,7 +155,11 @@ const reducer = (
     case 'PROGRESS':
       return { ...state, importProgress: action.payload.progress };
     case 'COMPLETED':
-      return { ...state, mode: 'completed' };
+      return {
+        ...state,
+        mode: 'completed',
+        importStatistics: action.payload.importStatistics,
+      };
     case 'FAILED':
       return { ...state, mode: 'failed' };
     case 'PREVIEW':

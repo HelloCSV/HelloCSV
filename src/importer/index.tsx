@@ -155,17 +155,23 @@ function ImporterBody({
         sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
       );
 
-      await onComplete({ ...state, sheetData: data }, (progress) => {
-        dispatch({ type: 'PROGRESS', payload: { progress } });
+      const statistics = await onComplete(
+        { ...state, sheetData: data },
+        (progress) => {
+          dispatch({ type: 'PROGRESS', payload: { progress } });
+        }
+      );
+
+      await delay(400);
+      dispatch({ type: 'PROGRESS', payload: { progress: 100 } });
+      await delay(200);
+      dispatch({
+        type: 'COMPLETED',
+        payload: { importStatistics: statistics ?? undefined },
       });
     } catch (e) {
       dispatch({ type: 'FAILED' });
-      return;
     }
-    await delay(400);
-    dispatch({ type: 'PROGRESS', payload: { progress: 100 } });
-    await delay(200);
-    dispatch({ type: 'COMPLETED' });
   }
 
   function onBackToPreview() {
@@ -263,8 +269,7 @@ function ImporterBody({
             onBackToPreview={onBackToPreview}
             resetState={resetState}
             sheetData={sheetData}
-            columnMappings={columnMappings ?? []}
-            importStatistics={importStatistics}
+            statistics={importStatistics}
             rowFile={state.rowFile}
           />
         )}

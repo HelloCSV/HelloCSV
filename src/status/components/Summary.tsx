@@ -8,14 +8,14 @@ type Mode = Extract<ImporterMode, 'failed' | 'completed'>;
 interface Props {
   mode: Mode;
   sheetData: SheetState[];
-  importStatistics?: ImportStatistics;
+  statistics?: ImportStatistics;
   rowFile?: File;
 }
 
 export default function Summary({
   mode,
   sheetData,
-  importStatistics,
+  statistics,
   rowFile,
 }: Props) {
   return (
@@ -29,7 +29,7 @@ export default function Summary({
         <SummaryInfo
           mode={mode}
           sheetData={sheetData}
-          importStatistics={importStatistics}
+          statistics={statistics}
           rowFile={rowFile}
         />
       </div>

@@ -13,7 +13,7 @@ interface Props {
   onBackToPreview: () => void;
   resetState: () => void;
   sheetData: SheetState[];
-  importStatistics?: ImportStatistics;
+  statistics?: ImportStatistics;
   rowFile?: File;
 }
 
@@ -24,7 +24,7 @@ export default function ImportStatus({
   onRetry,
   onBackToPreview,
   resetState,
-  importStatistics,
+  statistics,
   rowFile,
 }: Props) {
   return (
@@ -48,7 +48,7 @@ export default function ImportStatus({
             <Completed
               mode={mode}
               sheetData={sheetData}
-              importStatistics={importStatistics}
+              statistics={statistics}
               rowFile={rowFile}
               resetState={resetState}
             />
