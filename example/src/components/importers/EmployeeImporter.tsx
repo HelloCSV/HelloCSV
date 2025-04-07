@@ -40,7 +40,7 @@ export default function EmployeeImporter() {
           .
         </p>
       </DocumentContainer>
-      <div className="mt-4 flex max-h-[800px] rounded-lg border border-gray-200 bg-white p-6 px-8">
+      <div className="mt-4 flex max-h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
         <Importer
           maxFileSizeInBytes={10 * 1024 * 1024} // 10MB
           sheets={[

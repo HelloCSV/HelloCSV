@@ -13,69 +13,72 @@
   },
   "favicon": "/images/logo.png",
   "navigation": {
-    "tabs": [
+    "versions": [
       {
-        "tab": "Guides",
+        "version": "0.1.0",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
-              "get-started/introduction",
-              "get-started/why",
-              "get-started/usage",
-              "get-started/demo"
+              "common/get-started/introduction",
+              "common/get-started/why",
+              "common/get-started/usage",
+              "common/get-started/demo"
             ]
           },
           {
             "group": "API Reference",
             "pages": [
-              "api-reference/importer-props",
-              "api-reference/sheet-definition-props",
-              "api-reference/column-types",
-              "api-reference/common-column-props",
-              "api-reference/importer-state",
-              "api-reference/sheet-state",
-              "api-reference/validators",
-              "api-reference/transformers",
-              "api-reference/importer-validation-error"
+              "v0.1.0/api-reference/importer-props",
+              "v0.1.0/api-reference/sheet-definition-props",
+              "v0.1.0/api-reference/column-types",
+              "v0.1.0/api-reference/common-column-props",
+              "v0.1.0/api-reference/importer-state",
+              "v0.1.0/api-reference/sheet-state",
+              "v0.1.0/api-reference/validators",
+              "v0.1.0/api-reference/transformers",
+              "v0.1.0/api-reference/importer-validation-error"
             ]
           },
           {
             "group": "Configuration",
-            "pages": ["configuration/peer-vs-bundled", "configuration/react"]
+            "pages": [
+              "common/configuration/peer-vs-bundled",
+              "common/configuration/react"
+            ]
           },
           {
             "group": "Customization",
             "pages": [
-              "customization/height-and-width",
-              "customization/theme-styles"
+              "common/customization/height-and-width",
+              "common/customization/theme-styles"
             ]
           },
           {
             "group": "Development",
             "pages": [
-              "development/setup",
-              "development/no-build-example",
-              "development/docs"
+              "common/development/setup",
+              "common/development/no-build-example",
+              "common/development/docs"
             ]
           }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Demo",
-          "href": "https://hellocsv.github.io/HelloCSV/",
-          "icon": "play"
-        },
-        {
-          "anchor": "Source Code",
-          "href": "https://github.com/HelloCSV/HelloCSV",
-          "icon": "github"
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Demo",
+              "href": "https://hellocsv.github.io/HelloCSV/",
+              "icon": "play"
+            },
+            {
+              "anchor": "Source Code",
+              "href": "https://github.com/HelloCSV/HelloCSV",
+              "icon": "github"
+            }
+          ]
         }
-      ]
-    }
+      }
+    ]
   },
   "navbar": {
     "links": [
