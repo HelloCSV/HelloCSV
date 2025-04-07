@@ -17,12 +17,19 @@ Array of sheet definitions for importing data. This property defines the structu
 
 ## onComplete
 
-**Type:** `(data: ImporterState, onProgress: (progress: number) => void) => Promise<void>`
+**Type:** `(data: ImporterState, onProgress: (progress: number) => void) => Promise<ImportStatistics | void>`
 
 **Required:** Yes
 
 **Description:**  
 A callback function invoked when the import process completes. It receives the final data and a progress callback.
+An `ImportStatistics` object can be returned to provide detailed information about the import results. The statistics object has the following properties:
+- `totalRows`: Total number of rows processed
+- `imported`: Number of rows successfully imported
+- `failed`: Number of rows that failed to import
+- `skipped`: Number of rows that were skipped
+
+These statistics will be displayed in the import summary and can be used to show detailed import results to the user.
 
 ---
 
