@@ -1,11 +1,11 @@
 import {
   InformationCircleIcon,
   CheckCircleIcon,
-  XCircleIcon,
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
 import { ReactNode } from 'preact/compat';
 
-type VariantType = 'info' | 'success' | 'error';
+type VariantType = 'info' | 'success' | 'error' | 'warning';
 
 interface Props {
   variant?: VariantType;
@@ -37,13 +37,23 @@ const baseClasses: Record<VariantType, { icon?: ReactNode; classes?: string }> =
     },
     error: {
       icon: (
-        <XCircleIcon
+        <ExclamationTriangleIcon
           className="text-hello-csv-danger-light size-5"
           aria-hidden="true"
         />
       ),
       classes:
         'bg-hello-csv-danger-extra-light text-hello-csv-danger rounded-md p-4',
+    },
+    warning: {
+      icon: (
+        <ExclamationTriangleIcon
+          className="text-hello-csv-warning-light size-5"
+          aria-hidden="true"
+        />
+      ),
+      classes:
+        'bg-hello-csv-warning-extra-light text-hello-csv-warning rounded-md p-4',
     },
   };
 

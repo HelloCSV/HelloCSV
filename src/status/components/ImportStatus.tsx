@@ -29,7 +29,6 @@ export default function ImportStatus({
 }: Props) {
   return (
     <div className="flex h-full flex-col space-y-4">
-      <div className="text-2xl">Data import</div>
       <div className="flex flex-col space-y-4">
         <div>
           {mode === 'submit' && (
@@ -41,7 +40,13 @@ export default function ImportStatus({
           )}
 
           {mode === 'failed' && (
-            <Failed onRetry={onRetry} onBackToPreview={onBackToPreview} />
+            <Failed
+              mode={mode}
+              onRetry={onRetry}
+              onBackToPreview={onBackToPreview}
+              rowFile={rowFile}
+              sheetData={sheetData}
+            />
           )}
 
           {mode === 'completed' && (

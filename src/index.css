@@ -36,6 +36,10 @@
     --hello-csv-color-danger-extra-light
   );
   --color-hello-csv-warning: var(--hello-csv-color-warning);
+  --color-hello-csv-warning-light: var(--hello-csv-color-warning-light);
+  --color-hello-csv-warning-extra-light: var(
+    --hello-csv-color-warning-extra-light
+  );
   --color-hello-csv-info: var(--hello-csv-color-info);
   --color-hello-csv-muted: var(--hello-csv-color-muted);
   --color-hello-csv-muted-light: var(--hello-csv-color-muted-light);
@@ -54,8 +58,10 @@
     --hello-csv-color-success-extra-light: theme(colors.green.50);
     --hello-csv-color-danger: theme(colors.red.600);
     --hello-csv-color-danger-light: theme(colors.red.500);
-    --hello-csv-color-danger-extra-light: theme(colors.red.200);
-    --hello-csv-color-warning: theme(colors.yellow.400);
+    --hello-csv-color-danger-extra-light: theme(colors.red.50);
+    --hello-csv-color-warning: theme(colors.yellow.700);
+    --hello-csv-color-warning-light: theme(colors.yellow.400);
+    --hello-csv-color-warning-extra-light: theme(colors.yellow.50);
     --hello-csv-color-info: theme(colors.sky.500);
     --hello-csv-color-muted: theme(colors.gray.50);
     --hello-csv-color-muted-light: theme(colors.gray.100);
@@ -74,7 +80,9 @@
     --hello-csv-color-danger: theme(colors.red.500);
     --hello-csv-color-danger-light: theme(colors.red.400);
     --hello-csv-color-danger-extra-light: theme(colors.red.100);
-    --hello-csv-color-warning: theme(colors.orange.400);
+    --hello-csv-color-warning: theme(colors.orange.700);
+    --hello-csv-color-warning-light: theme(colors.orange.400);
+    --hello-csv-color-warning-extra-light: theme(colors.orange.50);
     --hello-csv-color-info: theme(colors.sky.400);
     --hello-csv-color-muted: theme(colors.gray.50);
     --hello-csv-color-muted-light: theme(colors.gray.100);
@@ -92,8 +100,10 @@
     --hello-csv-color-success-extra-light: theme(colors.lime.400);
     --hello-csv-color-danger: theme(colors.red.700);
     --hello-csv-color-danger-light: theme(colors.red.600);
-    --hello-csv-color-danger-extra-light: theme(colors.red.400);
-    --hello-csv-color-warning: theme(colors.yellow.600);
+    --hello-csv-color-danger-extra-light: theme(colors.red.50);
+    --hello-csv-color-warning: theme(colors.orange.700);
+    --hello-csv-color-warning-light: theme(colors.orange.400);
+    --hello-csv-color-warning-extra-light: theme(colors.orange.50);
     --hello-csv-color-info: theme(colors.sky.700);
     --hello-csv-color-muted: theme(colors.gray.50);
     --hello-csv-color-muted-light: theme(colors.gray.100);

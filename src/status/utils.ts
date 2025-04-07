@@ -19,7 +19,7 @@ function exportCsv(sheetId: string, rows: SheetRow[]) {
   const blob = getCsv(rows);
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `${sheetId}_processed_${new Date().toISOString()}.Csv`;
+  link.download = `${sheetId}_${new Date().toISOString().split('T')[0]}.csv`;
   link.click();
 }
 

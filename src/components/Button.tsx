@@ -6,8 +6,7 @@ export type ButtonVariant =
   | 'secondary'
   | 'tertiary'
   | 'success'
-  | 'danger'
-  | 'warning';
+  | 'danger';
 
 interface Props {
   children?: ReactNode;
@@ -29,7 +28,6 @@ const baseClasses = cva('text-center inline-block font-semibold', {
         'bg-white text-gray-900 ring-1 shadow-xs ring-hello-csv-tertiary ring-inset',
       success: 'shadow-xs bg-hello-csv-success text-white',
       danger: 'shadow-xs bg-hello-csv-danger text-white',
-      warning: 'shadow-xs bg-hello-csv-warning text-white',
     },
     size: {
       xs: 'px-2 py-1 rounded-sm text-xs',
@@ -72,12 +70,6 @@ const baseClasses = cva('text-center inline-block font-semibold', {
       disabled: false,
       className:
         'hover:bg-hello-csv-danger-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hello-csv-danger',
-    },
-    {
-      variant: 'warning',
-      disabled: false,
-      className:
-        'hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:opacity-80',
     },
   ],
   defaultVariants: {

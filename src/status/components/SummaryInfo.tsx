@@ -2,8 +2,12 @@ import { ImporterMode, ImportStatistics, SheetState } from '../../types';
 import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
 import { formatFileSize } from '../../uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
-import { CheckCircleIcon } from '@heroicons/react/24/solid';
-import { Button } from '../../components';
+import {
+  CheckCircleIcon,
+  ExclamationCircleIcon,
+  ExclamationTriangleIcon,
+} from '@heroicons/react/24/solid';
+import { Button, Badge } from '../../components';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
@@ -12,9 +16,16 @@ type Props = {
   mode: Mode;
   statistics?: ImportStatistics;
   rowFile?: File;
+  completedWithErrors?: boolean;
 };
 
-export default function SummaryInfo({ sheetData, statistics, rowFile }: Props) {
+export default function SummaryInfo({
+  sheetData,
+  statistics,
+  rowFile,
+  completedWithErrors,
+  mode,
+}: Props) {
   const totalRows = statistics?.totalRows || getTotalRows(sheetData);
 
   return (
@@ -39,7 +50,7 @@ export default function SummaryInfo({ sheetData, statistics, rowFile }: Props) {
               </div>
               <div className="mt-5">
                 <Button
-                  variant="secondary"
+                  variant="tertiary"
                   outline
                   onClick={() => exportAllCsvs(sheetData)}
                 >
@@ -53,19 +64,29 @@ export default function SummaryInfo({ sheetData, statistics, rowFile }: Props) {
         <div>
           <div className="flex flex-row">
             <div className="my-2 mr-5 text-center">
-              <CheckCircleIcon className="text-hello-csv-success-light h-8 w-8" />
+              {mode === 'failed' ? (
+                <ExclamationTriangleIcon className="text-hello-csv-danger-light h-8 w-8" />
+              ) : completedWithErrors ? (
+                <ExclamationCircleIcon className="text-hello-csv-warning-light h-8 w-8" />
+              ) : (
+                <CheckCircleIcon className="text-hello-csv-success-light h-8 w-8" />
+              )}
             </div>
             <div className="flex-1">
               <div className="my-2 text-sm font-light uppercase">
                 Import results
               </div>
-              <div className="text-md my-2 font-medium">
-                {totalRows} records processed
-              </div>
+              <div className="text-md my-2 font-medium">{totalRows} rows</div>
               {statistics && (
                 <div className="my-2 text-sm text-gray-500">
-                  {statistics.imported} records imported · {statistics.failed}{' '}
-                  records failed to import
+                  {statistics.skipped && `${statistics.skipped} skipped · `}
+                  {statistics.failed && `${statistics.failed} failed · `}
+                  {statistics.imported && `${statistics.imported} imported`}
+                </div>
+              )}
+              {mode === 'failed' && (
+                <div className="my-2 text-sm text-gray-500">
+                  Status: <Badge variant="error">Failed</Badge>
                 </div>
               )}
             </div>

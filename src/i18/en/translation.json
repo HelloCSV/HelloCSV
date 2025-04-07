@@ -85,10 +85,11 @@
   "importStatus": {
     "success": "Success",
     "importSuccessful": "Import successful",
+    "importSuccessfulWithErrors": "Import successful with errors",
     "successDescription": "{{totalRecords}} records were processed in your import",
     "successDescriptionWithStats": "{{recordsImported}} out of {{totalRecords}} records were imported and are now available in your database",
     "error": "Error",
     "importFailed": "Import failed",
-    "failedDescription": "An error occurred during the import. Please try again"
+    "failedDescription": "An error occurred while importing your data. Please try again"
   }
 }

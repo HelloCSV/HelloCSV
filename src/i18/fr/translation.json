@@ -84,6 +84,8 @@
   },
   "importStatus": {
     "success": "Importation réussie",
+    "importSuccessful": "Importation réussie",
+    "importSuccessfulWithErrors": "Importation réussie avec erreurs",
     "successDescription": "{{count}} enregistrements ont été importés avec succès",
     "successDescriptionWithStats": "{{recordsImported}} sur {{totalRecords}} enregistrements ont été importés avec succès",
     "error": "Importation échouée",
