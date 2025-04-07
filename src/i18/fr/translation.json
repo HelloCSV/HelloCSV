@@ -89,6 +89,17 @@
     "successDescription": "{{count}} enregistrements ont été importés avec succès",
     "successDescriptionWithStats": "{{recordsImported}} sur {{totalRecords}} enregistrements ont été importés avec succès",
     "error": "Importation échouée",
-    "errorDescription": "Une erreur est survenue lors de l'importation. Veuillez réessayer"
+    "errorDescription": "Une erreur est survenue lors de l'importation. Veuillez réessayer",
+    "importDetails": "Détails de l'importation",
+    "importDetailsDescription": "Détails sur votre dernière importation",
+    "fileInformation": "Informations sur le fichier",
+    "dataEnteredManually": "Données saisies manuellement",
+    "original": "Original",
+    "processed": "Traité",
+    "downloadProcessedData": "Télécharger les données traitées",
+    "importResults": "Résultats de l'importation",
+    "totalRows": "{{totalRows}} enregistrements",
+    "status": "Statut",
+    "failed": "Échoué"
   }
 }

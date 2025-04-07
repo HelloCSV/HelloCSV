@@ -90,6 +90,17 @@
     "successDescriptionWithStats": "{{recordsImported}} out of {{totalRecords}} records were imported and are now available in your database",
     "error": "Error",
     "importFailed": "Import failed",
-    "failedDescription": "An error occurred while importing your data. Please try again"
+    "failedDescription": "An error occurred while importing your data. Please try again",
+    "importDetails": "Import details",
+    "importDetailsDescription": "Details about your recent data import",
+    "fileInformation": "File information",
+    "dataEnteredManually": "Data entered manually",
+    "original": "Original",
+    "processed": "Processed",
+    "downloadProcessedData": "Download processed data",
+    "importResults": "Import results",
+    "totalRows": "{{totalRows}} rows",
+    "status": "Status",
+    "failed": "Failed"
   }
 }

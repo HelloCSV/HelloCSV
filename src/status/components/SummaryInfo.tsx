@@ -8,6 +8,7 @@ import {
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
 import { Button, Badge } from '../../components';
+import { useTranslations } from '../../i18';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
@@ -26,6 +27,7 @@ export default function SummaryInfo({
   completedWithErrors,
   mode,
 }: Props) {
+  const { t } = useTranslations();
   const totalRows = statistics?.totalRows || getTotalRows(sheetData);
 
   return (
@@ -38,15 +40,15 @@ export default function SummaryInfo({
             </div>
             <div className="flex-1">
               <div className="my-2 text-sm font-light uppercase">
-                File information
+                {t('importStatus.fileInformation')}
               </div>
               <div className="text-md my-2 font-medium">
                 {rowFile?.name || 'Data entered manually'}
               </div>
               <div className="my-2 text-sm text-gray-500">
                 {rowFile
-                  ? `Original: ${formatFileSize(rowFile?.size || 0)} · Processed: ${formatFileSize(getDataSize(sheetData))}`
-                  : 'Processed: ' + formatFileSize(getDataSize(sheetData))}
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')} ${formatFileSize(getDataSize(sheetData))}`
+                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`}
               </div>
               <div className="mt-5">
                 <Button
@@ -54,7 +56,7 @@ export default function SummaryInfo({
                   outline
                   onClick={() => exportAllCsvs(sheetData)}
                 >
-                  Download processed data
+                  {t('importStatus.downloadProcessedData')}
                 </Button>
               </div>
             </div>
@@ -74,9 +76,11 @@ export default function SummaryInfo({
             </div>
             <div className="flex-1">
               <div className="my-2 text-sm font-light uppercase">
-                Import results
+                {t('importStatus.importResults')}
               </div>
-              <div className="text-md my-2 font-medium">{totalRows} rows</div>
+              <div className="text-md my-2 font-medium">
+                {t('importStatus.totalRows', { totalRows })}
+              </div>
               {statistics && (
                 <div className="my-2 text-sm text-gray-500">
                   {statistics.skipped && `${statistics.skipped} skipped · `}
@@ -86,7 +90,8 @@ export default function SummaryInfo({
               )}
               {mode === 'failed' && (
                 <div className="my-2 text-sm text-gray-500">
-                  Status: <Badge variant="error">Failed</Badge>
+                  {t('importStatus.status')}:{' '}
+                  <Badge variant="error">{t('importStatus.failed')}</Badge>
                 </div>
               )}
             </div>
