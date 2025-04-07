@@ -1,5 +1,5 @@
 import { ImporterMode, ImportStatistics, SheetState } from '../../types';
-import { getTotalRows } from '../utils';
+import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
 import { formatFileSize } from '../../uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
@@ -30,29 +30,26 @@ export default function SummaryInfo({
               <DocumentTextIcon className="text-hello-csv-primary h-8 w-8" />
             </div>
             <div className="flex-1">
-              {rowFile && (
-                <>
-                  <div className="my-2 text-sm font-light uppercase">
-                    File information
-                  </div>
-                  <div className="text-md my-2 font-medium">{rowFile.name}</div>
-                  <div className="my-2 text-sm text-gray-500">
-                    Original: {formatFileSize(rowFile.size)} · Processed:{' '}
-                    {formatFileSize(
-                      sheetData.reduce(
-                        (acc, sheet) => acc + sheet.rows.length,
-                        0
-                      )
-                    )}
-                    {/* TODO: Improve the size of the parsed file */}
-                  </div>
-                  <div className="mt-5">
-                    <Button variant="secondary" outline onClick={() => {}}>
-                      Download processed file
-                    </Button>
-                  </div>
-                </>
-              )}
+              <div className="my-2 text-sm font-light uppercase">
+                File information
+              </div>
+              <div className="text-md my-2 font-medium">
+                {rowFile?.name || 'Data entered manually'}
+              </div>
+              <div className="my-2 text-sm text-gray-500">
+                {rowFile
+                  ? `Original: ${formatFileSize(rowFile?.size || 0)} · Processed: ${formatFileSize(getDataSize(sheetData))}`
+                  : 'Processed: ' + formatFileSize(getDataSize(sheetData))}
+              </div>
+              <div className="mt-5">
+                <Button
+                  variant="secondary"
+                  outline
+                  onClick={() => exportAllCsvs(sheetData)}
+                >
+                  Download processed data
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -64,15 +61,17 @@ export default function SummaryInfo({
             </div>
             <div className="flex-1">
               <div className="my-2 text-sm font-light uppercase">
-                Processing results
+                Import results
               </div>
               <div className="text-md my-2 font-medium">
                 {totalRows} records processed
               </div>
-              <div className="my-2 text-sm text-gray-500">
-                {importStatistics?.recordsImported} records imported ·{' '}
-                {importStatistics?.recordsFailed} records failed to import
-              </div>
+              {importStatistics && (
+                <div className="my-2 text-sm text-gray-500">
+                  {importStatistics.recordsImported} records imported ·{' '}
+                  {importStatistics.recordsFailed} records failed to import
+                </div>
+              )}
             </div>
           </div>
         </div>
