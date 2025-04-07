@@ -3,7 +3,7 @@ import { useRef } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
-import Completed from './components/Completed';
+import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
 import { buildInitialState, reducer } from './reducer';
 import {
@@ -50,6 +50,7 @@ function ImporterBody({
     parsedFile,
     validationErrors,
     importProgress,
+    importStatistics,
   } = state;
 
   useEffect(() => {
@@ -255,12 +256,16 @@ function ImporterBody({
         )}
 
         {(mode === 'submit' || mode === 'failed' || mode === 'completed') && (
-          <Completed
+          <ImportStatus
             mode={mode}
             progress={importProgress}
             onRetry={onSubmit}
             onBackToPreview={onBackToPreview}
             resetState={resetState}
+            sheetData={sheetData}
+            columnMappings={columnMappings ?? []}
+            importStatistics={importStatistics}
+            rowFile={state.rowFile}
           />
         )}
       </Root>

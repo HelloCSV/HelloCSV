@@ -81,5 +81,14 @@
     "regex": "This value is invalid",
     "required": "This value is required",
     "unique": "This value is not unique"
+  },
+  "importStatus": {
+    "success": "Success",
+    "importSuccessful": "Import successful",
+    "successDescription": "{{totalRecords}} records were processed in your import",
+    "successDescriptionWithStats": "{{recordsImported}} out of {{totalRecords}} records were imported and are now available in your database",
+    "error": "Error",
+    "importFailed": "Import failed",
+    "failedDescription": "An error occurred during the import. Please try again"
   }
 }

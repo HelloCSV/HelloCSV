@@ -8,6 +8,7 @@ import {
   OnDataColumnsMappedCallback,
   ColumnMapping,
   SheetRow,
+  ImportStatistics,
 } from '../types';
 
 // --------- Importer Definition Types ---------
@@ -21,7 +22,7 @@ export interface ImporterDefinition {
   onComplete: (
     state: ImporterState,
     onProgress: (progress: number) => void
-  ) => Promise<void>;
+  ) => void | Promise<ImportStatistics>;
   locale?: string;
   preventUploadOnValidationErrors?:
     | boolean
@@ -58,6 +59,7 @@ export interface ImporterState {
   rowFile?: File;
   columnMappings?: ColumnMapping[];
   importProgress: number;
+  importStatistics?: ImportStatistics;
 }
 
 export type ImporterOutputFieldType = string | number;

@@ -1,22 +1,66 @@
+import {
+  InformationCircleIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+} from '@heroicons/react/24/solid';
 import { ReactNode } from 'preact/compat';
-import { InformationCircleIcon } from '@heroicons/react/24/outline';
+
+type VariantType = 'info' | 'success' | 'error';
 
 interface Props {
-  children: ReactNode;
+  variant?: VariantType;
+  header?: string;
+  description: string;
 }
 
-export default function Alert({ children }: Props) {
+const baseClasses: Record<VariantType, { icon?: ReactNode; classes?: string }> =
+  {
+    info: {
+      icon: (
+        <InformationCircleIcon
+          className="text-hello-csv-primary-light size-5"
+          aria-hidden="true"
+        />
+      ),
+      classes:
+        'bg-hello-csv-primary-extra-light text-hello-csv-primary rounded-md p-4',
+    },
+    success: {
+      icon: (
+        <CheckCircleIcon
+          className="text-hello-csv-success-light size-5"
+          aria-hidden="true"
+        />
+      ),
+      classes:
+        'bg-hello-csv-success-extra-light text-hello-csv-success rounded-md p-4',
+    },
+    error: {
+      icon: (
+        <XCircleIcon
+          className="text-hello-csv-danger-light size-5"
+          aria-hidden="true"
+        />
+      ),
+      classes:
+        'bg-hello-csv-danger-extra-light text-hello-csv-danger rounded-md p-4',
+    },
+  };
+
+export default function Alert({
+  variant = 'info',
+  header,
+  description,
+}: Props) {
+  const { icon, classes } = baseClasses[variant];
+
   return (
-    <div className="bg-hello-csv-primary-extra-light rounded-md p-4">
+    <div className={classes}>
       <div className="flex">
-        <div className="shrink-0">
-          <InformationCircleIcon
-            aria-hidden="true"
-            className="text-hello-csv-primary size-5"
-          />
-        </div>
-        <div className="ml-3 flex-1 md:flex md:justify-between">
-          <p className="text-sm">{children}</p>
+        <div className="mt-1 shrink-0">{icon}</div>
+        <div className="ml-3">
+          {header && <div className="text-md">{header}</div>}
+          <div className="text-sm">{description}</div>
         </div>
       </div>
     </div>

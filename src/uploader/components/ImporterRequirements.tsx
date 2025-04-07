@@ -13,7 +13,7 @@ export default function ImporterRequirements({ importerRequirements }: Props) {
   return (
     <div className="flex h-full flex-col space-y-5">
       <div className="me-3">
-        <Alert>{t('uploader.importerInformation')}</Alert>
+        <Alert variant="info" description={t('uploader.importerInformation')} />
       </div>
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <RequirementsList importerRequirements={importerRequirements} />

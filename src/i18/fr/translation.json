@@ -81,5 +81,12 @@
     "regex": "Cette valeur est invalide",
     "required": "Cette valeur est obligatoire",
     "unique": "Cette valeur n'est pas unique"
+  },
+  "importStatus": {
+    "success": "Importation réussie",
+    "successDescription": "{{count}} enregistrements ont été importés avec succès",
+    "successDescriptionWithStats": "{{recordsImported}} sur {{totalRecords}} enregistrements ont été importés avec succès",
+    "error": "Importation échouée",
+    "errorDescription": "Une erreur est survenue lors de l'importation. Veuillez réessayer"
   }
 }
