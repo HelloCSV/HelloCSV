@@ -168,11 +168,6 @@ export default function StudentsImporter() {
             return sheets;
           }}
           onComplete={onComplete}
-          onSummaryFinished={() => {
-            console.log('Summary finished');
-            window.location.href =
-              'https://github.com/emily-fields/dagster_starter';
-          }}
         />
       </div>
       {ready && (
