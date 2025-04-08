@@ -105,6 +105,7 @@
     "dataImport": "Data import",
     "statisticsSkipped": "{{skipped}} skipped",
     "statisticsFailed": "{{failed}} failed",
-    "statisticsImported": "{{imported}} imported"
+    "statisticsImported": "{{imported}} imported",
+    "continue": "Continue"
   }
 }

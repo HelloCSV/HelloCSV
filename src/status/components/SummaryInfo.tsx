@@ -28,12 +28,8 @@ export default function SummaryInfo({
   mode,
 }: Props) {
   const { t } = useTranslations();
-  const totalRows = statistics?.totalRows || getTotalRows(sheetData);
+  const totalRows = getTotalRows(sheetData);
 
-  console.log(statistics);
-  console.log(statistics?.skipped);
-  console.log(statistics?.failed);
-  console.log(statistics?.imported);
   return (
     <div className="flex flex-row px-4 pt-3 pb-2">
       <div className="flex-1 space-y-4">
@@ -51,7 +47,7 @@ export default function SummaryInfo({
               </div>
               <div className="my-2 text-sm text-gray-500">
                 {rowFile
-                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')} ${formatFileSize(getDataSize(sheetData))}`
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`
                   : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`}
               </div>
               <div className="mt-5">
