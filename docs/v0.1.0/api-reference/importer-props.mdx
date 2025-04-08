@@ -109,11 +109,11 @@ Provides a custom function to generate suggested mappings based on CSV headers.
 
 ---
 
-## onSuccessRedirectUrl
+## onSummaryFinished
 
-**Type:** `string`
+**Type:** `() => void`
 
 **Required:** No
 
 **Description:**  
-URL to redirect the user to after a successful import. This can be used to navigate users to a results page, dashboard, or next step in the workflow after the import process completes successfully.
+Callback executed when the user has finished reviewing the import summary. This can be used to navigate users to a results page, dashboard, or next step in the workflow after the import process completes successfully.
