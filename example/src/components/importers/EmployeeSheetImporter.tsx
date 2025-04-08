@@ -107,6 +107,18 @@ export default function StudentsImporter() {
     onProgress(100);
     console.log(data);
     setReady(true);
+
+    const totalRows = data.sheetData.reduce(
+      (acc, sheet) => acc + sheet.rows.length,
+      0
+    );
+
+    return {
+      totalRows: totalRows,
+      imported: totalRows,
+      failed: 0,
+      skipped: 0,
+    };
   };
 
   return (

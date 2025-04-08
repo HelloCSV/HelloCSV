@@ -22,7 +22,7 @@ export interface ImporterDefinition {
   onComplete: (
     state: ImporterState,
     onProgress: (progress: number) => void
-  ) => void | Promise<ImportStatistics>;
+  ) => Promise<void> | Promise<ImportStatistics>;
   locale?: string;
   preventUploadOnValidationErrors?:
     | boolean

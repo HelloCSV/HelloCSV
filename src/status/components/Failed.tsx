@@ -24,34 +24,32 @@ export default function Failed({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="text-2xl">Data import</div>
-      <div className="mt-4">
-        <Alert
-          variant="error"
-          header={t('importStatus.importFailed')}
-          description={t('importStatus.failedDescription')}
-        />
-      </div>
-      <div className="mt-6 flex-1">
-        <Summary
-          mode={mode}
-          sheetData={sheetData}
-          rowFile={rowFile}
-          completedWithErrors={false}
-        />
-      </div>
-      <div className="mt-6">
-        <div className="flex justify-between">
-          <Button onClick={onBackToPreview} variant="secondary" outline>
-            <div className="flex items-center">
+      <div className="flex h-full w-full flex-col">
+        <div className="text-2xl">{t('importStatus.dataImport')}</div>
+        <div className="mt-4">
+          <Alert
+            variant="error"
+            header={t('importStatus.importFailed')}
+            description={t('importStatus.failedDescription')}
+          />
+        </div>
+        <div className="mt-6">
+          <Summary
+            mode={mode}
+            sheetData={sheetData}
+            rowFile={rowFile}
+            completedWithErrors={false}
+          />
+        </div>
+        <div className="mt-6 flex flex-grow flex-col justify-end">
+          <div className="flex justify-between">
+            <Button onClick={onBackToPreview} variant="secondary" outline>
               {t('importer.loader.backToPreview')}
-            </div>
-          </Button>
-          <Button onClick={onRetry} variant="primary">
-            <div className="flex items-center">
+            </Button>
+            <Button onClick={onRetry} variant="primary">
               {t('importer.loader.retry')}
-            </div>
-          </Button>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

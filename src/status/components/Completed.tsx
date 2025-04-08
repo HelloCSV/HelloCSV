@@ -26,7 +26,7 @@ export default function Completed({
 
   return (
     <div className="flex flex-col">
-      <div className="text-2xl">Data import</div>
+      <div className="text-2xl">{t('importStatus.dataImport')}</div>
       <div className="mt-4">
         <Alert
           variant={completedWithErrors ? 'warning' : 'success'}

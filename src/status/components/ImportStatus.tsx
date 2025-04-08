@@ -28,38 +28,30 @@ export default function ImportStatus({
   rowFile,
 }: Props) {
   return (
-    <div className="flex h-full flex-col space-y-4">
-      <div className="flex flex-col space-y-4">
-        <div>
-          {mode === 'submit' && (
-            <Uploading
-              progress={progress}
-              mode={mode}
-              resetState={resetState}
-            />
-          )}
+    <div className="h-full">
+      {mode === 'submit' && (
+        <Uploading progress={progress} mode={mode} resetState={resetState} />
+      )}
 
-          {mode === 'failed' && (
-            <Failed
-              mode={mode}
-              onRetry={onRetry}
-              onBackToPreview={onBackToPreview}
-              rowFile={rowFile}
-              sheetData={sheetData}
-            />
-          )}
+      {mode === 'failed' && (
+        <Failed
+          mode={mode}
+          onRetry={onRetry}
+          onBackToPreview={onBackToPreview}
+          rowFile={rowFile}
+          sheetData={sheetData}
+        />
+      )}
 
-          {mode === 'completed' && (
-            <Completed
-              mode={mode}
-              sheetData={sheetData}
-              statistics={statistics}
-              rowFile={rowFile}
-              resetState={resetState}
-            />
-          )}
-        </div>
-      </div>
+      {mode === 'completed' && (
+        <Completed
+          mode={mode}
+          sheetData={sheetData}
+          statistics={statistics}
+          rowFile={rowFile}
+          resetState={resetState}
+        />
+      )}
     </div>
   );
 }

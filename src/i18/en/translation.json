@@ -101,6 +101,10 @@
     "importResults": "Import results",
     "totalRows": "{{totalRows}} rows",
     "status": "Status",
-    "failed": "Failed"
+    "failed": "Failed",
+    "dataImport": "Data import",
+    "statisticsSkipped": "{{skipped}} skipped",
+    "statisticsFailed": "{{failed}} failed",
+    "statisticsImported": "{{imported}} imported"
   }
 }

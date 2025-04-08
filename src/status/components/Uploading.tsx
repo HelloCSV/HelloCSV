@@ -24,7 +24,7 @@ export default function Completed({ progress, mode, resetState }: Props) {
 
   return (
     <div className="flex h-full p-10">
-      <div className="flex flex-1 flex-col items-center justify-center">
+      <div className="flex h-full w-full flex-col">
         <div className="my-16 text-center">
           <div className="relative mx-auto h-24 w-24">
             <CircularProgress progress={progress} pending={pending} />
