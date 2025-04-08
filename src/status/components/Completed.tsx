@@ -55,7 +55,7 @@ export default function Completed({
           completedWithErrors={completedWithErrors}
         />
         <div className="mt-auto flex-none">
-          <div className="mt-5 flex justify-end gap-2">
+          <div className="mt-5 flex justify-end">
             <Button
               variant="primary"
               onClick={

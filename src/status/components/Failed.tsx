@@ -41,15 +41,14 @@ export default function Failed({
             completedWithErrors={false}
           />
         </div>
-        <div className="mt-6 flex flex-grow flex-col justify-end">
-          <div className="flex justify-between">
-            <Button onClick={onBackToPreview} variant="secondary" outline>
-              {t('importer.loader.backToPreview')}
-            </Button>
-            <Button onClick={onRetry} variant="primary">
-              {t('importer.loader.retry')}
-            </Button>
-          </div>
+
+        <div className="mt-6 flex justify-between">
+          <Button onClick={onBackToPreview} variant="secondary" outline>
+            {t('importer.loader.backToPreview')}
+          </Button>
+          <Button onClick={onRetry} variant="primary">
+            {t('importer.loader.retry')}
+          </Button>
         </div>
       </div>
     </div>
