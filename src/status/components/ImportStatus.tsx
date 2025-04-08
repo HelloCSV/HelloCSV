@@ -15,7 +15,7 @@ interface Props {
   sheetData: SheetState[];
   statistics?: ImportStatistics;
   rowFile?: File;
-  onSuccessRedirectUrl?: string;
+  onSummaryFinished?: () => void;
 }
 
 export default function ImportStatus({
@@ -27,7 +27,7 @@ export default function ImportStatus({
   resetState,
   statistics,
   rowFile,
-  onSuccessRedirectUrl,
+  onSummaryFinished,
 }: Props) {
   return (
     <div className="h-full">
@@ -52,7 +52,7 @@ export default function ImportStatus({
           statistics={statistics}
           rowFile={rowFile}
           resetState={resetState}
-          onSuccessRedirectUrl={onSuccessRedirectUrl}
+          onSummaryFinished={onSummaryFinished}
         />
       )}
     </div>

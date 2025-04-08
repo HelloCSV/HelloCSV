@@ -125,6 +125,11 @@ export default function EmployeeImporter() {
           }}
           onComplete={onComplete}
           preventUploadOnValidationErrors
+          onSummaryFinished={() => {
+            console.log('Summary finished');
+            window.location.href =
+              'https://github.com/emily-fields/dagster_starter';
+          }}
         />
       </div>
       {ready && (

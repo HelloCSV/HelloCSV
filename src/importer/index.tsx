@@ -34,7 +34,7 @@ function ImporterBody({
   preventUploadOnValidationErrors,
   maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
-  onSuccessRedirectUrl,
+  onSummaryFinished,
 }: ImporterDefinition) {
   const { t } = useTranslations();
 
@@ -272,7 +272,7 @@ function ImporterBody({
             sheetData={sheetData}
             statistics={importStatistics}
             rowFile={state.rowFile}
-            onSuccessRedirectUrl={onSuccessRedirectUrl}
+            onSummaryFinished={onSummaryFinished}
           />
         )}
       </Root>

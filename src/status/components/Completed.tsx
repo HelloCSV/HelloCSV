@@ -12,7 +12,7 @@ interface Props {
   mode: Mode;
   rowFile?: File;
   resetState: () => void;
-  onSuccessRedirectUrl?: string;
+  onSummaryFinished?: () => void;
 }
 
 export default function Completed({
@@ -21,7 +21,7 @@ export default function Completed({
   mode,
   rowFile,
   resetState,
-  onSuccessRedirectUrl,
+  onSummaryFinished,
 }: Props) {
   const { t } = useTranslations();
   const totalRecords = getTotalRows(sheetData);
@@ -56,16 +56,7 @@ export default function Completed({
         />
         <div className="mt-auto flex-none">
           <div className="mt-5 flex justify-end">
-            <Button
-              variant="primary"
-              onClick={
-                onSuccessRedirectUrl
-                  ? () => {
-                      window.location.href = onSuccessRedirectUrl;
-                    }
-                  : resetState
-              }
-            >
+            <Button variant="primary" onClick={onSummaryFinished || resetState}>
               {t('importStatus.continue')}
             </Button>
           </div>

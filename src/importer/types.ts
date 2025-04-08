@@ -28,7 +28,7 @@ export interface ImporterDefinition {
     | boolean
     | ((errors: ImporterValidationError[]) => boolean);
   maxFileSizeInBytes?: number;
-  onSuccessRedirectUrl?: string;
+  onSummaryFinished?: () => void;
   customSuggestedMapper?: (
     sheetDefinitions: SheetDefinition[],
     csvHeaders: string[]
