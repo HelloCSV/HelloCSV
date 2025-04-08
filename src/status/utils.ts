@@ -8,10 +8,24 @@ function getCsv(rows: SheetRow[]) {
   const headers = Object.keys(rows[0]);
   const CsvContent = [
     headers.join(','),
-    ...rows.map((row) => headers.map((h) => `"${row[h]}"`).join(',')),
+    ...rows.map((row) =>
+      headers
+        .map((h) => {
+          let cell = String(row[h] ?? '');
+
+          cell = cell.replace(/"/g, '""');
+
+          if (/[",\n\r]/.test(cell)) {
+            cell = `"${cell}"`;
+          }
+
+          return cell;
+        })
+        .join(',')
+    ),
   ].join('\n');
 
-  const blob = new Blob([CsvContent], { type: 'text/Csv;charset=utf-8;' });
+  const blob = new Blob([CsvContent], { type: 'text/csv;charset=utf-8;' });
   return blob;
 }
 
