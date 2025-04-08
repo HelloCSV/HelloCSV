@@ -24,7 +24,6 @@ Array of sheet definitions for importing data. This property defines the structu
 **Description:**  
 A callback function invoked when the import process completes. It receives the final data and a progress callback.
 An `ImportStatistics` object can be returned to provide detailed information about the import results. The statistics object has the following properties:
-- `totalRows`: Total number of rows processed
 - `imported`: Number of rows successfully imported
 - `failed`: Number of rows that failed to import
 - `skipped`: Number of rows that were skipped
@@ -107,3 +106,14 @@ Sets the maximum allowed file size in bytes. Files exceeding this limit will be 
 
 **Description:**  
 Provides a custom function to generate suggested mappings based on CSV headers.
+
+---
+
+## onSuccessRedirectUrl
+
+**Type:** `string`
+
+**Required:** No
+
+**Description:**  
+URL to redirect the user to after a successful import. This can be used to navigate users to a results page, dashboard, or next step in the workflow after the import process completes successfully.

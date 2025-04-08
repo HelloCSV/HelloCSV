@@ -6,19 +6,23 @@ import Summary from './Summary';
 
 type Mode = Extract<ImporterMode, 'completed'>;
 
+interface Props {
+  sheetData: SheetState[];
+  statistics?: ImportStatistics;
+  mode: Mode;
+  rowFile?: File;
+  resetState: () => void;
+  onSuccessRedirectUrl?: string;
+}
+
 export default function Completed({
   sheetData,
   statistics,
   mode,
   rowFile,
   resetState,
-}: {
-  sheetData: SheetState[];
-  statistics?: ImportStatistics;
-  mode: Mode;
-  rowFile?: File;
-  resetState: () => void;
-}) {
+  onSuccessRedirectUrl,
+}: Props) {
   const { t } = useTranslations();
   const totalRecords = getTotalRows(sheetData);
   const recordsImported = statistics?.imported ?? 0;
@@ -52,8 +56,17 @@ export default function Completed({
         />
         <div className="mt-auto flex-none">
           <div className="mt-5 flex justify-end gap-2">
-            <Button variant="secondary" outline onClick={resetState}>
-              Exit
+            <Button
+              variant="primary"
+              onClick={
+                onSuccessRedirectUrl
+                  ? () => {
+                      window.location.href = onSuccessRedirectUrl;
+                    }
+                  : resetState
+              }
+            >
+              {t('importStatus.continue')}
             </Button>
           </div>
         </div>
