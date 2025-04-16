@@ -59,7 +59,8 @@
             "pages": [
               "common/development/setup",
               "common/development/no-build-example",
-              "common/development/docs"
+              "common/development/docs",
+              "common/development/deployment"
             ]
           }
         ],

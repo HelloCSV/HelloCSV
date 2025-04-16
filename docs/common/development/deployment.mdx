@@ -1,0 +1,28 @@
+---
+title: "Deployment"
+---
+
+Deployment is done with the following steps
+
+1. Change version in `package.json` (to the target version)
+
+2. Run `npm i` in the root directory as well as in `example` and `example-vanilla` directories
+
+3. Update version in docs
+
+For minor version realease 
+- update version in `docs/docs.json` file
+- update directory name of `docs/v{oldVersion}` to `docs/v{newVersion}`
+- make sure to update all references to the old version in the `docs/docs.json` file
+
+For major version realease 
+- create a new directory in `docs` called `v{newVersion}`
+- copy all files from `docs/v{oldVersion}` to `docs/v{newVersion}`
+- create a new version entry in `docs/docs.json` file
+- write upgrade guide and put it in the docs
+
+4. Create a PR in the repository called `Release v{x.y.z}`
+
+5. Run `npm publish` in the root directory, you can use `--dry-run` flag to test the deployment
+
+6. Create a new release in Github - https://github.com/HelloCSV/HelloCSV/releases. Remember about creating a tag (`v{x.y.z}`) and writing release notes.
