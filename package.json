@@ -1,7 +1,7 @@
 {
   "name": "hello-csv",
   "version": "0.1.1",
-  "description": "React Importer",
+  "description": "A modern CSV importer written in Preact",
   "author": "HelloCSV",
   "license": "MIT",
   "repository": "HelloCSV/HelloCSV",
