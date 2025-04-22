@@ -20,7 +20,7 @@ export default function InstallTabs() {
     },
     {
       name: 'vanilla',
-      code: `<!-- Paste this into your HTML file -->\n<script src="https://cdn.jsdelivr.net/npm/hello-csv@0.0.3/dist/bundled/index.es.js"></script>\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hello-csv@0.0.3/dist/bundled/hello-csv.css">`,
+      code: `<!-- Paste this into your HTML file -->\n<script src="https://cdn.jsdelivr.net/npm/hello-csv@0.1.1/dist/bundled/index.es.js"></script>\n<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hello-csv@0.1.1/dist/bundled/hello-csv.css">`,
       current: true,
       terminal: false,
     },
