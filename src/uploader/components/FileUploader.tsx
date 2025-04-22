@@ -69,7 +69,7 @@ export default function FileUploader({
             {tHtml('uploader.maxFileSizeInBytes', {
               size: <b>{formatFileSize(maxFileSizeInBytes)}</b>,
             })}{' '}
-            • CSV
+            • CSV, TSV
           </div>
           <div className="mt-3">
             <Button>{t('uploader.browseFiles')}</Button>
