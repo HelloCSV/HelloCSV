@@ -9,11 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.0.6",
     "@heroicons/react": "^2.2.0",
+    "@tailwindcss/vite": "^4.0.6",
+    "hello-csv": "file:..",
     "highlight.js": "^11.11.1",
     "preact": "^10.25.4",
-    "hello-csv": "file:..",
+    "prism-code-editor": "^3.4.0",
     "tippy.js": "^6.3.7"
   },
   "devDependencies": {

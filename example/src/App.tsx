@@ -11,6 +11,7 @@ import InstallTabs from './components/InstallTabs';
 import Section from './components/Section';
 import Content from './components/Content';
 import DocumentContainer from './components/DocumentContainer';
+import TryItYourself from './components/TryItYourself';
 
 export default function App() {
   return (
@@ -80,6 +81,10 @@ export default function App() {
 
       <Section>
         <EmployeeSheetImporter />
+      </Section>
+
+      <Section>
+        <TryItYourself />
       </Section>
 
       <Footer />
