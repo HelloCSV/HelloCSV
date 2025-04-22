@@ -1,25 +1,21 @@
 import { useEffect } from "preact/hooks";
-import { minimalEditor, basicEditor, fullEditor, readonlyEditor } from "prism-code-editor/setups"
+import { basicEditor } from "prism-code-editor/setups"
 import { copyButton } from "prism-code-editor/copy-button"
 import "prism-code-editor/prism/languages/javascript"
+import "prism-code-editor/themes/atom-one-dark.css"
 import Content from "./Content";
+import DocumentContainer from "./DocumentContainer";
 
-const code = `
-import { renderImporter } from "hello-csv";
+const code = `import { renderImporter } from "hello-csv";
 
-console.log("Running");
 renderImporter(document.getElementById("importer"), {
   sheets: [
     {
       id: "employees",
       label: "Employees",
       columns: [
-        {
-          label: 'Name',
-          id: 'name',
-          type: 'string',
-          validators: [{ validate: 'required' }],
-        },
+        { label: 'Name', id: 'name', type: 'string', validators: [{ validate: 'required' }] },
+        { label: 'Phone', id: 'phone', type: 'string' },
         {
           label: 'Email',
           id: 'email',
@@ -34,7 +30,7 @@ renderImporter(document.getElementById("importer"), {
               error: 'This email is not valid',
             },
           ],
-        }
+        },
       ]
     }
   ]
@@ -64,16 +60,26 @@ export default function TryItYourself() {
     script.type = 'module';
     script.textContent = editor.textarea.value;
     document.getElementById("anchor")!.appendChild(script);
-    document.getElementById("importer")!.classList.remove("hidden");
+    document.getElementById("importer-container")!.classList.remove("hidden");
+    document.getElementById("importer-container")!.scrollIntoView({ behavior: 'smooth' });
   }
 
   return (
     <Content>
       <div className="flex flex-col gap-4">
-        <h3 className="text-2xl font-bold">Try It Yourself</h3>
-        <p>
-          Create your own importer — then copy and paste the code into your project.
-        </p>
+        <DocumentContainer>
+          <h3 className="mb-6 text-2xl font-bold lg:text-4xl">Try It Yourself</h3>
+          <div className="container leading-8">
+            <p>Build your own importer — then copy and paste the code into your project.</p>
+          </div>
+          <p className="mt-8 text-lg italic">
+            See the documentation{' '}
+            <a className="text-blue-500 hover:text-blue-600" href="https://hellocsv.mintlify.app/">
+               here
+            </a>
+            .
+          </p>
+        </DocumentContainer>
         <div id="editor"></div>
         <div className="flex justify-end">
           <button
@@ -81,12 +87,14 @@ export default function TryItYourself() {
             onClick={(e) => runCode()}
             className="text-md mr-3 cursor-pointer rounded-full px-6 py-2.5 font-semibold text-white bg-purple-600 shadow-xs hover:opacity-80"
           >
-            Run ❯
+            See it in action ❯
           </button>
         </div>
 
         <div id="anchor"></div>
-        <div id="importer" className="hidden rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8"></div>
+        <div id="importer-container" className="hidden">
+          <div id="importer" className="rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8"></div>
+        </div>
       </div>
     </Content>
   );
