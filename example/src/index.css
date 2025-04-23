@@ -10,10 +10,3 @@
     clip-path: polygon(0 0, 100% 0%, 115% 85%, 0 100%);
   }
 }
-
-
-.prism-code-editor {
-  /* Values are: Hue, saturation, lightness */
-  max-height: 500px;
-  overflow-y: auto;
-}

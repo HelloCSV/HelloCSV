@@ -35,9 +35,9 @@ export default function TryItYourself({ code }: { code: string }) {
     <Content>
       <div className="flex flex-col gap-4">
         <div id="editor"></div>
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <div>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-sm my-4">
               <i>(You can edit this</i> ☝<i>)</i>️
             </p>
           </div>
