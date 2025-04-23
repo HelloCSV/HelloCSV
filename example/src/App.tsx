@@ -1,6 +1,5 @@
 import 'hello-csv/peer/index.css';
 import Header from './components/Header';
-import CodeBlock from './components/CodeBlock';
 import Footer from './components/Footer';
 import { EXAMPLE_CODE } from './constants';
 import {
@@ -69,9 +68,15 @@ export default function App() {
               A simple, yet powerful Javascript API to fit your needs.
               Transform, validate, clean, and slice your data.
             </p>
+            <p className="mt-8 font-bold text-blue-500 underline decoration-blue-500 decoration-4 underline-offset-6">
+              <a href="#try-it-yourself">
+                Try it yourself ❯
+              </a>
+            </p>
           </DocumentContainer>
 
-          <CodeBlock code={EXAMPLE_CODE} />
+          <a id="try-it-yourself"></a>
+          <TryItYourself code={EXAMPLE_CODE} />
         </Content>
       </Section>
 
@@ -81,10 +86,6 @@ export default function App() {
 
       <Section>
         <EmployeeSheetImporter />
-      </Section>
-
-      <Section>
-        <TryItYourself />
       </Section>
 
       <Footer />
