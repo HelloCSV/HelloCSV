@@ -50,6 +50,8 @@ export default function Header() {
             <br />
             🔒 Frontend only, so data <b>never</b> leaves your application.
             <br />
+            💻 100% open source & free to use.
+            <br />
             🚀 Only ~99KB gzipped.
           </div>
 
