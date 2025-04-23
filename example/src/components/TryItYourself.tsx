@@ -43,7 +43,7 @@ export default function TryItYourself({ code }: { code: string }) {
           </div>
           <button
             type="button"
-            onClick={(e) => runCode()}
+            onClick={runCode}
             className="text-md mr-3 cursor-pointer rounded-full px-6 py-2.5 font-semibold text-white bg-blue-600 shadow-xs hover:opacity-80"
           >
             Create your importer ❯
