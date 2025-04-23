@@ -48,6 +48,8 @@ export default function Header() {
             <br />
             🌎 Fully supports multiple languages for a seamless experience.
             <br />
+            🔒 Frontend only, so data <b>never</b> leaves your application.
+            <br />
             🚀 Only ~99KB gzipped.
           </div>
 

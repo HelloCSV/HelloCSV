@@ -43,7 +43,8 @@ export default function App() {
             <p className="text-lg">
               HelloCSV is a javascript library that makes it easy to drop in a
               powerful, intuitive, and elegant CSV uploader that works with any
-              javascript application. <b>No React required.</b>
+              javascript application. <b>No React required.</b> (<a className="text-blue-500 underline" href="https://hellocsv.mintlify.app/common/get-started/usage#peer" target="_blank">But it works
+              with React too!</a>)
             </p>
             <br />
             <p>
