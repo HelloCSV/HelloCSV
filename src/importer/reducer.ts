@@ -6,7 +6,9 @@ import {
   SheetDefinition,
   SheetRow,
 } from '../types';
+import { setInIndexedDB } from '../utils/storage';
 import { applyValidations } from '../validators';
+import { stripFunctions } from './usePersistedReducer';
 
 function recalculateCalculatedColumns(
   row: SheetRow,
@@ -48,6 +50,7 @@ const reducer = (
   state: ImporterState,
   action: ImporterAction
 ): ImporterState => {
+  let newState = state;
   switch (action.type) {
     case 'ENTER_DATA_MANUALLY': {
       const emptyData = state.sheetDefinitions.map((sheet) => ({
@@ -58,22 +61,28 @@ const reducer = (
         ),
       }));
 
-      return { ...state, mode: 'preview', sheetData: emptyData };
+      newState = { ...state, mode: 'preview', sheetData: emptyData };
+      break;
     }
     case 'FILE_UPLOADED':
-      return { ...state, rowFile: action.payload.file };
+      newState = { ...state, rowFile: action.payload.file };
+      break;
     case 'FILE_PARSED':
-      return { ...state, parsedFile: action.payload.parsed, mode: 'mapping' };
-    case 'UPLOAD':
-      return { ...state, mode: 'upload' };
-    case 'COLUMN_MAPPING_CHANGED': {
-      return {
+      newState = {
         ...state,
-        columnMappings: action.payload.mappings,
+        parsedFile: action.payload.parsed,
+        mode: 'mapping',
       };
+      break;
+    case 'UPLOAD':
+      newState = { ...state, mode: 'upload' };
+      break;
+    case 'COLUMN_MAPPING_CHANGED': {
+      newState = { ...state, columnMappings: action.payload.mappings };
+      break;
     }
     case 'DATA_MAPPED': {
-      return {
+      newState = {
         ...state,
         sheetData: applyTransformations(
           state.sheetDefinitions,
@@ -85,6 +94,7 @@ const reducer = (
           action.payload.mappedData
         ),
       };
+      break;
     }
     case 'CELL_CHANGED': {
       const currentData = state.sheetData;
@@ -105,11 +115,12 @@ const reducer = (
         }
       });
 
-      return {
+      newState = {
         ...state,
         sheetData: applyTransformations(state.sheetDefinitions, newData),
         validationErrors: applyValidations(state.sheetDefinitions, newData),
       };
+      break;
     }
 
     case 'REMOVE_ROWS': {
@@ -126,11 +137,12 @@ const reducer = (
         return sheet;
       });
 
-      return {
+      newState = {
         ...state,
         sheetData: newData,
         validationErrors: applyValidations(state.sheetDefinitions, newData),
       };
+      break;
     }
 
     case 'ADD_EMPTY_ROW': {
@@ -145,32 +157,47 @@ const reducer = (
         };
       });
 
-      return { ...state, sheetData: newData };
+      newState = { ...state, sheetData: newData };
+      break;
     }
 
     case 'SHEET_CHANGED':
-      return { ...state, currentSheetId: action.payload.sheetId };
+      newState = { ...state, currentSheetId: action.payload.sheetId };
+      break;
     case 'SUBMIT':
-      return { ...state, mode: 'submit' };
+      newState = { ...state, mode: 'submit' };
+      break;
     case 'PROGRESS':
-      return { ...state, importProgress: action.payload.progress };
+      newState = { ...state, importProgress: action.payload.progress };
+      break;
     case 'COMPLETED':
-      return {
+      newState = {
         ...state,
         mode: 'completed',
         importStatistics: action.payload.importStatistics,
       };
+      break;
     case 'FAILED':
-      return { ...state, mode: 'failed' };
+      newState = { ...state, mode: 'failed' };
+      break;
     case 'PREVIEW':
-      return { ...state, mode: 'preview' };
+      newState = { ...state, mode: 'preview' };
+      break;
     case 'MAPPING':
-      return { ...state, mode: 'mapping' };
+      newState = { ...state, mode: 'mapping' };
+      break;
     case 'RESET':
-      return buildInitialState(state.sheetDefinitions);
+      newState = buildInitialState(state.sheetDefinitions);
+      break;
     default:
-      return state;
+      break;
   }
+
+  setInIndexedDB('importer-state', stripFunctions(newState)).catch(
+    console.error
+  );
+
+  return newState;
 };
 
 export { reducer, buildInitialState };

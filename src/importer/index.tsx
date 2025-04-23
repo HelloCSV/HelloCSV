@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'preact/compat';
+import { useEffect, useReducer } from 'preact/compat';
 import { useRef } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
@@ -37,11 +37,23 @@ function ImporterBody({
   onSummaryFinished,
 }: ImporterDefinition) {
   const { t } = useTranslations();
-
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
 
   const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
+    targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [state?.mode]);
+
+  if (!state || !dispatch) {
+    return <div>Loading...</div>;
+  }
 
   const {
     mode,
@@ -53,15 +65,6 @@ function ImporterBody({
     importProgress,
     importStatistics,
   } = state;
-
-  useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
-
-    targetRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [mode]);
 
   const currentSheetData = sheetData.find(
     (sheet) => sheet.sheetId === currentSheetId
@@ -79,7 +82,8 @@ function ImporterBody({
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
   function onFileUploaded(file: File) {
-    dispatch({ type: 'FILE_UPLOADED', payload: { file } });
+    console.log(dispatch);
+    dispatch?.({ type: 'FILE_UPLOADED', payload: { file } });
 
     parseCsv({
       file,
@@ -91,9 +95,9 @@ function ImporterBody({
             ? await customSuggestedMapper(sheets, csvHeaders)
             : buildSuggestedHeaderMappings(sheets, csvHeaders);
 
-        dispatch({ type: 'FILE_PARSED', payload: { parsed: newParsed } });
+        dispatch?.({ type: 'FILE_PARSED', payload: { parsed: newParsed } });
 
-        dispatch({
+        dispatch?.({
           type: 'COLUMN_MAPPING_CHANGED',
           payload: {
             mappings: suggestedMappings,
@@ -104,7 +108,7 @@ function ImporterBody({
   }
 
   function onEnterDataManually() {
-    dispatch({
+    dispatch?.({
       type: 'ENTER_DATA_MANUALLY',
       payload: {
         amountOfEmptyRowsToAdd: NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT,
@@ -113,7 +117,7 @@ function ImporterBody({
   }
 
   function onMappingsChanged(mappings: ColumnMapping[]) {
-    dispatch({
+    dispatch?.({
       type: 'COLUMN_MAPPING_CHANGED',
       payload: { mappings },
     });
@@ -127,28 +131,28 @@ function ImporterBody({
         ? await onDataColumnsMapped(mappedData)
         : mappedData;
 
-    dispatch({ type: 'DATA_MAPPED', payload: { mappedData: newMappedData } });
+    dispatch?.({ type: 'DATA_MAPPED', payload: { mappedData: newMappedData } });
   }
 
   function onCellChanged(payload: CellChangedPayload) {
-    dispatch({ type: 'CELL_CHANGED', payload });
+    dispatch?.({ type: 'CELL_CHANGED', payload });
   }
 
   function onRemoveRows(payload: RemoveRowsPayload) {
-    dispatch({ type: 'REMOVE_ROWS', payload });
+    dispatch?.({ type: 'REMOVE_ROWS', payload });
   }
 
   function addEmptyRow() {
-    dispatch({ type: 'ADD_EMPTY_ROW' });
+    dispatch?.({ type: 'ADD_EMPTY_ROW' });
   }
 
   function resetState() {
-    dispatch({ type: 'RESET' });
+    dispatch?.({ type: 'RESET' });
   }
 
   async function onSubmit() {
-    dispatch({ type: 'PROGRESS', payload: { progress: 0 } });
-    dispatch({ type: 'SUBMIT' });
+    dispatch?.({ type: 'PROGRESS', payload: { progress: 0 } });
+    dispatch?.({ type: 'SUBMIT' });
     try {
       // TODO THIS BRANCH: Should we filter invalid data?
       const data = applyTransformations(
@@ -157,34 +161,42 @@ function ImporterBody({
       );
 
       const statistics = await onComplete(
-        { ...state, sheetData: data },
+        {
+          ...state!,
+          sheetDefinitions: sheets,
+          sheetData: data,
+          currentSheetId: state!.currentSheetId,
+          mode: state!.mode,
+          validationErrors: state!.validationErrors,
+          importProgress: state!.importProgress,
+        },
         (progress) => {
-          dispatch({ type: 'PROGRESS', payload: { progress } });
+          dispatch?.({ type: 'PROGRESS', payload: { progress } });
         }
       );
 
       await delay(400);
-      dispatch({ type: 'PROGRESS', payload: { progress: 100 } });
+      dispatch?.({ type: 'PROGRESS', payload: { progress: 100 } });
       await delay(200);
-      dispatch({
+      dispatch?.({
         type: 'COMPLETED',
         payload: { importStatistics: statistics ?? undefined },
       });
     } catch (e) {
-      dispatch({ type: 'FAILED' });
+      dispatch?.({ type: 'FAILED' });
     }
   }
 
   function onBackToPreview() {
-    dispatch({ type: 'PREVIEW' });
+    dispatch?.({ type: 'PREVIEW' });
   }
 
   function onBackToUpload() {
-    dispatch({ type: 'UPLOAD' });
+    dispatch?.({ type: 'UPLOAD' });
   }
 
   function onBackToMapping() {
-    dispatch({ type: 'MAPPING' });
+    dispatch?.({ type: 'MAPPING' });
   }
 
   return (
@@ -221,7 +233,7 @@ function ImporterBody({
                 activeSheetId={currentSheetId}
                 sheetDefinitions={sheets}
                 onSheetChange={(sheetId) =>
-                  dispatch({ type: 'SHEET_CHANGED', payload: { sheetId } })
+                  dispatch?.({ type: 'SHEET_CHANGED', payload: { sheetId } })
                 }
                 validationErrors={validationErrors}
               />
