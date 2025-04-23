@@ -44,7 +44,7 @@ HelloCSV a Javascript library that drops in a CSV importer into your project tha
 
 ## Install
 With npm:
-```
+```sh
 npm install hello-csv
 ```
 
