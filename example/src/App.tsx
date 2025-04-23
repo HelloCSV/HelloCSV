@@ -1,4 +1,3 @@
-import 'hello-csv/peer/index.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { EXAMPLE_CODE } from './constants';
