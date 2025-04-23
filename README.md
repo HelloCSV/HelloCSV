@@ -24,7 +24,7 @@ A modern, drop in, frontend only, CSV importer workflow.
 
 ## About The Project
 
-![Screenshot](docs/images/screenshot.png)
+![Screenshot](docs/images/demo.gif)
 
 A challenge almost every project eventually faces is importing user uploaded data from CSV files in a way that doesn't cause a ton of issues. Developers always have to figure out
 
