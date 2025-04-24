@@ -1,4 +1,8 @@
-import { hashString } from './indexDbHelpers';
+import {
+  hashString,
+  deserializeFunctions,
+  serializeFunctions,
+} from './indexDbHelpers';
 
 const DB_NAME = 'HelloCSV';
 const DB_VERSION = 1;
@@ -16,7 +20,13 @@ export async function getFromIndexedDB(key: string): Promise<any> {
       const getRequest = store.get(key);
 
       getRequest.onerror = () => reject(getRequest.error);
-      getRequest.onsuccess = () => resolve(getRequest.result);
+      getRequest.onsuccess = () => {
+        try {
+          resolve(deserializeFunctions(getRequest.result));
+        } catch (error) {
+          reject(error);
+        }
+      };
     };
 
     request.onupgradeneeded = (event) => {
@@ -37,7 +47,7 @@ export async function setInIndexedDB(key: string, value: any): Promise<void> {
       const db = request.result;
       const transaction = db.transaction(STORE_NAME, 'readwrite');
       const store = transaction.objectStore(STORE_NAME);
-      const putRequest = store.put(value, key);
+      const putRequest = store.put(serializeFunctions(value), key);
 
       putRequest.onerror = () => reject(putRequest.error);
       putRequest.onsuccess = () => resolve();
@@ -51,7 +61,6 @@ export async function setInIndexedDB(key: string, value: any): Promise<void> {
     };
   });
 }
-
 
 export function getStateKey(array: any[]): string {
   const key = array.map((item) => `${item.id}-${item.label}`).join('|');

@@ -11,7 +11,7 @@ import {
   setInIndexedDB,
   getStateKey,
 } from '../utils/storage';
-import { stripFunctions } from '../utils/indexDbHelpers';
+import { deserializeFunctions } from '../utils/indexDbHelpers';
 import { applyValidations } from '../validators';
 
 function recalculateCalculatedColumns(
@@ -41,15 +41,20 @@ function recalculateCalculatedColumns(
 export async function buildInitialStateWithIndexedDB(
   sheetDefinitions: SheetDefinition[]
 ): Promise<ImporterState> {
-  const stateKey = getStateKey(sheetDefinitions);
-  const state = await getFromIndexedDB(stateKey);
-  if (state != null) {
-    return state;
-  }
+  try {
+    const stateKey = getStateKey(sheetDefinitions);
+    const state = await getFromIndexedDB(stateKey);
+    if (state != null) {
+      return state;
+    }
 
-  const newState = buildInitialState(sheetDefinitions);
-  await setInIndexedDB(stateKey, stripFunctions(newState));
-  return newState;
+    const newState = buildInitialState(sheetDefinitions);
+    await setInIndexedDB(stateKey, newState).catch(console.error);
+    return newState;
+  } catch (error) {
+    console.error(error);
+    return buildInitialState(sheetDefinitions);
+  }
 }
 
 function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
@@ -85,7 +90,13 @@ const reducer = (
       break;
     }
     case 'FILE_UPLOADED':
-      newState = { ...state, rowFile: action.payload.file };
+      newState = {
+        ...state,
+        rowFile: {
+          name: action.payload.file.name,
+          size: action.payload.file.size,
+        },
+      };
       break;
     case 'FILE_PARSED':
       newState = {
@@ -210,10 +221,9 @@ const reducer = (
       break;
   }
 
-  setInIndexedDB(
-    getStateKey(state.sheetDefinitions),
-    stripFunctions(newState)
-  ).catch(console.error);
+  setInIndexedDB(getStateKey(state.sheetDefinitions), newState).catch(
+    console.error
+  );
 
   return newState;
 };

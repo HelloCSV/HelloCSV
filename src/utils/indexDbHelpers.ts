@@ -8,17 +8,37 @@ export function hashString(str: string): number {
   return hash;
 }
 
-export function stripFunctions(obj: any): any {
+export function serializeFunctions(obj: any): any {
   if (typeof obj !== 'object' || obj === null) return obj;
 
   if (Array.isArray(obj)) {
-    return obj.map(stripFunctions);
+    return obj.map(serializeFunctions);
   }
 
   const result: any = {};
   for (const key in obj) {
-    if (typeof obj[key] !== 'function') {
-      result[key] = stripFunctions(obj[key]);
+    if (typeof obj[key] === 'function') {
+      result[key] = { __function__: obj[key].toString() };
+    } else {
+      result[key] = serializeFunctions(obj[key]);
+    }
+  }
+  return result;
+}
+
+export function deserializeFunctions(obj: any): any {
+  if (typeof obj !== 'object' || obj === null) return obj;
+
+  if (Array.isArray(obj)) {
+    return obj.map(deserializeFunctions);
+  }
+
+  const result: any = {};
+  for (const key in obj) {
+    if (obj[key]?.__function__) {
+      result[key] = eval(obj[key].__function__);
+    } else {
+      result[key] = deserializeFunctions(obj[key]);
     }
   }
   return result;
