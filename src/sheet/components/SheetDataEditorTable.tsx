@@ -142,6 +142,7 @@ export default function SheetDataEditorTable({
               const cellErrorsText = cellErrors(columnId, rowIndex)
                 .map((e) => t(e.message))
                 .join(', ');
+
               return (
                 <td key={cell.id} className={cellClass}>
                   <SheetDataEditorCell
@@ -150,9 +151,9 @@ export default function SheetDataEditorTable({
                     }
                     allData={allData}
                     value={cell.getValue() as ImporterOutputFieldType}
-                    onUpdated={(value) => {
-                      onCellValueChanged(rowIndex, columnId, value);
-                    }}
+                    onUpdated={(value) =>
+                      onCellValueChanged(rowIndex, columnId, value)
+                    }
                     clearRowsSelection={() => setSelectedRows([])}
                     errorsText={cellErrorsText}
                   />

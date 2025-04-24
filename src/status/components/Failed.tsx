@@ -8,7 +8,7 @@ type Mode = Extract<ImporterMode, 'failed'>;
 interface Props {
   onRetry: () => void;
   onBackToPreview: () => void;
-  rowFile?: File;
+  rowFile?: { name: string; size: number };
   sheetData: SheetState[];
   mode: Mode;
 }

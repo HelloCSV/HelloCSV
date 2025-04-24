@@ -10,7 +10,7 @@ interface Props {
   mode: Mode;
   sheetData: SheetState[];
   statistics?: ImportStatistics;
-  rowFile?: File;
+  rowFile?: { name: string; size: number };
   completedWithErrors?: boolean;
 }
 
