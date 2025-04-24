@@ -6,9 +6,13 @@ import {
   SheetDefinition,
   SheetRow,
 } from '../types';
-import { getFromIndexedDB, setInIndexedDB } from '../utils/storage';
+import {
+  getFromIndexedDB,
+  setInIndexedDB,
+  getStateKey,
+} from '../utils/storage';
+import { stripFunctions } from '../utils/indexDbHelpers';
 import { applyValidations } from '../validators';
-import { stripFunctions } from './usePersistedReducer';
 
 function recalculateCalculatedColumns(
   row: SheetRow,
@@ -32,16 +36,21 @@ function recalculateCalculatedColumns(
   return row;
 }
 
-async function buildInitialState(
+export async function buildInitialStateWithIndexedDB(
   sheetDefinitions: SheetDefinition[]
 ): Promise<ImporterState> {
-  const state = (await getFromIndexedDB(
-    'importer-state'
-  )) as unknown as ImporterState | null;
+  const stateKey = getStateKey(sheetDefinitions);
+  const state = await getFromIndexedDB(stateKey);
   if (state != null) {
     return state;
   }
 
+  const newState = buildInitialState(sheetDefinitions);
+  await setInIndexedDB(stateKey, stripFunctions(newState));
+  return newState;
+}
+
+function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
   return {
     sheetDefinitions,
     currentSheetId: sheetDefinitions[0].id,
@@ -202,9 +211,10 @@ const reducer = (
       break;
   }
 
-  setInIndexedDB('importer-state', stripFunctions(newState)).catch(
-    console.error
-  );
+  setInIndexedDB(
+    getStateKey(state.sheetDefinitions),
+    stripFunctions(newState)
+  ).catch(console.error);
 
   return newState;
 };

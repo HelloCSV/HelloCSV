@@ -1,3 +1,5 @@
+import { hashString } from './indexDbHelpers';
+
 const DB_NAME = 'HelloCSV';
 const DB_VERSION = 1;
 const STORE_NAME = 'state';
@@ -48,4 +50,10 @@ export async function setInIndexedDB(key: string, value: any): Promise<void> {
       }
     };
   });
+}
+
+
+export function getStateKey(array: any[]): string {
+  const key = array.map((item) => `${item.id}-${item.label}`).join('|');
+  return `importer-state-${hashString(key)}`;
 }
