@@ -29,7 +29,9 @@ function recalculateCalculatedColumns(
     );
 
     calculatedColumns.forEach((column) => {
-      row[column.id] = column.typeArguments.getValue(row);
+      if (Object.keys(column.typeArguments).length > 0) {
+        row[column.id] = column.typeArguments.getValue(row);
+      }
     });
   }
 
@@ -140,7 +142,6 @@ const reducer = (
       };
       break;
     }
-
     case 'REMOVE_ROWS': {
       const newData = state.sheetData.map((sheet) => {
         if (sheet.sheetId === action.payload.sheetId) {
@@ -162,7 +163,6 @@ const reducer = (
       };
       break;
     }
-
     case 'ADD_EMPTY_ROW': {
       const newData = state.sheetData.map((data) => {
         if (data.sheetId !== state.currentSheetId) {
@@ -178,7 +178,6 @@ const reducer = (
       newState = { ...state, sheetData: newData };
       break;
     }
-
     case 'SHEET_CHANGED':
       newState = { ...state, currentSheetId: action.payload.sheetId };
       break;
