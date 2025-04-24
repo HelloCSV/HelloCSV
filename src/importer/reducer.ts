@@ -6,7 +6,7 @@ import {
   SheetDefinition,
   SheetRow,
 } from '../types';
-import { setInIndexedDB } from '../utils/storage';
+import { getFromIndexedDB, setInIndexedDB } from '../utils/storage';
 import { applyValidations } from '../validators';
 import { stripFunctions } from './usePersistedReducer';
 
@@ -32,7 +32,16 @@ function recalculateCalculatedColumns(
   return row;
 }
 
-function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
+async function buildInitialState(
+  sheetDefinitions: SheetDefinition[]
+): Promise<ImporterState> {
+  const state = (await getFromIndexedDB(
+    'importer-state'
+  )) as unknown as ImporterState | null;
+  if (state != null) {
+    return state;
+  }
+
   return {
     sheetDefinitions,
     currentSheetId: sheetDefinitions[0].id,

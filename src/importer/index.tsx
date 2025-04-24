@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from 'preact/compat';
-import { useRef } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
@@ -10,6 +10,7 @@ import {
   CellChangedPayload,
   ColumnMapping,
   ImporterDefinition,
+  ImporterState,
   RemoveRowsPayload,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
@@ -39,8 +40,21 @@ function ImporterBody({
   const { t } = useTranslations();
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
+  const [initialState, setInitialState] = useState<ImporterState | null>(null);
 
-  const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
+  useEffect(() => {
+    const fetchState = async () => {
+      const state = await buildInitialState(sheets);
+      setInitialState(state);
+    };
+    fetchState();
+  }, [sheets]);
+
+  if (initialState == null) {
+    return <div>Loading...</div>;
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     if (isInitialRender.current) {
