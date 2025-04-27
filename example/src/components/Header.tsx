@@ -79,6 +79,9 @@ export default function Header() {
               Documentation ❯
             </a>
           </div>
+          <div className="mt-4">
+            <a href="https://www.producthunt.com/posts/hellocsv-a-free-flatfile-alternative?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-hellocsv&#0045;a&#0045;free&#0045;flatfile&#0045;alternative" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=958105&theme=light&t=1745717089950" alt="HelloCSV&#0032;&#0045;&#0032;A&#0032;free&#0032;FlatFile&#0032;alternative - A&#0032;modern&#0044;&#0032;frontend&#0032;only&#0044;&#0032;open&#0032;source&#0044;&#0032;CSV&#0032;importer | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+          </div>
         </div>
 
         <div className="mx-auto mt-8 flex cursor-pointer flex-col items-center justify-center rounded-[2rem] lg:mt-0">
