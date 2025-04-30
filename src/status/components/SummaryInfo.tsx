@@ -16,7 +16,7 @@ type Props = {
   sheetData: SheetState[];
   mode: Mode;
   statistics?: ImportStatistics;
-  rowFile?: { name: string; size: number };
+  rowFile?: { name: string; size: number; content: string };
   completedWithErrors?: boolean;
 };
 

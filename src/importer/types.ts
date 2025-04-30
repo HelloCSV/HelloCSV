@@ -57,7 +57,7 @@ export interface ImporterState {
   validationErrors: ImporterValidationError[];
   sheetData: SheetState[];
   parsedFile?: ParsedFile;
-  rowFile?: { name: string; size: number };
+  rowFile?: { name: string; size: number; content?: string };
   columnMappings?: ColumnMapping[];
   importProgress: number;
   importStatistics?: ImportStatistics;

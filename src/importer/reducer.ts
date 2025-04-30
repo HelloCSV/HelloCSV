@@ -87,14 +87,20 @@ const reducer = (
 
     newState = { ...state, mode: 'preview', sheetData: emptyData };
   } else if (action.type === 'FILE_UPLOADED') {
-    newState = {
-      ...state,
-      rowFile: {
-        name: action.payload.file.name,
-        size: action.payload.file.size,
-      },
+    const reader = new FileReader();
+    reader.readAsDataURL(action.payload.file);
+    reader.onload = () => {
+      setInIndexedDB(getStateKey(state.sheetDefinitions), {
+        ...newState,
+        rowFile: {
+          name: action.payload.file.name,
+          size: action.payload.file.size,
+          content: reader.result as string,
+        },
+      }).catch(console.error);
     };
   } else if (action.type === 'FILE_PARSED') {
+    debugger;
     newState = {
       ...state,
       parsedFile: action.payload.parsed,

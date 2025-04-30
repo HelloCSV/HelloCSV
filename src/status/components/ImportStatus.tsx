@@ -14,7 +14,7 @@ interface Props {
   resetState: () => void;
   sheetData: SheetState[];
   statistics?: ImportStatistics;
-  rowFile?: { name: string; size: number };
+  rowFile?: { name: string; size: number; content: string };
   onSummaryFinished?: () => void;
 }
 
