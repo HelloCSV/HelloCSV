@@ -13,7 +13,7 @@ interface Props {
   variant?: ButtonVariant;
   outline?: boolean;
   disabled?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
   onClick?: () => void;
   style?: CSSProperties;
 }
@@ -35,6 +35,7 @@ const baseClasses = cva('text-center inline-block font-semibold', {
       md: 'px-2.5 py-1.5 rounded-md text-sm',
       lg: 'px-3 py-2 rounded-md text-sm',
       xl: 'px-3.5 py-2.5 rounded-md text-sm',
+      full: 'w-full px-3 py-2 rounded-md text-sm',
     },
     disabled: {
       true: 'opacity-50 cursor-not-allowed pointer-events-none',
