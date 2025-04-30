@@ -48,7 +48,7 @@ export default function App() {
                 className="text-blue-500 underline"
                 href="https://hellocsv.mintlify.app/common/get-started/usage#peer"
                 target="_blank"
-                rel="noreferrer"
+                rel="noreferrer noopener"
               >
                 But it works with React too!
               </a>
