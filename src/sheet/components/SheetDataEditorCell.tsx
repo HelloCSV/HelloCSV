@@ -10,6 +10,7 @@ import {
   isColumnReadOnly,
 } from '../utils';
 import { useTranslations } from '../../i18';
+import { useLongPress } from '../../utils/hooks';
 
 interface Props {
   columnDefinition: SheetColumnDefinition;
@@ -56,6 +57,13 @@ export default function SheetDataEditorCell({
   const nonEmptyValue = valueEmpty ? '\u00A0' : extractedValue;
   const readOnly = isColumnReadOnly(columnDefinition);
 
+  const longPressHandlers = useLongPress(
+    () => {
+      if (!readOnly) setEditMode(true);
+    },
+    { disabled: readOnly }
+  );
+
   const cellBackgroundColor = errorsText
     ? 'bg-hello-csv-danger-extra-light'
     : readOnly
@@ -71,8 +79,9 @@ export default function SheetDataEditorCell({
         }
       >
         <div
+          {...longPressHandlers}
           onClick={(e) => !readOnly && e.detail > 1 && setEditMode(true)}
-          className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} truncate overflow-hidden whitespace-nowrap`}
+          className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
           title={valueEmpty ? undefined : `${nonEmptyValue}`}
         >
           {nonEmptyValue}
