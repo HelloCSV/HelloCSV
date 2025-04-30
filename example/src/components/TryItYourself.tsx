@@ -38,7 +38,7 @@ export default function TryItYourself({ code }: { code: string }) {
         <div className="flex flex-col justify-between md:flex-row">
           <div>
             <p className="my-4 text-sm text-gray-500">
-              <i>(You can edit this</i> ☝<i>)</i>️
+              <i>(You can edit this</i> ☝<i>)</i>
             </p>
           </div>
           <button

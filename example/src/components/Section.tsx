@@ -7,7 +7,7 @@ interface Props {
 
 export default function Section({ children, className }: Props) {
   return (
-    <div className={`lg:-z-1 lg:-skew-y-3 pt-12 ${className}`}>
+    <div className={`pt-12 lg:-z-1 lg:-skew-y-3 ${className}`}>
       <div className="lg:skew-y-3">{children}</div>
     </div>
   );
