@@ -25,6 +25,7 @@ import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
+import { getFromIndexedDB, getStateKey } from '../utils/storage';
 
 function ImporterBody({
   theme,
@@ -175,8 +176,18 @@ function ImporterBody({
         sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
       );
 
+      const getFile = await getFromIndexedDB(getStateKey(sheets) + '-file');
+      // turn the content into a File object
+      const file = new File([getFile.content], getFile.name, {
+        type: getFile.type,
+      });
+
       const statistics = await onComplete(
-        { ...state, sheetData: data },
+        {
+          ...state,
+          sheetData: data,
+          rowFile: file,
+        },
         (progress) => {
           dispatch({ type: 'PROGRESS', payload: { progress } });
         }
