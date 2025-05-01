@@ -90,17 +90,13 @@ const reducer = (
     const reader = new FileReader();
     reader.readAsDataURL(action.payload.file);
     reader.onload = () => {
-      setInIndexedDB(getStateKey(state.sheetDefinitions), {
-        ...newState,
-        rowFile: {
-          name: action.payload.file.name,
-          size: action.payload.file.size,
-          content: reader.result as string,
-        },
+      setInIndexedDB(getStateKey(state.sheetDefinitions) + '-file', {
+        name: action.payload.file.name,
+        size: action.payload.file.size,
+        content: reader.result,
       }).catch(console.error);
     };
   } else if (action.type === 'FILE_PARSED') {
-    debugger;
     newState = {
       ...state,
       parsedFile: action.payload.parsed,
