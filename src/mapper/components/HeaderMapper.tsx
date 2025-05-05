@@ -90,7 +90,7 @@ export default function HeaderMapper({
               })}
             </div>
           </div>
-          <div className="bg-hello-csv-muted flex-1 overflow-y-auto">
+          <div className="bg-hello-csv-muted hidden flex-1 overflow-y-auto sm:block">
             <HeaderMapperDataPreview
               examples={hoveredExamples}
               csvHeader={hoveredCsvHeader ?? ''}

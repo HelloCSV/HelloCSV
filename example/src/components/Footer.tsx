@@ -7,7 +7,7 @@ const navigation = {
     { name: 'GitHub', href: 'https://github.com/HelloCSV/HelloCSV' },
     {
       name: 'Support',
-      href: 'https://stackoverflow.com/questions/tagged/hello-csv',
+      href: 'https://github.com/HelloCSV/HelloCSV/issues',
     },
   ],
   social: [

@@ -98,6 +98,7 @@ export default function ConfirmationModal({
                     onConfirm();
                     setOpen(false);
                   }}
+                  withFullWidth
                 >
                   {confirmationText ??
                     t('components.confirmationModal.defaultConfirm')}
@@ -108,6 +109,7 @@ export default function ConfirmationModal({
                   variant="tertiary"
                   data-autofocus
                   onClick={() => setOpen(false)}
+                  withFullWidth
                 >
                   {cancelText ?? t('components.confirmationModal.cancel')}
                 </Button>
