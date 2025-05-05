@@ -96,6 +96,13 @@ const reducer = (
         content: reader.result,
       }).catch(console.error);
     };
+    newState = {
+      ...state,
+      rowFile: {
+        name: action.payload.file.name,
+        size: action.payload.file.size,
+      },
+    };
   } else if (action.type === 'FILE_PARSED') {
     newState = {
       ...state,
@@ -192,7 +199,6 @@ const reducer = (
   setInIndexedDB(getStateKey(state.sheetDefinitions), newState).catch(
     console.error
   );
-
   return newState;
 };
 
