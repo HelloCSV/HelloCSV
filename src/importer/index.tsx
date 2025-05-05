@@ -25,7 +25,6 @@ import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
-import { getFromIndexedDB, getStateKey } from '../utils/storage';
 
 function ImporterBody({
   theme,
@@ -99,8 +98,6 @@ function ImporterBody({
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
   function onFileUploaded(file: File) {
-    dispatch({ type: 'FILE_UPLOADED', payload: { file } });
-
     parseCsv({
       file,
       onCompleted: async (newParsed) => {
@@ -110,6 +107,25 @@ function ImporterBody({
           customSuggestedMapper != null
             ? await customSuggestedMapper(sheets, csvHeaders)
             : buildSuggestedHeaderMappings(sheets, csvHeaders);
+
+        const content = await new Promise((resolve, _) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = function () {
+            resolve(reader.result);
+          };
+        });
+
+        dispatch({
+          type: 'FILE_UPLOADED',
+          payload: {
+            rowFile: {
+              name: file.name,
+              size: file.size,
+              content: content as string,
+            },
+          },
+        });
 
         dispatch({ type: 'FILE_PARSED', payload: { parsed: newParsed } });
 
@@ -176,18 +192,8 @@ function ImporterBody({
         sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
       );
 
-      const getFile = await getFromIndexedDB(getStateKey(sheets) + '-file');
-      // turn the content into a File object
-      const file = new File([getFile.content], getFile.name, {
-        type: getFile.type,
-      });
-
       const statistics = await onComplete(
-        {
-          ...state,
-          sheetData: data,
-          rowFile: file,
-        },
+        { ...state, sheetData: data },
         (progress) => {
           dispatch({ type: 'PROGRESS', payload: { progress } });
         }

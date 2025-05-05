@@ -7,11 +7,7 @@ import {
   SheetDefinition,
   SheetRow,
 } from '../types';
-import {
-  getFromIndexedDB,
-  setInIndexedDB,
-  getStateKey,
-} from '../utils/storage';
+import { getIndexedDBState, setIndexedDBState } from '../utils/storage';
 import { applyValidations } from '../validators';
 
 function recalculateCalculatedColumns(
@@ -29,9 +25,7 @@ function recalculateCalculatedColumns(
     );
 
     calculatedColumns.forEach((column) => {
-      if (Object.keys(column.typeArguments).length > 0) {
-        row[column.id] = column.typeArguments.getValue(row);
-      }
+      row[column.id] = column.typeArguments.getValue(row);
     });
   }
 
@@ -42,14 +36,13 @@ export async function buildInitialStateWithIndexedDB(
   sheetDefinitions: SheetDefinition[]
 ): Promise<ImporterState> {
   try {
-    const stateKey = getStateKey(sheetDefinitions);
-    const state = await getFromIndexedDB(stateKey);
+    const state = await getIndexedDBState(sheetDefinitions);
     if (state != null) {
       return state;
     }
 
     const newState = buildInitialState(sheetDefinitions);
-    await setInIndexedDB(stateKey, newState).catch(console.error);
+    setIndexedDBState(newState);
     return newState;
   } catch (error) {
     console.error(error);
@@ -87,21 +80,9 @@ const reducer = (
 
     newState = { ...state, mode: 'preview', sheetData: emptyData };
   } else if (action.type === 'FILE_UPLOADED') {
-    const reader = new FileReader();
-    reader.readAsDataURL(action.payload.file);
-    reader.onload = () => {
-      setInIndexedDB(getStateKey(state.sheetDefinitions) + '-file', {
-        name: action.payload.file.name,
-        size: action.payload.file.size,
-        content: reader.result,
-      }).catch(console.error);
-    };
     newState = {
       ...state,
-      rowFile: {
-        name: action.payload.file.name,
-        size: action.payload.file.size,
-      },
+      rowFile: action.payload.rowFile,
     };
   } else if (action.type === 'FILE_PARSED') {
     newState = {
@@ -196,9 +177,7 @@ const reducer = (
     newState = buildInitialState(state.sheetDefinitions);
   }
 
-  setInIndexedDB(getStateKey(state.sheetDefinitions), newState).catch(
-    console.error
-  );
+  setIndexedDBState(newState);
   return newState;
 };
 
