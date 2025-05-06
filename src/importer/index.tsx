@@ -5,7 +5,7 @@ import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { buildDefaultState, buildInitialState, reducer } from './reducer';
+import { buildInitialState, buildState, reducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
@@ -15,7 +15,7 @@ import {
 import { ThemeSetter } from '../theme/ThemeSetter';
 import { parseCsv } from '../parser';
 import { getMappedData } from '../mapper';
-import { filterEmptyRows } from '../utils';
+import { filterEmptyRows, getFileData } from '../utils';
 import { applyTransformations } from '../transformers';
 import { buildSuggestedHeaderMappings } from '../mapper/utils';
 import { NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT } from '../constants';
@@ -41,16 +41,13 @@ function ImporterBody({
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-
-  const [state, dispatch] = useReducer(
-    reducer,
-    buildDefaultState(sheets, indexDBConfig)
-  );
+  const initialState = buildInitialState(sheets, indexDBConfig);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchState = async () => {
-      const state = await buildInitialState(sheets, indexDBConfig);
-      dispatch({ type: 'FETCH_STATE', payload: { state } });
+      const newState = await buildState(sheets, indexDBConfig);
+      dispatch({ type: 'SET_STATE', payload: { state: newState } });
     };
     fetchState();
   }, [sheets, indexDBConfig]);
@@ -94,6 +91,7 @@ function ImporterBody({
     parseCsv({
       file,
       onCompleted: async (newParsed) => {
+        const fileData = await getFileData(file);
         const csvHeaders = newParsed.meta.fields!;
 
         const suggestedMappings =
@@ -101,26 +99,10 @@ function ImporterBody({
             ? await customSuggestedMapper(sheets, csvHeaders)
             : buildSuggestedHeaderMappings(sheets, csvHeaders);
 
-        const content = await new Promise((resolve, _) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = function () {
-            resolve(reader.result);
-          };
-        });
-
         dispatch({
-          type: 'FILE_UPLOADED',
-          payload: {
-            rowFile: {
-              name: file.name,
-              size: file.size,
-              content: content as string,
-            },
-          },
+          type: 'FILE_PARSED',
+          payload: { parsed: newParsed, fileData },
         });
-
-        dispatch({ type: 'FILE_PARSED', payload: { parsed: newParsed } });
 
         dispatch({
           type: 'COLUMN_MAPPING_CHANGED',
@@ -300,7 +282,7 @@ function ImporterBody({
             resetState={resetState}
             sheetData={sheetData}
             statistics={importStatistics}
-            rowFile={state.rowFile}
+            fileData={state.fileData}
             onSummaryFinished={onSummaryFinished}
           />
         )}

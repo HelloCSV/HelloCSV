@@ -33,42 +33,7 @@ function recalculateCalculatedColumns(
   return row;
 }
 
-async function buildInitialState(
-  sheetDefinitions: SheetDefinition[],
-  indexDBConfig?: IndexDBConfig
-): Promise<ImporterState> {
-  const defaultState = buildDefaultState(sheetDefinitions, indexDBConfig);
-  try {
-    if (!indexDBConfig?.enabled) return defaultState;
-
-    return await buildInitialStateWithIndexedDB(
-      sheetDefinitions,
-      indexDBConfig
-    );
-  } catch (_error) {
-    return defaultState;
-  }
-}
-
-async function buildInitialStateWithIndexedDB(
-  sheetDefinitions: SheetDefinition[],
-  indexDBConfig: IndexDBConfig
-): Promise<ImporterState> {
-  const state = await getIndexedDBState(
-    sheetDefinitions,
-    indexDBConfig.customKey
-  );
-
-  if (state != null) {
-    return state;
-  }
-
-  const newState = buildDefaultState(sheetDefinitions, indexDBConfig);
-  setIndexedDBState(newState, indexDBConfig.customKey);
-  return newState;
-}
-
-function buildDefaultState(
+function buildInitialState(
   sheetDefinitions: SheetDefinition[],
   indexDBConfig?: IndexDBConfig
 ): ImporterState {
@@ -86,6 +51,38 @@ function buildDefaultState(
   };
 }
 
+async function buildState(
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig?: IndexDBConfig
+): Promise<ImporterState> {
+  const defaultState = buildInitialState(sheetDefinitions, indexDBConfig);
+  try {
+    if (!indexDBConfig?.enabled) return defaultState;
+
+    return await buildStateWithIndexedDB(sheetDefinitions, indexDBConfig);
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+async function buildStateWithIndexedDB(
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig: IndexDBConfig
+): Promise<ImporterState> {
+  const state = await getIndexedDBState(
+    sheetDefinitions,
+    indexDBConfig.customKey
+  );
+
+  if (state != null) {
+    return state;
+  }
+
+  const newState = buildInitialState(sheetDefinitions, indexDBConfig);
+  setIndexedDBState(newState, indexDBConfig.customKey);
+  return newState;
+}
+
 const reducer = (
   state: ImporterState,
   action: ImporterAction
@@ -99,38 +96,26 @@ const reducer = (
         () => ({})
       ),
     }));
-
-    newState = { ...state, mode: 'preview', sheetData: emptyData };
-  } else if (action.type === 'FILE_UPLOADED') {
-    newState = {
-      ...state,
-      rowFile: action.payload.rowFile,
-    };
+    newState.mode = 'preview';
+    newState.sheetData = emptyData;
   } else if (action.type === 'FILE_PARSED') {
-    newState = {
-      ...state,
-      parsedFile: action.payload.parsed,
-      mode: 'mapping',
-    };
+    newState.parsedFile = action.payload.parsed;
+    newState.fileData = action.payload.fileData;
+    newState.mode = 'mapping';
   } else if (action.type === 'COLUMN_MAPPING_CHANGED') {
-    newState = { ...state, columnMappings: action.payload.mappings };
+    newState.columnMappings = action.payload.mappings;
   } else if (action.type === 'DATA_MAPPED') {
-    newState = {
-      ...state,
-      sheetData: applyTransformations(
-        state.sheetDefinitions,
-        action.payload.mappedData
-      ),
-      mode: 'preview',
-      validationErrors: applyValidations(
-        state.sheetDefinitions,
-        action.payload.mappedData
-      ),
-    };
+    newState.sheetData = applyTransformations(
+      state.sheetDefinitions,
+      action.payload.mappedData
+    );
+    newState.mode = 'preview';
+    newState.validationErrors = applyValidations(
+      state.sheetDefinitions,
+      action.payload.mappedData
+    );
   } else if (action.type === 'CELL_CHANGED') {
-    const currentData = state.sheetData;
-
-    const newData = currentData.map((sheet) => {
+    const newData = state.sheetData.map((sheet) => {
       if (sheet.sheetId === action.payload.sheetId) {
         const newRows = [...sheet.rows];
 
@@ -146,11 +131,11 @@ const reducer = (
       }
     });
 
-    newState = {
-      ...state,
-      sheetData: applyTransformations(state.sheetDefinitions, newData),
-      validationErrors: applyValidations(state.sheetDefinitions, newData),
-    };
+    newState.sheetData = applyTransformations(state.sheetDefinitions, newData);
+    newState.validationErrors = applyValidations(
+      state.sheetDefinitions,
+      newData
+    );
   } else if (action.type === 'REMOVE_ROWS') {
     const newData = state.sheetData.map((sheet) => {
       if (sheet.sheetId === action.payload.sheetId) {
@@ -163,11 +148,11 @@ const reducer = (
       return sheet;
     });
 
-    newState = {
-      ...state,
-      sheetData: newData,
-      validationErrors: applyValidations(state.sheetDefinitions, newData),
-    };
+    newState.sheetData = newData;
+    newState.validationErrors = applyValidations(
+      state.sheetDefinitions,
+      newData
+    );
   } else if (action.type === 'ADD_EMPTY_ROW') {
     const newData = state.sheetData.map((data) => {
       if (data.sheetId !== state.currentSheetId) {
@@ -180,24 +165,21 @@ const reducer = (
       };
     });
 
-    newState = { ...state, sheetData: newData };
+    newState.sheetData = newData;
   } else if (action.type === 'SHEET_CHANGED') {
-    newState = { ...state, currentSheetId: action.payload.sheetId };
+    newState.currentSheetId = action.payload.sheetId;
   } else if (action.type === 'PROGRESS') {
-    newState = { ...state, importProgress: action.payload.progress };
+    newState.importProgress = action.payload.progress;
   } else if (action.type === 'COMPLETED') {
-    newState = {
-      ...state,
-      mode: 'completed',
-      importStatistics: action.payload.importStatistics,
-    };
+    newState.mode = 'completed';
+    newState.importStatistics = action.payload.importStatistics;
   } else if (
     ['FAILED', 'PREVIEW', 'MAPPING', 'SUBMIT', 'UPLOAD'].includes(action.type)
   ) {
-    newState = { ...state, mode: action.type.toLowerCase() as ImporterMode };
+    newState.mode = action.type.toLowerCase() as ImporterMode;
   } else if (action.type === 'RESET') {
-    newState = buildDefaultState(state.sheetDefinitions, state.indexDBConfig);
-  } else if (action.type === 'FETCH_STATE') {
+    newState = buildInitialState(state.sheetDefinitions, state.indexDBConfig);
+  } else if (action.type === 'SET_STATE') {
     newState = action.payload.state;
   }
 
@@ -208,4 +190,4 @@ const reducer = (
   return newState;
 };
 
-export { reducer, buildDefaultState, buildInitialState };
+export { reducer, buildInitialState, buildState };
