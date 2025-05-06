@@ -56,7 +56,7 @@ export async function setIndexedDBState(
   return new Promise((resolve, reject) => {
     const key = stateKey(state.sheetDefinitions, customKey);
     const value = { ...state } as any;
-    delete value.sheetDefinitions;
+    delete value.sheetDefinitions; // sheetDefinitions have functions within, this should not be saved in the database
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => reject(request.error);

@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'preact/compat';
+import { useReducer, useEffect } from 'preact/compat';
 import { useRef } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
@@ -41,8 +41,10 @@ function ImporterBody({
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const initialState = buildInitialState(sheets, indexDBConfig);
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(
+    reducer,
+    buildInitialState(sheets, indexDBConfig)
+  );
 
   useEffect(() => {
     const fetchState = async () => {
@@ -62,6 +64,8 @@ function ImporterBody({
     importProgress,
     importStatistics,
   } = state;
+  console.log('mode state', state.mode);
+  console.log('mode', mode);
 
   useEffect(() => {
     if (isInitialRender.current) {

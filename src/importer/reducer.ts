@@ -96,24 +96,32 @@ const reducer = (
         () => ({})
       ),
     }));
-    newState.mode = 'preview';
-    newState.sheetData = emptyData;
+    newState = { ...newState, mode: 'preview', sheetData: emptyData };
   } else if (action.type === 'FILE_PARSED') {
-    newState.parsedFile = action.payload.parsed;
-    newState.fileData = action.payload.fileData;
-    newState.mode = 'mapping';
+    newState = {
+      ...state,
+      parsedFile: action.payload.parsed,
+      fileData: action.payload.fileData,
+      mode: 'mapping',
+    };
   } else if (action.type === 'COLUMN_MAPPING_CHANGED') {
-    newState.columnMappings = action.payload.mappings;
+    newState = {
+      ...state,
+      columnMappings: action.payload.mappings,
+    };
   } else if (action.type === 'DATA_MAPPED') {
-    newState.sheetData = applyTransformations(
-      state.sheetDefinitions,
-      action.payload.mappedData
-    );
-    newState.mode = 'preview';
-    newState.validationErrors = applyValidations(
-      state.sheetDefinitions,
-      action.payload.mappedData
-    );
+    newState = {
+      ...state,
+      sheetData: applyTransformations(
+        state.sheetDefinitions,
+        action.payload.mappedData
+      ),
+      mode: 'preview',
+      validationErrors: applyValidations(
+        state.sheetDefinitions,
+        action.payload.mappedData
+      ),
+    };
   } else if (action.type === 'CELL_CHANGED') {
     const newData = state.sheetData.map((sheet) => {
       if (sheet.sheetId === action.payload.sheetId) {
@@ -131,11 +139,11 @@ const reducer = (
       }
     });
 
-    newState.sheetData = applyTransformations(state.sheetDefinitions, newData);
-    newState.validationErrors = applyValidations(
-      state.sheetDefinitions,
-      newData
-    );
+    newState = {
+      ...newState,
+      sheetData: applyTransformations(state.sheetDefinitions, newData),
+      validationErrors: applyValidations(state.sheetDefinitions, newData),
+    };
   } else if (action.type === 'REMOVE_ROWS') {
     const newData = state.sheetData.map((sheet) => {
       if (sheet.sheetId === action.payload.sheetId) {
@@ -148,11 +156,11 @@ const reducer = (
       return sheet;
     });
 
-    newState.sheetData = newData;
-    newState.validationErrors = applyValidations(
-      state.sheetDefinitions,
-      newData
-    );
+    newState = {
+      ...state,
+      sheetData: newData,
+      validationErrors: applyValidations(state.sheetDefinitions, newData),
+    };
   } else if (action.type === 'ADD_EMPTY_ROW') {
     const newData = state.sheetData.map((data) => {
       if (data.sheetId !== state.currentSheetId) {
@@ -165,18 +173,33 @@ const reducer = (
       };
     });
 
-    newState.sheetData = newData;
+    newState = {
+      ...state,
+      sheetData: newData,
+    };
   } else if (action.type === 'SHEET_CHANGED') {
-    newState.currentSheetId = action.payload.sheetId;
+    newState = {
+      ...state,
+      currentSheetId: action.payload.sheetId,
+    };
   } else if (action.type === 'PROGRESS') {
-    newState.importProgress = action.payload.progress;
+    newState = {
+      ...state,
+      importProgress: action.payload.progress,
+    };
   } else if (action.type === 'COMPLETED') {
-    newState.mode = 'completed';
-    newState.importStatistics = action.payload.importStatistics;
+    newState = {
+      ...state,
+      mode: 'completed',
+      importStatistics: action.payload.importStatistics,
+    };
   } else if (
     ['FAILED', 'PREVIEW', 'MAPPING', 'SUBMIT', 'UPLOAD'].includes(action.type)
   ) {
-    newState.mode = action.type.toLowerCase() as ImporterMode;
+    newState = {
+      ...state,
+      mode: action.type.toLowerCase() as ImporterMode,
+    };
   } else if (action.type === 'RESET') {
     newState = buildInitialState(state.sheetDefinitions, state.indexDBConfig);
   } else if (action.type === 'SET_STATE') {
