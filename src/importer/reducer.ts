@@ -33,33 +33,43 @@ function recalculateCalculatedColumns(
   return row;
 }
 
-export async function buildInitialStateWithIndexedDB(
+async function buildInitialState(
   sheetDefinitions: SheetDefinition[],
   indexDBConfig?: IndexDBConfig
 ): Promise<ImporterState> {
+  const defaultState = buildDefaultState(sheetDefinitions, indexDBConfig);
   try {
-    if (!indexDBConfig?.enabled) {
-      return buildInitialState(sheetDefinitions);
-    }
-    const state = await getIndexedDBState(
+    if (!indexDBConfig?.enabled) return defaultState;
+
+    return await buildInitialStateWithIndexedDB(
       sheetDefinitions,
-      indexDBConfig?.customKey
+      indexDBConfig
     );
-
-    if (state != null) {
-      return state;
-    }
-
-    const newState = buildInitialState(sheetDefinitions, indexDBConfig);
-    setIndexedDBState(newState, indexDBConfig?.customKey);
-    return newState;
   } catch (error) {
     console.error(error);
-    return buildInitialState(sheetDefinitions, indexDBConfig);
+    return defaultState;
   }
 }
 
-function buildInitialState(
+async function buildInitialStateWithIndexedDB(
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig: IndexDBConfig
+): Promise<ImporterState> {
+  const state = await getIndexedDBState(
+    sheetDefinitions,
+    indexDBConfig.customKey
+  );
+
+  if (state != null) {
+    return state;
+  }
+
+  const newState = buildDefaultState(sheetDefinitions, indexDBConfig);
+  setIndexedDBState(newState, indexDBConfig.customKey);
+  return newState;
+}
+
+function buildDefaultState(
   sheetDefinitions: SheetDefinition[],
   indexDBConfig?: IndexDBConfig
 ): ImporterState {

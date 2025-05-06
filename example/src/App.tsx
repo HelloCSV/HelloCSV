@@ -4,6 +4,7 @@ import { EXAMPLE_CODE } from './constants';
 import {
   EmployeeSheetImporter,
   EmployeeImporter,
+  IndexDBExample,
 } from './components/importers';
 import InstallTabs from './components/InstallTabs';
 import Section from './components/Section';
@@ -95,7 +96,7 @@ export default function App() {
       </Section>
 
       <Section className="bg-gray-100">
-        <EmployeeImporter indexDBConfig={{ enabled: true }} />
+        <IndexDBExample />
       </Section>
 
       <Footer />

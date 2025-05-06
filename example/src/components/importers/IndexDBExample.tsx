@@ -4,7 +4,7 @@ import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
 import example1 from '../../assets/datasets/example-1.csv?url';
 
-export default function EmployeeImporter() {
+export default function IndexDBExample() {
   const [ready, setReady] = useState(false);
 
   const onComplete = async (
@@ -22,22 +22,25 @@ export default function EmployeeImporter() {
   };
   return (
     <Content>
-      <a id="basic-example"></a>
+      <a id="indexdb-example"></a>
       <DocumentContainer>
-        <h3 className="mb-6 text-2xl font-bold lg:text-4xl">Basic Example</h3>
+        <h3 className="mb-6 text-2xl font-bold lg:text-4xl">IndexDB Example</h3>
         <div className="container leading-8">
           <p>
-            Imagine we are trying to set up an uploader that uploads a CSV of{' '}
-            <code className="rounded-md bg-gray-200 p-1">employees</code>.
+            This example shows how to use IndexDB to save the state of the
+            importer.
           </p>
-          <p>HelloCSV makes this a breeze.</p>
+          <p>
+            This is useful if you want to save the state of the importer so that
+            you can resume the upload later.
+          </p>
         </div>
         <p className="mt-8 text-lg underline decoration-blue-500 decoration-4 underline-offset-6">
           Try uploading{' '}
           <a className="text-blue-500 hover:text-blue-600" href={example1}>
-            this file
-          </a>
-          .
+            this file,
+          </a>{' '}
+          then reload the page.
         </p>
       </DocumentContainer>
       <div className="mt-4 flex max-h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
@@ -125,6 +128,7 @@ export default function EmployeeImporter() {
           }}
           onComplete={onComplete}
           preventUploadOnValidationErrors
+          indexDBConfig={{ enabled: true }}
         />
       </div>
       {ready && (

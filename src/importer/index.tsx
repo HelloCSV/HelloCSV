@@ -5,7 +5,7 @@ import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { buildInitialStateWithIndexedDB, reducer } from './reducer';
+import { buildInitialState, reducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
@@ -45,7 +45,7 @@ function ImporterBody({
 
   useEffect(() => {
     const fetchState = async () => {
-      const state = await buildInitialStateWithIndexedDB(sheets, indexDBConfig);
+      const state = await buildInitialState(sheets, indexDBConfig);
       setInitialState(state);
     };
     fetchState();
