@@ -8,7 +8,7 @@ import {
   SheetDefinition,
   SheetRow,
 } from '../types';
-import { getIndexedDBState, setIndexedDBState } from '../utils/storage';
+import { getIndexedDBState, setIndexedDBState } from './storage';
 import { applyValidations } from '../validators';
 
 function recalculateCalculatedColumns(
@@ -35,7 +35,7 @@ function recalculateCalculatedColumns(
 
 function buildInitialState(
   sheetDefinitions: SheetDefinition[],
-  indexDBConfig?: IndexDBConfig
+  indexDBConfig: IndexDBConfig = { enabled: false }
 ): ImporterState {
   return {
     sheetDefinitions,
@@ -47,17 +47,17 @@ function buildInitialState(
       rows: [],
     })),
     importProgress: 0,
-    indexDBConfig: indexDBConfig || { enabled: false },
+    indexDBConfig,
   };
 }
 
 async function buildState(
   sheetDefinitions: SheetDefinition[],
-  indexDBConfig?: IndexDBConfig
+  indexDBConfig: IndexDBConfig = { enabled: false }
 ): Promise<ImporterState> {
   const defaultState = buildInitialState(sheetDefinitions, indexDBConfig);
   try {
-    if (!indexDBConfig?.enabled) return defaultState;
+    if (!indexDBConfig.enabled) return defaultState;
 
     return await buildStateWithIndexedDB(sheetDefinitions, indexDBConfig);
   } catch (_error) {

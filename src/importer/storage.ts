@@ -1,4 +1,4 @@
-import { ImporterState } from '../importer/types';
+import { ImporterState } from './types';
 import { SheetDefinition } from '../sheet/types';
 
 const DB_NAME = 'HelloCSV';
