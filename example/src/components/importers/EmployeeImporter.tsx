@@ -4,7 +4,11 @@ import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
 import example1 from '../../assets/datasets/example-1.csv?url';
 
-export default function EmployeeImporter() {
+export default function EmployeeImporter({
+  indexDBConfig = { enabled: false },
+}: {
+  indexDBConfig?: { enabled: boolean };
+}) {
   const [ready, setReady] = useState(false);
 
   const onComplete = async (
@@ -125,6 +129,7 @@ export default function EmployeeImporter() {
           }}
           onComplete={onComplete}
           preventUploadOnValidationErrors
+          indexDBConfig={indexDBConfig}
         />
       </div>
       {ready && (

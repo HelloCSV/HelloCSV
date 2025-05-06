@@ -4,6 +4,7 @@ import {
   ImporterAction,
   ImporterMode,
   ImporterState,
+  IndexDBConfig,
   SheetDefinition,
   SheetRow,
 } from '../types';
@@ -33,24 +34,35 @@ function recalculateCalculatedColumns(
 }
 
 export async function buildInitialStateWithIndexedDB(
-  sheetDefinitions: SheetDefinition[]
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig?: IndexDBConfig
 ): Promise<ImporterState> {
   try {
-    const state = await getIndexedDBState(sheetDefinitions);
+    if (!indexDBConfig?.enabled) {
+      return buildInitialState(sheetDefinitions);
+    }
+    const state = await getIndexedDBState(
+      sheetDefinitions,
+      indexDBConfig?.customKey
+    );
+
     if (state != null) {
       return state;
     }
 
-    const newState = buildInitialState(sheetDefinitions);
-    setIndexedDBState(newState);
+    const newState = buildInitialState(sheetDefinitions, indexDBConfig);
+    setIndexedDBState(newState, indexDBConfig?.customKey);
     return newState;
   } catch (error) {
     console.error(error);
-    return buildInitialState(sheetDefinitions);
+    return buildInitialState(sheetDefinitions, indexDBConfig);
   }
 }
 
-function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
+function buildInitialState(
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig?: IndexDBConfig
+): ImporterState {
   return {
     sheetDefinitions,
     currentSheetId: sheetDefinitions[0].id,
@@ -61,6 +73,7 @@ function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
       rows: [],
     })),
     importProgress: 0,
+    indexDBConfig: indexDBConfig || { enabled: false },
   };
 }
 
@@ -174,10 +187,13 @@ const reducer = (
   ) {
     newState = { ...state, mode: action.type.toLowerCase() as ImporterMode };
   } else if (action.type === 'RESET') {
-    newState = buildInitialState(state.sheetDefinitions);
+    newState = buildInitialState(state.sheetDefinitions, state.indexDBConfig);
   }
 
-  setIndexedDBState(newState);
+  if (state.indexDBConfig?.enabled) {
+    setIndexedDBState(newState, state.indexDBConfig.customKey);
+  }
+
   return newState;
 };
 

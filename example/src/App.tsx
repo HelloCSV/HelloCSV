@@ -94,6 +94,10 @@ export default function App() {
         <EmployeeSheetImporter />
       </Section>
 
+      <Section className="bg-gray-100">
+        <EmployeeImporter indexDBConfig={{ enabled: true }} />
+      </Section>
+
       <Footer />
     </div>
   );

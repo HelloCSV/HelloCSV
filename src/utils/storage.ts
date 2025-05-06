@@ -6,10 +6,11 @@ const DB_VERSION = 1;
 const STORE_NAME = 'state';
 
 export async function getIndexedDBState(
-  sheetDefinitions: SheetDefinition[]
-): Promise<ImporterState> {
+  sheetDefinitions: SheetDefinition[],
+  customKey?: string | null
+): Promise<ImporterState | null> {
   return new Promise((resolve, reject) => {
-    const key = getStateKey(sheetDefinitions);
+    const key = stateKey(sheetDefinitions, customKey);
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => reject(request.error);
@@ -19,14 +20,14 @@ export async function getIndexedDBState(
       const store = transaction.objectStore(STORE_NAME);
       const getRequest = store.get(key);
 
-      getRequest.onerror = () => reject(getRequest.error);
+      getRequest.onerror = () => resolve(null);
       getRequest.onsuccess = () => {
         try {
           const result = getRequest.result;
           result.sheetDefinitions = sheetDefinitions;
           resolve(result);
         } catch (error) {
-          reject(error);
+          resolve(null);
         }
       };
     };
@@ -40,9 +41,12 @@ export async function getIndexedDBState(
   });
 }
 
-export async function setIndexedDBState(state: ImporterState): Promise<void> {
+export async function setIndexedDBState(
+  state: ImporterState,
+  customKey?: string | null
+): Promise<void> {
   return new Promise((resolve, reject) => {
-    const key = getStateKey(state.sheetDefinitions);
+    const key = stateKey(state.sheetDefinitions, customKey);
     const value = { ...state } as any;
     delete value.sheetDefinitions;
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -67,9 +71,10 @@ export async function setIndexedDBState(state: ImporterState): Promise<void> {
   });
 }
 
-function getStateKey(array: any[]): string {
+function stateKey(array: any[], customKey?: string | null): string {
+  const prefix = customKey ? `importer-state-${customKey}` : 'importer-state';
   const key = array.map((item) => `${item.id}-${item.label}`).join('|');
-  return `importer-state-${hashString(key)}`;
+  return `${prefix}-${hashString(key)}`;
 }
 
 function hashString(str: string): number {

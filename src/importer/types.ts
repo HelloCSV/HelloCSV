@@ -33,6 +33,12 @@ export interface ImporterDefinition {
     sheetDefinitions: SheetDefinition[],
     csvHeaders: string[]
   ) => ColumnMapping[] | Promise<ColumnMapping[]>;
+  indexDBConfig?: IndexDBConfig;
+}
+
+export interface IndexDBConfig {
+  enabled: boolean;
+  customKey?: string;
 }
 
 /**
@@ -61,6 +67,7 @@ export interface ImporterState {
   columnMappings?: ColumnMapping[];
   importProgress: number;
   importStatistics?: ImportStatistics;
+  indexDBConfig?: IndexDBConfig;
 }
 
 export type ImporterOutputFieldType = string | number;

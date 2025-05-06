@@ -36,6 +36,7 @@ function ImporterBody({
   maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
   onSummaryFinished,
+  indexDBConfig,
 }: ImporterDefinition) {
   const { t } = useTranslations();
   const isInitialRender = useRef(true);
@@ -44,11 +45,11 @@ function ImporterBody({
 
   useEffect(() => {
     const fetchState = async () => {
-      const state = await buildInitialStateWithIndexedDB(sheets);
+      const state = await buildInitialStateWithIndexedDB(sheets, indexDBConfig);
       setInitialState(state);
     };
     fetchState();
-  }, [sheets]);
+  }, [sheets, indexDBConfig]);
 
   if (initialState == null) {
     return <div>Loading...</div>;
