@@ -45,8 +45,7 @@ async function buildInitialState(
       sheetDefinitions,
       indexDBConfig
     );
-  } catch (error) {
-    console.error(error);
+  } catch (_error) {
     return defaultState;
   }
 }
@@ -197,7 +196,7 @@ const reducer = (
   ) {
     newState = { ...state, mode: action.type.toLowerCase() as ImporterMode };
   } else if (action.type === 'RESET') {
-    newState = buildInitialState(state.sheetDefinitions, state.indexDBConfig);
+    newState = buildDefaultState(state.sheetDefinitions, state.indexDBConfig);
   }
 
   if (state.indexDBConfig?.enabled) {
