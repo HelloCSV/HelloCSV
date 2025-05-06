@@ -1,16 +1,15 @@
 import { useEffect, useReducer } from 'preact/compat';
-import { useRef, useState } from 'preact/hooks';
+import { useRef } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { buildInitialState, reducer } from './reducer';
+import { buildDefaultState, buildInitialState, reducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
   ImporterDefinition,
-  ImporterState,
   RemoveRowsPayload,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
@@ -39,34 +38,22 @@ function ImporterBody({
   indexDBConfig,
 }: ImporterDefinition) {
   const { t } = useTranslations();
+
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [initialState, setInitialState] = useState<ImporterState | null>(null);
+
+  const [state, dispatch] = useReducer(
+    reducer,
+    buildDefaultState(sheets, indexDBConfig)
+  );
 
   useEffect(() => {
     const fetchState = async () => {
       const state = await buildInitialState(sheets, indexDBConfig);
-      setInitialState(state);
+      dispatch({ type: 'FETCH_STATE', payload: { state } });
     };
     fetchState();
   }, [sheets, indexDBConfig]);
-
-  if (initialState == null) {
-    return <div>Loading...</div>;
-  }
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [state, dispatch] = useReducer(reducer, initialState);
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
-
-    targetRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [state?.mode]);
 
   const {
     mode,
@@ -78,6 +65,15 @@ function ImporterBody({
     importProgress,
     importStatistics,
   } = state;
+
+  useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
+    targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [mode]);
 
   const currentSheetData = sheetData.find(
     (sheet) => sheet.sheetId === currentSheetId

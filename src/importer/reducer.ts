@@ -197,6 +197,8 @@ const reducer = (
     newState = { ...state, mode: action.type.toLowerCase() as ImporterMode };
   } else if (action.type === 'RESET') {
     newState = buildDefaultState(state.sheetDefinitions, state.indexDBConfig);
+  } else if (action.type === 'FETCH_STATE') {
+    newState = action.payload.state;
   }
 
   if (state.indexDBConfig?.enabled) {
@@ -206,4 +208,4 @@ const reducer = (
   return newState;
 };
 
-export { reducer, buildInitialState };
+export { reducer, buildDefaultState, buildInitialState };
