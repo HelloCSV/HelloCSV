@@ -68,10 +68,6 @@ function ImporterBody({
     targetRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [state?.mode]);
 
-  if (!state || !dispatch) {
-    return <div>Loading...</div>;
-  }
-
   const {
     mode,
     currentSheetId,
