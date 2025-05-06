@@ -34,9 +34,17 @@ export async function getIndexedDBState(
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
+      const oldVersion = event.oldVersion;
+
+      // Clear data if upgrading from an older version
+      if (oldVersion < DB_VERSION) {
+        if (db.objectStoreNames.contains(STORE_NAME)) {
+          db.deleteObjectStore(STORE_NAME);
+        }
       }
+
+      // Create fresh store
+      db.createObjectStore(STORE_NAME);
     };
   });
 }
