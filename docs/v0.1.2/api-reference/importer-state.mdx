@@ -1,0 +1,118 @@
+---
+title: "Importer State"
+---
+
+This section describes the state object of the importer.
+
+## sheetDefinitions
+
+**Type:** `SheetDefinition[]`
+
+**Required:** Yes
+
+**Description:**  
+Defines the structure of the import.
+
+---
+
+## currentSheetId
+
+**Type:** `string`
+
+**Required:** Yes
+
+**Description:**  
+ID of the currently selected sheet.
+
+---
+
+## mode
+
+**Type:** `'upload' | 'mapping' | 'preview' | 'submit' | 'completed' | 'failed'`
+
+**Required:** Yes
+
+**Description:**  
+Current state of the importer.
+
+---
+
+## validationErrors
+
+**Type:** `ImporterValidationError[]`
+
+**Required:** Yes
+
+**Description:**  
+List of validation errors.
+
+---
+
+## sheetData
+
+**Type:** `SheetState[]`
+
+**Required:** Yes
+
+**Description:**  
+Data for each sheet.
+
+---
+
+## parsedFile
+
+**Type:** `ParsedFile`
+
+**Required:** No
+
+**Description:**  
+Parsed CSV file data, if available.
+
+---
+
+## rowFile
+
+**Type:** `File`
+
+**Required:** No
+
+**Description:**  
+Original uploaded file.
+
+---
+
+## columnMappings
+
+**Type:** `ColumnMapping[]`
+
+**Required:** No
+
+**Description:**  
+Mappings between CSV columns and sheet columns.
+
+---
+
+## importProgress
+
+**Type:** `number`
+
+**Required:** Yes
+
+**Description:**  
+Import progress percentage (0-100).
+
+---
+
+## importStatistics
+
+**Type:** `ImportStatistics`
+
+**Required:** No
+
+**Description:**  
+Statistics about the import.
+
+**Fields:**
+- `imported`: number - Number of rows successfully imported
+- `failed`: number - Number of rows that failed to import
+- `skipped`: number - Number of rows that were skipped during import
