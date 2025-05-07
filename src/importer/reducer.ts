@@ -228,7 +228,9 @@ const usePersistedReducer = (
   }, [sheets, indexDBConfig]);
 
   useEffect(() => {
-    setIndexedDBState(state, indexDBConfig.customKey);
+    if (indexDBConfig.enabled) {
+      setIndexedDBState(state, indexDBConfig.customKey);
+    }
   }, [state, indexDBConfig]);
 
   return [state, dispatch];
