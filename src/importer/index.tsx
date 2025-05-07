@@ -35,7 +35,7 @@ function ImporterBody({
   maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
   onSummaryFinished,
-  indexDBConfig,
+  indexDBConfig = { enabled: false },
 }: ImporterDefinition) {
   const { t } = useTranslations();
 

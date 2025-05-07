@@ -67,7 +67,7 @@ export interface ImporterState {
   columnMappings?: ColumnMapping[];
   importProgress: number;
   importStatistics?: ImportStatistics;
-  indexDBConfig?: IndexDBConfig;
+  indexDBConfig: IndexDBConfig;
 }
 
 export type ImporterOutputFieldType = string | number;

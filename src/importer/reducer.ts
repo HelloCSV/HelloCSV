@@ -35,7 +35,7 @@ function recalculateCalculatedColumns(
 
 function buildInitialState(
   sheetDefinitions: SheetDefinition[],
-  indexDBConfig: IndexDBConfig = { enabled: false }
+  indexDBConfig: IndexDBConfig
 ): ImporterState {
   return {
     sheetDefinitions,
@@ -53,7 +53,7 @@ function buildInitialState(
 
 async function buildState(
   sheetDefinitions: SheetDefinition[],
-  indexDBConfig: IndexDBConfig = { enabled: false }
+  indexDBConfig: IndexDBConfig
 ): Promise<ImporterState> {
   const defaultState = buildInitialState(sheetDefinitions, indexDBConfig);
   try {
@@ -206,7 +206,7 @@ const reducer = (
     newState = action.payload.state;
   }
 
-  if (state.indexDBConfig?.enabled) {
+  if (state.indexDBConfig.enabled) {
     setIndexedDBState(newState, state.indexDBConfig.customKey);
   }
 
