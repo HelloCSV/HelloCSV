@@ -2,17 +2,17 @@ name: Mintlify automerge
 on:
   push:
     branches:
-      - main
+      - release
 jobs:
   sync-branch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge main -> mintlify
+      - name: Merge release -> mintlify
         uses: devmasx/merge-branch@v1.4.0
         with:
           type: now
-          from_branch: main
+          from_branch: release
           target_branch: mintlify
           github_token: ${{ secrets.PAT_TOKEN }}
