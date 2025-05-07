@@ -31,21 +31,6 @@ export async function getIndexedDBState(
         }
       };
     };
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      const oldVersion = event.oldVersion;
-
-      // Clear data if upgrading from an older version
-      if (oldVersion < DB_VERSION) {
-        if (db.objectStoreNames.contains(STORE_NAME)) {
-          db.deleteObjectStore(STORE_NAME);
-        }
-      }
-
-      // Create fresh store
-      db.createObjectStore(STORE_NAME);
-    };
   });
 }
 
@@ -69,19 +54,15 @@ export async function setIndexedDBState(
       putRequest.onerror = () => reject(putRequest.error);
       putRequest.onsuccess = () => resolve();
     };
-
-    request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME);
-      }
-    };
   });
 }
 
-function stateKey(array: SheetDefinition[], customKey?: string | null): string {
+function stateKey(
+  sheetDefinitions: SheetDefinition[],
+  customKey?: string | null
+): string {
   const prefix = customKey ? `importer-state-${customKey}` : 'importer-state';
-  const key = array.map((item) => `${item.id}-${item.label}`).join('|');
+  const key = JSON.stringify(sheetDefinitions);
   return `${prefix}-${hashString(key)}`;
 }
 
