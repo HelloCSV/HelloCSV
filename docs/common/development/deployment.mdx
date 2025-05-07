@@ -4,7 +4,7 @@ title: "Deployment"
 
 Deployment is done with the following steps
 
-1. Change version in `package.json` (to the target version)
+1. Change version in `package.json` (to the target version) - use branch `release/v{x.y.z}`
 
 2. Run `npm i` in the root directory as well as in `example` and `example-vanilla` directories
 
@@ -30,3 +30,5 @@ For major version realease
 7. Run `npm publish` in the root directory, you can use `--dry-run` flag to test the deployment
 
 8. Create a new release in Github - https://github.com/HelloCSV/HelloCSV/releases. Remember about creating a tag (`v{x.y.z}`) and writing release notes.
+
+9. Merge `main` to `production` branch - this would trigger docs deployment to Mintlify.
