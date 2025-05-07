@@ -79,7 +79,7 @@ export async function setIndexedDBState(
   });
 }
 
-function stateKey(array: any[], customKey?: string | null): string {
+function stateKey(array: SheetDefinition[], customKey?: string | null): string {
   const prefix = customKey ? `importer-state-${customKey}` : 'importer-state';
   const key = array.map((item) => `${item.id}-${item.label}`).join('|');
   return `${prefix}-${hashString(key)}`;
