@@ -64,8 +64,6 @@ function ImporterBody({
     importProgress,
     importStatistics,
   } = state;
-  console.log('mode state', state.mode);
-  console.log('mode', mode);
 
   useEffect(() => {
     if (isInitialRender.current) {
