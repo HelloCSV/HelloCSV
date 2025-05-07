@@ -121,7 +121,7 @@ Callback executed when the user has finished reviewing the import summary. This 
 
 ---
 
-## indexDBConfig (releasing on version 0.1.2)
+## indexDBConfig (releasing for `v0.1.2`)
 
 **Type:** `{ enabled: boolean; customKey?: string }`
 
@@ -129,3 +129,17 @@ Callback executed when the user has finished reviewing the import summary. This 
 
 **Description:**  
 Configuration for IndexedDB storage. When enabled, the importer state will be persisted in the browser's IndexedDB storage, allowing users to resume their import process if the page is refreshed or closed. The `customKey` option allows specifying a unique identifier for the stored data.
+
+Use cases for `customKey`:
+
+- **Multiple Import Sessions**: When you need to handle multiple import processes simultaneously in the same application, you can use different `customKey` values to keep their states separate.
+
+- **User-Specific Storage**: When implementing a multi-user system, you can use the user's ID as the `customKey` to maintain separate import states for each user.
+
+- **Different Import Configurations**: If your application has different types of imports (e.g., employee data vs. product data), you can use distinct `customKey` values to manage their states independently.
+
+- **Session Management**: You can use the `customKey` to implement session-specific storage, allowing you to clear specific import sessions without affecting others.
+
+- **Environment Separation**: When running the same application in different environments (development, staging, production), you can use environment-specific keys to prevent state conflicts.
+
+---
