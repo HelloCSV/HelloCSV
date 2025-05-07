@@ -1,11 +1,11 @@
 import { useEffect } from 'preact/compat';
 import { useRef } from 'preact/hooks';
-import { usePersistedReducer } from './reducer';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
+import { usePersistedReducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
@@ -52,7 +52,6 @@ function ImporterBody({
     validationErrors,
     importProgress,
     importStatistics,
-    rowFile,
   } = state;
 
   useEffect(() => {
@@ -273,7 +272,7 @@ function ImporterBody({
             resetState={resetState}
             sheetData={sheetData}
             statistics={importStatistics}
-            rowFile={rowFile}
+            rowFile={state.rowFile}
             onSummaryFinished={onSummaryFinished}
           />
         )}
