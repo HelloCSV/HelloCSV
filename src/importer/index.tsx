@@ -1,11 +1,11 @@
-import { useReducer, useEffect } from 'preact/compat';
+import { useEffect } from 'preact/compat';
 import { useRef } from 'preact/hooks';
+import { usePersistedReducer } from './reducer';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { buildInitialState, buildState, reducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
@@ -41,18 +41,7 @@ function ImporterBody({
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [state, dispatch] = useReducer(
-    reducer,
-    buildInitialState(sheets, indexDBConfig)
-  );
-
-  useEffect(() => {
-    const fetchState = async () => {
-      const newState = await buildState(sheets, indexDBConfig);
-      dispatch({ type: 'SET_STATE', payload: { state: newState } });
-    };
-    fetchState();
-  }, [sheets, indexDBConfig]);
+  const [state, dispatch] = usePersistedReducer(sheets, indexDBConfig);
 
   const {
     mode,

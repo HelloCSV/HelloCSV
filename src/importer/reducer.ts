@@ -1,3 +1,4 @@
+import { useReducer, useEffect } from 'preact/hooks';
 import { applyTransformations } from '../transformers';
 import {
   CellChangedPayload,
@@ -213,4 +214,24 @@ const reducer = (
   return newState;
 };
 
-export { reducer, buildInitialState, buildState };
+const usePersistedReducer = (
+  sheets: SheetDefinition[],
+  indexDBConfig: IndexDBConfig
+): [ImporterState, (action: ImporterAction) => void] => {
+  const [state, dispatch] = useReducer(
+    reducer,
+    buildInitialState(sheets, indexDBConfig)
+  );
+
+  useEffect(() => {
+    const fetchState = async () => {
+      const newState = await buildState(sheets, indexDBConfig);
+      dispatch({ type: 'SET_STATE', payload: { state: newState } });
+    };
+    fetchState();
+  }, [sheets, indexDBConfig]);
+
+  return [state, dispatch];
+};
+
+export { usePersistedReducer };
