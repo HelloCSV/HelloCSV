@@ -15,7 +15,7 @@ import {
 import { ThemeSetter } from '../theme/ThemeSetter';
 import { parseCsv } from '../parser';
 import { getMappedData } from '../mapper';
-import { filterEmptyRows, getFileData } from '../utils';
+import { filterEmptyRows } from '../utils';
 import { applyTransformations } from '../transformers';
 import { buildSuggestedHeaderMappings } from '../mapper/utils';
 import { NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT } from '../constants';
@@ -52,6 +52,7 @@ function ImporterBody({
     validationErrors,
     importProgress,
     importStatistics,
+    rowFile,
   } = state;
 
   useEffect(() => {
@@ -82,7 +83,6 @@ function ImporterBody({
     parseCsv({
       file,
       onCompleted: async (newParsed) => {
-        const fileData = await getFileData(file);
         const csvHeaders = newParsed.meta.fields!;
 
         const suggestedMappings =
@@ -92,7 +92,7 @@ function ImporterBody({
 
         dispatch({
           type: 'FILE_PARSED',
-          payload: { parsed: newParsed, fileData },
+          payload: { parsed: newParsed, rowFile: file },
         });
 
         dispatch({
@@ -273,7 +273,7 @@ function ImporterBody({
             resetState={resetState}
             sheetData={sheetData}
             statistics={importStatistics}
-            fileData={state.fileData}
+            rowFile={rowFile}
             onSummaryFinished={onSummaryFinished}
           />
         )}

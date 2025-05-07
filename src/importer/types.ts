@@ -63,11 +63,10 @@ export interface ImporterState {
   validationErrors: ImporterValidationError[];
   sheetData: SheetState[];
   parsedFile?: ParsedFile;
-  fileData?: FileData;
+  rowFile?: File;
   columnMappings?: ColumnMapping[];
   importProgress: number;
   importStatistics?: ImportStatistics;
-  indexDBConfig: IndexDBConfig;
 }
 
 export type ImporterOutputFieldType = string | number;
@@ -83,12 +82,6 @@ export interface RemoveRowsPayload {
   rows: SheetRow[];
 }
 
-export interface FileData {
-  name: string;
-  size: number;
-  content: string;
-}
-
 export type ImporterAction =
   | {
       type: 'ENTER_DATA_MANUALLY';
@@ -98,7 +91,7 @@ export type ImporterAction =
     } // Changes the mode to 'preview'
   | {
       type: 'FILE_PARSED';
-      payload: { parsed: ParsedFile; fileData: FileData };
+      payload: { parsed: ParsedFile; rowFile: File };
     } // Sets the parsed file and changes the mode to 'mapping'
   | { type: 'UPLOAD' } // Changes the mode to 'upload' - used when going back from in the mapping screen
   | { type: 'COLUMN_MAPPING_CHANGED'; payload: { mappings: ColumnMapping[] } } // Sets the proper mappings

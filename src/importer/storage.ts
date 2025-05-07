@@ -12,14 +12,12 @@ export async function getIndexedDBState(
   return new Promise((resolve, reject) => {
     const key = stateKey(sheetDefinitions, customKey);
     const request = indexedDB.open(DB_NAME, DB_VERSION);
-
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       const db = request.result;
       const transaction = db.transaction(STORE_NAME, 'readonly');
       const store = transaction.objectStore(STORE_NAME);
       const getRequest = store.get(key);
-
       getRequest.onerror = () => resolve(null);
       getRequest.onsuccess = () => {
         try {
@@ -30,6 +28,16 @@ export async function getIndexedDBState(
           resolve(null);
         }
       };
+    };
+
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (db.objectStoreNames.contains(STORE_NAME)) {
+        db.deleteObjectStore(STORE_NAME);
+      }
+
+      // Create fresh store
+      db.createObjectStore(STORE_NAME);
     };
   });
 }
@@ -53,6 +61,12 @@ export async function setIndexedDBState(
 
       putRequest.onerror = () => reject(putRequest.error);
       putRequest.onsuccess = () => resolve();
+    };
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME);
+      }
     };
   });
 }

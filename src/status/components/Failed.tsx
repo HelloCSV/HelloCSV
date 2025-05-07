@@ -1,6 +1,6 @@
 import { Alert, Button } from '../../components';
 import { useTranslations } from '../../i18';
-import { SheetState, ImporterMode, FileData } from '../../types';
+import { SheetState, ImporterMode } from '../../types';
 import Summary from './Summary';
 
 type Mode = Extract<ImporterMode, 'failed'>;
@@ -8,7 +8,7 @@ type Mode = Extract<ImporterMode, 'failed'>;
 interface Props {
   onRetry: () => void;
   onBackToPreview: () => void;
-  fileData?: FileData;
+  rowFile?: File;
   sheetData: SheetState[];
   mode: Mode;
 }
@@ -16,7 +16,7 @@ interface Props {
 export default function Failed({
   onRetry,
   onBackToPreview,
-  fileData,
+  rowFile,
   sheetData,
   mode,
 }: Props) {
@@ -37,7 +37,7 @@ export default function Failed({
           <Summary
             mode={mode}
             sheetData={sheetData}
-            fileData={fileData}
+            rowFile={rowFile}
             completedWithErrors={false}
           />
         </div>

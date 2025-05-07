@@ -2,7 +2,7 @@ import { ImporterMode } from '../../importer/types';
 import Completed from './Completed';
 import Failed from './Failed';
 import Uploading from './Uploading';
-import { ImportStatistics, SheetState, FileData } from '../../types';
+import { ImportStatistics, SheetState } from '../../types';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
@@ -14,7 +14,7 @@ interface Props {
   resetState: () => void;
   sheetData: SheetState[];
   statistics?: ImportStatistics;
-  fileData?: FileData;
+  rowFile?: File;
   onSummaryFinished?: () => void;
 }
 
@@ -26,7 +26,7 @@ export default function ImportStatus({
   onBackToPreview,
   resetState,
   statistics,
-  fileData,
+  rowFile,
   onSummaryFinished,
 }: Props) {
   return (
@@ -40,7 +40,7 @@ export default function ImportStatus({
           mode={mode}
           onRetry={onRetry}
           onBackToPreview={onBackToPreview}
-          fileData={fileData}
+          rowFile={rowFile}
           sheetData={sheetData}
         />
       )}
@@ -50,7 +50,7 @@ export default function ImportStatus({
           mode={mode}
           sheetData={sheetData}
           statistics={statistics}
-          fileData={fileData}
+          rowFile={rowFile}
           resetState={resetState}
           onSummaryFinished={onSummaryFinished}
         />

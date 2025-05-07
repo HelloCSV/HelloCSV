@@ -1,11 +1,6 @@
 import { Alert, Button } from '../../components';
 import { useTranslations } from '../../i18';
-import {
-  SheetState,
-  ImportStatistics,
-  ImporterMode,
-  FileData,
-} from '../../types';
+import { SheetState, ImportStatistics, ImporterMode } from '../../types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 
@@ -15,7 +10,7 @@ interface Props {
   sheetData: SheetState[];
   statistics?: ImportStatistics;
   mode: Mode;
-  fileData?: FileData;
+  rowFile?: File;
   resetState: () => void;
   onSummaryFinished?: () => void;
 }
@@ -24,7 +19,7 @@ export default function Completed({
   sheetData,
   statistics,
   mode,
-  fileData,
+  rowFile,
   resetState,
   onSummaryFinished,
 }: Props) {
@@ -56,7 +51,7 @@ export default function Completed({
           mode={mode}
           sheetData={sheetData}
           statistics={statistics}
-          fileData={fileData}
+          rowFile={rowFile}
           completedWithErrors={completedWithErrors}
         />
         <div className="mt-auto flex-none">

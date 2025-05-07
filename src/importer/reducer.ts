@@ -3,7 +3,6 @@ import { applyTransformations } from '../transformers';
 import {
   CellChangedPayload,
   ImporterAction,
-  ImporterMode,
   ImporterState,
   IndexDBConfig,
   SheetDefinition,
@@ -34,10 +33,7 @@ function recalculateCalculatedColumns(
   return row;
 }
 
-function buildInitialState(
-  sheetDefinitions: SheetDefinition[],
-  indexDBConfig: IndexDBConfig
-): ImporterState {
+function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
   return {
     sheetDefinitions,
     currentSheetId: sheetDefinitions[0].id,
@@ -48,7 +44,6 @@ function buildInitialState(
       rows: [],
     })),
     importProgress: 0,
-    indexDBConfig,
   };
 }
 
@@ -56,7 +51,7 @@ async function buildState(
   sheetDefinitions: SheetDefinition[],
   indexDBConfig: IndexDBConfig
 ): Promise<ImporterState> {
-  const defaultState = buildInitialState(sheetDefinitions, indexDBConfig);
+  const defaultState = buildInitialState(sheetDefinitions);
   try {
     if (!indexDBConfig.enabled) return defaultState;
 
@@ -79,7 +74,7 @@ async function buildStateWithIndexedDB(
     return state;
   }
 
-  const newState = buildInitialState(sheetDefinitions, indexDBConfig);
+  const newState = buildInitialState(sheetDefinitions);
   setIndexedDBState(newState, indexDBConfig.customKey);
   return newState;
 }
@@ -88,140 +83,141 @@ const reducer = (
   state: ImporterState,
   action: ImporterAction
 ): ImporterState => {
-  let newState = state;
-  if (action.type === 'ENTER_DATA_MANUALLY') {
-    const emptyData = state.sheetDefinitions.map((sheet) => ({
-      sheetId: sheet.id,
-      rows: Array.from(
-        { length: action.payload.amountOfEmptyRowsToAdd },
-        () => ({})
-      ),
-    }));
-    newState = { ...newState, mode: 'preview', sheetData: emptyData };
-  } else if (action.type === 'FILE_PARSED') {
-    newState = {
-      ...state,
-      parsedFile: action.payload.parsed,
-      fileData: action.payload.fileData,
-      mode: 'mapping',
-    };
-  } else if (action.type === 'COLUMN_MAPPING_CHANGED') {
-    newState = {
-      ...state,
-      columnMappings: action.payload.mappings,
-    };
-  } else if (action.type === 'DATA_MAPPED') {
-    newState = {
-      ...state,
-      sheetData: applyTransformations(
-        state.sheetDefinitions,
-        action.payload.mappedData
-      ),
-      mode: 'preview',
-      validationErrors: applyValidations(
-        state.sheetDefinitions,
-        action.payload.mappedData
-      ),
-    };
-  } else if (action.type === 'CELL_CHANGED') {
-    const newData = state.sheetData.map((sheet) => {
-      if (sheet.sheetId === action.payload.sheetId) {
-        const newRows = [...sheet.rows];
+  switch (action.type) {
+    case 'ENTER_DATA_MANUALLY': {
+      const emptyData = state.sheetDefinitions.map((sheet) => ({
+        sheetId: sheet.id,
+        rows: Array.from(
+          { length: action.payload.amountOfEmptyRowsToAdd },
+          () => ({})
+        ),
+      }));
 
-        newRows[action.payload.rowIndex] = recalculateCalculatedColumns(
-          action.payload.value,
-          action.payload,
-          state
-        );
+      return { ...state, mode: 'preview', sheetData: emptyData };
+    }
+    case 'FILE_PARSED':
+      return {
+        ...state,
+        parsedFile: action.payload.parsed,
+        rowFile: action.payload.rowFile,
+        mode: 'mapping',
+      };
+    case 'UPLOAD':
+      return { ...state, mode: 'upload' };
+    case 'COLUMN_MAPPING_CHANGED': {
+      return {
+        ...state,
+        columnMappings: action.payload.mappings,
+      };
+    }
+    case 'DATA_MAPPED': {
+      return {
+        ...state,
+        sheetData: applyTransformations(
+          state.sheetDefinitions,
+          action.payload.mappedData
+        ),
+        mode: 'preview',
+        validationErrors: applyValidations(
+          state.sheetDefinitions,
+          action.payload.mappedData
+        ),
+      };
+    }
+    case 'CELL_CHANGED': {
+      const currentData = state.sheetData;
 
-        return { ...sheet, rows: newRows };
-      } else {
-        return sheet;
-      }
-    });
+      const newData = currentData.map((sheet) => {
+        if (sheet.sheetId === action.payload.sheetId) {
+          const newRows = [...sheet.rows];
 
-    newState = {
-      ...newState,
-      sheetData: applyTransformations(state.sheetDefinitions, newData),
-      validationErrors: applyValidations(state.sheetDefinitions, newData),
-    };
-  } else if (action.type === 'REMOVE_ROWS') {
-    const newData = state.sheetData.map((sheet) => {
-      if (sheet.sheetId === action.payload.sheetId) {
-        return {
-          ...sheet,
-          rows: sheet.rows.filter((row) => !action.payload.rows.includes(row)),
-        };
-      }
+          newRows[action.payload.rowIndex] = recalculateCalculatedColumns(
+            action.payload.value,
+            action.payload,
+            state
+          );
 
-      return sheet;
-    });
-
-    newState = {
-      ...state,
-      sheetData: newData,
-      validationErrors: applyValidations(state.sheetDefinitions, newData),
-    };
-  } else if (action.type === 'ADD_EMPTY_ROW') {
-    const newData = state.sheetData.map((data) => {
-      if (data.sheetId !== state.currentSheetId) {
-        return data;
-      }
+          return { ...sheet, rows: newRows };
+        } else {
+          return sheet;
+        }
+      });
 
       return {
-        ...data,
-        rows: [...data.rows, {}],
+        ...state,
+        sheetData: applyTransformations(state.sheetDefinitions, newData),
+        validationErrors: applyValidations(state.sheetDefinitions, newData),
       };
-    });
+    }
 
-    newState = {
-      ...state,
-      sheetData: newData,
-    };
-  } else if (action.type === 'SHEET_CHANGED') {
-    newState = {
-      ...state,
-      currentSheetId: action.payload.sheetId,
-    };
-  } else if (action.type === 'PROGRESS') {
-    newState = {
-      ...state,
-      importProgress: action.payload.progress,
-    };
-  } else if (action.type === 'COMPLETED') {
-    newState = {
-      ...state,
-      mode: 'completed',
-      importStatistics: action.payload.importStatistics,
-    };
-  } else if (
-    ['FAILED', 'PREVIEW', 'MAPPING', 'SUBMIT', 'UPLOAD'].includes(action.type)
-  ) {
-    newState = {
-      ...state,
-      mode: action.type.toLowerCase() as ImporterMode,
-    };
-  } else if (action.type === 'RESET') {
-    newState = buildInitialState(state.sheetDefinitions, state.indexDBConfig);
-  } else if (action.type === 'SET_STATE') {
-    newState = action.payload.state;
+    case 'REMOVE_ROWS': {
+      const newData = state.sheetData.map((sheet) => {
+        if (sheet.sheetId === action.payload.sheetId) {
+          return {
+            ...sheet,
+            rows: sheet.rows.filter(
+              (row) => !action.payload.rows.includes(row)
+            ),
+          };
+        }
+
+        return sheet;
+      });
+
+      return {
+        ...state,
+        sheetData: newData,
+        validationErrors: applyValidations(state.sheetDefinitions, newData),
+      };
+    }
+
+    case 'ADD_EMPTY_ROW': {
+      const newData = state.sheetData.map((data) => {
+        if (data.sheetId !== state.currentSheetId) {
+          return data;
+        }
+
+        return {
+          ...data,
+          rows: [...data.rows, {}],
+        };
+      });
+
+      return { ...state, sheetData: newData };
+    }
+
+    case 'SHEET_CHANGED':
+      return { ...state, currentSheetId: action.payload.sheetId };
+    case 'SUBMIT':
+      return { ...state, mode: 'submit' };
+    case 'PROGRESS':
+      return { ...state, importProgress: action.payload.progress };
+    case 'COMPLETED':
+      return {
+        ...state,
+        mode: 'completed',
+        importStatistics: action.payload.importStatistics,
+      };
+    case 'FAILED':
+      return { ...state, mode: 'failed' };
+    case 'PREVIEW':
+      return { ...state, mode: 'preview' };
+    case 'MAPPING':
+      return { ...state, mode: 'mapping' };
+    case 'RESET':
+      return buildInitialState(state.sheetDefinitions);
+    case 'SET_STATE':
+      return action.payload.state;
+    default:
+      return state;
   }
-
-  if (state.indexDBConfig.enabled) {
-    setIndexedDBState(newState, state.indexDBConfig.customKey);
-  }
-
-  return newState;
 };
 
 const usePersistedReducer = (
   sheets: SheetDefinition[],
   indexDBConfig: IndexDBConfig
 ): [ImporterState, (action: ImporterAction) => void] => {
-  const [state, dispatch] = useReducer(
-    reducer,
-    buildInitialState(sheets, indexDBConfig)
-  );
+  const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
 
   useEffect(() => {
     const fetchState = async () => {
@@ -230,6 +226,10 @@ const usePersistedReducer = (
     };
     fetchState();
   }, [sheets, indexDBConfig]);
+
+  useEffect(() => {
+    setIndexedDBState(state, indexDBConfig.customKey);
+  }, [state, indexDBConfig]);
 
   return [state, dispatch];
 };

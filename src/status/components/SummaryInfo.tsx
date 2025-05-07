@@ -1,9 +1,4 @@
-import {
-  ImporterMode,
-  ImportStatistics,
-  SheetState,
-  FileData,
-} from '../../types';
+import { ImporterMode, ImportStatistics, SheetState } from '../../types';
 import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
 import { formatFileSize } from '../../uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
@@ -21,14 +16,14 @@ type Props = {
   sheetData: SheetState[];
   mode: Mode;
   statistics?: ImportStatistics;
-  fileData?: FileData;
+  rowFile?: File;
   completedWithErrors?: boolean;
 };
 
 export default function SummaryInfo({
   sheetData,
   statistics,
-  fileData,
+  rowFile,
   completedWithErrors,
   mode,
 }: Props) {
@@ -48,11 +43,11 @@ export default function SummaryInfo({
                 {t('importStatus.fileInformation')}
               </div>
               <div className="text-md my-2 font-medium">
-                {fileData?.name || 'Data entered manually'}
+                {rowFile?.name || 'Data entered manually'}
               </div>
               <div className="my-2 text-sm text-gray-500">
-                {fileData
-                  ? `${t('importStatus.original')}: ${formatFileSize(fileData?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`
+                {rowFile
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`
                   : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`}
               </div>
               <div className="mt-5">

@@ -34,21 +34,3 @@ export function normalizeValue(
       ''
     );
 }
-
-export function getFileData(file: File) {
-  return new Promise<{ name: string; size: number; content: string }>(
-    (resolve, _) => {
-      const data = {
-        name: file.name,
-        size: file.size,
-        content: '',
-      };
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-        data.content = reader.result as string;
-        resolve(data);
-      };
-    }
-  );
-}
