@@ -33,6 +33,12 @@ export interface ImporterDefinition {
     sheetDefinitions: SheetDefinition[],
     csvHeaders: string[]
   ) => ColumnMapping[] | Promise<ColumnMapping[]>;
+  indexDBConfig?: IndexDBConfig;
+}
+
+export interface IndexDBConfig {
+  enabled: boolean;
+  customKey?: string;
 }
 
 /**
@@ -83,8 +89,10 @@ export type ImporterAction =
         amountOfEmptyRowsToAdd: number;
       };
     } // Changes the mode to 'preview'
-  | { type: 'FILE_UPLOADED'; payload: { file: File } } // Sets the row file
-  | { type: 'FILE_PARSED'; payload: { parsed: ParsedFile } } // Sets the parsed file and changes the mode to 'mapping'
+  | {
+      type: 'FILE_PARSED';
+      payload: { parsed: ParsedFile; rowFile: File };
+    } // Sets the parsed file and changes the mode to 'mapping'
   | { type: 'UPLOAD' } // Changes the mode to 'upload' - used when going back from in the mapping screen
   | { type: 'COLUMN_MAPPING_CHANGED'; payload: { mappings: ColumnMapping[] } } // Sets the proper mappings
   | { type: 'DATA_MAPPED'; payload: { mappedData: MappedData } } // Sets mapped data as sheetData, optionally runs onDataColumnsMapped callback calls validations, changes the mode to 'preview'
@@ -106,4 +114,5 @@ export type ImporterAction =
   | { type: 'FAILED' } // Changes the mode to 'failed' when importing failed
   | { type: 'PREVIEW' } // Changes the mode to 'preview' - used when uploading failed and user wants to retry
   | { type: 'MAPPING' } // Changes the mode to 'mapping' - used to go back to mappings screen in case there were some mapping issues
-  | { type: 'RESET' }; // Resets the state to the initial state
+  | { type: 'RESET' } // Resets the state to the initial state
+  | { type: 'SET_STATE'; payload: { state: ImporterState } }; // Fetches the state from the indexedDB

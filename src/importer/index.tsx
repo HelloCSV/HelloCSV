@@ -1,11 +1,11 @@
-import { useReducer, useEffect } from 'preact/compat';
+import { useEffect } from 'preact/compat';
 import { useRef } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { buildInitialState, reducer } from './reducer';
+import { usePersistedReducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
@@ -35,13 +35,13 @@ function ImporterBody({
   maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
   onSummaryFinished,
+  indexDBConfig = { enabled: false },
 }: ImporterDefinition) {
   const { t } = useTranslations();
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-
-  const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
+  const [state, dispatch] = usePersistedReducer(sheets, indexDBConfig);
 
   const {
     mode,
@@ -79,8 +79,6 @@ function ImporterBody({
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
   function onFileUploaded(file: File) {
-    dispatch({ type: 'FILE_UPLOADED', payload: { file } });
-
     parseCsv({
       file,
       onCompleted: async (newParsed) => {
@@ -91,7 +89,10 @@ function ImporterBody({
             ? await customSuggestedMapper(sheets, csvHeaders)
             : buildSuggestedHeaderMappings(sheets, csvHeaders);
 
-        dispatch({ type: 'FILE_PARSED', payload: { parsed: newParsed } });
+        dispatch({
+          type: 'FILE_PARSED',
+          payload: { parsed: newParsed, rowFile: file },
+        });
 
         dispatch({
           type: 'COLUMN_MAPPING_CHANGED',

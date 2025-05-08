@@ -1,7 +1,6 @@
-import { ImporterMode } from '../../importer/types';
+import { ImporterMode, ImportStatistics, SheetState } from '../../types';
 import { Card } from '../../components';
 import SummaryInfo from './SummaryInfo';
-import { SheetState, ImportStatistics } from '../../types';
 import { useTranslations } from '../../i18';
 
 type Mode = Extract<ImporterMode, 'failed' | 'completed'>;

@@ -43,15 +43,18 @@ HelloCSV a Javascript library that drops in a CSV importer into your project tha
 - that doesn't assume your frontend stack
 
 ## Install
+
 With npm:
+
 ```sh
 npm install hello-csv
 ```
 
 From CDN
+
 ```
-<script src="https://cdn.jsdelivr.net/npm/hello-csv@0.1.1/dist/bundled/index.es.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hello-csv@0.1.1/dist/bundled/hello-csv.css">
+<script src="https://cdn.jsdelivr.net/npm/hello-csv@0.1.2/dist/bundled/index.es.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hello-csv@0.1.2/dist/bundled/hello-csv.css">
 ```
 
 ## Documentation
