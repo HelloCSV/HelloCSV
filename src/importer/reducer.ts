@@ -225,7 +225,9 @@ const usePersistedReducer = (
       dispatch({ type: 'SET_STATE', payload: { state: newState } });
     };
     fetchState();
-  }, [sheets, indexDBConfig]);
+    // We only want to fetch the state once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (indexDBConfig.enabled) {
