@@ -15,11 +15,7 @@
   "navigation": {
     "versions": [
       {
-<<<<<<< HEAD
         "version": "0.1.3",
-=======
-        "version": "0.1.2",
->>>>>>> origin/production
         "groups": [
           {
             "group": "Get Started",
@@ -33,7 +29,6 @@
           {
             "group": "API Reference",
             "pages": [
-<<<<<<< HEAD
               "v0.1.3/api-reference/importer-props",
               "v0.1.3/api-reference/sheet-definition-props",
               "v0.1.3/api-reference/column-types",
@@ -43,17 +38,6 @@
               "v0.1.3/api-reference/validators",
               "v0.1.3/api-reference/transformers",
               "v0.1.3/api-reference/importer-validation-error"
-=======
-              "v0.1.2/api-reference/importer-props",
-              "v0.1.2/api-reference/sheet-definition-props",
-              "v0.1.2/api-reference/column-types",
-              "v0.1.2/api-reference/common-column-props",
-              "v0.1.2/api-reference/importer-state",
-              "v0.1.2/api-reference/sheet-state",
-              "v0.1.2/api-reference/validators",
-              "v0.1.2/api-reference/transformers",
-              "v0.1.2/api-reference/importer-validation-error"
->>>>>>> origin/production
             ]
           },
           {
