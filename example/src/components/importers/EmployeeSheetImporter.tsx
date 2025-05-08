@@ -168,6 +168,9 @@ export default function StudentsImporter() {
             return sheets;
           }}
           onComplete={onComplete}
+          indexDBConfig={{
+            enabled: true,
+          }}
         />
       </div>
       {ready && (

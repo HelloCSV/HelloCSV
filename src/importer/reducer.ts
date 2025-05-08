@@ -1,11 +1,14 @@
+import { useReducer, useEffect } from 'preact/hooks';
 import { applyTransformations } from '../transformers';
 import {
   CellChangedPayload,
   ImporterAction,
   ImporterState,
+  IndexDBConfig,
   SheetDefinition,
   SheetRow,
 } from '../types';
+import { getIndexedDBState, setIndexedDBState } from './storage';
 import { applyValidations } from '../validators';
 
 function recalculateCalculatedColumns(
@@ -44,6 +47,38 @@ function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
   };
 }
 
+async function buildState(
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig: IndexDBConfig
+): Promise<ImporterState> {
+  const defaultState = buildInitialState(sheetDefinitions);
+  try {
+    if (!indexDBConfig.enabled) return defaultState;
+
+    return await buildStateWithIndexedDB(sheetDefinitions, indexDBConfig);
+  } catch (_error) {
+    return defaultState;
+  }
+}
+
+async function buildStateWithIndexedDB(
+  sheetDefinitions: SheetDefinition[],
+  indexDBConfig: IndexDBConfig
+): Promise<ImporterState> {
+  const state = await getIndexedDBState(
+    sheetDefinitions,
+    indexDBConfig.customKey
+  );
+
+  if (state != null) {
+    return state;
+  }
+
+  const newState = buildInitialState(sheetDefinitions);
+  setIndexedDBState(newState, indexDBConfig.customKey);
+  return newState;
+}
+
 const reducer = (
   state: ImporterState,
   action: ImporterAction
@@ -60,10 +95,13 @@ const reducer = (
 
       return { ...state, mode: 'preview', sheetData: emptyData };
     }
-    case 'FILE_UPLOADED':
-      return { ...state, rowFile: action.payload.file };
     case 'FILE_PARSED':
-      return { ...state, parsedFile: action.payload.parsed, mode: 'mapping' };
+      return {
+        ...state,
+        parsedFile: action.payload.parsed,
+        rowFile: action.payload.rowFile,
+        mode: 'mapping',
+      };
     case 'UPLOAD':
       return { ...state, mode: 'upload' };
     case 'COLUMN_MAPPING_CHANGED': {
@@ -168,9 +206,34 @@ const reducer = (
       return { ...state, mode: 'mapping' };
     case 'RESET':
       return buildInitialState(state.sheetDefinitions);
+    case 'SET_STATE':
+      return action.payload.state;
     default:
       return state;
   }
 };
 
-export { reducer, buildInitialState };
+const usePersistedReducer = (
+  sheets: SheetDefinition[],
+  indexDBConfig: IndexDBConfig
+): [ImporterState, (action: ImporterAction) => void] => {
+  const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
+
+  useEffect(() => {
+    const fetchState = async () => {
+      const newState = await buildState(sheets, indexDBConfig);
+      dispatch({ type: 'SET_STATE', payload: { state: newState } });
+    };
+    fetchState();
+  }, [sheets, indexDBConfig]);
+
+  useEffect(() => {
+    if (indexDBConfig.enabled) {
+      setIndexedDBState(state, indexDBConfig.customKey);
+    }
+  }, [state, indexDBConfig]);
+
+  return [state, dispatch];
+};
+
+export { usePersistedReducer };

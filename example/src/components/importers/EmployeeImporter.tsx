@@ -125,6 +125,9 @@ export default function EmployeeImporter() {
           }}
           onComplete={onComplete}
           preventUploadOnValidationErrors
+          indexDBConfig={{
+            enabled: true,
+          }}
         />
       </div>
       {ready && (
