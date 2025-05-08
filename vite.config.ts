@@ -21,7 +21,7 @@ export default defineConfig(({ mode }): UserConfig => {
       }),
     ],
     define: {
-      'process.env': process.env,
+      'process.env': { NODE_ENV: 'production' },
     },
     build: {
       lib: {
