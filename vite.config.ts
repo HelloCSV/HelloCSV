@@ -20,9 +20,6 @@ export default defineConfig(({ mode }): UserConfig => {
         insertTypesEntry: true,
       }),
     ],
-    define: {
-      'process.env': process.env,
-    },
     build: {
       lib: {
         entry: resolve(__dirname, 'src/index.ts'),
