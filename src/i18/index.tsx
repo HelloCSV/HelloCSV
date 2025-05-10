@@ -1,6 +1,7 @@
 import { createContext } from 'preact';
 import enTranslation from './en/translation.json';
 import frTranslation from './fr/translation.json';
+import ptBRTranslation from './pt-BR/translation.json';
 import { useContext } from 'preact/hooks';
 import { ReactNode } from 'preact/compat';
 import {
@@ -15,6 +16,7 @@ import {
 const resources: Resources = {
   en: enTranslation,
   fr: frTranslation,
+  'pt-BR': ptBRTranslation,
 };
 
 const defaultLocale = 'en';
