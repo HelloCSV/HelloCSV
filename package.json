@@ -24,12 +24,14 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build:peer": "tsc -b && vite build --mode peer",
+    "build:react": "tsc -b && vite build --mode react",
+    "build:preact": "tsc -b && vite build --mode preact",
     "build:bundled": "tsc -b && vite build --mode bundled",
-    "build": "npm-run-all --parallel build:peer build:bundled",
-    "watch:peer": "tsc -b && vite build --watch --mode peer",
+    "build": "npm-run-all --parallel build:preact build:bundled build:react",
+    "watch:react": "tsc -b && vite build --watch --mode react",
+    "watch:preact": "tsc -b && vite build --watch --mode preact",
     "watch:bundled": "tsc -b && vite build --watch --mode bundled",
-    "watch": "npm-run-all --parallel watch:peer watch:bundled",
+    "watch": "npm-run-all --parallel watch:preact watch:bundled watch:react",
     "test": "vitest",
     "preview": "vite preview",
     "prepare": "tsc --emitDeclarationOnly",
@@ -41,12 +43,18 @@
     "format_check": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\""
   },
   "exports": {
-    "./peer": {
-      "import": "./dist/peer/index.es.js",
-      "require": "./dist/peer/index.cjs.js",
+    "./react": {
+      "import": "./dist/react/index.es.js",
+      "require": "./dist/react/index.cjs.js",
       "types": "./dist/types/index.d.ts"
     },
-    "./peer/index.css": "./dist/peer/hello-csv.css",
+    "./react/index.css": "./dist/react/hello-csv.css",
+    "./preact": {
+      "import": "./dist/preact/index.es.js",
+      "require": "./dist/preact/index.cjs.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./preact/index.css": "./dist/preact/hello-csv.css",
     "./bundled": {
       "import": "./dist/bundled/index.es.js",
       "require": "./dist/bundled/index.cjs.js",
@@ -55,7 +63,20 @@
     "./bundled/index.css": "./dist/bundled/hello-csv.css"
   },
   "peerDependencies": {
-    "preact": "^10.25.4"
+    "preact": "^10.25.4",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "peerDependenciesMeta": {
+    "preact": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",
@@ -64,6 +85,7 @@
     "@types/papaparse": "5.3.15",
     "@typescript-eslint/eslint-plugin": "5.57.1",
     "@typescript-eslint/parser": "5.57.1",
+    "@vitejs/plugin-react": "^4.4.1",
     "cross-env": "^7.0.2",
     "eslint": "8.38.0",
     "eslint-config-airbnb": "19.0.4",

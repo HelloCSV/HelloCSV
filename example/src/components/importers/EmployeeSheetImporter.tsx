@@ -3,7 +3,7 @@ import Importer, {
   SheetDefinition,
   SheetRow,
   ImporterState,
-} from 'hello-csv/peer';
+} from 'hello-csv/preact';
 import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
 import example2 from '../../assets/datasets/example-2.csv?url';

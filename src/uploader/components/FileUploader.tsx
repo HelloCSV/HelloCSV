@@ -1,4 +1,4 @@
-import { useRef, useState } from 'preact/compat';
+import { useRef, useState } from 'preact/hooks';
 import { Button, Card } from '../../components';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from '../../i18';

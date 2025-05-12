@@ -43,7 +43,7 @@
           {
             "group": "Configuration",
             "pages": [
-              "common/configuration/peer-vs-bundled",
+              "common/configuration/bundle-versions",
               "common/configuration/react"
             ]
           },
