@@ -36,8 +36,8 @@
     "preview": "vite preview",
     "prepare": "tsc --emitDeclarationOnly",
     "prepublishOnly": "npm run build",
-    "predeploy": "cd example && npm install && npm run build",
-    "deploy": "gh-pages -d example/dist",
+    "predeploy": "cd example-preact && npm install && npm run build",
+    "deploy": "gh-pages -d example-preact/dist",
     "postpublish": "npm run deploy",
     "lint": "eslint --max-warnings=0 \"src/**/*.{ts,tsx}\"",
     "format_check": "prettier --check \"src/**/*.tsx\" \"src/**/*.ts\""
