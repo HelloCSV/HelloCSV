@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'preact/compat';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import {
   ColumnDef,
   getCoreRowModel,

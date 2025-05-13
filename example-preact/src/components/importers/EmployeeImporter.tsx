@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import Importer, { ImporterState } from 'hello-csv/peer';
+import Importer, { ImporterState } from 'hello-csv/preact';
 import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
 import example1 from '../../assets/datasets/example-1.csv?url';
@@ -130,8 +130,9 @@ export default function EmployeeImporter() {
           }}
         />
       </div>
-      <div className="mt-4 italic font-semibold text-sm">
-        Tip: You can refresh the page while using the importer, and you won't lose your progress!
+      <div className="mt-4 text-sm font-semibold italic">
+        Tip: You can refresh the page while using the importer, and you won't
+        lose your progress!
       </div>
       {ready && (
         <div>
