@@ -23,7 +23,7 @@ For major version release
 - create a new version entry in `docs/docs.json` file
 - write upgrade guide and put it in the docs
 
-4. Update version in `InstallTabs.tsx::no build`, `example/index.html`, and `README.md`
+4. Update version in `InstallTabs.tsx::no build`, `example/index.html`, `README.md` and `example-preact/src/App.tsx`
 
 5. Verify if `importer/storage.ts:DB_VERSION` needs to be bumped. It should be bumped anytime the release contains any breaking changes to `ImporterState`. If it is true, increment the `DB_VERSION`.
 
