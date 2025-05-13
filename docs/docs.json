@@ -52,6 +52,10 @@
             ]
           },
           {
+            "group": "Upgrade",
+            "pages": ["v0.2.0/upgrade/from-v-0-1-4"]
+          },
+          {
             "group": "Development",
             "pages": [
               "v0.2.0/development/setup",
