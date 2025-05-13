@@ -13,9 +13,10 @@ import {
 import { useTranslations } from '../i18';
 import { useState } from 'preact/hooks';
 import { ReactNode } from 'preact/compat';
+import { ImporterOutputFieldType } from '../types';
 
 export interface SelectOption<T> {
-  label: ReactNode;
+  label: ImporterOutputFieldType;
   value: T;
   icon?: ReactNode;
   group?: string;
