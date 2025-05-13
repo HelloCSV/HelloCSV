@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'preact/compat';
+import { useMemo, useState } from 'preact/hooks';
 import { Button, Error } from '../../components';
 import { useTranslations } from '../../i18';
 import { ColumnMapping, ParsedFile, SheetDefinition } from '../../types';

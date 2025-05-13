@@ -1,5 +1,4 @@
-import { useEffect } from 'preact/compat';
-import { useRef } from 'preact/hooks';
+import { useRef, useEffect } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';

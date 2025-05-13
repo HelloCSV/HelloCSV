@@ -11,13 +11,14 @@ import {
   CheckIcon,
 } from '@heroicons/react/20/solid';
 import { useTranslations } from '../i18';
-import { ComponentChildren } from 'preact';
 import { useState } from 'preact/hooks';
+import { ReactNode } from 'preact/compat';
+import { ImporterOutputFieldType } from '../types';
 
 export interface SelectOption<T> {
-  label: ComponentChildren;
+  label: ImporterOutputFieldType;
   value: T;
-  icon?: React.ReactNode;
+  icon?: ReactNode;
   group?: string;
 }
 

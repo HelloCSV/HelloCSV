@@ -31,8 +31,8 @@ renderImporter(document.getElementById("importer"), {
   },
 });`;
 
-export const EXAMPLE_CODE_JSX = `import Importer from 'hello-csv/peer'
-import 'hello-csv/peer/index.css'
+export const EXAMPLE_CODE_JSX = `import Importer from 'hello-csv/preact'
+import 'hello-csv/preact/index.css'
 
 <Importer
   theme="default"

@@ -1,0 +1,141 @@
+---
+title: 'Importer Props'
+---
+
+This section details each property available for the Importer component.
+
+## sheets
+
+**Type:** `SheetDefinition[]`
+
+**Required:** Yes
+
+**Description:**  
+Array of sheet definitions for importing data. This property defines the structure of the data to be imported.
+
+---
+
+## onComplete
+
+**Type:** `(data: ImporterState, onProgress: (progress: number) => void) => Promise<ImportStatistics | void>`
+
+**Required:** Yes
+
+**Description:**  
+A callback function invoked when the import process completes. It receives the final data and a progress callback.
+An `ImportStatistics` object can be returned to provide detailed information about the import results. The statistics object has the following properties:
+
+- `imported`: Number of rows successfully imported
+- `failed`: Number of rows that failed to import
+- `skipped`: Number of rows that were skipped
+
+These statistics will be displayed in the import summary and can be used to show detailed import results to the user.
+
+---
+
+## theme
+
+**Type:** `'default' | 'theme-1' | 'theme-2'`
+
+**Required:** No (Default: `default`)
+
+**Description:**  
+Determines the visual theme of the importer component.
+
+---
+
+## onDataColumnsMapped
+
+**Type:** `(data: SheetState) => Promise<SheetState> | SheetState`
+
+**Required:** No
+
+**Description:**  
+Callback executed after CSV columns are mapped to the sheet definitions. Allows for custom post-mapping processing.
+
+---
+
+## allowManualDataEntry
+
+**Type:** `boolean`
+
+**Required:** No (Default: `false`)
+
+**Description:**  
+Indicates whether manual data entry is allowed during the preview phase.
+
+---
+
+## locale
+
+**Type:** `'en' | 'fr' | 'pt-BR'`
+
+**Required:** No (Default: `en`)
+
+**Description:**  
+Specifies the locale for internationalization purposes.
+
+---
+
+## preventUploadOnValidationErrors
+
+**Type:** `boolean | (errors: ImporterValidationError[]) => boolean`
+
+**Required:** No (Default: `false`)
+
+**Description:**  
+Controls whether file upload should be prevented when validation errors occur. Can be a boolean or a function that returns a boolean.
+
+---
+
+## maxFileSizeInBytes
+
+**Type:** `number`
+
+**Required:** No (Default: `20971520` i.e., 20MB)
+
+**Description:**  
+Sets the maximum allowed file size in bytes. Files exceeding this limit will be rejected.
+
+---
+
+## customSuggestedMapper
+
+**Type:** `(sheetDefinitions: SheetDefinition[], csvHeaders: string[]) => ColumnMapping[] | Promise<ColumnMapping[]>`
+
+**Required:** No
+
+**Description:**  
+Provides a custom function to generate suggested mappings based on CSV headers.
+
+---
+
+## onSummaryFinished
+
+**Type:** `() => void`
+
+**Required:** No
+
+**Description:**  
+Callback executed when the user has finished reviewing the import summary. This can be used to navigate users to a results page, dashboard, or next step in the workflow after the import process completes successfully.
+
+---
+
+## indexDBConfig
+
+**Type:** `{ enabled: boolean; customKey?: string }`
+
+**Required:** No
+
+**Description:**  
+Configuration for IndexedDB storage. When enabled, the importer state will be persisted in the browser's IndexedDB storage, allowing users to resume their import process if the page is refreshed or closed. The `customKey` option allows specifying a unique identifier for the stored data.
+
+Use cases for `customKey`:
+
+- **Multiple Import Sessions**: When you need to handle multiple import processes simultaneously in the same application, you can use different `customKey` values to keep their states separate.
+
+- **User-Specific Storage**: When implementing a multi-user system, you can use the user's ID as the `customKey` to maintain separate import states for each user.
+
+- **Session Management**: You can use the `customKey` to implement session-specific storage, allowing you to clear specific import sessions without affecting others.
+
+---

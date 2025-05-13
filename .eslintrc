@@ -3,7 +3,7 @@
   "parserOptions": {
     "project": [
       "./tsconfig.json",
-      "./example/tsconfig.json"
+      "./example-preact/tsconfig.json"
     ],
     "ecmaVersion": 2020,
     "sourceType": "module"
