@@ -130,6 +130,9 @@ export default function EmployeeImporter() {
           }}
         />
       </div>
+      <div className="mt-4 italic font-semibold text-sm">
+        Tip: You can refresh the page while using the importer, and you won't lose your progress!
+      </div>
       {ready && (
         <div>
           <h4>Check the console for the output!</h4>

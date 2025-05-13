@@ -48,6 +48,8 @@ export default function Header() {
             <br />
             🌎 Fully supports multiple languages for a seamless experience.
             <br />
+            💾 Save progress to local storage, so user's don't lose progress on a page refresh.
+            <br />
             🔒 Frontend only, so data <b>never</b> leaves your application.
             <br />
             💻 100% open source & free to use.
