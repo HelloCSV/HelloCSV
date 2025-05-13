@@ -1,0 +1,162 @@
+---
+title: "Sheet Relationships"
+description: "Understanding sheet relationships and references in HelloCSV"
+---
+
+# Sheet Relationships
+
+HelloCSV supports relationships between sheets through reference columns, allowing you to create connected data structures.
+
+## Basic Structure
+
+A sheet structure consists of:
+- Multiple sheets with unique IDs
+- Columns that can reference other sheets
+- Validation across related data
+
+```typescript
+const sheets = [
+  {
+    id: 'employees',
+    label: 'Employees',
+    columns: [
+      {
+        id: 'name',
+        label: 'Name',
+        type: 'string',
+        validators: [{ validate: 'required' }]
+      }
+    ]
+  },
+  {
+    id: 'departments',
+    label: 'Departments',
+    columns: [
+      {
+        id: 'name',
+        label: 'Department Name',
+        type: 'string'
+      },
+      {
+        id: 'manager',
+        label: 'Department Manager',
+        type: 'reference',
+        typeArguments: {
+          sheetId: 'employees',  // References the employees sheet
+          sheetColumnId: 'name'  // References the name column
+        },
+        validators: [{ validate: 'required' }]
+      }
+    ]
+  }
+]
+```
+
+## Reference Columns
+
+Reference columns create links between sheets using the `reference` type:
+
+```typescript
+{
+  label: 'Manager',
+  id: 'manager',
+  type: 'reference',
+  typeArguments: {
+    sheetId: 'employees',     // The target sheet
+    sheetColumnId: 'name'     // The target column
+  },
+  validators: [{ validate: 'required' }]
+}
+```
+
+## Common Use Cases
+
+1. **One-to-Many Relationships**
+   - Employees to Departments
+   - Products to Categories
+   - Orders to Customers
+
+2. **Lookup References**
+   - User IDs to User Names
+   - Product Codes to Product Details
+   - Location IDs to Full Addresses
+
+## Validation
+
+Reference columns automatically validate that:
+- The referenced sheet exists
+- The referenced column exists
+- The referenced value exists in the target sheet
+
+## Best Practices
+
+1. **Define Primary Keys**
+   - Use unique identifiers in referenced columns
+   - Ensure referenced columns have unique validation
+
+2. **Order Matters**
+   - Import sheets with referenced data first
+   - Define dependencies clearly in your schema
+
+3. **Error Handling**
+   - Provide clear error messages for reference failures
+   - Handle missing references gracefully
+
+## Example: Complex Relationship
+
+```typescript
+const sheets = [
+  {
+    id: 'departments',
+    label: 'Departments',
+    columns: [
+      { 
+        id: 'name',
+        label: 'Department Name',
+        type: 'string',
+        validators: [
+          { validate: 'required' },
+          { validate: 'unique' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'employees',
+    label: 'Employees',
+    columns: [
+      {
+        id: 'name',
+        label: 'Employee Name',
+        type: 'string',
+        validators: [{ validate: 'required' }]
+      },
+      {
+        id: 'department',
+        label: 'Department',
+        type: 'reference',
+        typeArguments: {
+          sheetId: 'departments',
+          sheetColumnId: 'name'
+        },
+        validators: [{ validate: 'required' }]
+      },
+      {
+        id: 'manager',
+        label: 'Reports To',
+        type: 'reference',
+        typeArguments: {
+          sheetId: 'employees',
+          sheetColumnId: 'name'
+        }
+      }
+    ]
+  }
+]
+```
+
+This example shows:
+- Self-referencing (employees referencing other employees)
+- Cross-sheet references (employees to departments)
+- Required and optional references
+- Unique constraints for referenced fields

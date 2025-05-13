@@ -37,14 +37,16 @@
               "v0.1.4/api-reference/sheet-state",
               "v0.1.4/api-reference/validators",
               "v0.1.4/api-reference/transformers",
-              "v0.1.4/api-reference/importer-validation-error"
+              "v0.1.4/api-reference/importer-validation-error",
+              "v0.1.4/api-reference/sheet-relationships"
             ]
           },
           {
             "group": "Configuration",
             "pages": [
               "common/configuration/peer-vs-bundled",
-              "common/configuration/react"
+              "common/configuration/react",
+              "common/configuration/nextjs"
             ]
           },
           {

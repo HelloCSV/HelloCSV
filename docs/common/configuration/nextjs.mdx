@@ -1,0 +1,227 @@
+---
+title: "Next.js"
+description: "Using HelloCSV with Next.js"
+---
+
+# Using HelloCSV with Next.js
+
+## Installation
+
+First, install HelloCSV and its peer dependencies in your Next.js project:
+
+```bash
+npm install hello-csv preact@^10.0.0
+```
+
+## Configuration
+
+### Preact Compatibility
+
+Since HelloCSV uses Preact internally, you'll need to configure your bundler. Here's how the configuration differs between Next.js and Vite:
+
+#### Next.js Configuration
+```javascript
+// filepath: next.config.js
+module.exports = {
+  webpack: (config, { dev, isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react': 'preact/compat',
+        'react-dom': 'preact/compat',
+        'react-dom/test-utils': 'preact/test-utils',
+        'react/jsx-runtime': 'preact/jsx-runtime'
+      }
+    }
+    return config
+  }
+}
+```
+
+#### Equivalent Vite Configuration (for reference)
+```javascript
+// filepath: vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      react: 'preact/compat',
+      'react-dom': 'preact/compat',
+    },
+  },
+});
+```
+
+### Additional Next.js Optimizations
+
+For better performance, you can add these optional configurations:
+
+```javascript
+// filepath: next.config.js
+module.exports = {
+  // ...existing webpack config...
+  
+  // Optimize bundle size
+  experimental: {
+    optimizeCss: true,
+    scrollRestoration: true
+  },
+  
+  // Configure compiler options
+  compiler: {
+    // Remove console.logs in production
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Enable strict mode
+  reactStrictMode: true,
+}
+```
+
+### For Next.js 13+ (App Router)
+
+Create a client component to use HelloCSV since it requires browser APIs:
+
+```tsx
+'use client'
+
+import { HelloCSV } from 'hello-csv'
+
+export default function CSVImporter() {
+  const sheets = [
+    {
+      id: 'main',
+      label: 'Main Sheet',
+      columns: [
+        {
+          id: 'name',
+          label: 'Name',
+          type: 'string',
+          validators: [{ validate: 'required' }]
+        }
+      ]
+    }
+  ]
+
+  return (
+    <HelloCSV
+      sheets={sheets}
+      onComplete={(data) => {
+        console.log('Imported data:', data)
+      }}
+    />
+  )
+}
+```
+
+### For Next.js Pages Router
+
+```tsx
+import { HelloCSV } from 'hello-csv'
+
+export default function ImportPage() {
+  const sheets = [
+    {
+      id: 'main',
+      label: 'Main Sheet',
+      columns: [
+        {
+          id: 'name',
+          label: 'Name',
+          type: 'string',
+          validators: [{ validate: 'required' }]
+        }
+      ]
+    }
+  ]
+
+  return (
+    <HelloCSV
+      sheets={sheets}
+      onComplete={(data) => {
+        console.log('Imported data:', data)
+      }}
+    />
+  )
+}
+```
+
+## Example Usage
+
+Here's a complete example with error handling and loading states:
+
+```tsx
+'use client'
+
+import { HelloCSV } from 'hello-csv'
+import { useState } from 'react'
+
+export default function CSVImportPage() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const sheets = [
+    {
+      id: 'users',
+      label: 'Users',
+      columns: [
+        {
+          id: 'name',
+          label: 'Name',
+          type: 'string',
+          validators: [{ validate: 'required' }]
+        },
+        {
+          id: 'email',
+          label: 'Email',
+          type: 'string',
+          validators: [
+            { validate: 'required' },
+            { validate: 'email' }
+          ]
+        }
+      ]
+    }
+  ]
+
+  const handleComplete = async (data) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      
+      // Process your data here
+      await saveToDatabase(data)
+      
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="container mx-auto p-4">
+      {error && (
+        <div className="text-red-500 mb-4">
+          {error}
+        </div>
+      )}
+      
+      <HelloCSV
+        sheets={sheets}
+        onComplete={handleComplete}
+        disabled={isLoading}
+      />
+      
+      {isLoading && (
+        <div className="mt-4">
+          Processing your data...
+        </div>
+      )}
+    </div>
+  )
+}
+```
