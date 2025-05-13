@@ -45,3 +45,13 @@ Column with predefined values.
 
 **Additional:**  
 `typeArguments: { values: SelectOption<string>[] }`
+
+**Notes:**
+```ts
+export interface SelectOption<T> {
+  label: ImporterOutputFieldType;
+  value: T;
+  icon?: ReactNode;
+  group?: string;
+}
+```
