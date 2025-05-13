@@ -23,9 +23,12 @@ renderImporter(document.getElementById("importer"), {
             },
           ],
         },
-      ]
+      ],
     }
-  ]
+  ],
+  indexDBConfig: {
+    enabled: true, // Persist to local storage
+  },
 });`;
 
 export const EXAMPLE_CODE_JSX = `import Importer from 'hello-csv/peer'
