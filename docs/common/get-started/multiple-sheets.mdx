@@ -17,9 +17,6 @@ HelloCSV allows you to split the `employee` data and `company` data into separat
 Here is an example HelloCSV definition for the data above:
 
 ```jsx
-import Importer from 'hello-csv/peer';
-import 'hello-csv/peer/index.css';
-
 <Importer
   sheets={[
     {
@@ -27,7 +24,7 @@ import 'hello-csv/peer/index.css';
       label: 'Employees',
       columns: [
         { label: 'Employee ID', id: 'id', type: 'number' },
-        { label: 'Name', id: 'name', type: 'string', },
+        { label: 'Employee Name', id: 'name', type: 'string', },
         {
           label: 'Company',
           id: 'company',
@@ -44,14 +41,14 @@ import 'hello-csv/peer/index.css';
       id: 'companies',
       label: 'Companies',
       columns: [
-        { label: 'Name', id: 'name', type: 'string', validators: [{ validate: 'required' }], },
-        { label: 'Industry', id: 'industry', type: 'string', },
+        { label: 'Company Name', id: 'name', type: 'string', validators: [{ validate: 'required' }], },
+        { label: 'Company Industry', id: 'industry', type: 'string', },
       ],
     },
   ]}
-  onDataColumnsMapped={(data: SheetState) => {
+  onDataColumnsMapped={(sheets: any) => {
     // Filter companies down to only unique names
-    const sheet = sheets.find((sheet) => sheet.sheetId === 'companies')!;
+    const sheet = sheets.find((sheet: any) => sheet.sheetId === 'companies')!;
     const seen = new Set();
     sheet.rows = [...sheet.rows].filter((row: SheetRow) => {
       // Remove duplicate companies
@@ -61,14 +58,14 @@ import 'hello-csv/peer/index.css';
     });
     return sheets;
   }}
-  onComplete={(data) => {
-    const employees = data.sheetData.find(s => s.id === 'employees');
-    const companies = data.sheetData.find(s => s.id === 'companies');
+  onComplete={async (data) => {
+    const employees = data.sheetData.find((s: any) => s.id === 'employees');
+    const companies = data.sheetData.find((s: any) => s.id === 'companies');
     console.log(employees);
     // [{id: 1, name: "Mat", company: "Dunder Mifflin"}, {id: 2, name: "Emily", company: "Los Pollos Hermanos"}, {id: 3, name: "Chris", company: "Los Pollos Hermanos"}]
     console.log(companies);
     // [{name: "Dunder Mifflin", industry: "Paper"}, {name: "Los Pollos Hermanos", industry: "Food & Beverage"}]
   }}
-/>;
+/>
 ```
 
