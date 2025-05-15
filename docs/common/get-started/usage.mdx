@@ -55,6 +55,16 @@ import 'hello-csv/peer/index.css';
           isReadOnly: true,
           transformers: [{ transformer: 'state_code' }],
         },
+        {
+          label: 'Company',
+          id: 'company',
+          type: 'reference',
+          typeArguments: {
+            sheetId: 'companies',
+            sheetColumnId: 'company',
+          },
+          validators: [{ validate: 'required' }],
+        },
       ],
     },
     {
@@ -76,16 +86,6 @@ import 'hello-csv/peer/index.css';
               { label: 'Tech', value: 'tech' },
               { label: 'Finance', value: 'finance' },
             ],
-          },
-          validators: [{ validate: 'required' }],
-        },
-        {
-          label: 'Name',
-          id: 'name',
-          type: 'reference',
-          typeArguments: {
-            sheetId: 'employees',
-            sheetColumnId: 'name',
           },
           validators: [{ validate: 'required' }],
         },
