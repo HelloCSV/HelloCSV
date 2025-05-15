@@ -15,7 +15,7 @@
   "navigation": {
     "versions": [
       {
-        "version": "0.1.3",
+        "version": "0.2.0",
         "groups": [
           {
             "group": "Get Started",
@@ -31,22 +31,88 @@
           {
             "group": "API Reference",
             "pages": [
-              "v0.1.3/api-reference/importer-props",
-              "v0.1.3/api-reference/sheet-definition-props",
-              "v0.1.3/api-reference/column-types",
-              "v0.1.3/api-reference/common-column-props",
-              "v0.1.3/api-reference/importer-state",
-              "v0.1.3/api-reference/sheet-state",
-              "v0.1.3/api-reference/validators",
-              "v0.1.3/api-reference/transformers",
-              "v0.1.3/api-reference/importer-validation-error"
+              "v0.2.0/api-reference/importer-props",
+              "v0.2.0/api-reference/sheet-definition-props",
+              "v0.2.0/api-reference/column-types",
+              "v0.2.0/api-reference/common-column-props",
+              "v0.2.0/api-reference/importer-state",
+              "v0.2.0/api-reference/sheet-state",
+              "v0.2.0/api-reference/validators",
+              "v0.2.0/api-reference/transformers",
+              "v0.2.0/api-reference/importer-validation-error"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["v0.2.0/configuration/bundle-versions"]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "common/customization/height-and-width",
+              "common/customization/theme-styles"
+            ]
+          },
+          {
+            "group": "Upgrade",
+            "pages": ["v0.2.0/upgrade/from-v-0-1-4"]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "v0.2.0/development/setup",
+              "common/development/no-build-example",
+              "common/development/docs",
+              "v0.2.0/development/deployment"
+            ]
+          }
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Demo",
+              "href": "https://hellocsv.github.io/HelloCSV/",
+              "icon": "play"
+            },
+            {
+              "anchor": "Source Code",
+              "href": "https://github.com/HelloCSV/HelloCSV",
+              "icon": "github"
+            }
+          ]
+        }
+      },
+      {
+        "version": "0.1.4",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "common/get-started/introduction",
+              "common/get-started/why",
+              "v0.1.4/get-started/usage",
+              "common/get-started/demo"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "v0.1.4/api-reference/importer-props",
+              "v0.1.4/api-reference/sheet-definition-props",
+              "v0.1.4/api-reference/column-types",
+              "v0.1.4/api-reference/common-column-props",
+              "v0.1.4/api-reference/importer-state",
+              "v0.1.4/api-reference/sheet-state",
+              "v0.1.4/api-reference/validators",
+              "v0.1.4/api-reference/transformers",
+              "v0.1.4/api-reference/importer-validation-error"
             ]
           },
           {
             "group": "Configuration",
             "pages": [
-              "common/configuration/peer-vs-bundled",
-              "common/configuration/react"
+              "v0.1.4/configuration/peer-vs-bundled",
+              "v0.1.4/configuration/react"
             ]
           },
           {
@@ -59,10 +125,10 @@
           {
             "group": "Development",
             "pages": [
-              "common/development/setup",
+              "v0.1.4/development/setup",
               "common/development/no-build-example",
               "common/development/docs",
-              "common/development/deployment"
+              "v0.1.4/development/deployment"
             ]
           }
         ],

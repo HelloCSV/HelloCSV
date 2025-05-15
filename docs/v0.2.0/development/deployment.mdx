@@ -6,7 +6,7 @@ Deployment is done with the following steps
 
 1. Change version in `package.json` (to the target version) - use branch `release/v{x.y.z}`
 
-2. Run `npm i` in the root directory as well as in `example` and `example-vanilla` directories
+2. Run `npm i` in the root directory as well as in `example-preact`, `example-vanilla`, and `example-react` directories
 
 3. Update version in docs
 
@@ -23,7 +23,7 @@ For major version release
 - create a new version entry in `docs/docs.json` file
 - write upgrade guide and put it in the docs
 
-4. Update version in `InstallTabs.tsx::no build`, `example/index.html`, and `README.md`
+4. Update version in `InstallTabs.tsx::no build`, `example-preact/index.html`, `README.md` and `example-preact/src/App.tsx`
 
 5. Verify if `importer/storage.ts:DB_VERSION` needs to be bumped. It should be bumped anytime the release contains any breaking changes to `ImporterState`. If it is true, increment the `DB_VERSION`.
 
@@ -33,4 +33,6 @@ For major version release
 
 8. Create a new release in Github - https://github.com/HelloCSV/HelloCSV/releases. Remember about creating a tag (`v{x.y.z}`) and writing release notes.
 
-9. Merge `main` to `production` branch - this would trigger docs deployment to Mintlify.
+9. Merge `main` to `production` branch - this would trigger docs deployment to Mintlify
+
+10. Merge the automated PR 'Sync production to main' to keep the `main` branch in sync with the `production` branch

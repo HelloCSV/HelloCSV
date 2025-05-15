@@ -1,0 +1,38 @@
+---
+title: 'Deployment'
+---
+
+Deployment is done with the following steps
+
+1. Change version in `package.json` (to the target version) - use branch `release/v{x.y.z}`
+
+2. Run `npm i` in the root directory as well as in `example` and `example-vanilla` directories
+
+3. Update version in docs
+
+For minor version release
+
+- update version in `docs/docs.json` file
+- update directory name of `docs/v{oldVersion}` to `docs/v{newVersion}`
+- make sure to update all references to the old version in the `docs/docs.json` file
+
+For major version release
+
+- create a new directory in `docs` called `v{newVersion}`
+- copy all files from `docs/v{oldVersion}` to `docs/v{newVersion}`
+- create a new version entry in `docs/docs.json` file
+- write upgrade guide and put it in the docs
+
+4. Update version in `InstallTabs.tsx::no build`, `example/index.html`, and `README.md`
+
+5. Verify if `importer/storage.ts:DB_VERSION` needs to be bumped. It should be bumped anytime the release contains any breaking changes to `ImporterState`. If it is true, increment the `DB_VERSION`.
+
+6. Create a PR in the repository called `Release v{x.y.z}`
+
+7. Run `npm publish` in the root directory, you can use `--dry-run` flag to test the deployment
+
+8. Create a new release in Github - https://github.com/HelloCSV/HelloCSV/releases. Remember about creating a tag (`v{x.y.z}`) and writing release notes.
+
+9. Merge `main` to `production` branch - this would trigger docs deployment to Mintlify
+
+10. Merge the automated PR 'Sync production to main' to keep the `main` branch in sync with the `production` branch
