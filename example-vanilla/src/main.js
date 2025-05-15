@@ -92,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       onComplete: onComplete,
       preventUploadOnValidationErrors: true,
+      persistenceConfig: { enabled: true },
     });
   } catch (error) {
     console.error('Error calling renderImporter:', error);

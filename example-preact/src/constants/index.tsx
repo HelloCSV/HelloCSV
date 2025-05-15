@@ -26,7 +26,7 @@ renderImporter(document.getElementById("importer"), {
       ],
     }
   ],
-  indexDBConfig: {
+  persistenceConfig: {
     enabled: true, // Persist to local storage
   },
 });`;

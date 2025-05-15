@@ -168,7 +168,7 @@ export default function StudentsImporter() {
             return sheets;
           }}
           onComplete={onComplete}
-          indexDBConfig={{
+          persistenceConfig={{
             enabled: true,
           }}
         />

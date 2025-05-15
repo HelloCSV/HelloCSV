@@ -34,13 +34,13 @@ function ImporterBody({
   maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
   onSummaryFinished,
-  indexDBConfig = { enabled: false },
+  persistenceConfig = { enabled: false },
 }: ImporterDefinition) {
   const { t } = useTranslations();
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [state, dispatch] = usePersistedReducer(sheets, indexDBConfig);
+  const [state, dispatch] = usePersistedReducer(sheets, persistenceConfig);
 
   const {
     mode,
