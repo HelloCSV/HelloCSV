@@ -6,7 +6,7 @@ title: "Multiple Sheets"
 
 Often you'll want to import data that actually implicitly has multiple data schemas within it. For example, consider importing a CSV of employees working across multiple companies.
 
-![title](/images/multiple-sheets.png)
+![title](/images/multiple-sheets/multiple-sheets.png)
 
 In the above example, the company fields are actually duplicated for both Emily and Chris.
 
@@ -16,7 +16,7 @@ HelloCSV allows you to split the `employee` data and `company` data into separat
 
 Here is an example HelloCSV definition for the data above:
 
-```jsx
+```tsx
 <Importer
   sheets={[
     {
@@ -69,3 +69,9 @@ Here is an example HelloCSV definition for the data above:
 />
 ```
 
+
+### Screenshots
+<img src="/images/multiple-sheets/preview.png" />
+<img src="/images/multiple-sheets/mapping.png" />
+<img src="/images/multiple-sheets/companies.png" />
+<img src="/images/multiple-sheets/employees.png" />
