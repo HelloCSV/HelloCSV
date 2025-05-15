@@ -1,0 +1,37 @@
+---
+title: "Persistence"
+---
+
+## Persistence
+
+HelloCSV supports using [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) for persisting state. This ensures that users don't lose any edits they make if the page refreshes, and allows them to come back to a partially imported state later.
+
+The data is saved in the browsers IndexedDB store, so this data never leaves the user's browser. Therefore, if a different browser is used, the saved session will not be maintained.
+
+HelloCSV will invalidate any state that is saved if the definition of the importer changes. For example, if the definition of an importer is changed such that a new column is added, the state previously saved will not be maintained.
+
+### Persistence Configuration
+
+```tsx
+export interface IndexDBConfig {
+  enabled: boolean;
+  customKey?: string;
+}
+```
+
+
+### Usage
+
+```tsx
+<Importer
+  ...
+  persistenceConfig={{ enabled: true, customKey: `${currentUser.id}-import` }}
+/>
+```
+
+The persistence configuration also supports a custom key, so that you as the developer can invalidate any saved importing sessions. Intuitively, the key that the data is saved under can be thought of as: `key = importer_definition + custom_key`.
+
+<Warning>
+Be careful that you don't accidentally leak information across multiple users who may be sharing the same browser with this feature.
+</Warning>
+

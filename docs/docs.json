@@ -23,6 +23,8 @@
               "common/get-started/introduction",
               "common/get-started/why",
               "v0.2.0/get-started/usage",
+              "common/get-started/multiple-sheets",
+              "common/get-started/persistence",
               "common/get-started/demo"
             ]
           },
