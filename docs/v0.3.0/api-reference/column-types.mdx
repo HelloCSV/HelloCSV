@@ -1,0 +1,57 @@
+---
+title: "Column Types"
+---
+
+This section lists the available column types.
+
+## string
+
+**Description:**  
+Basic text column.
+
+---
+
+## number
+
+**Description:**  
+Numeric column.
+
+---
+
+## reference
+
+**Description:**  
+References data from another sheet.
+
+**Additional:**  
+`typeArguments: { sheetId: string, sheetColumnId: string }`
+
+---
+
+## calculated
+
+**Description:**  
+Computed column value (read-only).
+
+**Additional:**  
+`typeArguments: { getValue: (row: SheetRow) => ImporterOutputFieldType }`
+
+---
+
+## enum
+
+**Description:**  
+Column with predefined values.
+
+**Additional:**  
+`typeArguments: { values: SelectOption<string>[] }`
+
+**Notes:**
+```ts
+export interface SelectOption<T> {
+  label: ImporterOutputFieldType;
+  value: T;
+  icon?: ReactNode;
+  group?: string;
+}
+```
