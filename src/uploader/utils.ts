@@ -2,6 +2,7 @@ import { SheetDefinition } from '../types';
 import { ImporterRequirementsType } from './types';
 import { fieldIsRequired } from '../validators';
 import { allowUserToMapColumn } from '../mapper';
+import * as XLSX from 'xlsx';
 
 export function getImporterRequirements(
   sheets: SheetDefinition[]
@@ -43,4 +44,23 @@ export const formatFileSize = (bytes: number): string => {
   }
 
   return `${Math.round(size)} ${units[unitIndex]}`;
+};
+
+export const convertXlsxToCsv = (
+  file: File,
+  setFile: (file: File) => void
+): void => {
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const data = new Uint8Array(e.target?.result as ArrayBuffer);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+    const csvData = XLSX.utils.sheet_to_csv(firstSheet);
+    const csvBlob = new Blob([csvData], { type: 'text/csv' });
+    const csvFile = new File([csvBlob], file.name.replace('.xlsx', '.csv'), {
+      type: 'text/csv',
+    });
+    setFile(csvFile);
+  };
+  reader.readAsArrayBuffer(file);
 };
