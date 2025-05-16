@@ -22,7 +22,7 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
           commit-message: 'chore: sync production to main'
           title: 'Sync production to main'
           body: 'Automated PR to sync `production` branch to `main` branch'
