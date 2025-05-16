@@ -53,7 +53,7 @@
           },
           {
             "group": "Upgrade",
-            "pages": ["v0.3.0/upgrade/from-v-0-1-4"]
+            "pages": ["v0.3.0/upgrade/from-v-0-2-0"]
           },
           {
             "group": "Development",
@@ -62,6 +62,72 @@
               "common/development/no-build-example",
               "common/development/docs",
               "v0.3.0/development/deployment"
+            ]
+          }
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Demo",
+              "href": "https://hellocsv.github.io/HelloCSV/",
+              "icon": "play"
+            },
+            {
+              "anchor": "Source Code",
+              "href": "https://github.com/HelloCSV/HelloCSV",
+              "icon": "github"
+            }
+          ]
+        }
+      },
+      {
+        "version": "0.2.0",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "common/get-started/introduction",
+              "common/get-started/why",
+              "v0.2.0/get-started/usage",
+              "common/get-started/demo"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "v0.2.0/api-reference/importer-props",
+              "v0.2.0/api-reference/sheet-definition-props",
+              "v0.2.0/api-reference/column-types",
+              "v0.2.0/api-reference/common-column-props",
+              "v0.2.0/api-reference/importer-state",
+              "v0.2.0/api-reference/sheet-state",
+              "v0.2.0/api-reference/validators",
+              "v0.2.0/api-reference/transformers",
+              "v0.2.0/api-reference/importer-validation-error"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["v0.2.0/configuration/bundle-versions"]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "common/customization/height-and-width",
+              "common/customization/theme-styles"
+            ]
+          },
+          {
+            "group": "Upgrade",
+            "pages": ["v0.2.0/upgrade/from-v-0-1-4"]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "v0.2.0/development/setup",
+              "common/development/no-build-example",
+              "common/development/docs",
+              "v0.2.0/development/deployment"
             ]
           }
         ],
