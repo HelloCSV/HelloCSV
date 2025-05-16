@@ -1,0 +1,81 @@
+---
+title: "Multiple Sheets"
+---
+
+## Multiple Sheets
+
+Often you'll want to import data that actually implicitly has multiple data schemas within it. For example, consider importing a CSV of employees working across multiple companies.
+
+![title](/images/multiple-sheets/multiple-sheets.png)
+
+In the above example, the company fields are actually duplicated for both Emily and Chris.
+
+In this case, you'd most likely have a database table called `employees` and another one called `companies`, so this import should create **3 users** but only **2 companies**.
+
+HelloCSV allows you to split the `employee` data and `company` data into separate sheets on the frontend, before the upload, to give the user a chance to review the upload and make edits.
+
+Here is an example HelloCSV definition for the data above:
+
+```tsx
+<Importer
+  sheets={[
+    {
+      id: 'employees',
+      label: 'Employees',
+      columns: [
+        { label: 'Employee ID', id: 'id', type: 'number' },
+        { label: 'Employee Name', id: 'name', type: 'string', },
+        {
+          label: 'Company',
+          id: 'company',
+          type: 'reference',
+          typeArguments: {
+            sheetId: 'companies',
+            sheetColumnId: 'name',
+          },
+          validators: [{ validate: 'required' }],
+        },
+      ],
+    },
+    {
+      id: 'companies',
+      label: 'Companies',
+      columns: [
+        { label: 'Company Name', id: 'name', type: 'string', validators: [{ validate: 'required' }], },
+        { label: 'Company Industry', id: 'industry', type: 'string', },
+      ],
+    },
+  ]}
+  onDataColumnsMapped={(sheets: any) => {
+    // Filter companies down to only unique names
+    const sheet = sheets.find((sheet: any) => sheet.sheetId === 'companies')!;
+    const seen = new Set();
+    sheet.rows = [...sheet.rows].filter((row: SheetRow) => {
+      // Remove duplicate companies
+      const hasSeen = !seen.has(row.name);
+      seen.add(row.name);
+      return hasSeen;
+    });
+    return sheets;
+  }}
+  onComplete={async (data) => {
+    const employees = data.sheetData.find((s: any) => s.id === 'employees');
+    const companies = data.sheetData.find((s: any) => s.id === 'companies');
+    console.log(employees);
+    // [{id: 1, name: "Mat", company: "Dunder Mifflin"}, {id: 2, name: "Emily", company: "Los Pollos Hermanos"}, {id: 3, name: "Chris", company: "Los Pollos Hermanos"}]
+    console.log(companies);
+    // [{name: "Dunder Mifflin", industry: "Paper"}, {name: "Los Pollos Hermanos", industry: "Food & Beverage"}]
+  }}
+/>
+```
+
+
+### Screenshots
+**Preview**
+<img src="/images/multiple-sheets/preview.png" />
+**Mapping**
+<img src="/images/multiple-sheets/mapping.png" />
+**Employees Sheet**
+<img src="/images/multiple-sheets/employees.png" />
+**Companies Sheet**
+<img src="/images/multiple-sheets/companies.png" />

@@ -99,7 +99,7 @@ export default function App() {
       }}
       onComplete={onComplete}
       preventUploadOnValidationErrors
-      indexDBConfig={{
+      persistenceConfig={{
         enabled: true,
       }}
     />

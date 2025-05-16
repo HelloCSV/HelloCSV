@@ -125,7 +125,7 @@ export default function EmployeeImporter() {
           }}
           onComplete={onComplete}
           preventUploadOnValidationErrors
-          indexDBConfig={{
+          persistenceConfig={{
             enabled: true,
           }}
         />

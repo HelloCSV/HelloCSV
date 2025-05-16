@@ -33,10 +33,10 @@ export interface ImporterDefinition {
     sheetDefinitions: SheetDefinition[],
     csvHeaders: string[]
   ) => ColumnMapping[] | Promise<ColumnMapping[]>;
-  indexDBConfig?: IndexDBConfig;
+  persistenceConfig?: PersistenceConfig;
 }
 
-export interface IndexDBConfig {
+export interface PersistenceConfig {
   enabled: boolean;
   customKey?: string;
 }

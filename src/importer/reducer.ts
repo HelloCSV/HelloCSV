@@ -4,7 +4,7 @@ import {
   CellChangedPayload,
   ImporterAction,
   ImporterState,
-  IndexDBConfig,
+  PersistenceConfig,
   SheetDefinition,
   SheetRow,
 } from '../types';
@@ -49,13 +49,13 @@ function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
 
 async function buildState(
   sheetDefinitions: SheetDefinition[],
-  indexDBConfig: IndexDBConfig
+  persistenceConfig: PersistenceConfig
 ): Promise<ImporterState> {
   const defaultState = buildInitialState(sheetDefinitions);
   try {
-    if (!indexDBConfig.enabled) return defaultState;
+    if (!persistenceConfig.enabled) return defaultState;
 
-    return await buildStateWithIndexedDB(sheetDefinitions, indexDBConfig);
+    return await buildStateWithIndexedDB(sheetDefinitions, persistenceConfig);
   } catch (_error) {
     return defaultState;
   }
@@ -63,11 +63,11 @@ async function buildState(
 
 async function buildStateWithIndexedDB(
   sheetDefinitions: SheetDefinition[],
-  indexDBConfig: IndexDBConfig
+  persistenceConfig: PersistenceConfig
 ): Promise<ImporterState> {
   const state = await getIndexedDBState(
     sheetDefinitions,
-    indexDBConfig.customKey
+    persistenceConfig.customKey
   );
 
   if (state != null) {
@@ -75,7 +75,7 @@ async function buildStateWithIndexedDB(
   }
 
   const newState = buildInitialState(sheetDefinitions);
-  setIndexedDBState(newState, indexDBConfig.customKey);
+  setIndexedDBState(newState, persistenceConfig.customKey);
   return newState;
 }
 
@@ -215,13 +215,13 @@ const reducer = (
 
 const usePersistedReducer = (
   sheets: SheetDefinition[],
-  indexDBConfig: IndexDBConfig
+  persistenceConfig: PersistenceConfig
 ): [ImporterState, (action: ImporterAction) => void] => {
   const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
 
   useEffect(() => {
     const fetchState = async () => {
-      const newState = await buildState(sheets, indexDBConfig);
+      const newState = await buildState(sheets, persistenceConfig);
       dispatch({ type: 'SET_STATE', payload: { state: newState } });
     };
     fetchState();
@@ -230,10 +230,10 @@ const usePersistedReducer = (
   }, []);
 
   useEffect(() => {
-    if (indexDBConfig.enabled) {
-      setIndexedDBState(state, indexDBConfig.customKey);
+    if (persistenceConfig.enabled) {
+      setIndexedDBState(state, persistenceConfig.customKey);
     }
-  }, [state, indexDBConfig]);
+  }, [state, persistenceConfig]);
 
   return [state, dispatch];
 };
