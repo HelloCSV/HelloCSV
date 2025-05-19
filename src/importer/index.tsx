@@ -282,7 +282,10 @@ function ImporterBody({
 
 export default function Importer(props: ImporterDefinition) {
   return (
-    <TranslationProvider selectedLocale={props.locale}>
+    <TranslationProvider
+      selectedLocale={props.locale}
+      translationResources={props.translationResources}
+    >
       <ImporterBody {...props} />
     </TranslationProvider>
   );
