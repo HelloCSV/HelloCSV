@@ -3,13 +3,15 @@ import { Button, Card } from '../../components';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from '../../i18';
 import { SUPPORTED_FILE_MIME_TYPES } from '../../constants';
-import { formatFileSize } from '../utils';
+import { formatFileSize, loadFile } from '../utils';
+import { CustomFileLoader } from '../../types';
 
 interface Props {
   setFile: (file: File) => void;
   allowManualDataEntry?: boolean;
   onEnterDataManually?: () => void;
   maxFileSizeInBytes: number;
+  customFileLoaders?: CustomFileLoader[];
 }
 
 export default function FileUploader({
@@ -17,16 +19,35 @@ export default function FileUploader({
   allowManualDataEntry = true,
   onEnterDataManually,
   maxFileSizeInBytes,
+  customFileLoaders,
 }: Props) {
   const { t, tHtml } = useTranslations();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const supportedMimeTypes = SUPPORTED_FILE_MIME_TYPES.concat(customFileLoaders?.map(loader => loader.mimeType) ?? []);
 
   // TODO: Add error handling
   const validateAndSetFile = (file: File, maxFileSizeInBytes: number) => {
-    if (!SUPPORTED_FILE_MIME_TYPES.includes(file.type)) {
+
+    if (!supportedMimeTypes.includes(file.type)) {
       return;
     }
+
+    const matchedCustomFileLoader = customFileLoaders?.find(loader => loader.mimeType === file.type);
+    if (matchedCustomFileLoader) {
+      loadFile(file).then(event => {
+        const { fileName, csvData } = matchedCustomFileLoader.convert(event ,file);
+
+        const csvBlob = new Blob([csvData], { type: 'text/csv' });
+        const csvFile = new File([csvBlob], fileName, {
+          type: 'text/csv',
+        });
+        setFile(csvFile);
+      })
+      
+      return;
+    }
+
     if (file.size <= maxFileSizeInBytes) {
       setFile(file);
     }
@@ -69,7 +90,7 @@ export default function FileUploader({
             {tHtml('uploader.maxFileSizeInBytes', {
               size: <b>{formatFileSize(maxFileSizeInBytes)}</b>,
             })}{' '}
-            • CSV, TSV
+            • {["CSV", "TSV"].concat(customFileLoaders?.map(loader => loader.label) ?? []).join(", ")}
           </div>
           <div className="mt-3">
             <Button>{t('uploader.browseFiles')}</Button>
@@ -89,7 +110,7 @@ export default function FileUploader({
         <input
           ref={fileInputRef}
           type="file"
-          accept={SUPPORTED_FILE_MIME_TYPES.join(',')}
+          accept={supportedMimeTypes.join(',')}
           style={{ display: 'none' }}
           onChange={(e) => handleFileSelect(e)}
         />

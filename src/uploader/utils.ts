@@ -44,3 +44,13 @@ export const formatFileSize = (bytes: number): string => {
 
   return `${Math.round(size)} ${units[unitIndex]}`;
 };
+
+export const loadFile = async (file: File): Promise<ProgressEvent<FileReader>> => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      resolve(event);
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}

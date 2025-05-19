@@ -1,4 +1,4 @@
-import { SheetDefinition } from '../../types';
+import { CustomFileLoader, SheetDefinition } from '../../types';
 import ImporterRequirements from './ImporterRequirements';
 import FileUploader from './FileUploader';
 import { getImporterRequirements } from '../utils';
@@ -10,6 +10,7 @@ interface Props {
   onEnterDataManually: () => void;
   allowManualDataEntry?: boolean;
   maxFileSizeInBytes: number;
+  customFileLoaders?: CustomFileLoader[];
 }
 
 export default function Uploader({
@@ -18,6 +19,7 @@ export default function Uploader({
   onEnterDataManually,
   allowManualDataEntry,
   maxFileSizeInBytes,
+  customFileLoaders,
 }: Props) {
   const importerRequirements = getImporterRequirements(sheets);
   const { t } = useTranslations();
@@ -36,6 +38,7 @@ export default function Uploader({
               allowManualDataEntry={allowManualDataEntry}
               onEnterDataManually={onEnterDataManually}
               maxFileSizeInBytes={maxFileSizeInBytes}
+              customFileLoaders={customFileLoaders}
             />
           </div>
         </div>

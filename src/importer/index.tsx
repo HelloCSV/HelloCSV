@@ -29,6 +29,7 @@ function ImporterBody({
   onComplete,
   allowManualDataEntry,
   sheets,
+  customFileLoaders,
   onDataColumnsMapped,
   preventUploadOnValidationErrors,
   maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
@@ -200,6 +201,7 @@ function ImporterBody({
             onEnterDataManually={onEnterDataManually}
             allowManualDataEntry={allowManualDataEntry}
             maxFileSizeInBytes={maxFileSizeInBytes}
+            customFileLoaders={customFileLoaders}
           />
         )}
 
