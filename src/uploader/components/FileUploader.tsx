@@ -24,11 +24,12 @@ export default function FileUploader({
   const { t, tHtml } = useTranslations();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const supportedMimeTypes = SUPPORTED_FILE_MIME_TYPES.concat(customFileLoaders?.map(loader => loader.mimeType) ?? []);
+  const supportedMimeTypes = SUPPORTED_FILE_MIME_TYPES.concat(
+    customFileLoaders?.map((loader) => loader.mimeType) ?? []
+  );
 
   // TODO: Add error handling
   const validateAndSetFile = (file: File, maxFileSizeInBytes: number) => {
-
     if (!supportedMimeTypes.includes(file.type)) {
       return;
     }
@@ -73,7 +74,10 @@ export default function FileUploader({
             {tHtml('uploader.maxFileSizeInBytes', {
               size: <b>{formatFileSize(maxFileSizeInBytes)}</b>,
             })}{' '}
-            • {["CSV", "TSV"].concat(customFileLoaders?.map(loader => loader.label) ?? []).join(", ")}
+            •{' '}
+            {['CSV', 'TSV']
+              .concat(customFileLoaders?.map((loader) => loader.label) ?? [])
+              .join(', ')}
           </div>
           <div className="mt-3">
             <Button>{t('uploader.browseFiles')}</Button>

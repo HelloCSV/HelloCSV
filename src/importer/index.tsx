@@ -79,16 +79,17 @@ function ImporterBody({
 
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
-
-
   function onFileUploaded(file: File) {
+    const matchedCustomFileLoader = customFileLoaders?.find(
+      (loader) => loader.mimeType === file.type
+    );
 
-    const matchedCustomFileLoader = customFileLoaders?.find(loader => loader.mimeType === file.type);
-
-    const csvFilePromise: Promise<File> = matchedCustomFileLoader ?
-      loadFile(file)
-        .then(event => {
-          const { fileName, csvData } = matchedCustomFileLoader.convert(event, file);
+    const csvFilePromise: Promise<File> = matchedCustomFileLoader
+      ? loadFile(file).then((event) => {
+          const { fileName, csvData } = matchedCustomFileLoader.convert(
+            event,
+            file
+          );
 
           const csvBlob = new Blob([csvData], { type: 'text/csv' });
           const csvFile = new File([csvBlob], fileName, {
@@ -99,7 +100,7 @@ function ImporterBody({
         })
       : Promise.resolve(file);
 
-    csvFilePromise.then(csvFile => {
+    csvFilePromise.then((csvFile) => {
       parseCsv({
         file: csvFile,
         onCompleted: async (newParsed) => {
@@ -123,7 +124,7 @@ function ImporterBody({
           });
         },
       });
-    })
+    });
   }
 
   function onEnterDataManually() {

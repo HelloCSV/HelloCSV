@@ -9,11 +9,13 @@ export type ImporterRequirementsType = {
   optional: ImporterRequirementType[];
 };
 
-
 export interface CustomFileLoader {
   mimeType: string;
   label: string;
-  convert: (loadEvent: ProgressEvent<FileReader>, file: File) => {
+  convert: (
+    loadEvent: ProgressEvent<FileReader>,
+    file: File
+  ) => {
     fileName: string;
     csvData: string;
   };
