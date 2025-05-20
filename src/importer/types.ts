@@ -1,5 +1,4 @@
-import { Translation } from '../i18';
-import {
+import type {
   ThemeVariant,
   ImporterValidationError,
   ParsedFile,
@@ -10,6 +9,7 @@ import {
   ColumnMapping,
   SheetRow,
   ImportStatistics,
+  Translation,
 } from '../types';
 
 // --------- Importer Definition Types ---------
@@ -27,8 +27,8 @@ export interface ImporterDefinition {
   ) => Promise<void> | Promise<ImportStatistics>;
   locale?: string;
   preventUploadOnValidationErrors?:
-  | boolean
-  | ((errors: ImporterValidationError[]) => boolean);
+    | boolean
+    | ((errors: ImporterValidationError[]) => boolean);
   maxFileSizeInBytes?: number;
   onSummaryFinished?: () => void;
   customSuggestedMapper?: (
@@ -86,29 +86,29 @@ export interface RemoveRowsPayload {
 
 export type ImporterAction =
   | {
-    type: 'ENTER_DATA_MANUALLY';
-    payload: {
-      amountOfEmptyRowsToAdd: number;
-    };
-  } // Changes the mode to 'preview'
+      type: 'ENTER_DATA_MANUALLY';
+      payload: {
+        amountOfEmptyRowsToAdd: number;
+      };
+    } // Changes the mode to 'preview'
   | {
-    type: 'FILE_PARSED';
-    payload: { parsed: ParsedFile; rowFile: File };
-  } // Sets the parsed file and changes the mode to 'mapping'
+      type: 'FILE_PARSED';
+      payload: { parsed: ParsedFile; rowFile: File };
+    } // Sets the parsed file and changes the mode to 'mapping'
   | { type: 'UPLOAD' } // Changes the mode to 'upload' - used when going back from in the mapping screen
   | { type: 'COLUMN_MAPPING_CHANGED'; payload: { mappings: ColumnMapping[] } } // Sets the proper mappings
   | { type: 'DATA_MAPPED'; payload: { mappedData: MappedData } } // Sets mapped data as sheetData, optionally runs onDataColumnsMapped callback calls validations, changes the mode to 'preview'
   | {
-    type: 'CELL_CHANGED';
-    payload: CellChangedPayload;
-  } // Searches for the cell and changes the value, calls validations
+      type: 'CELL_CHANGED';
+      payload: CellChangedPayload;
+    } // Searches for the cell and changes the value, calls validations
   | {
-    type: 'REMOVE_ROWS';
-    payload: RemoveRowsPayload;
-  } // Removes rows from the sheetData
+      type: 'REMOVE_ROWS';
+      payload: RemoveRowsPayload;
+    } // Removes rows from the sheetData
   | {
-    type: 'ADD_EMPTY_ROW';
-  } // Removes rows from the sheetData
+      type: 'ADD_EMPTY_ROW';
+    } // Removes rows from the sheetData
   | { type: 'SHEET_CHANGED'; payload: { sheetId: string } } // Calls onComplete callback with state.sheetData, changes mode to 'submit'
   | { type: 'SUBMIT' } // Calls onComplete callback with state.sheetData, changes mode to 'submit'
   | { type: 'PROGRESS'; payload: { progress: number } } // Updates importProgress

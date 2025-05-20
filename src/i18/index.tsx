@@ -8,22 +8,9 @@ import {
   ArgumentsTypeHtml,
   ArgumentsTypeText,
   Resources,
+  Translation,
   TranslationContextType,
 } from './types';
-
-type Prettify<T> = {
-  [K in keyof T]: T[K] extends object ? Prettify<T[K]> : T[K];
-} & unknown;
-
-type CreateTranslation<T> = {
-  [K in keyof T]: T[K] extends string
-    ? string
-    : T[K] extends object
-      ? CreateTranslation<T[K]>
-      : T[K];
-};
-
-export type Translation = Prettify<CreateTranslation<typeof enTranslation>>;
 
 const resources: Record<string, Translation | undefined> = {
   en: enTranslation,
