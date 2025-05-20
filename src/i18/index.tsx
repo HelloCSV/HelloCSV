@@ -20,10 +20,15 @@ const resources: Record<string, Translation | undefined> = {
 
 const defaultLocale = 'en';
 
-function extractTranslation(currentLocale: string, key: string, translationResources?: Resources) {
+function extractTranslation(
+  currentLocale: string,
+  key: string,
+  translationResources?: Resources
+) {
   const keyParts = key.split('.');
 
-  let result: any = translationResources?.[currentLocale] ?? resources[currentLocale];
+  let result: any =
+    translationResources?.[currentLocale] ?? resources[currentLocale];
 
   for (const k of keyParts) {
     if (result && typeof result === 'object') {
