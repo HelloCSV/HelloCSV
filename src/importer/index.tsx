@@ -80,7 +80,6 @@ function ImporterBody({
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
   function onFileUploaded(file: File) {
-
     convertCsvFile(file, customFileLoaders).then((csvFile) => {
       parseCsv({
         file: csvFile,
