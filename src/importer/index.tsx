@@ -23,7 +23,7 @@ import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
-import { loadFile } from '../uploader/utils';
+import { convertCsvFile } from '../uploader/utils';
 
 function ImporterBody({
   theme,
@@ -80,27 +80,8 @@ function ImporterBody({
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
   function onFileUploaded(file: File) {
-    const matchedCustomFileLoader = customFileLoaders?.find(
-      (loader) => loader.mimeType === file.type
-    );
 
-    const csvFilePromise: Promise<File> = matchedCustomFileLoader
-      ? loadFile(file).then((event) => {
-          const { fileName, csvData } = matchedCustomFileLoader.convert(
-            event,
-            file
-          );
-
-          const csvBlob = new Blob([csvData], { type: 'text/csv' });
-          const csvFile = new File([csvBlob], fileName, {
-            type: 'text/csv',
-          });
-
-          return csvFile;
-        })
-      : Promise.resolve(file);
-
-    csvFilePromise.then((csvFile) => {
+    convertCsvFile(file, customFileLoaders).then((csvFile) => {
       parseCsv({
         file: csvFile,
         onCompleted: async (newParsed) => {
