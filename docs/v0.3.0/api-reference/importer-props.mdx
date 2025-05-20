@@ -150,3 +150,43 @@ Use cases for `customKey`:
 A dictionary of translations for the importer component. The keys are the locale codes, and the values are the translations.
 
 ---
+
+## customFileLoaders
+
+**Type:** `{ mimeType: string; label: string; convert: (loadEvent: ProgressEvent<FileReader>, file: File) => { fileName: string; csvData: string; }; }[]`
+
+**Required:** No
+
+**Description:**  
+A list of custom file loaders for the importer component.
+
+Use cases for `customFileLoaders`:
+
+- **Custom File Types**: When you need to import files with custom formats(like XLSX), you can create a custom file loader to handle the conversion process.
+
+**Example:**
+
+```typescript
+// Excel upload using xlsx library
+import * as XLSX from 'xlsx';
+
+const XLSX_FILE_MIME_TYPE =
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+<Importer
+  customFileLoaders={[
+    {
+      mimeType: XLSX_FILE_MIME_TYPE,
+      label: 'XLSX',
+      convert: (loadEvent, file) => {
+        const data = new Uint8Array(loadEvent.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const csvData = XLSX.utils.sheet_to_csv(firstSheet);   
+
+        return { fileName: file.name, csvData };
+      },
+    },
+  ]}
+/>
+```
