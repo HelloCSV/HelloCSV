@@ -23,6 +23,7 @@ import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
+import { loadFile } from '../uploader/utils';
 
 function ImporterBody({
   theme,
@@ -78,30 +79,51 @@ function ImporterBody({
 
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
+
+
   function onFileUploaded(file: File) {
-    parseCsv({
-      file,
-      onCompleted: async (newParsed) => {
-        const csvHeaders = newParsed.meta.fields!;
 
-        const suggestedMappings =
-          customSuggestedMapper != null
-            ? await customSuggestedMapper(sheets, csvHeaders)
-            : buildSuggestedHeaderMappings(sheets, csvHeaders);
+    const matchedCustomFileLoader = customFileLoaders?.find(loader => loader.mimeType === file.type);
 
-        dispatch({
-          type: 'FILE_PARSED',
-          payload: { parsed: newParsed, rowFile: file },
-        });
+    const csvFilePromise: Promise<File> = matchedCustomFileLoader ?
+      loadFile(file)
+        .then(event => {
+          const { fileName, csvData } = matchedCustomFileLoader.convert(event, file);
 
-        dispatch({
-          type: 'COLUMN_MAPPING_CHANGED',
-          payload: {
-            mappings: suggestedMappings,
-          },
-        });
-      },
-    });
+          const csvBlob = new Blob([csvData], { type: 'text/csv' });
+          const csvFile = new File([csvBlob], fileName, {
+            type: 'text/csv',
+          });
+
+          return csvFile;
+        })
+      : Promise.resolve(file);
+
+    csvFilePromise.then(csvFile => {
+      parseCsv({
+        file: csvFile,
+        onCompleted: async (newParsed) => {
+          const csvHeaders = newParsed.meta.fields!;
+
+          const suggestedMappings =
+            customSuggestedMapper != null
+              ? await customSuggestedMapper(sheets, csvHeaders)
+              : buildSuggestedHeaderMappings(sheets, csvHeaders);
+
+          dispatch({
+            type: 'FILE_PARSED',
+            payload: { parsed: newParsed, rowFile: file },
+          });
+
+          dispatch({
+            type: 'COLUMN_MAPPING_CHANGED',
+            payload: {
+              mappings: suggestedMappings,
+            },
+          });
+        },
+      });
+    })
   }
 
   function onEnterDataManually() {

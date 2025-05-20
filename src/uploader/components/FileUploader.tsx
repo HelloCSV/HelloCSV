@@ -3,7 +3,7 @@ import { Button, Card } from '../../components';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from '../../i18';
 import { SUPPORTED_FILE_MIME_TYPES } from '../../constants';
-import { formatFileSize, loadFile } from '../utils';
+import { formatFileSize } from '../utils';
 import { CustomFileLoader } from '../../types';
 
 interface Props {
@@ -33,21 +33,6 @@ export default function FileUploader({
       return;
     }
 
-    const matchedCustomFileLoader = customFileLoaders?.find(loader => loader.mimeType === file.type);
-    if (matchedCustomFileLoader) {
-      loadFile(file).then(event => {
-        const { fileName, csvData } = matchedCustomFileLoader.convert(event ,file);
-
-        const csvBlob = new Blob([csvData], { type: 'text/csv' });
-        const csvFile = new File([csvBlob], fileName, {
-          type: 'text/csv',
-        });
-        setFile(csvFile);
-      })
-      
-      return;
-    }
-
     if (file.size <= maxFileSizeInBytes) {
       setFile(file);
     }
@@ -71,9 +56,7 @@ export default function FileUploader({
   return (
     <Card variant="muted" withPadding={false} className="h-full">
       <div
-        className={`flex h-full flex-col p-5 transition-colors ${
-          isDragging ? 'bg-hello-csv-muted-light' : 'bg-hello-csv-muted'
-        }`}
+        className={`flex h-full flex-col p-5 transition-colors ${isDragging ? 'bg-hello-csv-muted-light' : 'bg-hello-csv-muted'}`}
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => {
           e.preventDefault();
