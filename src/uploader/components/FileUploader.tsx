@@ -77,7 +77,10 @@ export default function FileUploader({
           {allowManualDataEntry && (
             <div className="mt-3 text-sm">
               <p
-                onClick={onEnterDataManually}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEnterDataManually?.();
+                }}
                 className="text-hello-csv-primary hover:text-hello-csv-primary cursor-pointer decoration-2 opacity-90 hover:underline focus:underline focus:outline-none"
               >
                 {t('uploader.enterManually')}
