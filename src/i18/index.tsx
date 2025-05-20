@@ -83,7 +83,7 @@ export function TranslationProvider({
 }: {
   children: ReactNode;
   selectedLocale?: string;
-  translationResources?: Resources;
+  translationResources?: Record<string, Translation>;
 }) {
   const locale = selectedLocale ?? defaultLocale;
 
