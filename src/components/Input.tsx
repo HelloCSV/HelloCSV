@@ -3,6 +3,8 @@ import {
   forwardRef,
   PropsWithoutRef,
   ReactNode,
+  useEffect,
+  useState,
 } from 'preact/compat';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { ImporterOutputFieldType } from '../types';
@@ -32,6 +34,12 @@ const Input = forwardRef<HTMLInputElement, Props>(
     },
     ref
   ) => {
+    const [localValue, setLocalValue] = useState(value);
+
+    useEffect(() => {
+      setLocalValue(value);
+    }, [value]);
+
     const displayClearIcon = clearable && value != null && value !== '';
 
     function getParsedValue(e: FormEvent<HTMLInputElement>) {
@@ -50,8 +58,10 @@ const Input = forwardRef<HTMLInputElement, Props>(
           type={type}
           inputMode={type === 'number' ? 'numeric' : 'text'}
           placeholder={placeholder}
-          value={value}
-          onChange={(e) => onChange?.(getParsedValue(e))}
+          value={localValue}
+          onChange={(e) =>
+            onChange?.(getParsedValue(e)) ?? setLocalValue(getParsedValue(e))
+          }
           className={`${classes} ${iconBuilder != null ? 'pl-10' : ''} ${clearable ? 'pr-10' : ''} focus:outline-hello-csv-primary col-start-1 row-start-1 block rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
           onBlur={(e) => onBlur?.(getParsedValue(e))}
         />
