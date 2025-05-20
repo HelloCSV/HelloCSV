@@ -90,6 +90,8 @@
     "successDescriptionWithStats": "{{recordsImported}} sur {{totalRecords}} enregistrements ont été importés avec succès",
     "error": "Importation échouée",
     "errorDescription": "Une erreur est survenue lors de l'importation. Veuillez réessayer",
+    "importFailed": "Importation échouée",
+    "failedDescription": "Une erreur est survenue lors de l'importation. Veuillez réessayer",
     "importDetails": "Détails de l'importation",
     "importDetailsDescription": "Détails sur votre dernière importation",
     "fileInformation": "Informations sur le fichier",

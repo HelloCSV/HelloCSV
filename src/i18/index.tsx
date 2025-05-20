@@ -8,23 +8,27 @@ import {
   ArgumentsTypeHtml,
   ArgumentsTypeText,
   Resources,
+  Translation,
   TranslationContextType,
 } from './types';
 
-/// Writing a custom translations module to reduce the size of the package
-
-const resources: Resources = {
+const resources: Record<string, Translation | undefined> = {
   en: enTranslation,
   fr: frTranslation,
   'pt-BR': ptBRTranslation,
-};
+} satisfies Resources;
 
 const defaultLocale = 'en';
 
-function extractTranslation(currentLocale: string, key: string) {
+function extractTranslation(
+  currentLocale: string,
+  key: string,
+  translationResources?: Resources
+) {
   const keyParts = key.split('.');
 
-  let result: any = resources[currentLocale];
+  let result: any =
+    translationResources?.[currentLocale] ?? resources[currentLocale];
 
   for (const k of keyParts) {
     if (result && typeof result === 'object') {
@@ -80,14 +84,16 @@ const TranslationContext = createContext<TranslationContextType>(
 export function TranslationProvider({
   children,
   selectedLocale,
+  translationResources,
 }: {
   children: ReactNode;
   selectedLocale?: string;
+  translationResources?: Record<string, Translation>;
 }) {
   const locale = selectedLocale ?? defaultLocale;
 
   function t(key: string, argumentValues: ArgumentsTypeText = {}): string {
-    const translation = extractTranslation(locale, key);
+    const translation = extractTranslation(locale, key, translationResources);
 
     return replaceArguments(translation, argumentValues);
   }
@@ -96,7 +102,7 @@ export function TranslationProvider({
     key: string,
     argumentValues: ArgumentsTypeHtml = {}
   ): ReactNode {
-    const translation = extractTranslation(locale, key);
+    const translation = extractTranslation(locale, key, translationResources);
 
     return replaceArgumentsHtml(translation, argumentValues);
   }
