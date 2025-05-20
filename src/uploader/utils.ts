@@ -58,25 +58,25 @@ const loadFile = async (file: File): Promise<ProgressEvent<FileReader>> => {
 export const convertCsvFile = async (
   file: File,
   customFileLoaders: CustomFileLoader[] | undefined
-) => {
+): Promise<File> => {
   const matchedCustomFileLoader = customFileLoaders?.find(
     (loader) => loader.mimeType === file.type
   );
 
   if (matchedCustomFileLoader) {
-    return loadFile(file).then((event) => {
-      const { fileName, csvData } = matchedCustomFileLoader.convert(
-        event,
-        file
-      );
+    const loadedEvent = await loadFile(file);
 
-      const csvBlob = new Blob([csvData], { type: 'text/csv' });
-      const csvFile = new File([csvBlob], fileName, {
-        type: 'text/csv',
-      });
+    const { fileName, csvData } = await matchedCustomFileLoader.convert(
+      loadedEvent,
+      file
+    );
 
-      return csvFile;
+    const csvBlob = new Blob([csvData], { type: 'text/csv' });
+    const csvFile = new File([csvBlob], fileName, {
+      type: 'text/csv',
     });
+
+    return csvFile;
   }
 
   return file;

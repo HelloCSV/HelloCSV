@@ -15,8 +15,13 @@ export interface CustomFileLoader {
   convert: (
     loadEvent: ProgressEvent<FileReader>,
     file: File
-  ) => {
-    fileName: string;
-    csvData: string;
-  };
+  ) =>
+    | {
+        fileName: string;
+        csvData: string;
+      }
+    | Promise<{
+        fileName: string;
+        csvData: string;
+      }>;
 }

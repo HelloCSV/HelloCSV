@@ -153,7 +153,7 @@ A dictionary of translations for the importer component. The keys are the locale
 
 ## customFileLoaders
 
-**Type:** `{ mimeType: string; label: string; convert: (loadEvent: ProgressEvent<FileReader>, file: File) => { fileName: string; csvData: string; }; }[]`
+**Type:** `{ mimeType: string; label: string; convert: (loadEvent: ProgressEvent<FileReader>, file: File) => { fileName: string; csvData: string; } | Promise<{ fileName: string; csvData: string; }>; }[]`
 
 **Required:** No
 
