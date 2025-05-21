@@ -1,0 +1,34 @@
+---
+title: "XLSX & Custom Data Formats"
+---
+
+## Custom File Loaders
+
+HelloCSV supports integrating data formats different from standard CSV / TSV uploads by allowing developers to create a `CustomFileLoader`
+
+```tsx
+interface CustomFileLoader {
+  mimeType: string;
+  label: string;
+  convert: (
+    loadEvent: ProgressEvent<FileReader>,
+    file: File
+  ) =>
+    | {
+        fileName: string;
+        csvData: string;
+      }
+    | Promise<{
+        fileName: string;
+        csvData: string;
+      }>;
+}
+```
+
+A `CustomFileLoader` is responsible for parsing a file, of a target `mimeType`, and returning a `csvData` string, which then gets passed
+to the rest of the pipeline.
+
+The `convert` function supports returning a promise for parsing files server-side if needed.
+
+### Usage
+See [customFileLoader](https://hellocsv.mintlify.app/v0.3.1/api-reference/importer-props#customfileloaders) prop.
