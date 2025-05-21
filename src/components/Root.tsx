@@ -35,10 +35,13 @@ export default forwardRef<HTMLDivElement, Props>(function Root(
 
   return (
     <div
+      role="group"
+      aria-label="Hello CSV"
       ref={ref}
       className={`${ROOT_CLASS} min-h-0 w-full bg-white p-6 overflow-auto${className ? ` ${className}` : ''}`}
     >
       {children}
+      <div id="portal-root" />
     </div>
   );
 });

@@ -1,9 +1,16 @@
-import {
+import type { RowData } from '@tanstack/react-table';
+import type {
   ImporterOutputFieldType,
   ImporterTransformerDefinition,
   ImporterValidatorDefinition,
   SelectOption,
 } from '../types';
+
+declare module '@tanstack/react-table' {
+  export interface ColumnMeta<TData extends RowData, TValue> {
+    columnLabel?: string;
+  }
+}
 
 // --------- Sheet Definition Types ---------
 export interface SheetDefinition {

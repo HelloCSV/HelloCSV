@@ -89,7 +89,7 @@ export default function SheetDataEditorActions({
   if (
     errorColumnFilter != null &&
     filterByErrorOptions.find((option) => option.value === errorColumnFilter) ==
-      null
+    null
   ) {
     filterByErrorOptions.push(errorFilterOption(errorColumnFilter));
   }
@@ -152,9 +152,15 @@ export default function SheetDataEditorActions({
           )}
         >
           <TrashIcon
-            className={`h-6 w-6 ${
-              selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses
-            }`}
+            role="button"
+            tabIndex={0}
+            aria-label={t(
+              selectedRows.length <= 0
+                ? 'sheet.removeRowsTooltipNoRowsSelected'
+                : 'sheet.removeRowsTooltip'
+            )}
+            className={`h-6 w-6 ${selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses
+              }`}
             onClick={() => setRemoveConfirmationModalOpen(true)}
           />
         </Tooltip>
@@ -165,9 +171,8 @@ export default function SheetDataEditorActions({
 
         <Tooltip tooltipText={t('sheet.downloadSheetTooltip')}>
           <ArrowDownTrayIcon
-            className={`h-6 w-6 ${
-              rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
-            }`}
+            className={`h-6 w-6 ${rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
+              }`}
             onClick={() => downloadSheetAsCsv(sheetDefinition, rowData)}
           />
         </Tooltip>

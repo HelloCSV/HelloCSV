@@ -13,6 +13,7 @@ import { useTranslations } from '../../i18';
 import { useLongPress } from '../../utils/hooks';
 
 interface Props {
+  rowId: string;
   columnDefinition: SheetColumnDefinition;
   value: ImporterOutputFieldType;
   onUpdated: (value: ImporterOutputFieldType) => void;
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export default function SheetDataEditorCell({
+  rowId,
   columnDefinition,
   value,
   onUpdated,
@@ -79,6 +81,9 @@ export default function SheetDataEditorCell({
         }
       >
         <div
+          role="button"
+          tabIndex={0}
+          aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${value}`}
           {...longPressHandlers}
           onClick={(e) => !readOnly && e.detail > 1 && setEditMode(true)}
           className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
@@ -143,6 +148,7 @@ export default function SheetDataEditorCell({
 
   return (
     <Input
+      aria-label={`edit row ${Number(rowId) + 1}'s ${columnDefinition.label}`}
       type={columnDefinition.type === 'number' ? 'number' : 'text'}
       classes="block w-full"
       value={value}

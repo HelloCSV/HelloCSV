@@ -33,6 +33,7 @@ interface Props<T> {
   placeholder?: string;
   classes?: string;
   displayPlaceholderWhenSelected?: boolean;
+  "aria-label"?: string;
 }
 
 export default function Select<T>({
@@ -46,6 +47,7 @@ export default function Select<T>({
   placeholder,
   classes,
   displayPlaceholderWhenSelected = false,
+  ...props
 }: Props<T>) {
   const { t } = useTranslations();
   const [query, setQuery] = useState('');
@@ -82,8 +84,8 @@ export default function Select<T>({
   const filteredOptions =
     query && searchable
       ? options.filter((option) =>
-          String(option.label).toLowerCase().includes(query.toLowerCase())
-        )
+        String(option.label).toLowerCase().includes(query.toLowerCase())
+      )
       : options;
 
   const placeholderValue =
@@ -105,19 +107,19 @@ export default function Select<T>({
 
   const groupedOptions = hasGroupProperty
     ? Object.entries(
-        filteredOptions.reduce(
-          (acc: Record<string, SelectOption<T>[]>, option) => {
-            const groupKey = option.group || 'ungrouped';
-            acc[groupKey] = acc[groupKey] || [];
-            acc[groupKey].push(option);
-            return acc;
-          },
-          {}
-        )
-      ).map(([group, items]) => ({
-        label: group,
-        items,
-      }))
+      filteredOptions.reduce(
+        (acc: Record<string, SelectOption<T>[]>, option) => {
+          const groupKey = option.group || 'ungrouped';
+          acc[groupKey] = acc[groupKey] || [];
+          acc[groupKey].push(option);
+          return acc;
+        },
+        {}
+      )
+    ).map(([group, items]) => ({
+      label: group,
+      items,
+    }))
     : [{ label: null, items: filteredOptions }];
 
   const hasNoOptions = groupedOptions.every(({ items }) => items.length === 0);
@@ -126,7 +128,7 @@ export default function Select<T>({
   return (
     <Combobox value={value as any} onChange={handleChange} multiple={multiple}>
       <div className="relative">
-        <ComboboxButton className="w-full">
+        <ComboboxButton className="w-full" aria-label={props['aria-label'] ?? placeholder}>
           <ComboboxInput
             className={`${classes} focus:outline-hello-csv-primary block w-full cursor-pointer truncate rounded-md bg-white py-1.5 focus:cursor-text ${clearButtonDisplayed ? 'pr-12' : 'pr-2'} pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm`}
             displayValue={getDisplayValue}
@@ -140,6 +142,9 @@ export default function Select<T>({
 
         {clearButtonDisplayed && (
           <span
+            role="button"
+            tabIndex={0}
+            aria-label={t('components.select.clear')}
             onClick={(e) => {
               e.stopPropagation();
               clear();

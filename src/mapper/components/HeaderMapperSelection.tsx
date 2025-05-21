@@ -21,10 +21,10 @@ export default function HeaderMapperSelection({
     currentMapping == null
       ? null
       : (mappingSelectionOptions.find(
-          (option) =>
-            option.value.sheetId === currentMapping.sheetId &&
-            option.value.sheetColumnId === currentMapping.sheetColumnId
-        )?.value ?? null);
+        (option) =>
+          option.value.sheetId === currentMapping.sheetId &&
+          option.value.sheetColumnId === currentMapping.sheetColumnId
+      )?.value ?? null);
 
   return (
     <div
@@ -43,6 +43,7 @@ export default function HeaderMapperSelection({
 
         <div className="mx-2.5 flex-1">
           <Select
+            aria-label={`column mapping for ${csvHeader}`}
             searchable
             clearable
             compareFunction={(a, b) => {

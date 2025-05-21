@@ -6,7 +6,11 @@
     },
     "select": {
       "optionPlaceholder": "Select an option",
-      "noOptions": "No options"
+      "noOptions": "No options",
+      "clear": "Clear"
+    },
+    "input": {
+      "clear": "Clear"
     }
   },
   "importer": {
@@ -53,6 +57,7 @@
     "reviewAndConfirm": "Review and confirm each mapping"
   },
   "sheet": {
+    "sheetTitle": "Uploaded data",
     "validationPassed": "All rows pass validation!",
     "removeConfirmationModalTitle": "Remove rows",
     "removeConfirmationModalConfirmationText": "Remove",
