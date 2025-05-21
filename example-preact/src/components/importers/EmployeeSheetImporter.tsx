@@ -92,7 +92,7 @@ const EMPLOYEE_SHEET: SheetDefinition = {
   ],
 };
 
-export default function StudentsImporter() {
+export default function EmployeeSheetImporter() {
   const [ready, setReady] = useState(false);
 
   const onComplete = async (
