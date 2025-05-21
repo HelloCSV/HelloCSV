@@ -30,6 +30,8 @@ function getCsv(rows: SheetRow[]) {
 }
 
 function exportCsv(sheetId: string, rows: SheetRow[]) {
+  if (rows.length === 0) return;
+
   const blob = getCsv(rows);
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
@@ -53,6 +55,10 @@ export const getDataSize = (sheetData: SheetState[]) => {
   if (!sheetData.length) return 0;
 
   return sheetData.reduce((totalSize, sheet) => {
-    return totalSize + getCsvSize(sheet.rows);
+    if (sheet.rows.length > 0) {
+      return totalSize + getCsvSize(sheet.rows);
+    }
+
+    return totalSize;
   }, 0);
 };
