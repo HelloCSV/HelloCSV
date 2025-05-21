@@ -15,7 +15,8 @@
     "highlight.js": "^11.11.1",
     "preact": "^10.25.4",
     "prism-code-editor": "^3.4.0",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",

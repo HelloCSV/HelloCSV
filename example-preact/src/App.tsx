@@ -10,6 +10,7 @@ import Section from './components/Section';
 import Content from './components/Content';
 import DocumentContainer from './components/DocumentContainer';
 import TryItYourself from './components/TryItYourself';
+import ExcelImporter from './components/importers/ExcelImporter';
 
 export default function App() {
   return (
@@ -96,6 +97,10 @@ export default function App() {
 
       <Section>
         <EmployeeSheetImporter />
+      </Section>
+
+      <Section>
+        <ExcelImporter />
       </Section>
 
       <Footer />
