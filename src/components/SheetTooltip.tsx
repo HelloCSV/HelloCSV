@@ -1,5 +1,12 @@
 import { cva } from 'cva';
-import { createPortal, MouseEvent, ReactNode, useEffect, useId, useState } from 'preact/compat';
+import {
+  createPortal,
+  MouseEvent,
+  ReactNode,
+  useEffect,
+  useId,
+  useState,
+} from 'preact/compat';
 
 type Variant = 'error' | 'info';
 
@@ -43,12 +50,11 @@ const tooltipWrapperBaseClasses = cva('group relative h-full w-full', {
 });
 
 function Portal({ children }: { children: ReactNode | ReactNode[] }) {
-  const portal = document.getElementById("portal-root");
-  const el = document.createElement("div");
+  const portal = document.getElementById('portal-root');
+  const el = document.createElement('div');
 
   useEffect(() => {
     if (portal) {
-
       portal.appendChild(el);
       return () => portal.removeChild(el);
     }
@@ -77,7 +83,7 @@ export default function SheetTooltip({
     setCoords({
       left: rect.left,
       top: rect.top + rect.height,
-      width: rect.width
+      width: rect.width,
     });
     setShowTooltip(true);
   };

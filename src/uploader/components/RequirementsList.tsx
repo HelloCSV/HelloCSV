@@ -15,7 +15,7 @@ export default function RequirementsList({ importerRequirements }: Props) {
       {Object.entries(importerRequirements)
         .filter(([, requirements]) => requirements.length > 0)
         .map(([groupName, requirements]) => {
-          const group = groupName === "required" ? "required" : "optional";
+          const group = groupName === 'required' ? 'required' : 'optional';
 
           return (
             <div key={groupName} className="me-3">
@@ -40,7 +40,7 @@ export default function RequirementsList({ importerRequirements }: Props) {
                 ))}
               </div>
             </div>
-          )
+          );
         })}
     </div>
   );

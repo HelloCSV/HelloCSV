@@ -21,10 +21,10 @@ export default function HeaderMapperSelection({
     currentMapping == null
       ? null
       : (mappingSelectionOptions.find(
-        (option) =>
-          option.value.sheetId === currentMapping.sheetId &&
-          option.value.sheetColumnId === currentMapping.sheetColumnId
-      )?.value ?? null);
+          (option) =>
+            option.value.sheetId === currentMapping.sheetId &&
+            option.value.sheetColumnId === currentMapping.sheetColumnId
+        )?.value ?? null);
 
   return (
     <div

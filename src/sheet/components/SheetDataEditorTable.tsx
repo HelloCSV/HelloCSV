@@ -1,7 +1,11 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import SheetDataEditorCell from './SheetDataEditorCell';
 import { SheetDefinition, SheetRow, SheetState } from '../types';
-import { ImporterOutputFieldType, ImporterValidationError, TranslationKey } from '../../types';
+import {
+  ImporterOutputFieldType,
+  ImporterValidationError,
+  TranslationKey,
+} from '../../types';
 import { Checkbox } from '../../components';
 import { useTranslations } from '../../i18';
 import { findRowIndex } from '../utils';
@@ -25,15 +29,18 @@ interface Props {
   tableContainerRef: RefObject<HTMLDivElement>;
 }
 
-function getColumnWidthDict(columns: { id: string, width: number }[]) {
+function getColumnWidthDict(columns: { id: string; width: number }[]) {
   const totalWidth = columns.reduce((acc, column) => {
     return acc + column.width;
   }, 0);
 
-  return columns.reduce((acc, column) => {
-    acc[column.id] = `calc(${column.width / totalWidth} * (100% - 24px))`;
-    return acc;
-  }, {} as Record<string, string>);
+  return columns.reduce(
+    (acc, column) => {
+      acc[column.id] = `calc(${column.width / totalWidth} * (100% - 24px))`;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 }
 
 export default function SheetDataEditorTable({
@@ -100,10 +107,17 @@ export default function SheetDataEditorTable({
     };
   });
 
-  const columnWidthDict = getColumnWidthDict(table.getAllColumns().map(column => ({ id: column.id, width: column.getSize() })));
+  const columnWidthDict = getColumnWidthDict(
+    table
+      .getAllColumns()
+      .map((column) => ({ id: column.id, width: column.getSize() }))
+  );
 
   return (
-    <table className="min-w-full border-separate border-spacing-0" aria-label={t('sheet.sheetTitle')}>
+    <table
+      className="min-w-full border-separate border-spacing-0"
+      aria-label={t('sheet.sheetTitle')}
+    >
       <thead className="bg-hello-csv-muted sticky top-0 z-10">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id} className="flex">
@@ -119,21 +133,25 @@ export default function SheetDataEditorTable({
               <th
                 key={header.id}
                 className={`z-10 ${headerClass}`}
-                style={{ width: columnWidthDict[header.column.id], minWidth: header.column.getSize() }}
+                style={{
+                  width: columnWidthDict[header.column.id],
+                  minWidth: header.column.getSize(),
+                }}
               >
                 <div
-                  className={`flex ${header.column.getCanSort()
-                    ? 'cursor-pointer select-none'
-                    : ''
-                    }`}
+                  className={`flex ${
+                    header.column.getCanSort()
+                      ? 'cursor-pointer select-none'
+                      : ''
+                  }`}
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
 
                   <span className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200">
                     {{
@@ -199,7 +217,10 @@ export default function SheetDataEditorTable({
                 <td
                   key={cell.id}
                   className={cellClass}
-                  style={{ width: columnWidthDict[cell.column.id], minWidth: cell.column.getSize() }}
+                  style={{
+                    width: columnWidthDict[cell.column.id],
+                    minWidth: cell.column.getSize(),
+                  }}
                 >
                   <SheetDataEditorCell
                     rowId={row.id}

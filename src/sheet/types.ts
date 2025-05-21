@@ -7,6 +7,7 @@ import type {
 } from '../types';
 
 declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export interface ColumnMeta<TData extends RowData, TValue> {
     columnLabel?: string;
   }
