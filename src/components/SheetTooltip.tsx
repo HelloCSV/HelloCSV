@@ -1,5 +1,5 @@
 import { cva } from 'cva';
-import { ReactNode } from 'preact/compat';
+import { createPortal, MouseEvent, ReactNode, useEffect, useId, useState } from 'preact/compat';
 
 type Variant = 'error' | 'info';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 const tooltipBaseClasses = cva(
-  'bg-gray-50 text-gray-900 absolute outline top-full w-full whitespace-normal z-5 mb-2 hidden px-2 py-4 text-xs group-focus-within:block group-hover:block',
+  'bg-gray-50 text-gray-900 absolute outline top-full w-full whitespace-normal z-5 mb-2 px-2 py-4 text-xs',
   {
     variants: {
       variant: {
@@ -42,6 +42,22 @@ const tooltipWrapperBaseClasses = cva('group relative h-full w-full', {
   },
 });
 
+function Portal({ children }: { children: ReactNode | ReactNode[] }) {
+  const portal = document.getElementById("portal-root");
+  const el = document.createElement("div");
+
+  useEffect(() => {
+    if (portal) {
+
+      portal.appendChild(el);
+      return () => portal.removeChild(el);
+    }
+  }, [el, portal]);
+
+  return createPortal(children, el);
+}
+
+export { Portal };
 export default function SheetTooltip({
   variant,
   children,
@@ -53,11 +69,49 @@ export default function SheetTooltip({
     withOutline: !!tooltipText,
   });
 
+  const [coords, setCoords] = useState({ left: 0, top: 0, width: 0 });
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const mouseEnter = (e: MouseEvent<HTMLElement>) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    setCoords({
+      left: rect.left,
+      top: rect.top + rect.height,
+      width: rect.width
+    });
+    setShowTooltip(true);
+  };
+
+  const mouseLeave = () => {
+    setShowTooltip(false);
+  };
+
+  const tooltipId = useId();
   // Add tabIndex to make the tooltip focusable
   return (
-    <div className={tooltipWrapperClassName} tabIndex={0}>
+    <div
+      className={tooltipWrapperClassName}
+      tabIndex={0}
+      aria-invalid={variant === 'error'}
+      aria-errormessage={variant === 'error' ? tooltipId : undefined}
+      aria-describedby={variant === 'error' ? tooltipId : undefined}
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}
+    >
       {children}
-      {tooltipText && <span className={tooltipClassName}>{tooltipText}</span>}
+      {tooltipText && showTooltip && (
+        <Portal>
+          <span
+            id={tooltipId}
+            role="tooltip"
+            aria-label={tooltipText}
+            className={tooltipClassName}
+            style={{ left: coords.left, top: coords.top, width: coords.width }}
+          >
+            {tooltipText}
+          </span>
+        </Portal>
+      )}
     </div>
   );
 }
