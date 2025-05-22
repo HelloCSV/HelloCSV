@@ -15,4 +15,4 @@ jobs:
           type: now
           from_branch: production
           target_branch: main
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.GH_TOKEN }}
