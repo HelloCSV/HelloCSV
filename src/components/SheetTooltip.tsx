@@ -80,7 +80,9 @@ export default function SheetTooltip({
     };
   }, []);
 
-  const showTooltip = (_event: MouseEvent<HTMLElement> | FocusEvent<HTMLElement>) => {
+  const showTooltip = (
+    _event: MouseEvent<HTMLElement> | FocusEvent<HTMLElement>
+  ) => {
     const rect = triggerRef.current?.getBoundingClientRect();
     if (!rect) return;
 
@@ -112,7 +114,8 @@ export default function SheetTooltip({
       onBlur={hideTooltip}
     >
       {children}
-      {tooltipText && tooltipContainer && (
+      {tooltipText &&
+        tooltipContainer &&
         createPortal(
           <span
             id={tooltipId}
@@ -130,8 +133,7 @@ export default function SheetTooltip({
             {tooltipText}
           </span>,
           tooltipContainer
-        )
-      )}
+        )}
     </div>
   );
 }
