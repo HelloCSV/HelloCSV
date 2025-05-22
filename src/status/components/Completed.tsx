@@ -8,6 +8,7 @@ type Mode = Extract<ImporterMode, 'completed'>;
 
 interface Props {
   sheetData: SheetState[];
+  headers: string[];
   statistics?: ImportStatistics;
   mode: Mode;
   rowFile?: File;
@@ -17,6 +18,7 @@ interface Props {
 
 export default function Completed({
   sheetData,
+  headers,
   statistics,
   mode,
   rowFile,
@@ -49,6 +51,7 @@ export default function Completed({
       <div className="mt-6">
         <Summary
           mode={mode}
+          headers={headers}
           sheetData={sheetData}
           statistics={statistics}
           rowFile={rowFile}

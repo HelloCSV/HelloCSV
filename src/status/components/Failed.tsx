@@ -10,6 +10,7 @@ interface Props {
   onBackToPreview: () => void;
   rowFile?: File;
   sheetData: SheetState[];
+  headers: string[];
   mode: Mode;
 }
 
@@ -18,6 +19,7 @@ export default function Failed({
   onBackToPreview,
   rowFile,
   sheetData,
+  headers,
   mode,
 }: Props) {
   const { t } = useTranslations();
@@ -36,6 +38,7 @@ export default function Failed({
         <div className="mt-6">
           <Summary
             mode={mode}
+            headers={headers}
             sheetData={sheetData}
             rowFile={rowFile}
             completedWithErrors={false}

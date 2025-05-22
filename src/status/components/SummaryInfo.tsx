@@ -14,6 +14,7 @@ type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
 type Props = {
   sheetData: SheetState[];
+  headers: string[];
   mode: Mode;
   statistics?: ImportStatistics;
   rowFile?: File;
@@ -22,6 +23,7 @@ type Props = {
 
 export default function SummaryInfo({
   sheetData,
+  headers,
   statistics,
   rowFile,
   completedWithErrors,
@@ -47,14 +49,14 @@ export default function SummaryInfo({
               </div>
               <div className="my-2 text-sm text-gray-500">
                 {rowFile
-                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`
-                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`}
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, headers))}`
+                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, headers))}`}
               </div>
               <div className="mt-5">
                 <Button
                   variant="tertiary"
                   outline
-                  onClick={() => exportAllCsvs(sheetData)}
+                  onClick={() => exportAllCsvs(sheetData, headers)}
                 >
                   {t('importStatus.downloadProcessedData')}
                 </Button>
