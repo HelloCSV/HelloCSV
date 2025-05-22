@@ -1,0 +1,18 @@
+name: Main automerge
+on:
+  push:
+    branches:
+      - production
+jobs:
+  sync-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Merge production -> main
+        uses: devmasx/merge-branch@v1.4.0
+        with:
+          type: now
+          from_branch: production
+          target_branch: main
+          github_token: ${{ secrets.GH_TOKEN }}
