@@ -31,3 +31,10 @@ jobs:
           labels: |
             automated
             sync
+
+      - name: Enable auto-merge
+        run: |
+          pr_url=$(gh pr list --head sync-production-to-main --base main --json url -q '.[0].url')
+          gh pr merge "$pr_url" --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
