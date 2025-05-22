@@ -85,7 +85,7 @@ export default function SheetDataEditorTable({
   const headerClass =
     'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 flex-shrink-0';
   const cellClass =
-    'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 flex-shrink-0 relative isolate';
+    'flex text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 flex-shrink-0 relative isolate justify-start items-center';
 
   // The scrollable element for your list
 
@@ -139,19 +139,18 @@ export default function SheetDataEditorTable({
                 }}
               >
                 <div
-                  className={`flex ${
-                    header.column.getCanSort()
+                  className={`flex ${header.column.getCanSort()
                       ? 'cursor-pointer select-none'
                       : ''
-                  }`}
+                    }`}
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
 
                   <span className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200">
                     {{

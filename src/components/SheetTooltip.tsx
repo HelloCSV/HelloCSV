@@ -2,11 +2,14 @@ import { cva } from 'cva';
 import {
   createPortal,
   MouseEvent,
+  FocusEvent,
   ReactNode,
   useEffect,
   useId,
   useState,
+  useRef,
 } from 'preact/compat';
+import { ROOT_CLASS } from '../constants';
 
 type Variant = 'error' | 'info';
 
@@ -17,7 +20,7 @@ interface Props {
 }
 
 const tooltipBaseClasses = cva(
-  'bg-gray-50 text-gray-900 absolute outline top-full w-full whitespace-normal z-5 mb-2 px-2 py-4 text-xs',
+  'absolute z-50 bg-gray-50 text-gray-900 outline top-full w-full whitespace-normal mb-2 px-2 py-4 text-xs opacity-100 aria-hidden:opacity-0',
   {
     variants: {
       variant: {
@@ -49,74 +52,85 @@ const tooltipWrapperBaseClasses = cva('group relative h-full w-full', {
   },
 });
 
-function Portal({ children }: { children: ReactNode | ReactNode[] }) {
-  const portal = document.getElementById('portal-root');
-  const el = document.createElement('div');
-
-  useEffect(() => {
-    if (portal) {
-      portal.appendChild(el);
-      return () => portal.removeChild(el);
-    }
-  }, [el, portal]);
-
-  return createPortal(children, el);
-}
-
-export { Portal };
 export default function SheetTooltip({
   variant,
   children,
   tooltipText,
 }: Props) {
-  const tooltipClassName = tooltipBaseClasses({ variant });
   const tooltipWrapperClassName = tooltipWrapperBaseClasses({
     variant,
     withOutline: !!tooltipText,
   });
 
-  const [coords, setCoords] = useState({ left: 0, top: 0, width: 0 });
-  const [showTooltip, setShowTooltip] = useState(false);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const [position, setPosition] = useState({ left: 0, top: 0, width: 0 });
+  const [isVisible, setIsVisible] = useState(false);
 
-  const mouseEnter = (e: MouseEvent<HTMLElement>) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    setCoords({
-      left: rect.left,
-      top: rect.top + rect.height,
+  const [tooltipContainer, setTooltipContainer] =
+    useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const div = document.createElement('div');
+    div.classList.add(ROOT_CLASS);
+    document.body.appendChild(div);
+    setTooltipContainer(div);
+
+    return () => {
+      document.body.removeChild(div);
+    };
+  }, []);
+
+  const showTooltip = (_event: MouseEvent<HTMLElement> | FocusEvent<HTMLElement>) => {
+    const rect = triggerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+
+    setPosition({
+      top: rect.bottom + window.scrollY,
+      left: rect.left + rect.width / 2 + window.scrollX,
       width: rect.width,
     });
-    setShowTooltip(true);
+    setIsVisible(true);
   };
 
-  const mouseLeave = () => {
-    setShowTooltip(false);
+  const hideTooltip = () => {
+    setIsVisible(false);
   };
 
   const tooltipId = useId();
   // Add tabIndex to make the tooltip focusable
   return (
     <div
+      ref={triggerRef}
       className={tooltipWrapperClassName}
       tabIndex={0}
       aria-invalid={variant === 'error'}
       aria-errormessage={variant === 'error' ? tooltipId : undefined}
       aria-describedby={variant === 'error' ? tooltipId : undefined}
-      onMouseEnter={mouseEnter}
-      onMouseLeave={mouseLeave}
+      onMouseEnter={showTooltip}
+      onMouseLeave={hideTooltip}
+      onFocus={showTooltip}
+      onBlur={hideTooltip}
     >
       {children}
-      {tooltipText && showTooltip && (
-        <Portal>
+      {tooltipText && tooltipContainer && (
+        createPortal(
           <span
             id={tooltipId}
             role="tooltip"
             aria-label={tooltipText}
-            className={tooltipClassName}
-            style={{ left: coords.left, top: coords.top, width: coords.width }}
+            aria-hidden={!isVisible}
+            className={tooltipBaseClasses({ variant })}
+            style={{
+              left: `${position.left}px`,
+              top: `${position.top}px`,
+              width: position.width,
+              transform: 'translateX(-50%)',
+            }}
           >
             {tooltipText}
-          </span>
-        </Portal>
+          </span>,
+          tooltipContainer
+        )
       )}
     </div>
   );
