@@ -30,7 +30,6 @@ interface Props {
   enumLabelDict: EnumLabelDict;
 }
 
-
 function getColumnWidthDict(columns: { id: string; width: number }[]) {
   const totalWidth = columns.reduce((acc, column) => {
     return acc + column.width;

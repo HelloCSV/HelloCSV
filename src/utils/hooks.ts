@@ -61,9 +61,9 @@ export function useLongPress(
   };
 }
 
-export function useInViewObserver(){
+export function useInViewObserver() {
   const tipRef = useRef<HTMLElement>(null);
-   const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(false);
 
   const cb = (entries: IntersectionObserverEntry[]) => {
     const [entry] = entries;
@@ -73,7 +73,7 @@ export function useInViewObserver(){
   useEffect(() => {
     const options = {
       root: null,
-      rootMargin: "0px"
+      rootMargin: '0px',
     };
     const ref = tipRef.current;
     const observer = new IntersectionObserver(cb, options);
@@ -85,5 +85,5 @@ export function useInViewObserver(){
     };
   }, [tipRef]);
 
-  return { tipRef, inView }
+  return { tipRef, inView };
 }

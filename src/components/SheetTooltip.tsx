@@ -67,7 +67,7 @@ export default function SheetTooltip({
   const [position, setPosition] = useState({ left: 0, top: 0, width: 0 });
   const [isVisible, setIsVisible] = useState(false);
 
-  const { tipRef, inView } = useInViewObserver()
+  const { tipRef, inView } = useInViewObserver();
 
   const [tooltipContainer, setTooltipContainer] =
     useState<HTMLDivElement | null>(null);
