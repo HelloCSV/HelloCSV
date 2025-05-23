@@ -1,4 +1,4 @@
-import { ImporterMode, ImportStatistics, SheetState } from '../../types';
+import { ImporterMode, ImportStatistics, SheetDefinition, SheetState } from '../../types';
 import { Card } from '../../components';
 import SummaryInfo from './SummaryInfo';
 import { useTranslations } from '../../i18';
@@ -7,8 +7,8 @@ type Mode = Extract<ImporterMode, 'failed' | 'completed'>;
 
 interface Props {
   mode: Mode;
-  headers: string[];
   sheetData: SheetState[];
+  sheetDefinitions: SheetDefinition[];
   statistics?: ImportStatistics;
   rowFile?: File;
   completedWithErrors?: boolean;
@@ -16,8 +16,8 @@ interface Props {
 
 export default function Summary({
   mode,
-  headers,
   sheetData,
+  sheetDefinitions,
   statistics,
   rowFile,
   completedWithErrors,
@@ -36,8 +36,8 @@ export default function Summary({
         <div className="border-b border-gray-200 pb-2"></div>
         <SummaryInfo
           mode={mode}
-          headers={headers}
           sheetData={sheetData}
+          sheetDefinitions={sheetDefinitions}
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}

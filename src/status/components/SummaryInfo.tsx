@@ -1,4 +1,4 @@
-import { ImporterMode, ImportStatistics, SheetState } from '../../types';
+import { ImporterMode, ImportStatistics, SheetDefinition, SheetState } from '../../types';
 import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
 import { formatFileSize } from '../../uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
@@ -14,7 +14,7 @@ type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
 type Props = {
   sheetData: SheetState[];
-  headers: string[];
+  sheetDefinitions: SheetDefinition[];
   mode: Mode;
   statistics?: ImportStatistics;
   rowFile?: File;
@@ -23,7 +23,7 @@ type Props = {
 
 export default function SummaryInfo({
   sheetData,
-  headers,
+  sheetDefinitions,
   statistics,
   rowFile,
   completedWithErrors,
@@ -49,14 +49,14 @@ export default function SummaryInfo({
               </div>
               <div className="my-2 text-sm text-gray-500">
                 {rowFile
-                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, headers))}`
-                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, headers))}`}
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions))}`
+                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions))}`}
               </div>
               <div className="mt-5">
                 <Button
                   variant="tertiary"
                   outline
-                  onClick={() => exportAllCsvs(sheetData, headers)}
+                  onClick={() => exportAllCsvs(sheetData, sheetDefinitions)}
                 >
                   {t('importStatus.downloadProcessedData')}
                 </Button>

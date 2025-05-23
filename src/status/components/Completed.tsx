@@ -1,6 +1,6 @@
 import { Alert, Button } from '../../components';
 import { useTranslations } from '../../i18';
-import { SheetState, ImportStatistics, ImporterMode } from '../../types';
+import { SheetState, ImportStatistics, ImporterMode, SheetDefinition } from '../../types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 
@@ -8,7 +8,7 @@ type Mode = Extract<ImporterMode, 'completed'>;
 
 interface Props {
   sheetData: SheetState[];
-  headers: string[];
+  sheetDefinitions: SheetDefinition[];
   statistics?: ImportStatistics;
   mode: Mode;
   rowFile?: File;
@@ -18,7 +18,7 @@ interface Props {
 
 export default function Completed({
   sheetData,
-  headers,
+  sheetDefinitions,
   statistics,
   mode,
   rowFile,
@@ -51,8 +51,8 @@ export default function Completed({
       <div className="mt-6">
         <Summary
           mode={mode}
-          headers={headers}
           sheetData={sheetData}
+          sheetDefinitions={sheetDefinitions}
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}

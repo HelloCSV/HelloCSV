@@ -270,14 +270,12 @@ function ImporterBody({
         {(mode === 'submit' || mode === 'failed' || mode === 'completed') && (
           <ImportStatus
             mode={mode}
-            headers={
-              columnMappings?.map((mapping) => mapping.sheetColumnId) ?? []
-            }
             progress={importProgress}
             onRetry={onSubmit}
             onBackToPreview={onBackToPreview}
             resetState={resetState}
             sheetData={sheetData}
+            sheetDefinitions={sheets}
             statistics={importStatistics}
             rowFile={state.rowFile}
             onSummaryFinished={onSummaryFinished}
