@@ -20,7 +20,7 @@ interface Props {
 }
 
 const tooltipBaseClasses = cva(
-  'absolute z-50 bg-gray-50 text-gray-900 outline top-full w-full whitespace-normal mb-2 px-2 py-4 text-xs opacity-100 aria-hidden:opacity-0',
+  'absolute z-50 bg-gray-50 text-gray-900 outline top-full w-full whitespace-normal mb-2 px-2 py-4 text-xs opacity-100 aria-hidden:opacity-0 aria-hidden:z-[-1]',
   {
     variants: {
       variant: {

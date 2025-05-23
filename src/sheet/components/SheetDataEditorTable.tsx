@@ -36,7 +36,7 @@ function getColumnWidthDict(columns: { id: string; width: number }[]) {
 
   return columns.reduce(
     (acc, column) => {
-      acc[column.id] = `calc(${column.width / totalWidth} * (100% - 24px))`;
+      acc[column.id] = `calc(${column.width / totalWidth} * (100% - 96px))`;
       return acc;
     },
     {} as Record<string, string>
@@ -115,7 +115,7 @@ export default function SheetDataEditorTable({
 
   return (
     <table
-      className="min-w-full border-separate border-spacing-0"
+      className="min-w-full border-separate border-spacing-0 flex flex-col"
       aria-label={t('sheet.sheetTitle')}
     >
       <thead className="bg-hello-csv-muted sticky top-0 z-10">
@@ -139,19 +139,18 @@ export default function SheetDataEditorTable({
                 }}
               >
                 <div
-                  className={`flex ${
-                    header.column.getCanSort()
-                      ? 'cursor-pointer select-none'
-                      : ''
-                  }`}
+                  className={`flex ${header.column.getCanSort()
+                    ? 'cursor-pointer select-none'
+                    : ''
+                    }`}
                   onClick={header.column.getToggleSortingHandler()}
                 >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
 
                   <span className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200">
                     {{
