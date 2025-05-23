@@ -32,36 +32,15 @@ type Join<K, P> = K extends string | number
     : never
   : never;
 
-// Up to 4 levels deep
-type TranslationPaths<T> = T extends string
-  ? never
-  : {
+type TranslationPaths<T> = T extends object
+  ? {
       [K in keyof T]: T[K] extends string
         ? K & string
-        : T[K] extends Record<string, any>
-          ?
-              | (K & string)
-              | Join<
-                  K & string,
-                  {
-                    [K2 in keyof T[K]]: T[K][K2] extends string
-                      ? K2 & string
-                      : T[K][K2] extends Record<string, any>
-                        ?
-                            | (K2 & string)
-                            | Join<
-                                K2 & string,
-                                {
-                                  [K3 in keyof T[K][K2]]: T[K][K2][K3] extends string
-                                    ? K3 & string
-                                    : never;
-                                }[keyof T[K][K2]]
-                              >
-                        : never;
-                  }[keyof T[K]]
-                >
+        : T[K] extends object
+          ? (K & string) | Join<K & string, TranslationPaths<T[K]>>
           : never;
-    }[keyof T];
+    }[keyof T]
+  : never;
 
 export type TranslationKey = TranslationPaths<Translation>;
 
