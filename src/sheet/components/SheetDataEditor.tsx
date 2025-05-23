@@ -27,6 +27,13 @@ interface Props {
   removeRows: (payload: RemoveRowsPayload) => void;
   addEmptyRow: () => void;
   resetState: () => void;
+  enumLabelDict: {
+    [sheetId: string]: {
+      [columnId: string]: {
+        [value: string]: ImporterOutputFieldType;
+      };
+    };
+  };
 }
 
 export default function SheetDataEditor({
@@ -38,6 +45,7 @@ export default function SheetDataEditor({
   removeRows,
   addEmptyRow,
   resetState,
+  enumLabelDict,
 }: Props) {
   const [selectedRows, setSelectedRows] = useState<SheetRow[]>([]);
   const [viewMode, setViewMode] = useState<SheetViewMode>('all');
@@ -143,6 +151,7 @@ export default function SheetDataEditor({
           onCellValueChanged={onCellValueChanged}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
+          enumLabelDict={enumLabelDict}
         />
       </div>
     </div>

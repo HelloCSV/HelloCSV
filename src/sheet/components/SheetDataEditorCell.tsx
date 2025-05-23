@@ -19,6 +19,13 @@ interface Props {
   allData: SheetState[];
   clearRowsSelection: () => void;
   errorsText: string;
+  enumLabelDict: {
+    [sheetId: string]: {
+      [columnId: string]: {
+        [value: string]: ImporterOutputFieldType;
+      };
+    };
+  };
 }
 
 export default function SheetDataEditorCell({
@@ -28,6 +35,7 @@ export default function SheetDataEditorCell({
   allData,
   clearRowsSelection,
   errorsText,
+  enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
 
@@ -110,8 +118,11 @@ export default function SheetDataEditorCell({
       allData
     );
 
+    const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
+    const labelDict = enumLabelDict[sheetId][sheetColumnId];
+
     const selectOptions = referenceData.map((value) => ({
-      label: value,
+      label: labelDict[value] ?? value,
       value,
     }));
 

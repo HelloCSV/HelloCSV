@@ -20,6 +20,13 @@ interface Props {
   ) => void;
   selectedRows: SheetRow[];
   setSelectedRows: (rows: SheetRow[]) => void;
+  enumLabelDict: {
+    [sheetId: string]: {
+      [columnId: string]: {
+        [value: string]: ImporterOutputFieldType;
+      };
+    };
+  };
 }
 
 export default function SheetDataEditorTable({
@@ -31,6 +38,7 @@ export default function SheetDataEditorTable({
   onCellValueChanged,
   selectedRows,
   setSelectedRows,
+  enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
 
@@ -61,7 +69,7 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300';
+    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 shrink-0';
   const cellClass =
     'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
 
@@ -156,6 +164,7 @@ export default function SheetDataEditorTable({
                     }
                     clearRowsSelection={() => setSelectedRows([])}
                     errorsText={cellErrorsText}
+                    enumLabelDict={enumLabelDict}
                   />
                 </td>
               );

@@ -72,6 +72,25 @@ function ImporterBody({
     (sheet) => sheet.id === currentSheetId
   )!;
 
+  const enumLabelDict = Object.fromEntries(
+    sheets.map((sheet) => [
+      sheet.id,
+      Object.fromEntries(
+        sheet.columns
+          .filter((column) => column.type === 'enum')
+          .map((column) => [
+            column.id,
+            Object.fromEntries(
+              column.typeArguments.values.map(({ label, value }) => [
+                value,
+                label,
+              ])
+            ),
+          ])
+      ),
+    ])
+  );
+
   const preventUploadOnErrors =
     typeof preventUploadOnValidationErrors === 'function'
       ? (preventUploadOnValidationErrors?.(validationErrors) ?? false)
@@ -243,6 +262,7 @@ function ImporterBody({
                 removeRows={onRemoveRows}
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}
+                enumLabelDict={enumLabelDict}
               />
             </div>
             <div className="flex-none">
