@@ -1,6 +1,6 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import SheetDataEditorCell from './SheetDataEditorCell';
-import { SheetDefinition, SheetRow, SheetState } from '../types';
+import { EnumLabelDict, SheetDefinition, SheetRow, SheetState } from '../types';
 import { ImporterOutputFieldType, ImporterValidationError } from '../../types';
 import { Checkbox } from '../../components';
 import { useTranslations } from '../../i18';
@@ -20,13 +20,7 @@ interface Props {
   ) => void;
   selectedRows: SheetRow[];
   setSelectedRows: (rows: SheetRow[]) => void;
-  enumLabelDict: {
-    [sheetId: string]: {
-      [columnId: string]: {
-        [value: string]: ImporterOutputFieldType;
-      };
-    };
-  };
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function SheetDataEditorTable({
@@ -69,7 +63,7 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 shrink-0';
+    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300';
   const cellClass =
     'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
 
