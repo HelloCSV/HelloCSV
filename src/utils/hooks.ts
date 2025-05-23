@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 
 const LONG_PRESS_DELAY = 500;
 const LONG_PRESS_ALLOWED_MOVE_THRESHOLD = 10;
@@ -59,4 +59,31 @@ export function useLongPress(
     onTouchCancel: clear,
     onMouseLeave: clear,
   };
+}
+
+export function useInViewObserver(){
+  const tipRef = useRef<HTMLElement>(null);
+   const [inView, setInView] = useState(false);
+
+  const cb = (entries: IntersectionObserverEntry[]) => {
+    const [entry] = entries;
+    entry.isIntersecting ? setInView(true) : setInView(false);
+  };
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "0px"
+    };
+    const ref = tipRef.current;
+    const observer = new IntersectionObserver(cb, options);
+
+    if (ref) observer.observe(ref);
+
+    return () => {
+      if (ref) observer.unobserve(ref);
+    };
+  }, [tipRef]);
+
+  return { tipRef, inView }
 }

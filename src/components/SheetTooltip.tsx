@@ -10,6 +10,7 @@ import {
   useRef,
 } from 'preact/compat';
 import { ROOT_CLASS } from '../constants';
+import { useInViewObserver } from '../utils/hooks';
 
 type Variant = 'error' | 'info';
 
@@ -66,6 +67,8 @@ export default function SheetTooltip({
   const [position, setPosition] = useState({ left: 0, top: 0, width: 0 });
   const [isVisible, setIsVisible] = useState(false);
 
+  const { tipRef, inView } = useInViewObserver()
+
   const [tooltipContainer, setTooltipContainer] =
     useState<HTMLDivElement | null>(null);
 
@@ -102,7 +105,12 @@ export default function SheetTooltip({
   // Add tabIndex to make the tooltip focusable
   return (
     <div
-      ref={triggerRef}
+      ref={(element) => {
+        if (element) {
+          triggerRef.current = element;
+          tipRef.current = element;
+        }
+      }}
       className={tooltipWrapperClassName}
       tabIndex={0}
       aria-invalid={variant === 'error'}
@@ -116,6 +124,7 @@ export default function SheetTooltip({
       {children}
       {tooltipText &&
         tooltipContainer &&
+        inView &&
         createPortal(
           <span
             id={tooltipId}
