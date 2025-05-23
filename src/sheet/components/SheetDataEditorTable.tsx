@@ -83,9 +83,9 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 flex-shrink-0';
+    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 shrink-0';
   const cellClass =
-    'flex text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 flex-shrink-0 relative isolate justify-start items-center';
+    'flex text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 shrink-0 relative isolate justify-start items-center';
 
   // The scrollable element for your list
 
