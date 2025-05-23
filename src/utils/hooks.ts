@@ -67,7 +67,11 @@ export function useInViewObserver() {
 
   const cb = (entries: IntersectionObserverEntry[]) => {
     const [entry] = entries;
-    entry.isIntersecting ? setInView(true) : setInView(false);
+    if (entry.isIntersecting) {
+      setInView(true);
+    } else {
+      setInView(false);
+    }
   };
 
   useEffect(() => {

@@ -104,7 +104,7 @@ export default function SheetDataEditor({
         maxSize: 250,
         meta: { columnLabel: column.label },
       })),
-    [sheetDefinition]
+    [sheetDefinition, rowData]
   );
 
   const table = useReactTable<SheetRow>({
