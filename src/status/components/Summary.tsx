@@ -1,4 +1,9 @@
-import { ImporterMode, ImportStatistics, SheetDefinition, SheetState } from '../../types';
+import {
+  ImporterMode,
+  ImportStatistics,
+  SheetDefinition,
+  SheetState,
+} from '../../types';
 import { Card } from '../../components';
 import SummaryInfo from './SummaryInfo';
 import { useTranslations } from '../../i18';

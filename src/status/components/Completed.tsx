@@ -1,6 +1,11 @@
 import { Alert, Button } from '../../components';
 import { useTranslations } from '../../i18';
-import { SheetState, ImportStatistics, ImporterMode, SheetDefinition } from '../../types';
+import {
+  SheetState,
+  ImportStatistics,
+  ImporterMode,
+  SheetDefinition,
+} from '../../types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 

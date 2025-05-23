@@ -1,4 +1,9 @@
-import { ImporterMode, ImportStatistics, SheetDefinition, SheetState } from '../../types';
+import {
+  ImporterMode,
+  ImportStatistics,
+  SheetDefinition,
+  SheetState,
+} from '../../types';
 import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
 import { formatFileSize } from '../../uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
