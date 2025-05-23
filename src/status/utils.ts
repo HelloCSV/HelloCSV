@@ -12,7 +12,17 @@ function getCsv(sheetRows: SheetRow[], sheetDefinition: SheetDefinition) {
 
   const rows = sheetRows.map((row) =>
     sheetDefinition.columns
-      .map((column) => row[column.id])
+      .map((column) => {
+        let cell = String(row[column.id] ?? '');
+
+        cell = cell.replace(/"/g, '""');
+
+        if (/[",\n\r]/.test(cell)) {
+          cell = `"${cell}"`;
+        }
+
+        return cell;
+      })
       .join(DOWNLOADED_CSV_SEPARATOR)
   );
 
@@ -39,11 +49,13 @@ export function exportAllCsvs(
   sheetDefinitions: SheetDefinition[]
 ) {
   sheetData.forEach((sheet) => {
-    exportCsv(
-      sheet.sheetId,
-      sheet.rows,
-      sheetDefinitions.find((s) => s.id === sheet.sheetId)!
+    const sheetDefinition = sheetDefinitions.find(
+      (s) => s.id === sheet.sheetId
     );
+
+    if (sheetDefinition) {
+      exportCsv(sheet.sheetId, sheet.rows, sheetDefinition);
+    }
   });
 }
 
