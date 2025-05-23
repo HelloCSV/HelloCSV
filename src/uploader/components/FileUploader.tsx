@@ -85,6 +85,9 @@ export default function FileUploader({
           {allowManualDataEntry && (
             <div className="mt-3 text-sm">
               <p
+                role="button"
+                tabIndex={0}
+                aria-label={t('uploader.enterManually')}
                 onClick={(e) => {
                   e.stopPropagation();
                   onEnterDataManually?.();
@@ -98,10 +101,11 @@ export default function FileUploader({
         </div>
 
         <input
+          aria-label={t('uploader.uploadAFile')}
           ref={fileInputRef}
           type="file"
           accept={supportedMimeTypes.join(',')}
-          style={{ display: 'none' }}
+          className="sr-only"
           onChange={(e) => handleFileSelect(e)}
         />
       </div>

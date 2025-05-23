@@ -89,7 +89,13 @@ export default function Button({
   const componentClassName = baseClasses({ variant, disabled, withFullWidth });
 
   return (
-    <div className={componentClassName} onClick={onClick}>
+    <div
+      role="button"
+      tabIndex={0}
+      className={componentClassName}
+      onClick={onClick}
+      aria-disabled={disabled}
+    >
       {children}
     </div>
   );

@@ -279,6 +279,7 @@ function ImporterBody({
             onBackToPreview={onBackToPreview}
             resetState={resetState}
             sheetData={sheetData}
+            sheetDefinitions={sheets}
             statistics={importStatistics}
             rowFile={state.rowFile}
             onSummaryFinished={onSummaryFinished}

@@ -1,6 +1,11 @@
 import { Alert, Button } from '../../components';
 import { useTranslations } from '../../i18';
-import { SheetState, ImportStatistics, ImporterMode } from '../../types';
+import {
+  SheetState,
+  ImportStatistics,
+  ImporterMode,
+  SheetDefinition,
+} from '../../types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 
@@ -8,6 +13,7 @@ type Mode = Extract<ImporterMode, 'completed'>;
 
 interface Props {
   sheetData: SheetState[];
+  sheetDefinitions: SheetDefinition[];
   statistics?: ImportStatistics;
   mode: Mode;
   rowFile?: File;
@@ -17,6 +23,7 @@ interface Props {
 
 export default function Completed({
   sheetData,
+  sheetDefinitions,
   statistics,
   mode,
   rowFile,
@@ -50,6 +57,7 @@ export default function Completed({
         <Summary
           mode={mode}
           sheetData={sheetData}
+          sheetDefinitions={sheetDefinitions}
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}
