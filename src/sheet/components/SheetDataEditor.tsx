@@ -85,6 +85,13 @@ export default function SheetDataEditor({
         header: () => <SheetDataEditorHeader column={column} />,
         sortUndefined: 'last',
         sortingFn: 'auto',
+        size: 32 // padding
+          + Math.max(
+            column.label.length, // label size
+            ...rowData.map(row => row[column.id].toString().length) // max length value
+          ) * 7
+          + ('isReadOnly' in column && column.isReadOnly ? 16 : 0), // readonly icon
+        maxSize: 250,
         meta: { columnLabel: column.label },
       })),
     [sheetDefinition]
