@@ -131,3 +131,24 @@ export function isColumnReadOnly(
 
   return !!columnDefinition.isReadOnly;
 }
+
+export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
+  return Object.fromEntries(
+    sheetDefinitions.map((sheet) => [
+      sheet.id,
+      Object.fromEntries(
+        sheet.columns
+          .filter((column) => column.type === 'enum')
+          .map((column) => [
+            column.id,
+            Object.fromEntries(
+              column.typeArguments.values.map(({ label, value }) => [
+                value,
+                label,
+              ])
+            ),
+          ])
+      ),
+    ])
+  );
+}

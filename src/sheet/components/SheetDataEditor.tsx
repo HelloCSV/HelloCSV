@@ -6,7 +6,13 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { SheetDefinition, SheetState, SheetRow, SheetViewMode } from '../types';
+import {
+  SheetDefinition,
+  SheetState,
+  SheetRow,
+  SheetViewMode,
+  EnumLabelDict,
+} from '../types';
 import {
   CellChangedPayload,
   ImporterOutputFieldType,
@@ -27,6 +33,7 @@ interface Props {
   removeRows: (payload: RemoveRowsPayload) => void;
   addEmptyRow: () => void;
   resetState: () => void;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function SheetDataEditor({
@@ -38,6 +45,7 @@ export default function SheetDataEditor({
   removeRows,
   addEmptyRow,
   resetState,
+  enumLabelDict,
 }: Props) {
   const [selectedRows, setSelectedRows] = useState<SheetRow[]>([]);
   const [viewMode, setViewMode] = useState<SheetViewMode>('all');
@@ -157,6 +165,7 @@ export default function SheetDataEditor({
           onCellValueChanged={onCellValueChanged}
           selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
+          enumLabelDict={enumLabelDict}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import SheetDataEditorCell from './SheetDataEditorCell';
-import { SheetDefinition, SheetRow, SheetState } from '../types';
+import { EnumLabelDict, SheetDefinition, SheetRow, SheetState } from '../types';
 import {
   ImporterOutputFieldType,
   ImporterValidationError,
@@ -27,7 +27,9 @@ interface Props {
   selectedRows: SheetRow[];
   setSelectedRows: (rows: SheetRow[]) => void;
   tableContainerRef: RefObject<HTMLDivElement>;
+  enumLabelDict: EnumLabelDict;
 }
+
 
 function getColumnWidthDict(columns: { id: string; width: number }[]) {
   const totalWidth = columns.reduce((acc, column) => {
@@ -53,6 +55,7 @@ export default function SheetDataEditorTable({
   selectedRows,
   setSelectedRows,
   tableContainerRef,
+  enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
 
@@ -234,6 +237,7 @@ export default function SheetDataEditorTable({
                     }
                     clearRowsSelection={() => setSelectedRows([])}
                     errorsText={cellErrorsText}
+                    enumLabelDict={enumLabelDict}
                   />
                 </td>
               );

@@ -70,6 +70,14 @@ interface SheetColumnCalculatedDefinition
   };
 }
 
+export type EnumLabelDict = {
+  [sheetId: string]: {
+    [columnId: string]: {
+      [value: string]: ImporterOutputFieldType;
+    };
+  };
+};
+
 // --------- Sheet State Types ---------
 export type SheetRow = Record<string, ImporterOutputFieldType>;
 

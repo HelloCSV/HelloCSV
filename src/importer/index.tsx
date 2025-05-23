@@ -24,6 +24,7 @@ import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
 import { convertCsvFile } from '../uploader/utils';
+import { getEnumLabelDict } from '../sheet/utils';
 
 function ImporterBody({
   theme,
@@ -71,6 +72,8 @@ function ImporterBody({
   const currentSheetDefinition = sheets.find(
     (sheet) => sheet.id === currentSheetId
   )!;
+
+  const enumLabelDict = getEnumLabelDict(sheets);
 
   const preventUploadOnErrors =
     typeof preventUploadOnValidationErrors === 'function'
@@ -243,6 +246,7 @@ function ImporterBody({
                 removeRows={onRemoveRows}
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}
+                enumLabelDict={enumLabelDict}
               />
             </div>
             <div className="flex-none">
