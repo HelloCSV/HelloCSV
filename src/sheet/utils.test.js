@@ -3,18 +3,18 @@ import { describe, it, expect } from 'vitest';
 
 describe('calculateStringWidth', () => {
     it('ascii only', () => {
-        expect(calculateStringWidth("test 1234")).toEqual(9 * 7);
+        expect(calculateStringWidth("test 1234")).toEqual(9 * 8);
     });
 
     it('chinese', () => {
-        expect(calculateStringWidth("你好!")).toEqual(3 * 7 + 2 * 7);
+        expect(calculateStringWidth("你好!")).toEqual(3 * 8 + 2 * 8);
     });
 
     it('japanese', () => {
-        expect(calculateStringWidth("こんにちは!")).toEqual(6 * 7 + 5 * 7);
+        expect(calculateStringWidth("こんにちは!")).toEqual(6 * 8 + 5 * 8);
     });
     it('korean', () => {
-        expect(calculateStringWidth("ㄱㅏ가 힣")).toEqual(5 * 7 + 4 * 7);
+        expect(calculateStringWidth("ㄱㅏ가 힣")).toEqual(5 * 8 + 4 * 8);
     });
 
     it('undefined value', () => {
@@ -22,7 +22,7 @@ describe('calculateStringWidth', () => {
     });
 
     it('mixed characters', () => {
-        expect(calculateStringWidth("Hello 世界!")).toEqual(9 * 7 + 2 * 7);
+        expect(calculateStringWidth("Hello 世界!")).toEqual(9 * 8 + 2 * 8);
     });
 
     it('empty string', () => {
@@ -30,7 +30,7 @@ describe('calculateStringWidth', () => {
     });
 
     it('special characters', () => {
-        expect(calculateStringWidth("!@#$%^&*()")).toEqual(10 * 7);
+        expect(calculateStringWidth("!@#$%^&*()")).toEqual(10 * 8);
     });
 });
 
@@ -40,7 +40,7 @@ describe('calculateColumnWidth', () => {
             id: 'name',
             label: 'Name',
             type: 'string',
-        }, [])).toEqual(80);
+        }, [])).toEqual(84);
     });
 
     it('cjk header label', () => {
@@ -50,7 +50,7 @@ describe('calculateColumnWidth', () => {
             type: 'string',
         }, [
             "abc" // 3
-        ])).toEqual(80);
+        ])).toEqual(84);
     });
 
     it('header label and longer row', () => {
@@ -58,7 +58,7 @@ describe('calculateColumnWidth', () => {
             id: 'name',
             label: 'Name',
             type: 'string',
-        }, [{ name: 'Very long name' }])).toEqual(130);
+        }, [{ name: 'Very long name' }])).toEqual(144);
     });
 
     it('with readonly column', () => {
@@ -67,6 +67,6 @@ describe('calculateColumnWidth', () => {
             label: 'Name',
             type: 'string',
             isReadOnly: true,
-        }, [])).toEqual(96);
+        }, [])).toEqual(100);
     });
 });

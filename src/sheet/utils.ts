@@ -169,7 +169,7 @@ function countFullWidth(valueAsString: string | undefined): number {
 
 export function calculateStringWidth(value: string | number | undefined) {
   return (
-    (value?.toString().length ?? 0) * 7 + countFullWidth(value?.toString()) * 7
+    (value?.toString().length ?? 0) * 8 + countFullWidth(value?.toString()) * 8
   );
 }
 
