@@ -53,7 +53,7 @@ export default function SheetDataEditorCell({
   const extractedValue =
     columnDefinition.type === 'enum'
       ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
-          ?.label ?? value)
+        ?.label ?? value)
       : value;
   const valueEmpty =
     extractedValue == null ||
@@ -86,7 +86,7 @@ export default function SheetDataEditorCell({
         <div
           role="button"
           tabIndex={0}
-          aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${value}`}
+          aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${nonEmptyValue}`}
           {...longPressHandlers}
           onClick={(e) => !readOnly && e.detail > 1 && setEditMode(true)}
           className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
