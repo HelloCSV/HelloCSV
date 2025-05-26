@@ -180,7 +180,7 @@ export function calculateColumnWidth(
   return (
     32 + // padding
     Math.max(
-      calculateStringWidth(column.label), // label size
+      calculateStringWidth(column.label) + 20, // label size + sort button
       ...rowData
         .filter((row) => {
           const value = row[column.id];
@@ -188,7 +188,6 @@ export function calculateColumnWidth(
         })
         .map((row) => calculateStringWidth(row[column.id])) // max length value
     ) +
-    20 + // sort button
     ('isReadOnly' in column && column.isReadOnly ? 16 : 0)
   );
 }

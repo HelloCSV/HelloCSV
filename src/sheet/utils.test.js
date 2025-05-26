@@ -58,7 +58,7 @@ describe('calculateColumnWidth', () => {
             id: 'name',
             label: 'Name',
             type: 'string',
-        }, [{ name: 'Very long name' }])).toEqual(150);
+        }, [{ name: 'Very long name' }])).toEqual(130);
     });
 
     it('with readonly column', () => {
