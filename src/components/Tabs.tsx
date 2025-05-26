@@ -20,17 +20,20 @@ export default function Tabs({ tabs, activeTab, onTabChange }: Props) {
       </div>
       <div className="hidden sm:block">
         <div className="border-b border-gray-200">
-          <nav aria-label="Tabs" className="-mb-px flex space-x-8">
+          <nav aria-label="Tabs" className="-mb-px flex space-x-8" role="tablist">
             {tabs.map((tab) => (
               <button
+                id={`tab-${tab.value}`}
                 key={tab.label}
+                role="tab"
+                aria-selected={tab.value === activeTab}
                 aria-current={tab.value === activeTab ? 'page' : undefined}
+                aria-controls={`tabpanel-${tab.value}`}
                 onClick={() => onTabChange(tab.value)}
-                className={` ${
-                  tab.value === activeTab
-                    ? 'border-hello-csv-primary text-hello-csv-primary'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                } flex cursor-pointer items-center border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap`}
+                className={` ${tab.value === activeTab
+                  ? 'border-hello-csv-primary text-hello-csv-primary'
+                  : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                  } flex cursor-pointer items-center border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap`}
               >
                 {tab.icon}
                 {tab.label}
