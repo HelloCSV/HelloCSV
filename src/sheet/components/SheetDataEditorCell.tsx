@@ -8,6 +8,7 @@ import {
 import { Input, Select, SheetTooltip } from '../../components';
 import {
   extractReferenceColumnPossibleValues,
+  getLabelDict,
   isColumnReadOnly,
 } from '../utils';
 import { useTranslations } from '../../i18';
@@ -52,7 +53,9 @@ export default function SheetDataEditorCell({
     columnDefinition.type === 'enum'
       ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
           ?.label ?? value)
-      : value;
+      : columnDefinition.type === 'reference'
+        ? (getLabelDict(columnDefinition, enumLabelDict)[value] ?? value)
+        : value;
   const valueEmpty =
     extractedValue == null ||
     (typeof extractedValue === 'string' && extractedValue.trim() === '');
@@ -113,8 +116,7 @@ export default function SheetDataEditorCell({
       allData
     );
 
-    const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
-    const labelDict = enumLabelDict[sheetId][sheetColumnId] ?? {};
+    const labelDict = getLabelDict(columnDefinition, enumLabelDict);
 
     const selectOptions = referenceData.map((value) => ({
       label: labelDict[value] ?? value,

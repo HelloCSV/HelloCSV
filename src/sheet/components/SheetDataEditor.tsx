@@ -138,6 +138,7 @@ export default function SheetDataEditor({
           sheetValidationErrors={sheetValidationErrors}
           rowValidationSummary={rowValidationSummary}
           resetState={resetState}
+          enumLabelDict={enumLabelDict}
         />
       </div>
 

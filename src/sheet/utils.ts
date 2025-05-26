@@ -1,5 +1,6 @@
 import { isEmptyCell, normalizeValue } from '../utils';
 import {
+  EnumLabelDict,
   ImporterValidationError,
   SheetColumnDefinition,
   SheetColumnReferenceDefinition,
@@ -30,15 +31,26 @@ export function extractReferenceColumnPossibleValues(
 
 export function downloadSheetAsCsv(
   sheetDefinition: SheetDefinition,
-  data: SheetRow[]
+  data: SheetRow[],
+  enumLabelDict: EnumLabelDict
 ) {
   const headers = sheetDefinition.columns
-    .map((column) => column.id)
+    .map((column) => column.label ?? column.id)
     .join(DOWNLOADED_CSV_SEPARATOR);
 
   const rows = data.map((row) =>
     sheetDefinition.columns
-      .map((column) => row[column.id])
+      .map((column) => {
+        const value = row[column.id];
+        if (column.type === 'enum') {
+          return enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
+        }
+
+        if (column.type === 'reference') {
+          return getLabelDict(column, enumLabelDict)[value] ?? value;
+        }
+        return value;
+      })
       .join(DOWNLOADED_CSV_SEPARATOR)
   );
 
@@ -151,4 +163,13 @@ export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
       ),
     ])
   );
+}
+
+export function getLabelDict(
+  columnDefinition: SheetColumnReferenceDefinition,
+  enumLabelDict: EnumLabelDict
+) {
+  const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
+  const labelDict = enumLabelDict[sheetId][sheetColumnId] ?? {};
+  return labelDict;
 }
