@@ -97,10 +97,12 @@ export default function SheetDataEditor({
           32 + // padding
           Math.max(
             calculateStringWidth(column.label), // label size
-            ...rowData.filter(row => {
-              const value = row[column.id];
-              return typeof value === 'string' || !isNaN(value);
-            }).map((row) => calculateStringWidth(row[column.id])) // max length value
+            ...rowData
+              .filter((row) => {
+                const value = row[column.id];
+                return typeof value === 'string' || !isNaN(value);
+              })
+              .map((row) => calculateStringWidth(row[column.id])) // max length value
           ) +
           ('isReadOnly' in column && column.isReadOnly ? 16 : 0), // readonly icon
         maxSize: 250,
