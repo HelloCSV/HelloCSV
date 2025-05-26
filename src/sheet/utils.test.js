@@ -1,4 +1,4 @@
-import { calculateStringWidth } from './utils.ts';
+import { calculateStringWidth, calculateColumnWidth } from './utils.ts';
 import { describe, it, expect } from 'vitest';
 
 describe('calculateStringWidth', () => {
@@ -31,5 +31,42 @@ describe('calculateStringWidth', () => {
 
     it('special characters', () => {
         expect(calculateStringWidth("!@#$%^&*()")).toEqual(10 * 7);
+    });
+});
+
+describe('calculateColumnWidth', () => {
+    it('header label only', () => {
+        expect(calculateColumnWidth({
+            id: 'name',
+            label: 'Name',
+            type: 'string',
+        }, [])).toEqual(80);
+    });
+
+    it('cjk header label', () => {
+        expect(calculateColumnWidth({
+            id: 'name',
+            label: '이름', // 2 * 2
+            type: 'string',
+        }, [
+            "abc" // 3
+        ])).toEqual(80);
+    });
+
+    it('header label and longer row', () => {
+        expect(calculateColumnWidth({
+            id: 'name',
+            label: 'Name',
+            type: 'string',
+        }, [{ name: 'Very long name' }])).toEqual(150);
+    });
+
+    it('with readonly column', () => {
+        expect(calculateColumnWidth({
+            id: 'name',
+            label: 'Name',
+            type: 'string',
+            isReadOnly: true,
+        }, [])).toEqual(96);
     });
 });

@@ -22,7 +22,7 @@ import {
 import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
-import { calculateStringWidth, useFilteredRowData } from '../utils';
+import { calculateColumnWidth, calculateStringWidth, useFilteredRowData } from '../utils';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -93,18 +93,7 @@ export default function SheetDataEditor({
         header: () => <SheetDataEditorHeader column={column} />,
         sortUndefined: 'last',
         sortingFn: 'auto',
-        size:
-          32 + // padding
-          Math.max(
-            calculateStringWidth(column.label), // label size
-            ...rowData
-              .filter((row) => {
-                const value = row[column.id];
-                return typeof value === 'string' || !isNaN(value);
-              })
-              .map((row) => calculateStringWidth(row[column.id])) // max length value
-          ) +
-          ('isReadOnly' in column && column.isReadOnly ? 16 : 0), // readonly icon
+        size: calculateColumnWidth(column, rowData), // readonly icon
         maxSize: 250,
         meta: { columnLabel: column.label },
       })),

@@ -172,3 +172,23 @@ export function calculateStringWidth(value: string | number | undefined) {
     (value?.toString().length ?? 0) * 7 + countFullWidth(value?.toString()) * 7
   );
 }
+
+export function calculateColumnWidth(
+  column: SheetColumnDefinition,
+  rowData: SheetRow[]
+) {
+  return (
+    32 + // padding
+    Math.max(
+      calculateStringWidth(column.label), // label size
+      ...rowData
+        .filter((row) => {
+          const value = row[column.id];
+          return typeof value === 'string' || !isNaN(value);
+        })
+        .map((row) => calculateStringWidth(row[column.id])) // max length value
+    ) +
+    20 + // sort button
+    ('isReadOnly' in column && column.isReadOnly ? 16 : 0)
+  );
+}
