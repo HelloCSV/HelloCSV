@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef, useEffect, useMemo } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
@@ -68,6 +68,12 @@ function ImporterBody({
   const currentSheetData = sheetData.find(
     (sheet) => sheet.sheetId === currentSheetId
   )!;
+
+  const sheetCountDict = useMemo(() => {
+    return Object.fromEntries(
+      sheetData.map((sheet) => [sheet.sheetId, sheet.rows.length])
+    );
+  }, [sheetData]);
 
   const currentSheetDefinition = sheets.find(
     (sheet) => sheet.id === currentSheetId
@@ -228,6 +234,7 @@ function ImporterBody({
               <SheetsSwitcher
                 activeSheetId={currentSheetId}
                 sheetDefinitions={sheets}
+                sheetCountDict={sheetCountDict}
                 onSheetChange={(sheetId) =>
                   dispatch({ type: 'SHEET_CHANGED', payload: { sheetId } })
                 }
