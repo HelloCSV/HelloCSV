@@ -22,7 +22,7 @@ import {
 import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
-import { calculateColumnWidth, calculateStringWidth, useFilteredRowData } from '../utils';
+import { calculateColumnWidth, useFilteredRowData } from '../utils';
 
 interface Props {
   sheetDefinition: SheetDefinition;
