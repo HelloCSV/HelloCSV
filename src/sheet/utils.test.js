@@ -40,7 +40,7 @@ describe('calculateColumnWidth', () => {
             id: 'name',
             label: 'Name',
             type: 'string',
-        }, [])).toEqual(84);
+        }, [], {})).toEqual(84);
     });
 
     it('cjk header label', () => {
@@ -50,7 +50,7 @@ describe('calculateColumnWidth', () => {
             type: 'string',
         }, [
             "abc" // 3
-        ])).toEqual(84);
+        ], {})).toEqual(84);
     });
 
     it('header label and longer row', () => {
@@ -58,7 +58,7 @@ describe('calculateColumnWidth', () => {
             id: 'name',
             label: 'Name',
             type: 'string',
-        }, [{ name: 'Very long name' }])).toEqual(144);
+        }, [{ name: 'Very long name' }], {})).toEqual(144);
     });
 
     it('with readonly column', () => {
@@ -67,6 +67,44 @@ describe('calculateColumnWidth', () => {
             label: 'Name',
             type: 'string',
             isReadOnly: true,
-        }, [])).toEqual(100);
+        }, [], {})).toEqual(100);
     });
+
+    it('with enum column', () => {
+        expect(calculateColumnWidth({
+            id: 'name',
+            label: 'Name',
+            type: 'enum',
+            typeArguments: {
+                values: [
+                    { label: 'Value 1', value: '1' },
+                    { label: 'very long label 2', value: '2' },
+                    { label: 'Value 3', value: '3' }
+
+                ]
+            }
+        }, [], {})).toEqual(168);
+    })
+
+    it('with reference column', () => {
+        expect(calculateColumnWidth({
+            id: 'name',
+            label: 'Name',
+            type: 'reference',
+            typeArguments: {
+                sheetId: 'employee',
+                sheetColumnId: 'email',
+            }
+        }, [], {
+            employee: {
+                email: {
+                    '1': 'Value 1',
+                    '2': 'very long label 2',
+                    '3': 'Value 3'
+                }
+            }
+        })).toEqual(168);
+    })
+
+
 });

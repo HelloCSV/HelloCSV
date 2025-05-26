@@ -1,5 +1,6 @@
 import { isEmptyCell, normalizeValue } from '../utils';
 import {
+  EnumLabelDict,
   ImporterValidationError,
   SheetColumnDefinition,
   SheetColumnReferenceDefinition,
@@ -175,8 +176,23 @@ export function calculateStringWidth(value: string | number | undefined) {
 
 export function calculateColumnWidth(
   column: SheetColumnDefinition,
-  rowData: SheetRow[]
+  rowData: SheetRow[],
+  enumLabelDict: EnumLabelDict
 ) {
+  const enumLabelList = (
+    column.type === 'enum'
+      ? column.typeArguments.values.map(({ label }) => label)
+      : column.type === 'reference'
+        ? Object.values(
+            enumLabelDict[column.typeArguments.sheetId]?.[
+              column.typeArguments.sheetColumnId
+            ] ?? {}
+          )
+        : []
+  )
+    .filter((label) => typeof label === 'string' || !isNaN(label))
+    .map((label) => String(label));
+
   return (
     32 + // padding
     Math.max(
@@ -186,7 +202,9 @@ export function calculateColumnWidth(
           const value = row[column.id];
           return typeof value === 'string' || !isNaN(value);
         })
-        .map((row) => calculateStringWidth(row[column.id])) // max length value
+        .map((row) => row[column.id])
+        .concat(enumLabelList)
+        .map(calculateStringWidth) // max length value
     ) +
     ('isReadOnly' in column && column.isReadOnly ? 16 : 0)
   );
