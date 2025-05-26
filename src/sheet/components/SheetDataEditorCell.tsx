@@ -53,7 +53,7 @@ export default function SheetDataEditorCell({
   const extractedValue =
     columnDefinition.type === 'enum'
       ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
-        ?.label ?? value)
+          ?.label ?? value)
       : value;
   const valueEmpty =
     extractedValue == null ||
