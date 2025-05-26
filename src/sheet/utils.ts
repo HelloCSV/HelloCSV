@@ -152,3 +152,23 @@ export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
     ])
   );
 }
+
+// count cjk unicode characters
+function countFullWidth(valueAsString: string | undefined): number {
+  if (valueAsString === undefined) {
+    return 0;
+  }
+
+  return (
+    valueAsString.match(
+      // korean, japanese, chinese, etc.
+      /[ㄱ-ㅎㅏ-ㅣ가-힣ぁ-んァ-ヶ亜-熙一-鿿]/g
+    )?.length ?? 0
+  );
+}
+
+export function calculateStringWidth(value: string | number | undefined) {
+  return (
+    (value?.toString().length ?? 0) * 7 + countFullWidth(value?.toString()) * 7
+  );
+}

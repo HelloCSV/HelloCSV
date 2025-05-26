@@ -22,7 +22,7 @@ import {
 import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
-import { useFilteredRowData } from '../utils';
+import { calculateStringWidth, useFilteredRowData } from '../utils';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -96,10 +96,12 @@ export default function SheetDataEditor({
         size:
           32 + // padding
           Math.max(
-            column.label.length, // label size
-            ...rowData.map((row) => row[column.id]?.toString().length) // max length value
-          ) *
-          7 +
+            calculateStringWidth(column.label), // label size
+            ...rowData.filter(row => {
+              const value = row[column.id];
+              return typeof value === 'string' || !isNaN(value);
+            }).map((row) => calculateStringWidth(row[column.id])) // max length value
+          ) +
           ('isReadOnly' in column && column.isReadOnly ? 16 : 0), // readonly icon
         maxSize: 250,
         meta: { columnLabel: column.label },
