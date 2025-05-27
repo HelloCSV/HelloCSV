@@ -1,16 +1,5 @@
 import { cva } from 'cva';
-import {
-  createPortal,
-  MouseEvent,
-  FocusEvent,
-  ReactNode,
-  useEffect,
-  useId,
-  useState,
-  useRef,
-} from 'preact/compat';
-import { ROOT_CLASS } from '../constants';
-import { useInViewObserver } from '../utils/hooks';
+import { ReactNode } from 'preact/compat';
 
 type Variant = 'error' | 'info';
 
@@ -21,7 +10,7 @@ interface Props {
 }
 
 const tooltipBaseClasses = cva(
-  'absolute z-50 bg-gray-50 text-gray-900 outline top-full w-full whitespace-normal mb-2 px-2 py-4 text-xs opacity-100 aria-hidden:opacity-0 aria-hidden:z-[-1]',
+  'bg-gray-50 text-gray-900 absolute outline top-full w-full whitespace-normal z-5 mb-2 hidden px-2 py-4 text-xs group-focus-within:block group-hover:block',
   {
     variants: {
       variant: {
@@ -58,91 +47,17 @@ export default function SheetTooltip({
   children,
   tooltipText,
 }: Props) {
+  const tooltipClassName = tooltipBaseClasses({ variant });
   const tooltipWrapperClassName = tooltipWrapperBaseClasses({
     variant,
     withOutline: !!tooltipText,
   });
 
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ left: 0, top: 0, width: 0 });
-  const [isVisible, setIsVisible] = useState(false);
-
-  const { tipRef, inView } = useInViewObserver();
-
-  const [tooltipContainer, setTooltipContainer] =
-    useState<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const div = document.createElement('div');
-    div.classList.add(ROOT_CLASS);
-    document.body.appendChild(div);
-    setTooltipContainer(div);
-
-    return () => {
-      document.body.removeChild(div);
-    };
-  }, []);
-
-  const showTooltip = (
-    _event: MouseEvent<HTMLElement> | FocusEvent<HTMLElement>
-  ) => {
-    const rect = triggerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-
-    setPosition({
-      top: rect.bottom + window.scrollY,
-      left: rect.left + rect.width / 2 + window.scrollX,
-      width: rect.width,
-    });
-    setIsVisible(true);
-  };
-
-  const hideTooltip = () => {
-    setIsVisible(false);
-  };
-
-  const tooltipId = useId();
   // Add tabIndex to make the tooltip focusable
   return (
-    <div
-      ref={(element) => {
-        if (element) {
-          triggerRef.current = element;
-          tipRef.current = element;
-        }
-      }}
-      className={tooltipWrapperClassName}
-      tabIndex={0}
-      aria-invalid={variant === 'error'}
-      aria-errormessage={variant === 'error' ? tooltipId : undefined}
-      aria-describedby={variant === 'error' ? tooltipId : undefined}
-      onMouseEnter={showTooltip}
-      onMouseLeave={hideTooltip}
-      onFocus={showTooltip}
-      onBlur={hideTooltip}
-    >
+    <div className={tooltipWrapperClassName} tabIndex={0}>
       {children}
-      {tooltipText &&
-        tooltipContainer &&
-        inView &&
-        createPortal(
-          <span
-            id={tooltipId}
-            role="tooltip"
-            aria-label={tooltipText}
-            aria-hidden={!isVisible}
-            className={tooltipBaseClasses({ variant })}
-            style={{
-              left: `${position.left}px`,
-              top: `${position.top}px`,
-              width: position.width,
-              transform: 'translateX(-50%)',
-            }}
-          >
-            {tooltipText}
-          </span>,
-          tooltipContainer
-        )}
+      {tooltipText && <span className={tooltipClassName}>{tooltipText}</span>}
     </div>
   );
 }

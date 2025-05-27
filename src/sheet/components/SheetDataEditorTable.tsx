@@ -86,8 +86,8 @@ export default function SheetDataEditorTable({
 
   const headerClass =
     'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 shrink-0';
-  const cellClass =
-    'flex text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 shrink-0 relative isolate justify-start items-center';
+   const cellClass =
+    'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
 
   // The scrollable element for your list
 
@@ -106,6 +106,7 @@ export default function SheetDataEditorTable({
       row: rows[virtualRow.index],
       index: virtualRow.index,
       start: virtualRow.start,
+      end: virtualRow.end
     };
   });
 
@@ -114,6 +115,14 @@ export default function SheetDataEditorTable({
       .getAllColumns()
       .map((column) => ({ id: column.id, width: column.getSize() }))
   );
+
+  const [paddingTop, paddingBottom] =
+    visibleRows.length > 0
+      ? [
+          Math.max(0, visibleRows[0].start - rowVirtualizer.options.scrollMargin),
+          Math.max(0, rowVirtualizer.getTotalSize() - visibleRows[visibleRows.length - 1].end),
+        ]
+      : [0, 0]
 
   return (
     <table
@@ -177,17 +186,17 @@ export default function SheetDataEditorTable({
 
       <tbody
         className="grid w-full divide-y divide-gray-200"
-        style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+        style={{ height: `${rowVirtualizer.getTotalSize()}px`,
+          paddingTop,
+          paddingBottom,
+        }}
       >
-        {visibleRows.map(({ row, index, start }) => (
+        {visibleRows.map(({ row, index }) => (
           <tr
             key={row.id}
             data-index={index}
             ref={(node) => rowVirtualizer.measureElement(node)}
-            className="absolute flex w-full"
-            style={{
-              transform: `translateY(${start}px)`, //this should always be a `style` as it changes on scroll
-            }}
+            className="flex w-full"
           >
             <td
               aria-label={`Select row ${Number(row.id) + 1}`}
