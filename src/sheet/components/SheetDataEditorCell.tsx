@@ -123,6 +123,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
@@ -138,6 +139,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
