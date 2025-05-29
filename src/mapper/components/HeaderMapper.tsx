@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
-import { Button, Error } from '../../components';
-import { useTranslations } from '../../i18';
-import { ColumnMapping, ParsedFile } from '../../types';
+import { Button, Error } from '@/components';
+import { useTranslations } from '@/i18';
+import { ColumnMapping, ParsedFile } from '@/types';
 import {
   areAllRequiredMappingsSet,
   calculateMappingExamples,
