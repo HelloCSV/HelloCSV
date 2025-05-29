@@ -1,4 +1,4 @@
-import { isEmptyCell, normalizeValue } from '../utils';
+import { isEmptyCell, normalizeValue, getLabelDict } from '../utils';
 import {
   EnumLabelDict,
   ImporterOutputFieldType,
@@ -11,7 +11,6 @@ import {
   SheetViewMode,
 } from '../types';
 import { useMemo } from 'preact/hooks';
-import { getLabelDict } from '../utils';
 
 export function extractReferenceColumnPossibleValues(
   columnDefinition: SheetColumnReferenceDefinition,
