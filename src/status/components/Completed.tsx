@@ -3,6 +3,7 @@ import { useTranslations } from '../../i18';
 import { SheetState, ImportStatistics, ImporterMode } from '../../types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
+import { useImporterDefinition } from '@/importer/hooks';
 
 type Mode = Extract<ImporterMode, 'completed'>;
 
@@ -12,7 +13,6 @@ interface Props {
   mode: Mode;
   rowFile?: File;
   resetState: () => void;
-  onSummaryFinished?: () => void;
 }
 
 export default function Completed({
@@ -21,8 +21,8 @@ export default function Completed({
   mode,
   rowFile,
   resetState,
-  onSummaryFinished,
 }: Props) {
+  const { onSummaryFinished } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRecords = getTotalRows(sheetData);
   const recordsImported = statistics?.imported ?? 0;

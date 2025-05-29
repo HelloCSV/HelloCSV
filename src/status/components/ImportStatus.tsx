@@ -15,7 +15,6 @@ interface Props {
   sheetData: SheetState[];
   statistics?: ImportStatistics;
   rowFile?: File;
-  onSummaryFinished?: () => void;
 }
 
 export default function ImportStatus({
@@ -27,7 +26,6 @@ export default function ImportStatus({
   resetState,
   statistics,
   rowFile,
-  onSummaryFinished,
 }: Props) {
   return (
     <div className="h-full">
@@ -52,7 +50,6 @@ export default function ImportStatus({
           statistics={statistics}
           rowFile={rowFile}
           resetState={resetState}
-          onSummaryFinished={onSummaryFinished}
         />
       )}
     </div>

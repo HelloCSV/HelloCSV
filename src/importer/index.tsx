@@ -8,6 +8,7 @@ import { usePersistedReducer } from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
+  ImporterDefinitionWithDefaults,
   ImporterDefinition,
   RemoveRowsPayload,
 } from '../types';
@@ -25,21 +26,17 @@ import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
 import { convertCsvFile } from '../uploader/utils';
 import { getEnumLabelDict } from '../sheet/utils';
+import { ImporterDefinitionProvider } from './hooks';
 
 function ImporterBody({
-  theme,
   onComplete,
-  allowManualDataEntry,
   sheets,
   customFileLoaders,
   onDataColumnsMapped,
   preventUploadOnValidationErrors,
-  maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
-  onSummaryFinished,
-  persistenceConfig = { enabled: false },
-  csvDownloadMode = 'value',
-}: ImporterDefinition) {
+  persistenceConfig,
+}: ImporterDefinitionWithDefaults) {
   const { t } = useTranslations();
 
   const isInitialRender = useRef(true);
@@ -202,26 +199,21 @@ function ImporterBody({
   }
 
   return (
-    <ThemeSetter theme={theme}>
+    <ThemeSetter>
       <Root
         ref={targetRef}
         className={`${mode === 'submit' || mode === 'failed' || mode === 'completed' ? 'h-full' : ''}`}
       >
         {mode === 'upload' && (
           <Uploader
-            sheets={sheets}
             onFileUploaded={onFileUploaded}
             onEnterDataManually={onEnterDataManually}
-            allowManualDataEntry={allowManualDataEntry}
-            maxFileSizeInBytes={maxFileSizeInBytes}
-            customFileLoaders={customFileLoaders}
           />
         )}
 
         {mode === 'mapping' && (
           <HeaderMapper
             parsed={parsedFile!}
-            sheetDefinitions={sheets}
             currentMapping={columnMappings ?? []}
             onMappingsChanged={onMappingsChanged}
             onMappingsSet={onMappingsSet}
@@ -234,7 +226,6 @@ function ImporterBody({
             <div className="flex-none">
               <SheetsSwitcher
                 activeSheetId={currentSheetId}
-                sheetDefinitions={sheets}
                 sheetCountDict={sheetCountDict}
                 onSheetChange={(sheetId) =>
                   dispatch({ type: 'SHEET_CHANGED', payload: { sheetId } })
@@ -261,7 +252,6 @@ function ImporterBody({
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}
                 enumLabelDict={enumLabelDict}
-                csvDownloadMode={csvDownloadMode}
               />
             </div>
             <div className="flex-none">
@@ -296,7 +286,6 @@ function ImporterBody({
             sheetData={sheetData}
             statistics={importStatistics}
             rowFile={state.rowFile}
-            onSummaryFinished={onSummaryFinished}
           />
         )}
       </Root>
@@ -305,12 +294,19 @@ function ImporterBody({
 }
 
 export default function Importer(props: ImporterDefinition) {
+  const propsWithDefaults: ImporterDefinitionWithDefaults = {
+    ...props,
+    maxFileSizeInBytes: props.maxFileSizeInBytes ?? 20 * 1024 * 1024, // 20MB,
+    persistenceConfig: props.persistenceConfig ?? { enabled: false },
+    csvDownloadMode: props.csvDownloadMode ?? 'value',
+    allowManualDataEntry: props.allowManualDataEntry ?? false,
+  };
+
   return (
-    <TranslationProvider
-      selectedLocale={props.locale}
-      translationResources={props.translationResources}
-    >
-      <ImporterBody {...props} />
-    </TranslationProvider>
+    <ImporterDefinitionProvider importerDefintion={propsWithDefaults}>
+      <TranslationProvider>
+        <ImporterBody {...propsWithDefaults} />
+      </TranslationProvider>
+    </ImporterDefinitionProvider>
   );
 }

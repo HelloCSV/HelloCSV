@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+import path from 'path';
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 import react from '@vitejs/plugin-react';
@@ -17,6 +18,10 @@ export default defineConfig(({ mode }): UserConfig => {
       ? 'dist/react'
       : 'dist/preact';
 
+  const baseAlias = {
+    '@': path.resolve(__dirname, './src'),
+  };
+
   return {
     plugins: [
       tailwindcss(),
@@ -32,6 +37,7 @@ export default defineConfig(({ mode }): UserConfig => {
     resolve: {
       alias: isReact
         ? {
+            ...baseAlias,
             'preact/compat': resolve(
               __dirname,
               'src/shims/react-compat-shim.js'
@@ -42,7 +48,7 @@ export default defineConfig(({ mode }): UserConfig => {
             'preact/debug': 'react',
             preact: 'react',
           }
-        : undefined,
+        : baseAlias,
     },
     build: {
       lib: {
