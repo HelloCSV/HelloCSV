@@ -38,7 +38,10 @@ export interface ImporterDefinition {
     csvHeaders: string[]
   ) => ColumnMapping[] | Promise<ColumnMapping[]>;
   persistenceConfig?: PersistenceConfig;
+  csvDownloadMode?: CsvDownloadMode;
 }
+
+export type CsvDownloadMode = 'value' | 'label';
 
 export interface PersistenceConfig {
   enabled: boolean;

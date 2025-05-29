@@ -171,6 +171,7 @@ export default function EmployeeSheetImporter() {
           persistenceConfig={{
             enabled: true,
           }}
+          csvDownloadMode="label"
         />
       </div>
       {ready && (

@@ -50,7 +50,7 @@ export default function SheetDataEditorCell({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMode]);
 
-  const { displayValue: nonEmptyValue, valueEmpty } = getCellDisplayValue(
+  const { displayValue, valueEmpty } = getCellDisplayValue(
     columnDefinition,
     value,
     enumLabelDict
@@ -83,11 +83,11 @@ export default function SheetDataEditorCell({
           {...longPressHandlers}
           onClick={(e) => !readOnly && e.detail > 1 && setEditMode(true)}
           className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
-          title={valueEmpty ? undefined : `${nonEmptyValue}`}
+          title={valueEmpty ? undefined : `${displayValue}`}
         >
           {columnDefinition.customRender
-            ? columnDefinition.customRender(value, nonEmptyValue)
-            : nonEmptyValue}
+            ? columnDefinition.customRender(value, displayValue)
+            : displayValue}
         </div>
       </SheetTooltip>
     );

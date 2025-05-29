@@ -22,7 +22,11 @@ import {
   SheetRow,
   SheetViewMode,
 } from '../types';
-import { ImporterValidationError, RemoveRowsPayload } from '../../types';
+import {
+  CsvDownloadMode,
+  ImporterValidationError,
+  RemoveRowsPayload,
+} from '../../types';
 import { removeDuplicates } from '../../utils';
 
 interface Props {
@@ -42,6 +46,7 @@ interface Props {
   rowValidationSummary: Record<SheetViewMode, number>;
   resetState: () => void;
   enumLabelDict: EnumLabelDict;
+  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function SheetDataEditorActions({
@@ -61,6 +66,7 @@ export default function SheetDataEditorActions({
   rowValidationSummary,
   resetState,
   enumLabelDict,
+  csvDownloadMode,
 }: Props) {
   const { t } = useTranslations();
 
@@ -174,7 +180,12 @@ export default function SheetDataEditorActions({
               rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
             }`}
             onClick={() =>
-              downloadSheetAsCsv(sheetDefinition, rowData, enumLabelDict)
+              downloadSheetAsCsv(
+                sheetDefinition,
+                rowData,
+                enumLabelDict,
+                csvDownloadMode
+              )
             }
           />
         </Tooltip>

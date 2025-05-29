@@ -1,5 +1,6 @@
 import { isEmptyCell, normalizeValue } from '../utils';
 import {
+  CsvDownloadMode,
   EnumLabelDict,
   ImporterOutputFieldType,
   ImporterValidationError,
@@ -33,16 +34,22 @@ export function extractReferenceColumnPossibleValues(
 export function downloadSheetAsCsv(
   sheetDefinition: SheetDefinition,
   data: SheetRow[],
-  enumLabelDict: EnumLabelDict
+  enumLabelDict: EnumLabelDict,
+  csvDownloadMode: CsvDownloadMode
 ) {
   const headers = sheetDefinition.columns
-    .map((column) => column.label ?? column.id)
+    .map((column) => (csvDownloadMode === 'label' ? column.label : column.id))
     .join(DOWNLOADED_CSV_SEPARATOR);
 
   const rows = data.map((row) =>
     sheetDefinition.columns
       .map((column) => {
         const value = row[column.id];
+
+        if (csvDownloadMode === 'value') {
+          return value;
+        }
+
         if (column.type === 'enum') {
           return enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
         }

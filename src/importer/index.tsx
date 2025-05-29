@@ -38,6 +38,7 @@ function ImporterBody({
   customSuggestedMapper,
   onSummaryFinished,
   persistenceConfig = { enabled: false },
+  csvDownloadMode = 'value',
 }: ImporterDefinition) {
   const { t } = useTranslations();
 
@@ -254,6 +255,7 @@ function ImporterBody({
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}
                 enumLabelDict={enumLabelDict}
+                csvDownloadMode={csvDownloadMode}
               />
             </div>
             <div className="flex-none">
