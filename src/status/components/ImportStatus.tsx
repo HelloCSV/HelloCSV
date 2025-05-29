@@ -1,8 +1,8 @@
-import { ImporterMode } from '../../importer/types';
+import { ImporterMode } from '@/importer/types';
 import Completed from './Completed';
 import Failed from './Failed';
 import Uploading from './Uploading';
-import { ImportStatistics, SheetState } from '../../types';
+import { ImportStatistics, SheetState } from '@/types';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 

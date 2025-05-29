@@ -6,7 +6,7 @@ import {
   Input,
   Select,
   Tooltip,
-} from '../../components';
+} from '@/components';
 import { downloadSheetAsCsv } from '../utils';
 import {
   XMarkIcon,
@@ -15,15 +15,16 @@ import {
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
-import { useTranslations } from '../../i18';
+import { useTranslations } from '@/i18';
 import {
+  ImporterValidationError,
+  RemoveRowsPayload,
   EnumLabelDict,
   SheetDefinition,
   SheetRow,
   SheetViewMode,
-} from '../types';
-import { ImporterValidationError, RemoveRowsPayload } from '../../types';
-import { removeDuplicates } from '../../utils';
+} from '@/types';
+import { removeDuplicates } from '@/utils';
 import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {

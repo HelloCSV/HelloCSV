@@ -1,7 +1,7 @@
 import ImporterRequirements from './ImporterRequirements';
 import FileUploader from './FileUploader';
 import { getImporterRequirements } from '../utils';
-import { useTranslations } from '../../i18';
+import { useTranslations } from '@/i18';
 import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {

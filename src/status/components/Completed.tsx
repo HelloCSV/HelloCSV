@@ -1,6 +1,6 @@
-import { Alert, Button } from '../../components';
-import { useTranslations } from '../../i18';
-import { SheetState, ImportStatistics, ImporterMode } from '../../types';
+import { Alert, Button } from '@/components';
+import { useTranslations } from '@/i18';
+import { SheetState, ImportStatistics, ImporterMode } from '@/types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 import { useImporterDefinition } from '@/importer/hooks';

@@ -1,5 +1,5 @@
-import { Tabs } from '../../components';
-import { ImporterValidationError } from '../../types';
+import { Tabs } from '@/components';
+import { ImporterValidationError } from '@/types';
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
 import { useImporterDefinition } from '@/importer/hooks';
 
