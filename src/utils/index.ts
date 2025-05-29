@@ -44,6 +44,22 @@ export function normalizeValue(
     );
 }
 
+function escapeCsvCell(value: any): string {
+  if (value == null) {
+    return '';
+  }
+
+  let cell = String(value);
+
+  cell = cell.replace(/"/g, '""');
+
+  if (/[",\n\r]/.test(cell)) {
+    cell = `"${cell}"`;
+  }
+
+  return cell;
+}
+
 export function generateCsvContent(
   sheetDefinition: SheetDefinition,
   data: SheetRow[],
@@ -51,26 +67,29 @@ export function generateCsvContent(
   csvDownloadMode: CsvDownloadMode
 ) {
   const headers = sheetDefinition.columns
-    .map((column) => (csvDownloadMode === 'label' ? column.label : column.id))
+    .map((column) =>
+      escapeCsvCell(csvDownloadMode === 'label' ? column.label : column.id)
+    )
     .join(DOWNLOADED_CSV_SEPARATOR);
 
   const rows = data.map((row) =>
     sheetDefinition.columns
       .map((column) => {
         const value = row[column.id];
+        let processedValue;
 
         if (csvDownloadMode === 'value') {
-          return value;
+          processedValue = value;
+        } else if (column.type === 'enum') {
+          processedValue =
+            enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
+        } else if (column.type === 'reference') {
+          processedValue = getLabelDict(column, enumLabelDict)[value] ?? value;
+        } else {
+          processedValue = value;
         }
 
-        if (column.type === 'enum') {
-          return enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
-        }
-
-        if (column.type === 'reference') {
-          return getLabelDict(column, enumLabelDict)[value] ?? value;
-        }
-        return value;
+        return escapeCsvCell(processedValue);
       })
       .join(DOWNLOADED_CSV_SEPARATOR)
   );
