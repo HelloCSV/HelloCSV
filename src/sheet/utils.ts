@@ -1,6 +1,5 @@
 import { isEmptyCell, normalizeValue } from '../utils';
 import {
-  CsvDownloadMode,
   EnumLabelDict,
   ImporterOutputFieldType,
   ImporterValidationError,
@@ -11,8 +10,8 @@ import {
   SheetState,
   SheetViewMode,
 } from '../types';
-import { DOWNLOADED_CSV_SEPARATOR } from '../constants';
 import { useMemo } from 'preact/hooks';
+import { getLabelDict } from '../utils';
 
 export function extractReferenceColumnPossibleValues(
   columnDefinition: SheetColumnReferenceDefinition,
@@ -29,48 +28,6 @@ export function extractReferenceColumnPossibleValues(
       ?.filter((c) => !isEmptyCell(c))
       ?.filter((c, index, allData) => allData.indexOf(c) === index) ?? [] // Remove dupplicates
   );
-}
-
-export function downloadSheetAsCsv(
-  sheetDefinition: SheetDefinition,
-  data: SheetRow[],
-  enumLabelDict: EnumLabelDict,
-  csvDownloadMode: CsvDownloadMode
-) {
-  const headers = sheetDefinition.columns
-    .map((column) => (csvDownloadMode === 'label' ? column.label : column.id))
-    .join(DOWNLOADED_CSV_SEPARATOR);
-
-  const rows = data.map((row) =>
-    sheetDefinition.columns
-      .map((column) => {
-        const value = row[column.id];
-
-        if (csvDownloadMode === 'value') {
-          return value;
-        }
-
-        if (column.type === 'enum') {
-          return enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
-        }
-
-        if (column.type === 'reference') {
-          return getLabelDict(column, enumLabelDict)[value] ?? value;
-        }
-        return value;
-      })
-      .join(DOWNLOADED_CSV_SEPARATOR)
-  );
-
-  const csv = [headers, ...rows].join('\n');
-
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${sheetDefinition.label}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 export function findRowIndex(
@@ -171,15 +128,6 @@ export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
       ),
     ])
   );
-}
-
-export function getLabelDict(
-  columnDefinition: SheetColumnReferenceDefinition,
-  enumLabelDict: EnumLabelDict
-) {
-  const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
-
-  return enumLabelDict[sheetId][sheetColumnId] ?? {};
 }
 
 export function getCellDisplayValue(

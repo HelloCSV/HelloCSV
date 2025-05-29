@@ -1,8 +1,13 @@
-import { ImporterMode } from '../../importer/types';
+import { CsvDownloadMode, ImporterMode } from '../../importer/types';
 import Completed from './Completed';
 import Failed from './Failed';
 import Uploading from './Uploading';
-import { ImportStatistics, SheetState } from '../../types';
+import {
+  EnumLabelDict,
+  ImportStatistics,
+  SheetDefinition,
+  SheetState,
+} from '../../types';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
@@ -16,6 +21,9 @@ interface Props {
   statistics?: ImportStatistics;
   rowFile?: File;
   onSummaryFinished?: () => void;
+  sheetDefinitions: SheetDefinition[];
+  enumLabelDict: EnumLabelDict;
+  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function ImportStatus({
@@ -28,6 +36,9 @@ export default function ImportStatus({
   statistics,
   rowFile,
   onSummaryFinished,
+  sheetDefinitions,
+  enumLabelDict,
+  csvDownloadMode,
 }: Props) {
   return (
     <div className="h-full">
@@ -42,6 +53,9 @@ export default function ImportStatus({
           onBackToPreview={onBackToPreview}
           rowFile={rowFile}
           sheetData={sheetData}
+          sheetDefinitions={sheetDefinitions}
+          enumLabelDict={enumLabelDict}
+          csvDownloadMode={csvDownloadMode}
         />
       )}
 
@@ -53,6 +67,9 @@ export default function ImportStatus({
           rowFile={rowFile}
           resetState={resetState}
           onSummaryFinished={onSummaryFinished}
+          sheetDefinitions={sheetDefinitions}
+          enumLabelDict={enumLabelDict}
+          csvDownloadMode={csvDownloadMode}
         />
       )}
     </div>

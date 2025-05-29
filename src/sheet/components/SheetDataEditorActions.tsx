@@ -7,7 +7,7 @@ import {
   Select,
   Tooltip,
 } from '../../components';
-import { downloadSheetAsCsv } from '../utils';
+import { downloadSheetAsCsv } from '../../utils';
 import {
   XMarkIcon,
   TrashIcon,

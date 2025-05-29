@@ -9,9 +9,9 @@ import { Input, Select, SheetTooltip } from '../../components';
 import {
   extractReferenceColumnPossibleValues,
   getCellDisplayValue,
-  getLabelDict,
   isColumnReadOnly,
 } from '../utils';
+import { getLabelDict } from '../../utils';
 import { useTranslations } from '../../i18';
 import { useLongPress } from '../../utils/hooks';
 

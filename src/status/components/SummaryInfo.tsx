@@ -1,5 +1,12 @@
-import { ImporterMode, ImportStatistics, SheetState } from '../../types';
-import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
+import {
+  ImporterMode,
+  ImportStatistics,
+  SheetDefinition,
+  SheetState,
+  EnumLabelDict,
+  CsvDownloadMode,
+} from '../../types';
+import { getTotalRows, downloadAllSheetsAsCsv, getDataSize } from '../utils';
 import { formatFileSize } from '../../uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import {
@@ -18,6 +25,9 @@ type Props = {
   statistics?: ImportStatistics;
   rowFile?: File;
   completedWithErrors?: boolean;
+  sheetDefinitions: SheetDefinition[];
+  enumLabelDict: EnumLabelDict;
+  csvDownloadMode: CsvDownloadMode;
 };
 
 export default function SummaryInfo({
@@ -26,6 +36,9 @@ export default function SummaryInfo({
   rowFile,
   completedWithErrors,
   mode,
+  sheetDefinitions,
+  enumLabelDict,
+  csvDownloadMode,
 }: Props) {
   const { t } = useTranslations();
   const totalRows = getTotalRows(sheetData);
@@ -47,14 +60,21 @@ export default function SummaryInfo({
               </div>
               <div className="my-2 text-sm text-gray-500">
                 {rowFile
-                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`
-                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData))}`}
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`
+                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`}
               </div>
               <div className="mt-5">
                 <Button
                   variant="tertiary"
                   outline
-                  onClick={() => exportAllCsvs(sheetData)}
+                  onClick={() =>
+                    downloadAllSheetsAsCsv(
+                      sheetData,
+                      sheetDefinitions,
+                      enumLabelDict,
+                      csvDownloadMode
+                    )
+                  }
                 >
                   {t('importStatus.downloadProcessedData')}
                 </Button>

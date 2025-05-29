@@ -297,6 +297,9 @@ function ImporterBody({
             statistics={importStatistics}
             rowFile={state.rowFile}
             onSummaryFinished={onSummaryFinished}
+            sheetDefinitions={sheets}
+            enumLabelDict={enumLabelDict}
+            csvDownloadMode={csvDownloadMode}
           />
         )}
       </Root>
