@@ -78,3 +78,26 @@ Array of validation rules.
 
 **Description:**  
 Array of transformation rules.
+
+---
+
+## customRender
+
+**Type:** `(value: ImporterOutputFieldType, displayValue: ImporterOutputFieldType) => ReactNode`
+
+**Required:** No
+
+**Description:**  
+Custom render function for the cell.
+
+The function gets passed
+
+- `value` - the row value of the cell
+- `displayValue` - the display value of the cell - that is a value that extracts enum labels and prevents empty values from being displayed. You should use this value to display the cell.
+
+The function should return a ReactNode.
+
+When rendering the cell you should remember that the background color of the cell could be
+- `bg-hello-csv-danger-extra-light` - in case of validation errors
+- `bg-hello-csv-muted` - in case of read only columns
+- default background colors - in other case

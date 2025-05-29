@@ -85,7 +85,9 @@ export default function SheetDataEditorCell({
           className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
           title={valueEmpty ? undefined : `${nonEmptyValue}`}
         >
-          {nonEmptyValue}
+          {columnDefinition.customRender
+            ? columnDefinition.customRender(value, nonEmptyValue)
+            : nonEmptyValue}
         </div>
       </SheetTooltip>
     );
@@ -120,6 +122,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
@@ -135,6 +138,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
