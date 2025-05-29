@@ -1,6 +1,7 @@
 import { isEmptyCell, normalizeValue } from '../utils';
 import {
   EnumLabelDict,
+  ImporterOutputFieldType,
   ImporterValidationError,
   SheetColumnDefinition,
   SheetColumnReferenceDefinition,
@@ -170,6 +171,27 @@ export function getLabelDict(
   enumLabelDict: EnumLabelDict
 ) {
   const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
-  const labelDict = enumLabelDict[sheetId][sheetColumnId] ?? {};
-  return labelDict;
+
+  return enumLabelDict[sheetId][sheetColumnId] ?? {};
+}
+
+export function getCellDisplayValue(
+  columnDefinition: SheetColumnDefinition,
+  value: ImporterOutputFieldType,
+  enumLabelDict: EnumLabelDict
+) {
+  const extractedValue =
+    columnDefinition.type === 'enum'
+      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
+          ?.label ?? value)
+      : columnDefinition.type === 'reference'
+        ? (getLabelDict(columnDefinition, enumLabelDict)[value] ?? value)
+        : value;
+
+  const valueEmpty =
+    extractedValue == null ||
+    (typeof extractedValue === 'string' && extractedValue.trim() === '');
+
+  // Use non-breaking space to keep the cell height
+  return { displayValue: valueEmpty ? '\u00A0' : extractedValue, valueEmpty };
 }

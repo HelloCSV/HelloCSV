@@ -8,6 +8,7 @@ import {
 import { Input, Select, SheetTooltip } from '../../components';
 import {
   extractReferenceColumnPossibleValues,
+  getCellDisplayValue,
   getLabelDict,
   isColumnReadOnly,
 } from '../utils';
@@ -49,18 +50,12 @@ export default function SheetDataEditorCell({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMode]);
 
-  const extractedValue =
-    columnDefinition.type === 'enum'
-      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
-          ?.label ?? value)
-      : columnDefinition.type === 'reference'
-        ? (getLabelDict(columnDefinition, enumLabelDict)[value] ?? value)
-        : value;
-  const valueEmpty =
-    extractedValue == null ||
-    (typeof extractedValue === 'string' && extractedValue.trim() === '');
-  // Use non-breaking space to keep the cell height
-  const nonEmptyValue = valueEmpty ? '\u00A0' : extractedValue;
+  const { displayValue: nonEmptyValue, valueEmpty } = getCellDisplayValue(
+    columnDefinition,
+    value,
+    enumLabelDict
+  );
+
   const readOnly = isColumnReadOnly(columnDefinition);
 
   const longPressHandlers = useLongPress(
