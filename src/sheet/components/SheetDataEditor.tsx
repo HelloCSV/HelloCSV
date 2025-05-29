@@ -15,6 +15,7 @@ import {
 } from '../types';
 import {
   CellChangedPayload,
+  CsvDownloadMode,
   ImporterOutputFieldType,
   ImporterValidationError,
   RemoveRowsPayload,
@@ -34,6 +35,7 @@ interface Props {
   addEmptyRow: () => void;
   resetState: () => void;
   enumLabelDict: EnumLabelDict;
+  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function SheetDataEditor({
@@ -46,6 +48,7 @@ export default function SheetDataEditor({
   addEmptyRow,
   resetState,
   enumLabelDict,
+  csvDownloadMode,
 }: Props) {
   const [selectedRows, setSelectedRows] = useState<SheetRow[]>([]);
   const [viewMode, setViewMode] = useState<SheetViewMode>('all');
@@ -143,6 +146,8 @@ export default function SheetDataEditor({
           sheetValidationErrors={sheetValidationErrors}
           rowValidationSummary={rowValidationSummary}
           resetState={resetState}
+          enumLabelDict={enumLabelDict}
+          csvDownloadMode={csvDownloadMode}
         />
       </div>
 

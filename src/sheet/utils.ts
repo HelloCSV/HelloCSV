@@ -1,6 +1,8 @@
 import { isEmptyCell, normalizeValue } from '../utils';
 import {
+  CsvDownloadMode,
   EnumLabelDict,
+  ImporterOutputFieldType,
   ImporterValidationError,
   SheetColumnDefinition,
   SheetColumnReferenceDefinition,
@@ -31,15 +33,32 @@ export function extractReferenceColumnPossibleValues(
 
 export function downloadSheetAsCsv(
   sheetDefinition: SheetDefinition,
-  data: SheetRow[]
+  data: SheetRow[],
+  enumLabelDict: EnumLabelDict,
+  csvDownloadMode: CsvDownloadMode
 ) {
   const headers = sheetDefinition.columns
-    .map((column) => column.id)
+    .map((column) => (csvDownloadMode === 'label' ? column.label : column.id))
     .join(DOWNLOADED_CSV_SEPARATOR);
 
   const rows = data.map((row) =>
     sheetDefinition.columns
-      .map((column) => row[column.id])
+      .map((column) => {
+        const value = row[column.id];
+
+        if (csvDownloadMode === 'value') {
+          return value;
+        }
+
+        if (column.type === 'enum') {
+          return enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
+        }
+
+        if (column.type === 'reference') {
+          return getLabelDict(column, enumLabelDict)[value] ?? value;
+        }
+        return value;
+      })
       .join(DOWNLOADED_CSV_SEPARATOR)
   );
 
@@ -208,4 +227,34 @@ export function calculateColumnWidth(
     ) +
     ('isReadOnly' in column && column.isReadOnly ? 16 : 0)
   );
+}
+
+export function getLabelDict(
+  columnDefinition: SheetColumnReferenceDefinition,
+  enumLabelDict: EnumLabelDict
+) {
+  const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
+
+  return enumLabelDict[sheetId][sheetColumnId] ?? {};
+}
+
+export function getCellDisplayValue(
+  columnDefinition: SheetColumnDefinition,
+  value: ImporterOutputFieldType,
+  enumLabelDict: EnumLabelDict
+) {
+  const extractedValue =
+    columnDefinition.type === 'enum'
+      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
+          ?.label ?? value)
+      : columnDefinition.type === 'reference'
+        ? (getLabelDict(columnDefinition, enumLabelDict)[value] ?? value)
+        : value;
+
+  const valueEmpty =
+    extractedValue == null ||
+    (typeof extractedValue === 'string' && extractedValue.trim() === '');
+
+  // Use non-breaking space to keep the cell height
+  return { displayValue: valueEmpty ? '\u00A0' : extractedValue, valueEmpty };
 }

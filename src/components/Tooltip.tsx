@@ -1,6 +1,6 @@
 import { cva } from 'cva';
 import { ReactNode, createPortal } from 'preact/compat';
-import { useEffect, useId, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useId, useState } from 'preact/hooks';
 import { ROOT_CLASS } from '../constants';
 
 interface Props {

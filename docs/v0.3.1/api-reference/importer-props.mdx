@@ -190,3 +190,18 @@ const XLSX_FILE_MIME_TYPE =
   ]}
 />
 ```
+
+---
+
+## csvDownloadMode
+
+**Type:** `'value' | 'label'`
+
+**Required:** No (Default: `value`)
+
+**Description:**  
+Determines the mode for CSV download. 
+
+When set to `value`, the CSV will contain the raw values from the sheet. This includes enum fields values and column ids for CSV headers. 
+
+When set to `label`, the CSV will contain the labels of the values as  well as column labels for CSV headers.

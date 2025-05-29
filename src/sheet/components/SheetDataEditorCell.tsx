@@ -8,6 +8,8 @@ import {
 import { Input, Select, SheetTooltip } from '../../components';
 import {
   extractReferenceColumnPossibleValues,
+  getCellDisplayValue,
+  getLabelDict,
   isColumnReadOnly,
 } from '../utils';
 import { useTranslations } from '../../i18';
@@ -50,16 +52,12 @@ export default function SheetDataEditorCell({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMode]);
 
-  const extractedValue =
-    columnDefinition.type === 'enum'
-      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
-          ?.label ?? value)
-      : value;
-  const valueEmpty =
-    extractedValue == null ||
-    (typeof extractedValue === 'string' && extractedValue.trim() === '');
-  // Use non-breaking space to keep the cell height
-  const nonEmptyValue = valueEmpty ? '\u00A0' : extractedValue;
+  const { displayValue, valueEmpty } = getCellDisplayValue(
+    columnDefinition,
+    value,
+    enumLabelDict
+  );
+
   const readOnly = isColumnReadOnly(columnDefinition);
 
   const longPressHandlers = useLongPress(
@@ -86,13 +84,15 @@ export default function SheetDataEditorCell({
         <div
           role="button"
           tabIndex={0}
-          aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${nonEmptyValue}`}
+          aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${displayValue}`}
           {...longPressHandlers}
           onClick={(e) => !readOnly && e.detail > 1 && setEditMode(true)}
           className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
-          title={valueEmpty ? undefined : `${nonEmptyValue}`}
+          title={valueEmpty ? undefined : `${displayValue}`}
         >
-          {nonEmptyValue}
+          {columnDefinition.customRender
+            ? columnDefinition.customRender(value, displayValue)
+            : displayValue}
         </div>
       </SheetTooltip>
     );
@@ -118,8 +118,7 @@ export default function SheetDataEditorCell({
       allData
     );
 
-    const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
-    const labelDict = enumLabelDict[sheetId][sheetColumnId] ?? {};
+    const labelDict = getLabelDict(columnDefinition, enumLabelDict);
 
     const selectOptions = referenceData.map((value) => ({
       label: labelDict[value] ?? value,
@@ -128,6 +127,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
@@ -143,6 +143,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>

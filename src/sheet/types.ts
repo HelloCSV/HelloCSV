@@ -1,5 +1,6 @@
 import type { RowData } from '@tanstack/react-table';
-import type {
+import { ReactNode } from 'preact/compat';
+import {
   ImporterOutputFieldType,
   ImporterTransformerDefinition,
   ImporterValidatorDefinition,
@@ -34,6 +35,10 @@ interface SheetColumnBaseDefinition {
   isReadOnly?: boolean;
   validators?: ImporterValidatorDefinition[];
   transformers?: ImporterTransformerDefinition[];
+  customRender?: (
+    value: ImporterOutputFieldType,
+    displayValue: ImporterOutputFieldType
+  ) => ReactNode;
 }
 
 interface SheetColumnStringDefinition extends SheetColumnBaseDefinition {
