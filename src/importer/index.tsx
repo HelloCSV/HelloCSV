@@ -242,7 +242,13 @@ function ImporterBody({
                 validationErrors={validationErrors}
               />
             </div>
-            <div className="flex-1 overflow-auto">
+            <div
+              className="flex-1 overflow-auto"
+              role="tabpanel"
+              id={`tabpanel-${currentSheetId}`}
+              aria-labelledby={`tab-${currentSheetId}`}
+              tabIndex={0}
+            >
               <SheetDataEditor
                 data={currentSheetData}
                 allData={sheetData}

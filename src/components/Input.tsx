@@ -8,6 +8,7 @@ import {
 } from 'preact/compat';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { ImporterOutputFieldType } from '../types';
+import { useTranslations } from '../i18';
 
 interface Props {
   value: ImporterOutputFieldType;
@@ -18,6 +19,7 @@ interface Props {
   classes?: string;
   clearable?: boolean;
   type?: 'text' | 'number';
+  'aria-label'?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
@@ -31,9 +33,11 @@ const Input = forwardRef<HTMLInputElement, Props>(
       classes,
       clearable,
       type = 'text',
+      ...props
     },
     ref
   ) => {
+    const { t } = useTranslations();
     const [localValue, setLocalValue] = useState(value);
 
     useEffect(() => {
@@ -54,6 +58,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     return (
       <div className="grid grid-cols-1">
         <input
+          aria-label={props['aria-label']}
           ref={ref}
           type={type}
           inputMode={type === 'number' ? 'numeric' : 'text'}
@@ -73,6 +78,9 @@ const Input = forwardRef<HTMLInputElement, Props>(
 
         {displayClearIcon && (
           <span
+            role="button"
+            tabIndex={0}
+            aria-label={t('components.input.clear')}
             onClick={(e) => {
               e.stopPropagation();
               onChange?.('');

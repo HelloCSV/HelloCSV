@@ -1,6 +1,6 @@
 import { cva } from 'cva';
 import { ReactNode, createPortal } from 'preact/compat';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useId, useState } from 'preact/hooks';
 import { ROOT_CLASS } from '../constants';
 
 interface Props {
@@ -64,17 +64,27 @@ export default function Tooltip({
 
   const hideTooltip = () => setIsVisible(false);
 
+  const tooltipId = useId();
+
   return (
     <div
       ref={triggerRef}
+      tabIndex={0}
       className={`${className} relative inline-block`}
       onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
+      onFocus={showTooltip}
+      onBlur={hideTooltip}
+      aria-describedby={tooltipId}
     >
       {children}
       {tooltipContainer &&
         createPortal(
           <div
+            id={tooltipId}
+            role="tooltip"
+            aria-label={tooltipText}
+            aria-hidden={!isVisible}
             ref={tooltipRef}
             className={baseClasses({ visible: isVisible, hidden })}
             style={{

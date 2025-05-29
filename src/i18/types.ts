@@ -12,11 +12,6 @@ export type Resources = {
   [lang: string]: Translations;
 };
 
-export type TranslationContextType = {
-  t: (key: string, argumentValues?: ArgumentsTypeText) => string;
-  tHtml: (key: string, argumentValues?: ArgumentsTypeHtml) => ReactNode;
-};
-
 type Prettify<T> = {
   [K in keyof T]: T[K] extends object ? Prettify<T[K]> : T[K];
 } & unknown;
@@ -30,3 +25,26 @@ type CreateTranslation<T> = {
 };
 
 export type Translation = Prettify<CreateTranslation<typeof enTranslation>>;
+
+type Join<K, P> = K extends string | number
+  ? P extends string | number
+    ? `${K}.${P}`
+    : never
+  : never;
+
+type TranslationPaths<T> = T extends object
+  ? {
+      [K in keyof T]: T[K] extends string
+        ? K & string
+        : T[K] extends object
+          ? (K & string) | Join<K & string, TranslationPaths<T[K]>>
+          : never;
+    }[keyof T]
+  : never;
+
+export type TranslationKey = TranslationPaths<Translation>;
+
+export type TranslationContextType = {
+  t: (key: TranslationKey, argumentValues?: ArgumentsTypeText) => string;
+  tHtml: (key: TranslationKey, argumentValues?: ArgumentsTypeHtml) => ReactNode;
+};

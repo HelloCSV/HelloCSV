@@ -1,7 +1,11 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import SheetDataEditorCell from './SheetDataEditorCell';
 import { EnumLabelDict, SheetDefinition, SheetRow, SheetState } from '../types';
-import { ImporterOutputFieldType, ImporterValidationError } from '../../types';
+import {
+  ImporterOutputFieldType,
+  ImporterValidationError,
+  TranslationKey,
+} from '../../types';
 import { Checkbox } from '../../components';
 import { useTranslations } from '../../i18';
 import { findRowIndex } from '../utils';
@@ -142,12 +146,13 @@ export default function SheetDataEditorTable({
               );
 
               const cellErrorsText = cellErrors(columnId, rowIndex)
-                .map((e) => t(e.message))
+                .map((e) => t(e.message as TranslationKey))
                 .join(', ');
 
               return (
                 <td key={cell.id} className={cellClass}>
                   <SheetDataEditorCell
+                    rowId={row.id}
                     columnDefinition={
                       sheetDefinition.columns.find((c) => c.id === columnId)!
                     }
