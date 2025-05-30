@@ -1,10 +1,9 @@
-import { SheetDefinition } from '../types';
-import { Tabs } from '../../components';
-import { ImporterValidationError } from '../../types';
+import { Tabs } from '@/components';
+import { ImporterValidationError } from '@/types';
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
-  sheetDefinitions: SheetDefinition[];
   activeSheetId: string;
   onSheetChange: (sheetId: string) => void;
   validationErrors: ImporterValidationError[];
@@ -12,12 +11,13 @@ interface Props {
 }
 
 export default function SheetsSwitcher({
-  sheetDefinitions,
   activeSheetId,
   onSheetChange,
   validationErrors,
   sheetCountDict,
 }: Props) {
+  const { sheets: sheetDefinitions } = useImporterDefinition();
+
   return (
     <Tabs
       tabs={sheetDefinitions.map((sheet) => ({

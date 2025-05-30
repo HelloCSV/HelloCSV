@@ -1,3 +1,21 @@
+import { downloadSheetAsCsv, removeDuplicates } from '@/utils';
+import {
+  XMarkIcon,
+  TrashIcon,
+  PlusIcon,
+  ArrowDownTrayIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
+import { useTranslations } from '@/i18';
+import {
+  ImporterValidationError,
+  RemoveRowsPayload,
+  EnumLabelDict,
+  SheetDefinition,
+  SheetRow,
+  SheetViewMode,
+} from '@/types';
+import { useImporterDefinition } from '@/importer/hooks';
 import { useState } from 'preact/hooks';
 import {
   ButtonGroup,
@@ -6,27 +24,7 @@ import {
   Input,
   Select,
   Tooltip,
-} from '../../components';
-import { downloadSheetAsCsv, removeDuplicates } from '../../utils';
-import {
-  XMarkIcon,
-  TrashIcon,
-  PlusIcon,
-  ArrowDownTrayIcon,
-  MagnifyingGlassIcon,
-} from '@heroicons/react/24/outline';
-import { useTranslations } from '../../i18';
-import {
-  EnumLabelDict,
-  SheetDefinition,
-  SheetRow,
-  SheetViewMode,
-} from '../types';
-import {
-  CsvDownloadMode,
-  ImporterValidationError,
-  RemoveRowsPayload,
-} from '../../types';
+} from '@/components';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -45,7 +43,6 @@ interface Props {
   rowValidationSummary: Record<SheetViewMode, number>;
   resetState: () => void;
   enumLabelDict: EnumLabelDict;
-  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function SheetDataEditorActions({
@@ -65,8 +62,8 @@ export default function SheetDataEditorActions({
   rowValidationSummary,
   resetState,
   enumLabelDict,
-  csvDownloadMode,
 }: Props) {
+  const { csvDownloadMode } = useImporterDefinition();
   const { t } = useTranslations();
 
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =

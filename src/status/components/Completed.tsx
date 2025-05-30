@@ -1,15 +1,14 @@
-import { Alert, Button } from '../../components';
-import { useTranslations } from '../../i18';
+import { Alert, Button } from '@/components';
+import { useTranslations } from '@/i18';
 import {
   SheetState,
   ImportStatistics,
   ImporterMode,
-  SheetDefinition,
-  CsvDownloadMode,
   EnumLabelDict,
-} from '../../types';
+} from '@/types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
+import { useImporterDefinition } from '@/importer/hooks';
 
 type Mode = Extract<ImporterMode, 'completed'>;
 
@@ -19,10 +18,7 @@ interface Props {
   mode: Mode;
   rowFile?: File;
   resetState: () => void;
-  onSummaryFinished?: () => void;
-  sheetDefinitions: SheetDefinition[];
   enumLabelDict: EnumLabelDict;
-  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function Completed({
@@ -31,11 +27,9 @@ export default function Completed({
   mode,
   rowFile,
   resetState,
-  onSummaryFinished,
-  sheetDefinitions,
   enumLabelDict,
-  csvDownloadMode,
 }: Props) {
+  const { onSummaryFinished } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRecords = getTotalRows(sheetData);
   const recordsImported = statistics?.imported ?? 0;
@@ -66,9 +60,7 @@ export default function Completed({
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}
-          sheetDefinitions={sheetDefinitions}
           enumLabelDict={enumLabelDict}
-          csvDownloadMode={csvDownloadMode}
         />
         <div className="mt-auto flex-none">
           <div className="mt-5 flex justify-end">
