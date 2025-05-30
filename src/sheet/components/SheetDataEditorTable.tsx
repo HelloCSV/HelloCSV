@@ -78,7 +78,6 @@ export default function SheetDataEditorTable({
           <tr key={headerGroup.id}>
             <th className={`${headerClass} sticky left-0 z-20`}>
               <Checkbox
-                id={`Select all checkbox for ${sheetDefinition.id}`}
                 checked={selectAllChecked}
                 setChecked={toggleSelectAll}
               />
@@ -128,8 +127,6 @@ export default function SheetDataEditorTable({
               className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 py-3.5 pr-3 pl-4`}
             >
               <Checkbox
-                // TODO: Check if it works correctly for 2 idnetical rows
-                id={`Selection checkbox for ${sheetDefinition.id} ${row.id}`}
                 checked={selectedRows.includes(row.original)}
                 setChecked={() => toggleRowSelection(row.original)}
                 label={`${Number(row.id) + 1}`}

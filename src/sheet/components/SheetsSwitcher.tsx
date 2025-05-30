@@ -8,6 +8,7 @@ interface Props {
   onSheetChange: (sheetId: string) => void;
   validationErrors: ImporterValidationError[];
   sheetCountDict: Record<string, number>;
+  idPrefix?: string;
 }
 
 export default function SheetsSwitcher({
@@ -15,6 +16,7 @@ export default function SheetsSwitcher({
   onSheetChange,
   validationErrors,
   sheetCountDict,
+  idPrefix,
 }: Props) {
   const { sheets: sheetDefinitions } = useImporterDefinition();
 
@@ -29,6 +31,7 @@ export default function SheetsSwitcher({
       }))}
       activeTab={activeSheetId}
       onTabChange={onSheetChange}
+      idPrefix={idPrefix}
     />
   );
 }

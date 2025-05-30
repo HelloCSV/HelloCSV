@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from 'preact/hooks';
+import { useRef, useEffect, useMemo, useId } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
@@ -42,6 +42,7 @@ function ImporterBody({
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
   const [state, dispatch] = usePersistedReducer(sheets, persistenceConfig);
+  const idPrefix = useId();
 
   const {
     mode,
@@ -225,6 +226,7 @@ function ImporterBody({
           <div className="flex h-full flex-col">
             <div className="flex-none">
               <SheetsSwitcher
+                idPrefix={idPrefix}
                 activeSheetId={currentSheetId}
                 sheetCountDict={sheetCountDict}
                 onSheetChange={(sheetId) =>
@@ -236,8 +238,8 @@ function ImporterBody({
             <div
               className="flex-1 overflow-auto"
               role="tabpanel"
-              id={`tabpanel-${currentSheetId}`}
-              aria-labelledby={`tab-${currentSheetId}`}
+              id={`${idPrefix}-tabpanel-${currentSheetId}`}
+              aria-labelledby={`${idPrefix}-tab-${currentSheetId}`}
               tabIndex={0}
             >
               <SheetDataEditor
