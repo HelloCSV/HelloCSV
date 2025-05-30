@@ -1,3 +1,12 @@
+import { useState } from 'preact/hooks';
+import {
+  ButtonGroup,
+  ButtonGroupType,
+  ConfirmationModal,
+  Input,
+  Select,
+  Tooltip,
+} from '@/components';
 import { downloadSheetAsCsv, removeDuplicates } from '@/utils';
 import {
   XMarkIcon,
@@ -16,15 +25,6 @@ import {
   SheetViewMode,
 } from '@/types';
 import { useImporterDefinition } from '@/importer/hooks';
-import { useState } from 'preact/hooks';
-import {
-  ButtonGroup,
-  ButtonGroupType,
-  ConfirmationModal,
-  Input,
-  Select,
-  Tooltip,
-} from '@/components';
 
 interface Props {
   sheetDefinition: SheetDefinition;
