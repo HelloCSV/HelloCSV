@@ -1,25 +1,14 @@
-import { ImporterMode, ImportStatistics, SheetState } from '../../types';
+import { ImportStatistics } from '../../types';
 import { Card } from '../../components';
 import SummaryInfo from './SummaryInfo';
 import { useTranslations } from '../../i18';
 
-type Mode = Extract<ImporterMode, 'failed' | 'completed'>;
-
 interface Props {
-  mode: Mode;
-  sheetData: SheetState[];
   statistics?: ImportStatistics;
-  rowFile?: File;
   completedWithErrors?: boolean;
 }
 
-export default function Summary({
-  mode,
-  sheetData,
-  statistics,
-  rowFile,
-  completedWithErrors,
-}: Props) {
+export default function Summary({ statistics, completedWithErrors }: Props) {
   const { t } = useTranslations();
 
   return (
@@ -33,10 +22,7 @@ export default function Summary({
         </div>
         <div className="border-b border-gray-200 pb-2"></div>
         <SummaryInfo
-          mode={mode}
-          sheetData={sheetData}
           statistics={statistics}
-          rowFile={rowFile}
           completedWithErrors={completedWithErrors}
         />
       </div>

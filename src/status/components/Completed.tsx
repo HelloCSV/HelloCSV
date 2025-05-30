@@ -1,29 +1,20 @@
 import { Alert, Button } from '@/components';
 import { useTranslations } from '@/i18';
-import { SheetState, ImportStatistics, ImporterMode } from '@/types';
+
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 import { useImporterDefinition } from '@/importer/hooks';
-
-type Mode = Extract<ImporterMode, 'completed'>;
+import { useImporterState } from '@/importer/reducer';
 
 interface Props {
-  sheetData: SheetState[];
-  statistics?: ImportStatistics;
-  mode: Mode;
-  rowFile?: File;
   resetState: () => void;
 }
 
-export default function Completed({
-  sheetData,
-  statistics,
-  mode,
-  rowFile,
-  resetState,
-}: Props) {
+export default function Completed({ resetState }: Props) {
+  const { sheetData, importStatistics: statistics } = useImporterState();
   const { onSummaryFinished } = useImporterDefinition();
   const { t } = useTranslations();
+
   const totalRecords = getTotalRows(sheetData);
   const recordsImported = statistics?.imported ?? 0;
   const completedWithErrors = !!statistics?.failed || !!statistics?.skipped;
@@ -48,10 +39,7 @@ export default function Completed({
       </div>
       <div className="mt-6">
         <Summary
-          mode={mode}
-          sheetData={sheetData}
           statistics={statistics}
-          rowFile={rowFile}
           completedWithErrors={completedWithErrors}
         />
         <div className="mt-auto flex-none">

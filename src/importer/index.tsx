@@ -4,7 +4,11 @@ import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { usePersistedReducer } from './reducer';
+import {
+  ReducerProvider,
+  useImporterState,
+  useImporterStateDispatch,
+} from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
@@ -35,13 +39,15 @@ function ImporterBody({
   onDataColumnsMapped,
   preventUploadOnValidationErrors,
   customSuggestedMapper,
-  persistenceConfig,
 }: ImporterDefinitionWithDefaults) {
   const { t } = useTranslations();
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [state, dispatch] = usePersistedReducer(sheets, persistenceConfig);
+
+  const state = useImporterState();
+  const dispatch = useImporterStateDispatch();
+
   const idPrefix = useId();
 
   const {
@@ -51,8 +57,6 @@ function ImporterBody({
     columnMappings,
     parsedFile,
     validationErrors,
-    importProgress,
-    importStatistics,
   } = state;
 
   useEffect(() => {
@@ -214,8 +218,6 @@ function ImporterBody({
 
         {mode === 'mapping' && (
           <HeaderMapper
-            parsed={parsedFile!}
-            currentMapping={columnMappings ?? []}
             onMappingsChanged={onMappingsChanged}
             onMappingsSet={onMappingsSet}
             onBack={onBackToUpload}
@@ -227,12 +229,10 @@ function ImporterBody({
             <div className="flex-none">
               <SheetsSwitcher
                 idPrefix={idPrefix}
-                activeSheetId={currentSheetId}
                 sheetCountDict={sheetCountDict}
                 onSheetChange={(sheetId) =>
                   dispatch({ type: 'SHEET_CHANGED', payload: { sheetId } })
                 }
-                validationErrors={validationErrors}
               />
             </div>
             <div
@@ -244,7 +244,6 @@ function ImporterBody({
             >
               <SheetDataEditor
                 data={currentSheetData}
-                allData={sheetData}
                 sheetDefinition={currentSheetDefinition}
                 sheetValidationErrors={validationErrors.filter(
                   (error) => error.sheetId === currentSheetDefinition?.id
@@ -280,14 +279,9 @@ function ImporterBody({
 
         {(mode === 'submit' || mode === 'failed' || mode === 'completed') && (
           <ImportStatus
-            mode={mode}
-            progress={importProgress}
             onRetry={onSubmit}
             onBackToPreview={onBackToPreview}
             resetState={resetState}
-            sheetData={sheetData}
-            statistics={importStatistics}
-            rowFile={state.rowFile}
           />
         )}
       </Root>
@@ -306,9 +300,14 @@ export default function Importer(props: ImporterDefinition) {
 
   return (
     <ImporterDefinitionProvider importerDefintion={propsWithDefaults}>
-      <TranslationProvider>
-        <ImporterBody {...propsWithDefaults} />
-      </TranslationProvider>
+      <ReducerProvider
+        sheets={propsWithDefaults.sheets}
+        persistenceConfig={propsWithDefaults.persistenceConfig}
+      >
+        <TranslationProvider>
+          <ImporterBody {...propsWithDefaults} />
+        </TranslationProvider>
+      </ReducerProvider>
     </ImporterDefinitionProvider>
   );
 }

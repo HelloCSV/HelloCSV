@@ -21,11 +21,11 @@ import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
 import { useFilteredRowData } from '../utils';
+import { useImporterState } from '@/importer/reducer';
 
 interface Props {
   sheetDefinition: SheetDefinition;
   data: SheetState;
-  allData: SheetState[];
   sheetValidationErrors: ImporterValidationError[];
   setRowData: (payload: CellChangedPayload) => void;
   removeRows: (payload: RemoveRowsPayload) => void;
@@ -37,7 +37,6 @@ interface Props {
 export default function SheetDataEditor({
   sheetDefinition,
   data,
-  allData,
   sheetValidationErrors,
   setRowData,
   removeRows,
@@ -45,6 +44,8 @@ export default function SheetDataEditor({
   resetState,
   enumLabelDict,
 }: Props) {
+  const { sheetData: allData } = useImporterState();
+
   const [selectedRows, setSelectedRows] = useState<SheetRow[]>([]);
   const [viewMode, setViewMode] = useState<SheetViewMode>('all');
   const [searchPhrase, setSearchPhrase] = useState('');

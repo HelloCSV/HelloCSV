@@ -1,25 +1,13 @@
-import { Alert, Button } from '../../components';
-import { useTranslations } from '../../i18';
-import { SheetState, ImporterMode } from '../../types';
+import { Alert, Button } from '@/components';
+import { useTranslations } from '@/i18';
 import Summary from './Summary';
-
-type Mode = Extract<ImporterMode, 'failed'>;
 
 interface Props {
   onRetry: () => void;
   onBackToPreview: () => void;
-  rowFile?: File;
-  sheetData: SheetState[];
-  mode: Mode;
 }
 
-export default function Failed({
-  onRetry,
-  onBackToPreview,
-  rowFile,
-  sheetData,
-  mode,
-}: Props) {
+export default function Failed({ onRetry, onBackToPreview }: Props) {
   const { t } = useTranslations();
 
   return (
@@ -34,12 +22,7 @@ export default function Failed({
           />
         </div>
         <div className="mt-6">
-          <Summary
-            mode={mode}
-            sheetData={sheetData}
-            rowFile={rowFile}
-            completedWithErrors={false}
-          />
+          <Summary completedWithErrors={false} />
         </div>
 
         <div className="mt-6 flex justify-between">

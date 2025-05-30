@@ -1,32 +1,26 @@
-import { ImporterMode, ImportStatistics, SheetState } from '../../types';
+import { ImportStatistics } from '@/types';
 import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
-import { formatFileSize } from '../../uploader/utils';
+import { formatFileSize } from '@/uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
-import { Button, Badge } from '../../components';
-import { useTranslations } from '../../i18';
-
-type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
+import { Button, Badge } from '@/components';
+import { useTranslations } from '@/i18';
+import { useImporterState } from '@/importer/reducer';
 
 type Props = {
-  sheetData: SheetState[];
-  mode: Mode;
   statistics?: ImportStatistics;
-  rowFile?: File;
   completedWithErrors?: boolean;
 };
 
 export default function SummaryInfo({
-  sheetData,
   statistics,
-  rowFile,
   completedWithErrors,
-  mode,
 }: Props) {
+  const { rowFile, mode, sheetData } = useImporterState();
   const { t } = useTranslations();
   const totalRows = getTotalRows(sheetData);
 
