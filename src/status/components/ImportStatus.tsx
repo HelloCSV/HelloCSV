@@ -1,8 +1,8 @@
-import { ImporterMode } from '../../importer/types';
+import { ImporterMode } from '@/importer/types';
 import Completed from './Completed';
 import Failed from './Failed';
 import Uploading from './Uploading';
-import { ImportStatistics, SheetDefinition, SheetState } from '../../types';
+import { ImportStatistics, SheetState, EnumLabelDict } from '@/types';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
@@ -13,23 +13,21 @@ interface Props {
   onBackToPreview: () => void;
   resetState: () => void;
   sheetData: SheetState[];
-  sheetDefinitions: SheetDefinition[];
   statistics?: ImportStatistics;
   rowFile?: File;
-  onSummaryFinished?: () => void;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function ImportStatus({
   progress,
   mode,
   sheetData,
-  sheetDefinitions,
   onRetry,
   onBackToPreview,
   resetState,
   statistics,
   rowFile,
-  onSummaryFinished,
+  enumLabelDict,
 }: Props) {
   return (
     <div className="h-full">
@@ -40,11 +38,10 @@ export default function ImportStatus({
       {mode === 'failed' && (
         <Failed
           mode={mode}
-          sheetData={sheetData}
-          sheetDefinitions={sheetDefinitions}
           onRetry={onRetry}
           onBackToPreview={onBackToPreview}
           rowFile={rowFile}
+          enumLabelDict={enumLabelDict}
         />
       )}
 
@@ -52,11 +49,10 @@ export default function ImportStatus({
         <Completed
           mode={mode}
           sheetData={sheetData}
-          sheetDefinitions={sheetDefinitions}
           statistics={statistics}
           rowFile={rowFile}
           resetState={resetState}
-          onSummaryFinished={onSummaryFinished}
+          enumLabelDict={enumLabelDict}
         />
       )}
     </div>

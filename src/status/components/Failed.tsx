@@ -1,6 +1,6 @@
 import { Alert, Button } from '../../components';
 import { useTranslations } from '../../i18';
-import { SheetState, ImporterMode, SheetDefinition } from '../../types';
+import { SheetState, ImporterMode, EnumLabelDict } from '../../types';
 import Summary from './Summary';
 
 type Mode = Extract<ImporterMode, 'failed'>;
@@ -10,8 +10,8 @@ interface Props {
   onBackToPreview: () => void;
   rowFile?: File;
   sheetData: SheetState[];
-  sheetDefinitions: SheetDefinition[];
   mode: Mode;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function Failed({
@@ -19,8 +19,8 @@ export default function Failed({
   onBackToPreview,
   rowFile,
   sheetData,
-  sheetDefinitions,
   mode,
+  enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
 
@@ -39,9 +39,9 @@ export default function Failed({
           <Summary
             mode={mode}
             sheetData={sheetData}
-            sheetDefinitions={sheetDefinitions}
             rowFile={rowFile}
             completedWithErrors={false}
+            enumLabelDict={enumLabelDict}
           />
         </div>
 

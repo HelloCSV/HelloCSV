@@ -1,39 +1,41 @@
 import {
   ImporterMode,
   ImportStatistics,
-  SheetDefinition,
   SheetState,
-} from '../../types';
-import { getTotalRows, exportAllCsvs, getDataSize } from '../utils';
-import { formatFileSize } from '../../uploader/utils';
+  EnumLabelDict,
+} from '@/types';
+import { getTotalRows, downloadAllSheetsAsCsv, getDataSize } from '../utils';
+import { formatFileSize } from '@/uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
-import { Button, Badge } from '../../components';
-import { useTranslations } from '../../i18';
+import { Button, Badge } from '@/components';
+import { useTranslations } from '@/i18';
+import { useImporterDefinition } from '@/importer/hooks';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
 type Props = {
   sheetData: SheetState[];
-  sheetDefinitions: SheetDefinition[];
   mode: Mode;
   statistics?: ImportStatistics;
   rowFile?: File;
   completedWithErrors?: boolean;
+  enumLabelDict: EnumLabelDict;
 };
 
 export default function SummaryInfo({
   sheetData,
-  sheetDefinitions,
   statistics,
   rowFile,
   completedWithErrors,
   mode,
+  enumLabelDict,
 }: Props) {
+  const { csvDownloadMode, sheets: sheetDefinitions } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRows = getTotalRows(sheetData);
 
@@ -54,14 +56,21 @@ export default function SummaryInfo({
               </div>
               <div className="my-2 text-sm text-gray-500">
                 {rowFile
-                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions))}`
-                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions))}`}
+                  ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`
+                  : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`}
               </div>
               <div className="mt-5">
                 <Button
                   variant="tertiary"
                   outline
-                  onClick={() => exportAllCsvs(sheetData, sheetDefinitions)}
+                  onClick={() =>
+                    downloadAllSheetsAsCsv(
+                      sheetData,
+                      sheetDefinitions,
+                      enumLabelDict,
+                      csvDownloadMode
+                    )
+                  }
                 >
                   {t('importStatus.downloadProcessedData')}
                 </Button>

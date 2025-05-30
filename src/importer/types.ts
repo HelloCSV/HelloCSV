@@ -123,3 +123,13 @@ export type ImporterAction =
   | { type: 'MAPPING' } // Changes the mode to 'mapping' - used to go back to mappings screen in case there were some mapping issues
   | { type: 'RESET' } // Resets the state to the initial state
   | { type: 'SET_STATE'; payload: { state: ImporterState } }; // Fetches the state from the indexedDB
+
+type WithRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+
+export type ImporterDefinitionWithDefaults = WithRequired<
+  ImporterDefinition,
+  | 'maxFileSizeInBytes'
+  | 'persistenceConfig'
+  | 'csvDownloadMode'
+  | 'allowManualDataEntry' // List of optional fields that need default value
+>;

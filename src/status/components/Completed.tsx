@@ -1,35 +1,35 @@
-import { Alert, Button } from '../../components';
-import { useTranslations } from '../../i18';
+import { Alert, Button } from '@/components';
+import { useTranslations } from '@/i18';
 import {
   SheetState,
   ImportStatistics,
   ImporterMode,
-  SheetDefinition,
-} from '../../types';
+  EnumLabelDict,
+} from '@/types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
+import { useImporterDefinition } from '@/importer/hooks';
 
 type Mode = Extract<ImporterMode, 'completed'>;
 
 interface Props {
   sheetData: SheetState[];
-  sheetDefinitions: SheetDefinition[];
   statistics?: ImportStatistics;
   mode: Mode;
   rowFile?: File;
   resetState: () => void;
-  onSummaryFinished?: () => void;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function Completed({
   sheetData,
-  sheetDefinitions,
   statistics,
   mode,
   rowFile,
   resetState,
-  onSummaryFinished,
+  enumLabelDict,
 }: Props) {
+  const { onSummaryFinished } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRecords = getTotalRows(sheetData);
   const recordsImported = statistics?.imported ?? 0;
@@ -57,10 +57,10 @@ export default function Completed({
         <Summary
           mode={mode}
           sheetData={sheetData}
-          sheetDefinitions={sheetDefinitions}
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}
+          enumLabelDict={enumLabelDict}
         />
         <div className="mt-auto flex-none">
           <div className="mt-5 flex justify-end">

@@ -6,9 +6,15 @@ interface Props {
   tabs: Tab[];
   activeTab: string;
   onTabChange: (tab: string) => void;
+  idPrefix?: string;
 }
 
-export default function Tabs({ tabs, activeTab, onTabChange }: Props) {
+export default function Tabs({
+  tabs,
+  activeTab,
+  onTabChange,
+  idPrefix,
+}: Props) {
   return (
     <div>
       <div className="grid grid-cols-1 sm:hidden">
@@ -27,12 +33,12 @@ export default function Tabs({ tabs, activeTab, onTabChange }: Props) {
           >
             {tabs.map((tab) => (
               <button
-                id={`tab-${tab.value}`}
+                id={`${idPrefix}-tab-${tab.value}`}
                 key={tab.label}
                 role="tab"
                 aria-selected={tab.value === activeTab}
                 aria-current={tab.value === activeTab ? 'page' : undefined}
-                aria-controls={`tabpanel-${tab.value}`}
+                aria-controls={`${idPrefix}-tabpanel-${tab.value}`}
                 onClick={() => onTabChange(tab.value)}
                 className={` ${
                   tab.value === activeTab

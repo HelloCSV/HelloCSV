@@ -1,8 +1,8 @@
 import {
   ImporterMode,
   ImportStatistics,
-  SheetDefinition,
   SheetState,
+  EnumLabelDict,
 } from '../../types';
 import { Card } from '../../components';
 import SummaryInfo from './SummaryInfo';
@@ -13,19 +13,19 @@ type Mode = Extract<ImporterMode, 'failed' | 'completed'>;
 interface Props {
   mode: Mode;
   sheetData: SheetState[];
-  sheetDefinitions: SheetDefinition[];
   statistics?: ImportStatistics;
   rowFile?: File;
   completedWithErrors?: boolean;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function Summary({
   mode,
   sheetData,
-  sheetDefinitions,
   statistics,
   rowFile,
   completedWithErrors,
+  enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
 
@@ -42,10 +42,10 @@ export default function Summary({
         <SummaryInfo
           mode={mode}
           sheetData={sheetData}
-          sheetDefinitions={sheetDefinitions}
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}
+          enumLabelDict={enumLabelDict}
         />
       </div>
     </Card>

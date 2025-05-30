@@ -4,16 +4,16 @@ import {
   ImporterOutputFieldType,
   SheetColumnDefinition,
   SheetState,
-} from '../../types';
-import { Input, Select, SheetTooltip } from '../../components';
+} from '@/types';
+import { Input, Select, SheetTooltip } from '@/components';
 import {
   extractReferenceColumnPossibleValues,
   getCellDisplayValue,
-  getLabelDict,
   isColumnReadOnly,
 } from '../utils';
-import { useTranslations } from '../../i18';
-import { useLongPress } from '../../utils/hooks';
+import { getLabelDict } from '@/utils';
+import { useTranslations } from '@/i18';
+import { useLongPress } from '@/utils/hooks';
 
 interface Props {
   rowId: string;

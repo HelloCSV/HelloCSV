@@ -11,6 +11,7 @@ import {
   Translation,
   TranslationContextType,
 } from './types';
+import { useImporterDefinition } from '@/importer/hooks';
 
 const resources: Record<string, Translation | undefined> = {
   en: enTranslation,
@@ -81,15 +82,9 @@ const TranslationContext = createContext<TranslationContextType>(
   {} as TranslationContextType
 );
 
-export function TranslationProvider({
-  children,
-  selectedLocale,
-  translationResources,
-}: {
-  children: ReactNode;
-  selectedLocale?: string;
-  translationResources?: Record<string, Translation>;
-}) {
+export function TranslationProvider({ children }: { children: ReactNode }) {
+  const { translationResources, locale: selectedLocale } =
+    useImporterDefinition();
   const locale = selectedLocale ?? defaultLocale;
 
   function t(key: string, argumentValues: ArgumentsTypeText = {}): string {

@@ -12,14 +12,11 @@ import {
   SheetRow,
   SheetViewMode,
   EnumLabelDict,
-} from '../types';
-import {
   CellChangedPayload,
-  CsvDownloadMode,
   ImporterOutputFieldType,
   ImporterValidationError,
   RemoveRowsPayload,
-} from '../../types';
+} from '@/types';
 import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
@@ -35,7 +32,6 @@ interface Props {
   addEmptyRow: () => void;
   resetState: () => void;
   enumLabelDict: EnumLabelDict;
-  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function SheetDataEditor({
@@ -48,7 +44,6 @@ export default function SheetDataEditor({
   addEmptyRow,
   resetState,
   enumLabelDict,
-  csvDownloadMode,
 }: Props) {
   const [selectedRows, setSelectedRows] = useState<SheetRow[]>([]);
   const [viewMode, setViewMode] = useState<SheetViewMode>('all');
@@ -147,7 +142,6 @@ export default function SheetDataEditor({
           rowValidationSummary={rowValidationSummary}
           resetState={resetState}
           enumLabelDict={enumLabelDict}
-          csvDownloadMode={csvDownloadMode}
         />
       </div>
 

@@ -1,11 +1,14 @@
+import { useId } from 'preact/hooks';
+
 interface Props {
-  id: string;
   checked: boolean;
   setChecked: (checked: boolean) => void;
   label?: string;
 }
 
-export default function Checkbox({ id, checked, setChecked, label }: Props) {
+export default function Checkbox({ checked, setChecked, label }: Props) {
+  const id = useId();
+
   return (
     <div className="flex gap-3">
       <div className="flex h-6 shrink-0 items-center">

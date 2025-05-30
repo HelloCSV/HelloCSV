@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
-import { Button, Error } from '../../components';
-import { useTranslations } from '../../i18';
-import { ColumnMapping, ParsedFile, SheetDefinition } from '../../types';
+import { Button, Error } from '@/components';
+import { useTranslations } from '@/i18';
+import { ColumnMapping, ParsedFile } from '@/types';
 import {
   areAllRequiredMappingsSet,
   calculateMappingExamples,
@@ -10,10 +10,10 @@ import {
 } from '../utils';
 import HeaderMapperDataPreview from './HeaderMapperDataPreview';
 import HeaderMapperSelection from './HeaderMapperSelection';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
   parsed: ParsedFile;
-  sheetDefinitions: SheetDefinition[];
   currentMapping: ColumnMapping[];
   onMappingsChanged: (mappings: ColumnMapping[]) => void;
   onMappingsSet: () => void;
@@ -22,12 +22,12 @@ interface Props {
 
 export default function HeaderMapper({
   parsed,
-  sheetDefinitions,
   currentMapping,
   onMappingsChanged,
   onMappingsSet,
   onBack,
 }: Props) {
+  const { sheets: sheetDefinitions } = useImporterDefinition();
   const { t } = useTranslations();
   const [hoveredCsvHeader, setHoveredCsvHeader] = useState<string | null>(null);
 
