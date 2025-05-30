@@ -1,10 +1,8 @@
 import {
   ImporterMode,
   ImportStatistics,
-  SheetDefinition,
   SheetState,
   EnumLabelDict,
-  CsvDownloadMode,
 } from '../../types';
 import { Card } from '../../components';
 import SummaryInfo from './SummaryInfo';
@@ -18,9 +16,7 @@ interface Props {
   statistics?: ImportStatistics;
   rowFile?: File;
   completedWithErrors?: boolean;
-  sheetDefinitions: SheetDefinition[];
   enumLabelDict: EnumLabelDict;
-  csvDownloadMode: CsvDownloadMode;
 }
 
 export default function Summary({
@@ -29,9 +25,7 @@ export default function Summary({
   statistics,
   rowFile,
   completedWithErrors,
-  sheetDefinitions,
   enumLabelDict,
-  csvDownloadMode,
 }: Props) {
   const { t } = useTranslations();
 
@@ -51,9 +45,7 @@ export default function Summary({
           statistics={statistics}
           rowFile={rowFile}
           completedWithErrors={completedWithErrors}
-          sheetDefinitions={sheetDefinitions}
           enumLabelDict={enumLabelDict}
-          csvDownloadMode={csvDownloadMode}
         />
       </div>
     </Card>

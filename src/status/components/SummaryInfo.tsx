@@ -1,21 +1,20 @@
 import {
   ImporterMode,
   ImportStatistics,
-  SheetDefinition,
   SheetState,
   EnumLabelDict,
-  CsvDownloadMode,
-} from '../../types';
+} from '@/types';
 import { getTotalRows, downloadAllSheetsAsCsv, getDataSize } from '../utils';
-import { formatFileSize } from '../../uploader/utils';
+import { formatFileSize } from '@/uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/solid';
-import { Button, Badge } from '../../components';
-import { useTranslations } from '../../i18';
+import { Button, Badge } from '@/components';
+import { useTranslations } from '@/i18';
+import { useImporterDefinition } from '@/importer/hooks';
 
 type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
 
@@ -25,9 +24,7 @@ type Props = {
   statistics?: ImportStatistics;
   rowFile?: File;
   completedWithErrors?: boolean;
-  sheetDefinitions: SheetDefinition[];
   enumLabelDict: EnumLabelDict;
-  csvDownloadMode: CsvDownloadMode;
 };
 
 export default function SummaryInfo({
@@ -36,10 +33,9 @@ export default function SummaryInfo({
   rowFile,
   completedWithErrors,
   mode,
-  sheetDefinitions,
   enumLabelDict,
-  csvDownloadMode,
 }: Props) {
+  const { csvDownloadMode, sheets: sheetDefinitions } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRows = getTotalRows(sheetData);
 
