@@ -6,7 +6,8 @@ export class IntegerValidator extends Validator {
     const valid =
       !isNaN(fieldValue as unknown as number) &&
       fieldValue !== null &&
-      fieldValue !== undefined;
+      fieldValue !== undefined &&
+      typeof fieldValue === 'number';
 
     if (!valid) {
       return this.definition.error || 'validators.integer';
