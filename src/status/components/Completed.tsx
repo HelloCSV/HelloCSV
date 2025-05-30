@@ -1,6 +1,6 @@
 import { Alert, Button } from '@/components';
 import { useTranslations } from '@/i18';
-
+import { EnumLabelDict } from '@/types';
 import { getTotalRows } from '../utils';
 import Summary from './Summary';
 import { useImporterDefinition } from '@/importer/hooks';
@@ -8,9 +8,10 @@ import { useImporterState } from '@/importer/reducer';
 
 interface Props {
   resetState: () => void;
+  enumLabelDict: EnumLabelDict;
 }
 
-export default function Completed({ resetState }: Props) {
+export default function Completed({ resetState, enumLabelDict }: Props) {
   const { sheetData, importStatistics: statistics } = useImporterState();
   const { onSummaryFinished } = useImporterDefinition();
   const { t } = useTranslations();
@@ -39,8 +40,8 @@ export default function Completed({ resetState }: Props) {
       </div>
       <div className="mt-6">
         <Summary
-          statistics={statistics}
           completedWithErrors={completedWithErrors}
+          enumLabelDict={enumLabelDict}
         />
         <div className="mt-auto flex-none">
           <div className="mt-5 flex justify-end">

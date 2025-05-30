@@ -1,14 +1,14 @@
-import { ImportStatistics } from '../../types';
-import { Card } from '../../components';
+import { EnumLabelDict } from '@/types';
+import { Card } from '@/components';
 import SummaryInfo from './SummaryInfo';
-import { useTranslations } from '../../i18';
+import { useTranslations } from '@/i18';
 
 interface Props {
-  statistics?: ImportStatistics;
   completedWithErrors?: boolean;
+  enumLabelDict: EnumLabelDict;
 }
 
-export default function Summary({ statistics, completedWithErrors }: Props) {
+export default function Summary({ completedWithErrors, enumLabelDict }: Props) {
   const { t } = useTranslations();
 
   return (
@@ -22,8 +22,8 @@ export default function Summary({ statistics, completedWithErrors }: Props) {
         </div>
         <div className="border-b border-gray-200 pb-2"></div>
         <SummaryInfo
-          statistics={statistics}
           completedWithErrors={completedWithErrors}
+          enumLabelDict={enumLabelDict}
         />
       </div>
     </Card>

@@ -282,6 +282,7 @@ function ImporterBody({
             onRetry={onSubmit}
             onBackToPreview={onBackToPreview}
             resetState={resetState}
+            enumLabelDict={enumLabelDict}
           />
         )}
       </Root>

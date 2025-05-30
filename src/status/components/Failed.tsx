@@ -1,13 +1,19 @@
 import { Alert, Button } from '@/components';
 import { useTranslations } from '@/i18';
+import { EnumLabelDict } from '@/types';
 import Summary from './Summary';
 
 interface Props {
   onRetry: () => void;
   onBackToPreview: () => void;
+  enumLabelDict: EnumLabelDict;
 }
 
-export default function Failed({ onRetry, onBackToPreview }: Props) {
+export default function Failed({
+  onRetry,
+  onBackToPreview,
+  enumLabelDict,
+}: Props) {
   const { t } = useTranslations();
 
   return (
@@ -22,7 +28,7 @@ export default function Failed({ onRetry, onBackToPreview }: Props) {
           />
         </div>
         <div className="mt-6">
-          <Summary completedWithErrors={false} />
+          <Summary completedWithErrors={false} enumLabelDict={enumLabelDict} />
         </div>
 
         <div className="mt-6 flex justify-between">

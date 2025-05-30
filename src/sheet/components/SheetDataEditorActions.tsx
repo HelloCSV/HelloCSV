@@ -7,7 +7,7 @@ import {
   Select,
   Tooltip,
 } from '@/components';
-import { downloadSheetAsCsv } from '../utils';
+import { downloadSheetAsCsv, removeDuplicates } from '@/utils';
 import {
   XMarkIcon,
   TrashIcon,
@@ -24,7 +24,6 @@ import {
   SheetRow,
   SheetViewMode,
 } from '@/types';
-import { removeDuplicates } from '@/utils';
 import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
