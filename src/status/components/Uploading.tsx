@@ -1,14 +1,10 @@
 import { useTranslations } from '../../i18';
 import { Button } from '../../components';
 import CircularProgress from './CircularProgress';
-import { ImporterMode } from '../../importer/types';
 import { CheckIcon } from '@heroicons/react/24/outline';
-
-type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
+import { useImporterState } from '@/importer/reducer';
 
 interface Props {
-  progress: number;
-  mode: Mode;
   resetState: () => void;
 }
 
@@ -18,7 +14,8 @@ function SuccessIcon() {
   );
 }
 
-export default function Completed({ progress, mode, resetState }: Props) {
+export default function Completed({ resetState }: Props) {
+  const { importProgress: progress, mode } = useImporterState();
   const pending = mode === 'submit';
   const { t } = useTranslations();
 

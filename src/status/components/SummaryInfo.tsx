@@ -1,9 +1,4 @@
-import {
-  ImporterMode,
-  ImportStatistics,
-  SheetState,
-  EnumLabelDict,
-} from '@/types';
+import { EnumLabelDict } from '@/types';
 import { getTotalRows, downloadAllSheetsAsCsv, getDataSize } from '../utils';
 import { formatFileSize } from '@/uploader/utils';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
@@ -14,28 +9,26 @@ import {
 } from '@heroicons/react/24/solid';
 import { Button, Badge } from '@/components';
 import { useTranslations } from '@/i18';
+import { useImporterState } from '@/importer/reducer';
 import { useImporterDefinition } from '@/importer/hooks';
 
-type Mode = Extract<ImporterMode, 'submit' | 'failed' | 'completed'>;
-
 type Props = {
-  sheetData: SheetState[];
-  mode: Mode;
-  statistics?: ImportStatistics;
-  rowFile?: File;
   completedWithErrors?: boolean;
   enumLabelDict: EnumLabelDict;
 };
 
 export default function SummaryInfo({
-  sheetData,
-  statistics,
-  rowFile,
   completedWithErrors,
-  mode,
   enumLabelDict,
 }: Props) {
-  const { csvDownloadMode, sheets: sheetDefinitions } = useImporterDefinition();
+  const {
+    rowFile,
+    mode,
+    sheetData,
+    importStatistics: statistics,
+    sheetDefinitions,
+  } = useImporterState();
+  const { csvDownloadMode } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRows = getTotalRows(sheetData);
 

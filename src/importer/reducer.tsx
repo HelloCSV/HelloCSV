@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'preact/hooks';
+import { useReducer, useEffect, Dispatch, useContext } from 'preact/hooks';
 import { applyTransformations } from '../transformers';
 import {
   CellChangedPayload,
@@ -10,6 +10,8 @@ import {
 } from '../types';
 import { getIndexedDBState, setIndexedDBState } from './storage';
 import { applyValidations } from '../validators';
+import { createContext } from 'preact';
+import { ReactNode } from 'preact/compat';
 
 function recalculateCalculatedColumns(
   row: SheetRow,
@@ -238,4 +240,36 @@ const usePersistedReducer = (
   return [state, dispatch];
 };
 
-export { usePersistedReducer };
+const ImporterStateContext = createContext<ImporterState>({} as ImporterState);
+
+const ImporterStateDispatchContext = createContext<Dispatch<ImporterAction>>(
+  {} as Dispatch<ImporterAction>
+);
+
+export function ReducerProvider({
+  sheets,
+  persistenceConfig,
+  children,
+}: {
+  sheets: SheetDefinition[];
+  persistenceConfig: PersistenceConfig;
+  children: ReactNode;
+}) {
+  const [state, dispatch] = usePersistedReducer(sheets, persistenceConfig);
+
+  return (
+    <ImporterStateContext.Provider value={state}>
+      <ImporterStateDispatchContext.Provider value={dispatch}>
+        {children}
+      </ImporterStateDispatchContext.Provider>
+    </ImporterStateContext.Provider>
+  );
+}
+
+export function useImporterState(): ImporterState {
+  return useContext(ImporterStateContext);
+}
+
+export function useImporterStateDispatch(): Dispatch<ImporterAction> {
+  return useContext(ImporterStateDispatchContext);
+}

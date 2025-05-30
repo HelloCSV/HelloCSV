@@ -1,23 +1,20 @@
 import { Tabs } from '@/components';
-import { ImporterValidationError } from '@/types';
 import { ExclamationCircleIcon } from '@heroicons/react/16/solid';
 import { useImporterDefinition } from '@/importer/hooks';
+import { useImporterState } from '@/importer/reducer';
 
 interface Props {
-  activeSheetId: string;
   onSheetChange: (sheetId: string) => void;
-  validationErrors: ImporterValidationError[];
   sheetCountDict: Record<string, number>;
   idPrefix?: string;
 }
 
 export default function SheetsSwitcher({
-  activeSheetId,
   onSheetChange,
-  validationErrors,
   sheetCountDict,
   idPrefix,
 }: Props) {
+  const { currentSheetId, validationErrors } = useImporterState();
   const { sheets: sheetDefinitions } = useImporterDefinition();
 
   return (
@@ -29,7 +26,7 @@ export default function SheetsSwitcher({
           <ExclamationCircleIcon className="mr-3 h-4 w-4" />
         ) : undefined,
       }))}
-      activeTab={activeSheetId}
+      activeTab={currentSheetId}
       onTabChange={onSheetChange}
       idPrefix={idPrefix}
     />
