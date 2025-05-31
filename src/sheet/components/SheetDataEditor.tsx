@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
   ColumnDef,
   getCoreRowModel,
@@ -20,7 +20,7 @@ import {
 import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
-import { useFilteredRowData } from '../utils';
+import { calculateColumnWidth, useFilteredRowData } from '../utils';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -91,8 +91,11 @@ export default function SheetDataEditor({
         header: () => <SheetDataEditorHeader column={column} />,
         sortUndefined: 'last',
         sortingFn: 'auto',
+        size: calculateColumnWidth(column, rowData, enumLabelDict), // readonly icon
+        maxSize: 250,
+        meta: { columnLabel: column.label },
       })),
-    [sheetDefinition]
+    [sheetDefinition, rowData, enumLabelDict]
   );
 
   const table = useReactTable<SheetRow>({
@@ -117,6 +120,8 @@ export default function SheetDataEditor({
     });
   }
 
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex-none">
@@ -140,8 +145,12 @@ export default function SheetDataEditor({
         />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div
+        className="relative grid min-h-0 overflow-y-auto"
+        ref={tableContainerRef}
+      >
         <SheetDataEditorTable
+          tableContainerRef={tableContainerRef}
           table={table}
           sheetDefinition={sheetDefinition}
           visibleData={rowData}

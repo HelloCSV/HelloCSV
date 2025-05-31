@@ -10,6 +10,8 @@ import { Checkbox } from '../../components';
 import { useTranslations } from '../../i18';
 import { findRowIndex } from '../utils';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { RefObject } from 'preact/compat';
 
 interface Props {
   table: Table<SheetRow>;
@@ -24,7 +26,22 @@ interface Props {
   ) => void;
   selectedRows: SheetRow[];
   setSelectedRows: (rows: SheetRow[]) => void;
+  tableContainerRef: RefObject<HTMLDivElement>;
   enumLabelDict: EnumLabelDict;
+}
+
+function getColumnWidthDict(columns: { id: string; width: number }[]) {
+  const totalWidth = columns.reduce((acc, column) => {
+    return acc + column.width;
+  }, 0);
+
+  return columns.reduce(
+    (acc, column) => {
+      acc[column.id] = `calc(${column.width / totalWidth} * (100% - 96px))`;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 }
 
 export default function SheetDataEditorTable({
@@ -36,6 +53,7 @@ export default function SheetDataEditorTable({
   onCellValueChanged,
   selectedRows,
   setSelectedRows,
+  tableContainerRef,
   enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
@@ -67,16 +85,61 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300';
+    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 shrink-0';
   const cellClass =
     'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
 
+  // The scrollable element for your list
+
+  const rows = table.getRowModel().rows;
+  // The virtualizer
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => 52.62,
+    measureElement: (element) => element?.getBoundingClientRect().height,
+    overscan: 20,
+  });
+
+  const visibleRows = rowVirtualizer.getVirtualItems().map((virtualRow) => {
+    return {
+      row: rows[virtualRow.index],
+      index: virtualRow.index,
+      start: virtualRow.start,
+      end: virtualRow.end,
+    };
+  });
+
+  const columnWidthDict = getColumnWidthDict(
+    table
+      .getAllColumns()
+      .map((column) => ({ id: column.id, width: column.getSize() }))
+  );
+
+  const [paddingTop, paddingBottom] =
+    visibleRows.length > 0
+      ? [
+          Math.max(
+            0,
+            visibleRows[0].start - rowVirtualizer.options.scrollMargin
+          ),
+          Math.max(
+            0,
+            rowVirtualizer.getTotalSize() -
+              visibleRows[visibleRows.length - 1].end
+          ),
+        ]
+      : [0, 0];
+
   return (
-    <table className="min-w-full border-separate border-spacing-0">
+    <table
+      className="flex min-w-full border-separate border-spacing-0 flex-col"
+      aria-label={t('sheet.sheetTitle')}
+    >
       <thead className="bg-hello-csv-muted sticky top-0 z-10">
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            <th className={`${headerClass} sticky left-0 z-20`}>
+          <tr key={headerGroup.id} className="flex">
+            <th className={`${headerClass} sticky left-0 z-20 w-24`}>
               <Checkbox
                 checked={selectAllChecked}
                 setChecked={toggleSelectAll}
@@ -84,7 +147,14 @@ export default function SheetDataEditorTable({
             </th>
 
             {headerGroup.headers.map((header) => (
-              <th key={header.id} className={`z-10 ${headerClass}`}>
+              <th
+                key={header.id}
+                className={`z-10 ${headerClass}`}
+                style={{
+                  width: columnWidthDict[header.column.id],
+                  minWidth: header.column.getSize(),
+                }}
+              >
                 <div
                   className={`flex ${
                     header.column.getCanSort()
@@ -120,11 +190,24 @@ export default function SheetDataEditorTable({
         ))}
       </thead>
 
-      <tbody className="divide-y divide-gray-200">
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+      <tbody
+        className="grid w-full divide-y divide-gray-200"
+        style={{
+          height: `${rowVirtualizer.getTotalSize()}px`,
+          paddingTop,
+          paddingBottom,
+        }}
+      >
+        {visibleRows.map(({ row, index }) => (
+          <tr
+            key={row.id}
+            data-index={index}
+            ref={(node) => rowVirtualizer.measureElement(node)}
+            className="flex w-full"
+          >
             <td
-              className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 py-3.5 pr-3 pl-4`}
+              aria-label={`Select row ${Number(row.id) + 1}`}
+              className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 w-24 py-3.5 pr-3 pl-4`}
             >
               <Checkbox
                 checked={selectedRows.includes(row.original)}
@@ -147,7 +230,14 @@ export default function SheetDataEditorTable({
                 .join(', ');
 
               return (
-                <td key={cell.id} className={cellClass}>
+                <td
+                  key={cell.id}
+                  className={cellClass}
+                  style={{
+                    width: columnWidthDict[cell.column.id],
+                    minWidth: cell.column.getSize(),
+                  }}
+                >
                   <SheetDataEditorCell
                     rowId={row.id}
                     columnDefinition={
