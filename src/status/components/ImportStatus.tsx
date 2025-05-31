@@ -38,10 +38,10 @@ export default function ImportStatus({
       {mode === 'failed' && (
         <Failed
           mode={mode}
-          sheetData={sheetData}
           onRetry={onRetry}
           onBackToPreview={onBackToPreview}
           rowFile={rowFile}
+          sheetData={sheetData}
           enumLabelDict={enumLabelDict}
         />
       )}
