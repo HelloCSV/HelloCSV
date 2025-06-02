@@ -10,7 +10,7 @@ export class Transformer {
 
   transform(value: ImporterOutputFieldType): ImporterOutputFieldType {
     const newValue = this.parse(value);
-    if (newValue) return newValue;
+    if (newValue != null) return newValue;
     return value;
   }
 

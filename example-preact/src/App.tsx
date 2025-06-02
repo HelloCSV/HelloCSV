@@ -4,13 +4,13 @@ import { EXAMPLE_CODE } from './constants';
 import {
   EmployeeSheetImporter,
   EmployeeImporter,
+  ExcelImporter,
 } from './components/importers';
 import InstallTabs from './components/InstallTabs';
 import Section from './components/Section';
 import Content from './components/Content';
 import DocumentContainer from './components/DocumentContainer';
 import TryItYourself from './components/TryItYourself';
-import ExcelImporter from './components/importers/ExcelImporter';
 
 export default function App() {
   return (

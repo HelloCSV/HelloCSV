@@ -138,7 +138,7 @@ export function getCellDisplayValue(
     columnDefinition.type === 'enum'
       ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
           ?.label ?? value)
-      : columnDefinition.type === 'reference'
+      : columnDefinition.type === 'reference' && value != null
         ? (getLabelDict(columnDefinition, enumLabelDict)[value] ?? value)
         : value;
 

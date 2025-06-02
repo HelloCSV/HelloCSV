@@ -3,7 +3,7 @@ import { Validator } from './base';
 
 export class RequiredValidator extends Validator {
   isValid(fieldValue: ImporterOutputFieldType) {
-    if (!fieldValue) {
+    if (fieldValue == null) {
       return this.definition.error || 'validators.required';
     }
   }

@@ -162,7 +162,7 @@ function ImporterBody({
     dispatch({ type: 'PROGRESS', payload: { progress: 0 } });
     dispatch({ type: 'SUBMIT' });
     try {
-      // TODO THIS BRANCH: Should we filter invalid data?
+      // TODO: Should we filter invalid data?
       const data = applyTransformations(
         sheets,
         sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))

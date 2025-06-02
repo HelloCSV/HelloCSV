@@ -76,7 +76,7 @@ export interface ImporterState {
   importStatistics?: ImportStatistics;
 }
 
-export type ImporterOutputFieldType = string | number;
+export type ImporterOutputFieldType = string | number | undefined;
 
 export interface CellChangedPayload {
   sheetId: string;

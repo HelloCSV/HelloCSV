@@ -2,10 +2,10 @@ import { cva } from 'cva';
 
 interface Props {
   activeButton: string;
-  buttons: ButtonGroupType[];
+  buttons: ButtonGroupDefinition[];
 }
 
-export type ButtonGroupType = {
+export type ButtonGroupDefinition = {
   value: string;
   label: string;
   onClick: () => void;

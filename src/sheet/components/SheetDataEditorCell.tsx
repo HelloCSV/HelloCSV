@@ -121,7 +121,7 @@ export default function SheetDataEditorCell({
     const labelDict = getLabelDict(columnDefinition, enumLabelDict);
 
     const selectOptions = referenceData.map((value) => ({
-      label: labelDict[value] ?? value,
+      label: String(labelDict[value] ?? value),
       value,
     }));
 
