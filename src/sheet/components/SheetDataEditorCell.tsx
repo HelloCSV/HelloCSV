@@ -11,7 +11,7 @@ import {
   getCellDisplayValue,
   isColumnReadOnly,
 } from '../utils';
-import { getLabelDict } from '@/utils';
+import { getLabelDict, getLabelDictValue } from '@/utils';
 import { useTranslations } from '@/i18';
 import { useLongPress } from '@/utils/hooks';
 
@@ -121,7 +121,7 @@ export default function SheetDataEditorCell({
     const labelDict = getLabelDict(columnDefinition, enumLabelDict);
 
     const selectOptions = referenceData.map((value) => ({
-      label: String(labelDict[value] ?? value),
+      label: String(getLabelDictValue(labelDict, value)),
       value,
     }));
 

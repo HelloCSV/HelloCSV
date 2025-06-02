@@ -79,10 +79,15 @@ export function generateCsvContent(
         if (csvDownloadMode === 'value' || value == null) {
           processedValue = value;
         } else if (column.type === 'enum') {
-          processedValue =
-            enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
+          processedValue = getLabelDictValue(
+            enumLabelDict[sheetDefinition.id][column.id],
+            value
+          );
         } else if (column.type === 'reference') {
-          processedValue = getLabelDict(column, enumLabelDict)[value] ?? value;
+          processedValue = getLabelDictValue(
+            getLabelDict(column, enumLabelDict),
+            value
+          );
         } else {
           processedValue = value;
         }
@@ -123,4 +128,15 @@ export function getLabelDict(
   const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
 
   return enumLabelDict[sheetId][sheetColumnId] ?? {};
+}
+
+export function getLabelDictValue(
+  labelDict: Record<string, ImporterOutputFieldType>,
+  value: ImporterOutputFieldType
+): ImporterOutputFieldType {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  return labelDict[value] ?? value;
 }
