@@ -98,7 +98,7 @@ function mapCalculatedColumns(
 
 function isFloat(value: string): boolean {
   if (FLOAT.test(value)) {
-    var floatValue = parseFloat(value);
+    const floatValue = parseFloat(value);
     if (floatValue > MIN_FLOAT && floatValue < MAX_FLOAT) {
       return true;
     }
