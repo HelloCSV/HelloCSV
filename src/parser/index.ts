@@ -14,7 +14,6 @@ export function parseCsv({
   Papa.parse<CSVParsedData>(file, {
     skipEmptyLines: true,
     header: true,
-    dynamicTyping: true,
     complete: onCompleted,
   });
 }
