@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
   ColumnDef,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-
 import {
   SheetDefinition,
   SheetState,
@@ -92,6 +91,8 @@ export default function SheetDataEditor({
         header: () => <SheetDataEditorHeader column={column} />,
         sortUndefined: 'last',
         sortingFn: 'auto',
+        maxSize: 250,
+        meta: { columnLabel: column.label },
       })),
     [sheetDefinition]
   );
@@ -118,6 +119,8 @@ export default function SheetDataEditor({
     });
   }
 
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex-none">
@@ -141,8 +144,9 @@ export default function SheetDataEditor({
         />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto">
+      <div className="min-h-0 flex-1 overflow-auto" ref={tableContainerRef}>
         <SheetDataEditorTable
+          tableContainerRef={tableContainerRef}
           table={table}
           sheetDefinition={sheetDefinition}
           visibleData={rowData}

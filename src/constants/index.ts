@@ -14,3 +14,6 @@ export const MAX_CHARACTERS_IN_MAPPING_EXAMPLES = 500;
 export const HEALDESS_UI_PORTAL_ROOT_ID = 'headlessui-portal-root';
 
 export const ROOT_CLASS = 'hello-csv';
+
+// Used for virtualizer, should be updated if the row height changes
+export const ESTIMATED_ROW_HEIGHT = 52.62;

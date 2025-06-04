@@ -1,15 +1,21 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import SheetDataEditorCell from './SheetDataEditorCell';
-import { EnumLabelDict, SheetDefinition, SheetRow, SheetState } from '../types';
 import {
+  EnumLabelDict,
+  SheetDefinition,
+  SheetRow,
+  SheetState,
   ImporterOutputFieldType,
   ImporterValidationError,
   TranslationKey,
-} from '../../types';
-import { Checkbox } from '../../components';
-import { useTranslations } from '../../i18';
+} from '@/types';
+import { Checkbox } from '@/components';
+import { useTranslations } from '@/i18';
 import { findRowIndex } from '../utils';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import { useVirtualizer } from '@tanstack/react-virtual';
+import { RefObject } from 'preact/compat';
+import { ESTIMATED_ROW_HEIGHT } from '@/constants';
 
 interface Props {
   table: Table<SheetRow>;
@@ -24,6 +30,7 @@ interface Props {
   ) => void;
   selectedRows: SheetRow[];
   setSelectedRows: (rows: SheetRow[]) => void;
+  tableContainerRef: RefObject<HTMLDivElement>;
   enumLabelDict: EnumLabelDict;
 }
 
@@ -36,6 +43,7 @@ export default function SheetDataEditorTable({
   onCellValueChanged,
   selectedRows,
   setSelectedRows,
+  tableContainerRef,
   enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
@@ -71,8 +79,44 @@ export default function SheetDataEditorTable({
   const cellClass =
     'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
 
+  const rows = table.getRowModel().rows;
+
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => ESTIMATED_ROW_HEIGHT,
+    measureElement: (element) => element?.getBoundingClientRect().height,
+    overscan: 20,
+  });
+
+  const visibleRows = rowVirtualizer.getVirtualItems().map((virtualRow) => ({
+    row: rows[virtualRow.index],
+    index: virtualRow.index,
+    start: virtualRow.start,
+    end: virtualRow.end,
+  }));
+
+  // https://github.com/TanStack/virtual/discussions/476
+  const [paddingTop, paddingBottom] =
+    visibleRows.length > 0
+      ? [
+          Math.max(
+            0,
+            visibleRows[0].start - rowVirtualizer.options.scrollMargin
+          ),
+          Math.max(
+            0,
+            rowVirtualizer.getTotalSize() -
+              visibleRows[visibleRows.length - 1].end
+          ),
+        ]
+      : [0, 0];
+
   return (
-    <table className="min-w-full border-separate border-spacing-0">
+    <table
+      className="min-w-full border-separate border-spacing-0"
+      aria-label={t('sheet.sheetTitle')}
+    >
       <thead className="bg-hello-csv-muted sticky top-0 z-10">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
@@ -120,10 +164,24 @@ export default function SheetDataEditorTable({
         ))}
       </thead>
 
-      <tbody className="divide-y divide-gray-200">
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+      <tbody
+        className="divide-y divide-gray-200"
+        style={{
+          height: `${rowVirtualizer.getTotalSize()}px`,
+        }}
+      >
+        {/* Padding used for virtualization */}
+        <tr>
+          <td style={{ height: paddingTop }} />
+        </tr>
+        {visibleRows.map(({ row, index }) => (
+          <tr
+            key={row.id}
+            data-index={index}
+            ref={(node) => rowVirtualizer.measureElement(node)}
+          >
             <td
+              aria-label={`Select row ${Number(row.id) + 1}`}
               className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 py-3.5 pr-3 pl-4`}
             >
               <Checkbox
@@ -167,6 +225,10 @@ export default function SheetDataEditorTable({
             })}
           </tr>
         ))}
+        {/* Padding used for virtualization */}
+        <tr>
+          <td style={{ height: paddingBottom }} />
+        </tr>
       </tbody>
     </table>
   );
