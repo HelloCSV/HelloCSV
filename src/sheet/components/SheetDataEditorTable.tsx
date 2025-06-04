@@ -30,20 +30,6 @@ interface Props {
   enumLabelDict: EnumLabelDict;
 }
 
-function getColumnWidthDict(columns: { id: string; width: number }[]) {
-  const totalWidth = columns.reduce((acc, column) => {
-    return acc + column.width;
-  }, 0);
-
-  return columns.reduce(
-    (acc, column) => {
-      acc[column.id] = `calc(${column.width / totalWidth} * (100% - 96px))`;
-      return acc;
-    },
-    {} as Record<string, string>
-  );
-}
-
 export default function SheetDataEditorTable({
   table,
   sheetDefinition,
@@ -85,14 +71,12 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300 shrink-0';
+    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300';
   const cellClass =
     'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
 
-  // The scrollable element for your list
-
   const rows = table.getRowModel().rows;
-  // The virtualizer
+
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => tableContainerRef.current,
@@ -109,12 +93,6 @@ export default function SheetDataEditorTable({
       end: virtualRow.end,
     };
   });
-
-  const columnWidthDict = getColumnWidthDict(
-    table
-      .getAllColumns()
-      .map((column) => ({ id: column.id, width: column.getSize() }))
-  );
 
   const [paddingTop, paddingBottom] =
     visibleRows.length > 0
@@ -133,13 +111,13 @@ export default function SheetDataEditorTable({
 
   return (
     <table
-      className="flex min-w-full border-separate border-spacing-0 flex-col"
+      className="min-w-full border-separate border-spacing-0"
       aria-label={t('sheet.sheetTitle')}
     >
       <thead className="bg-hello-csv-muted sticky top-0 z-10">
         {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id} className="flex">
-            <th className={`${headerClass} sticky left-0 z-20 w-24`}>
+          <tr key={headerGroup.id}>
+            <th className={`${headerClass} sticky left-0 z-20`}>
               <Checkbox
                 checked={selectAllChecked}
                 setChecked={toggleSelectAll}
@@ -147,14 +125,7 @@ export default function SheetDataEditorTable({
             </th>
 
             {headerGroup.headers.map((header) => (
-              <th
-                key={header.id}
-                className={`z-10 ${headerClass}`}
-                style={{
-                  width: columnWidthDict[header.column.id],
-                  minWidth: header.column.getSize(),
-                }}
-              >
+              <th key={header.id} className={`z-10 ${headerClass}`}>
                 <div
                   className={`flex ${
                     header.column.getCanSort()
@@ -191,23 +162,23 @@ export default function SheetDataEditorTable({
       </thead>
 
       <tbody
-        className="grid w-full divide-y divide-gray-200"
+        className="divide-y divide-gray-200"
         style={{
           height: `${rowVirtualizer.getTotalSize()}px`,
-          paddingTop,
-          paddingBottom,
         }}
       >
+        <tr>
+          <td style={{ height: paddingTop }} />
+        </tr>
         {visibleRows.map(({ row, index }) => (
           <tr
             key={row.id}
             data-index={index}
             ref={(node) => rowVirtualizer.measureElement(node)}
-            className="flex w-full"
           >
             <td
               aria-label={`Select row ${Number(row.id) + 1}`}
-              className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 w-24 py-3.5 pr-3 pl-4`}
+              className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 py-3.5 pr-3 pl-4`}
             >
               <Checkbox
                 checked={selectedRows.includes(row.original)}
@@ -233,10 +204,12 @@ export default function SheetDataEditorTable({
                 <td
                   key={cell.id}
                   className={cellClass}
-                  style={{
-                    width: columnWidthDict[cell.column.id],
-                    minWidth: cell.column.getSize(),
-                  }}
+                  style={
+                    {
+                      // width: columnWidthDict[cell.column.id],
+                      // minWidth: cell.column.getSize(),
+                    }
+                  }
                 >
                   <SheetDataEditorCell
                     rowId={row.id}
@@ -257,6 +230,9 @@ export default function SheetDataEditorTable({
             })}
           </tr>
         ))}
+        <tr>
+          <td style={{ height: paddingBottom }} />
+        </tr>
       </tbody>
     </table>
   );

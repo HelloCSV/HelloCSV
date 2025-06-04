@@ -20,7 +20,7 @@ import {
 import SheetDataEditorTable from './SheetDataEditorTable';
 import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
-import { calculateColumnWidth, useFilteredRowData } from '../utils';
+import { useFilteredRowData } from '../utils';
 import { useImporterState } from '@/importer/reducer';
 
 interface Props {
@@ -92,7 +92,7 @@ export default function SheetDataEditor({
         header: () => <SheetDataEditorHeader column={column} />,
         sortUndefined: 'last',
         sortingFn: 'auto',
-        size: calculateColumnWidth(column, rowData, enumLabelDict), // readonly icon
+        // size: calculateColumnWidth(column, rowData, enumLabelDict), // readonly icon
         maxSize: 250,
         meta: { columnLabel: column.label },
       })),
@@ -146,10 +146,7 @@ export default function SheetDataEditor({
         />
       </div>
 
-      <div
-        className="relative grid min-h-0 overflow-y-auto"
-        ref={tableContainerRef}
-      >
+      <div className="min-h-0 flex-1 overflow-auto" ref={tableContainerRef}>
         <SheetDataEditorTable
           tableContainerRef={tableContainerRef}
           table={table}

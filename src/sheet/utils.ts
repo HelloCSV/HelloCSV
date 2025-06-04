@@ -134,62 +134,6 @@ export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
   );
 }
 
-// count cjk unicode characters
-function countFullWidth(valueAsString: string | undefined): number {
-  if (valueAsString === undefined) {
-    return 0;
-  }
-
-  return (
-    valueAsString.match(
-      // korean, japanese, chinese, etc.
-      /[ㄱ-ㅎㅏ-ㅣ가-힣ぁ-んァ-ヶ亜-熙一-鿿]/g
-    )?.length ?? 0
-  );
-}
-
-export function calculateStringWidth(value: string | number | undefined) {
-  return (
-    (value?.toString().length ?? 0) * 8 + countFullWidth(value?.toString()) * 8
-  );
-}
-
-export function calculateColumnWidth(
-  column: SheetColumnDefinition,
-  rowData: SheetRow[],
-  enumLabelDict: EnumLabelDict
-) {
-  const enumLabelList = (
-    column.type === 'enum'
-      ? column.typeArguments.values.map(({ label }) => label)
-      : column.type === 'reference'
-        ? Object.values(
-            enumLabelDict[column.typeArguments.sheetId]?.[
-              column.typeArguments.sheetColumnId
-            ] ?? {}
-          )
-        : []
-  )
-    .filter((label) => typeof label === 'string' || typeof label === 'number')
-    .map((label) => String(label));
-
-  return (
-    32 + // padding
-    Math.max(
-      calculateStringWidth(column.label) + 20, // label size + sort button
-      ...rowData
-        .filter((row) => {
-          const value = row[column.id];
-          return typeof value === 'string' || typeof value === 'number';
-        })
-        .map((row) => row[column.id])
-        .concat(enumLabelList)
-        .map(calculateStringWidth) // max length value
-    ) +
-    ('isReadOnly' in column && column.isReadOnly ? 16 : 0)
-  );
-}
-
 export function getCellDisplayValue(
   columnDefinition: SheetColumnDefinition,
   value: ImporterOutputFieldType,
