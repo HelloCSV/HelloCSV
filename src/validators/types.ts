@@ -53,7 +53,7 @@ export interface CustomValidatorDefinition
   extends ImporterValidatorDefinitionBase {
   key: string;
   validateFn: (
-    fieldValue: ImporterOutputFieldType,
+    fieldValue: ImporterOutputFieldType | undefined,
     row: SheetRow
   ) => ImporterValidatorOutput;
 }

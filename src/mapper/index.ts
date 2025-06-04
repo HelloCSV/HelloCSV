@@ -1,12 +1,18 @@
 import {
   CSVCell,
   CSVParsedData,
+  ImporterOutputFieldType,
   ParsedFile,
   SheetColumnDefinition,
   SheetDefinition,
   SheetRow,
+  ColumnMapping,
+  MappedData,
 } from '../types';
-import { ColumnMapping, MappedData } from './types';
+
+const FLOAT = /^\s*-?(\d+\.?|\.\d+|\d+\.\d+)([eE][-+]?\d+)?\s*$/;
+const MAX_FLOAT = Math.pow(2, 53);
+const MIN_FLOAT = -MAX_FLOAT;
 
 export { default as HeaderMapper } from './components/HeaderMapper';
 
@@ -90,11 +96,32 @@ function mapCalculatedColumns(
   );
 }
 
+function isFloat(value: string): boolean {
+  if (FLOAT.test(value)) {
+    const floatValue = parseFloat(value);
+    if (floatValue > MIN_FLOAT && floatValue < MAX_FLOAT) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function getCellTypedValue(
+  csvColumnValue: CSVCell,
+  columnDefinition: SheetColumnDefinition
+): ImporterOutputFieldType {
+  if (columnDefinition.type === 'number' && isFloat(csvColumnValue)) {
+    return parseFloat(csvColumnValue);
+  }
+
+  return csvColumnValue;
+}
+
 /// Checks to see if CSV value doesn't match the enum label, if so converts it into enum value
 function getCellValue(
   csvColumnValue: CSVCell,
   columnDefinition: SheetColumnDefinition
-): CSVCell {
+): ImporterOutputFieldType {
   if (columnDefinition.type === 'enum') {
     const enumDefinition = columnDefinition.typeArguments.values.find(
       (definition) => definition.label === csvColumnValue
@@ -105,7 +132,7 @@ function getCellValue(
     }
   }
 
-  return csvColumnValue;
+  return getCellTypedValue(csvColumnValue, columnDefinition);
 }
 
 function mapRegularColumns(

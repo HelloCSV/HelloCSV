@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks';
 import {
   ButtonGroup,
-  ButtonGroupType,
+  ButtonGroupDefinition,
   ConfirmationModal,
   Input,
   Select,
@@ -103,7 +103,7 @@ export default function SheetDataEditorActions({
     filterByErrorOptions.push(errorFilterOption(errorColumnFilter));
   }
 
-  const viewModeButtons: ButtonGroupType[] = [
+  const viewModeButtons: ButtonGroupDefinition[] = [
     {
       value: 'all',
       label: t('sheet.all') + ` (${rowValidationSummary.all})`,

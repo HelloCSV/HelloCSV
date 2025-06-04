@@ -18,5 +18,7 @@ export interface ImporterTransformerDefinitionBase {
 export interface CustomTransformerDefinition
   extends ImporterTransformerDefinitionBase {
   key: string;
-  transformFn: (value: ImporterOutputFieldType) => ImporterOutputFieldType;
+  transformFn: (
+    value: ImporterOutputFieldType
+  ) => ImporterOutputFieldType | undefined;
 }

@@ -3,19 +3,17 @@ import { ImporterValidatorDefinitionBase } from '../types';
 import { Validator } from './base';
 
 export class UniqueValidator extends Validator {
-  seen: {
-    [key: string]: boolean;
-  };
+  seen: Set<ImporterOutputFieldType>;
 
   constructor(definition: ImporterValidatorDefinitionBase) {
     super(definition);
-    this.seen = {};
+    this.seen = new Set();
   }
 
   isValid(fieldValue: ImporterOutputFieldType) {
-    if (fieldValue in this.seen) {
+    if (this.seen.has(fieldValue)) {
       return this.definition.error || 'validators.unique';
     }
-    this.seen[fieldValue] = true;
+    this.seen.add(fieldValue);
   }
 }

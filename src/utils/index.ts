@@ -19,17 +19,15 @@ export const filterEmptyRows = (state: SheetState) => {
   return state.rows.filter((d) => Object.keys(d).length > 0);
 };
 
-export const isEmptyCell = (value: any) => {
+export function isEmptyCell(value: any): value is null | undefined {
   return isUndefinedOrNull(value) || value === '';
-};
+}
 
 export const removeDuplicates = (array: any[]) => {
   return [...new Set(array)];
 };
 
-export function normalizeValue(
-  value: ImporterOutputFieldType | undefined | null
-) {
+export function normalizeValue(value: ImporterOutputFieldType) {
   if (value == null) {
     return null;
   }
@@ -44,7 +42,7 @@ export function normalizeValue(
     );
 }
 
-function escapeCsvCell(value: any): string {
+function escapeCsvCell(value: ImporterOutputFieldType): string {
   if (value == null) {
     return '';
   }
@@ -76,15 +74,20 @@ export function generateCsvContent(
     sheetDefinition.columns
       .map((column) => {
         const value = row[column.id];
-        let processedValue;
+        let processedValue: ImporterOutputFieldType;
 
-        if (csvDownloadMode === 'value') {
+        if (csvDownloadMode === 'value' || value == null) {
           processedValue = value;
         } else if (column.type === 'enum') {
-          processedValue =
-            enumLabelDict[sheetDefinition.id][column.id][value] ?? value;
+          processedValue = getLabelDictValue(
+            enumLabelDict[sheetDefinition.id][column.id],
+            value
+          );
         } else if (column.type === 'reference') {
-          processedValue = getLabelDict(column, enumLabelDict)[value] ?? value;
+          processedValue = getLabelDictValue(
+            getLabelDict(column, enumLabelDict),
+            value
+          );
         } else {
           processedValue = value;
         }
@@ -125,4 +128,15 @@ export function getLabelDict(
   const { sheetId, sheetColumnId } = columnDefinition.typeArguments;
 
   return enumLabelDict[sheetId][sheetColumnId] ?? {};
+}
+
+export function getLabelDictValue(
+  labelDict: Record<string, ImporterOutputFieldType>,
+  value: ImporterOutputFieldType
+): ImporterOutputFieldType {
+  if (typeof value !== 'string') {
+    return value;
+  }
+
+  return labelDict[value] ?? value;
 }

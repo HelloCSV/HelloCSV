@@ -1,4 +1,9 @@
-import { isEmptyCell, normalizeValue, getLabelDict } from '../utils';
+import {
+  isEmptyCell,
+  normalizeValue,
+  getLabelDict,
+  getLabelDictValue,
+} from '../utils';
 import {
   EnumLabelDict,
   ImporterOutputFieldType,
@@ -194,8 +199,11 @@ export function getCellDisplayValue(
     columnDefinition.type === 'enum'
       ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
           ?.label ?? value)
-      : columnDefinition.type === 'reference'
-        ? (getLabelDict(columnDefinition, enumLabelDict)[value] ?? value)
+      : columnDefinition.type === 'reference' && value != null
+        ? getLabelDictValue(
+            getLabelDict(columnDefinition, enumLabelDict),
+            value
+          )
         : value;
 
   const valueEmpty =
