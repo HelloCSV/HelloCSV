@@ -1,17 +1,21 @@
 import { flexRender, Table } from '@tanstack/react-table';
 import SheetDataEditorCell from './SheetDataEditorCell';
-import { EnumLabelDict, SheetDefinition, SheetRow, SheetState } from '../types';
 import {
+  EnumLabelDict,
+  SheetDefinition,
+  SheetRow,
+  SheetState,
   ImporterOutputFieldType,
   ImporterValidationError,
   TranslationKey,
-} from '../../types';
-import { Checkbox } from '../../components';
-import { useTranslations } from '../../i18';
+} from '@/types';
+import { Checkbox } from '@/components';
+import { useTranslations } from '@/i18';
 import { findRowIndex } from '../utils';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { RefObject } from 'preact/compat';
+import { ESTIMATED_ROW_HEIGHT } from '@/constants';
 
 interface Props {
   table: Table<SheetRow>;
@@ -80,7 +84,7 @@ export default function SheetDataEditorTable({
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 52.62,
+    estimateSize: () => ESTIMATED_ROW_HEIGHT,
     measureElement: (element) => element?.getBoundingClientRect().height,
     overscan: 20,
   });
