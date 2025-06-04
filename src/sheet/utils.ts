@@ -170,7 +170,7 @@ export function calculateColumnWidth(
           )
         : []
   )
-    .filter((label) => typeof label === 'string' || !isNaN(label))
+    .filter((label) => typeof label === 'string' || typeof label === 'number')
     .map((label) => String(label));
 
   return (
@@ -180,7 +180,7 @@ export function calculateColumnWidth(
       ...rowData
         .filter((row) => {
           const value = row[column.id];
-          return typeof value === 'string' || !isNaN(value);
+          return typeof value === 'string' || typeof value === 'number';
         })
         .map((row) => row[column.id])
         .concat(enumLabelList)
