@@ -201,16 +201,7 @@ export default function SheetDataEditorTable({
                 .join(', ');
 
               return (
-                <td
-                  key={cell.id}
-                  className={cellClass}
-                  style={
-                    {
-                      // width: columnWidthDict[cell.column.id],
-                      // minWidth: cell.column.getSize(),
-                    }
-                  }
-                >
+                <td key={cell.id} className={cellClass}>
                   <SheetDataEditorCell
                     rowId={row.id}
                     columnDefinition={

@@ -92,11 +92,10 @@ export default function SheetDataEditor({
         header: () => <SheetDataEditorHeader column={column} />,
         sortUndefined: 'last',
         sortingFn: 'auto',
-        // size: calculateColumnWidth(column, rowData, enumLabelDict), // readonly icon
         maxSize: 250,
         meta: { columnLabel: column.label },
       })),
-    [sheetDefinition, rowData, enumLabelDict]
+    [sheetDefinition]
   );
 
   const table = useReactTable<SheetRow>({
