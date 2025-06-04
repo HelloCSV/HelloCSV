@@ -89,15 +89,14 @@ export default function SheetDataEditorTable({
     overscan: 20,
   });
 
-  const visibleRows = rowVirtualizer.getVirtualItems().map((virtualRow) => {
-    return {
-      row: rows[virtualRow.index],
-      index: virtualRow.index,
-      start: virtualRow.start,
-      end: virtualRow.end,
-    };
-  });
+  const visibleRows = rowVirtualizer.getVirtualItems().map((virtualRow) => ({
+    row: rows[virtualRow.index],
+    index: virtualRow.index,
+    start: virtualRow.start,
+    end: virtualRow.end,
+  }));
 
+  // https://github.com/TanStack/virtual/discussions/476
   const [paddingTop, paddingBottom] =
     visibleRows.length > 0
       ? [
@@ -171,6 +170,7 @@ export default function SheetDataEditorTable({
           height: `${rowVirtualizer.getTotalSize()}px`,
         }}
       >
+        {/* Padding used for virtualization */}
         <tr>
           <td style={{ height: paddingTop }} />
         </tr>
@@ -225,6 +225,7 @@ export default function SheetDataEditorTable({
             })}
           </tr>
         ))}
+        {/* Padding used for virtualization */}
         <tr>
           <td style={{ height: paddingBottom }} />
         </tr>
