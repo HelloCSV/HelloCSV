@@ -21,6 +21,15 @@ import SheetDataEditorHeader from './SheetDataEditorHeader';
 import SheetDataEditorActions from './SheetDataEditorActions';
 import { useFilteredRowData } from '../utils';
 import { useImporterState } from '@/importer/reducer';
+import SheetDataEditorSelectAllCheckbox from './SheetDataEditorSelectAllCheckbox';
+import SheetDataEditorSelectCheckbox from './SheetDataEditorSelectCheckbox';
+import {
+  CHECKBOX_COLUMN_ID,
+  CHECKBOX_COLUMN_WIDTH,
+  DATA_COLUMN_WIDTH,
+  DATA_COLUMN_MAX_WIDTH,
+  DATA_COLUMN_MIN_WIDTH,
+} from '@/constants';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -84,17 +93,44 @@ export default function SheetDataEditor({
   }, [data, sheetValidationErrors]);
 
   const columns = useMemo<ColumnDef<SheetRow>[]>(
-    () =>
-      sheetDefinition.columns.map((column) => ({
-        id: column.id,
-        accessorFn: (row) => row[column.id],
-        header: () => <SheetDataEditorHeader column={column} />,
-        sortUndefined: 'last',
-        sortingFn: 'auto',
-        maxSize: 250,
-        meta: { columnLabel: column.label },
-      })),
-    [sheetDefinition]
+    () => [
+      {
+        id: CHECKBOX_COLUMN_ID,
+        header: () => (
+          <SheetDataEditorSelectAllCheckbox
+            visibleData={rowData}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+          />
+        ),
+        cell: ({ row }) => (
+          <SheetDataEditorSelectCheckbox
+            row={row}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+          />
+        ),
+        enableResizing: false,
+        enableSorting: false,
+        enableColumnFilter: false,
+        enableMultiSort: false,
+        enableGlobalFilter: false,
+        size: CHECKBOX_COLUMN_WIDTH,
+      },
+      ...sheetDefinition.columns.map(
+        (column) =>
+          ({
+            id: column.id,
+            accessorFn: (row) => row[column.id],
+            header: () => <SheetDataEditorHeader column={column} />,
+            sortUndefined: 'last',
+            sortingFn: 'auto',
+            meta: { columnLabel: column.label },
+            enableResizing: true,
+          }) as ColumnDef<SheetRow>
+      ),
+    ],
+    [sheetDefinition, selectedRows]
   );
 
   const table = useReactTable<SheetRow>({
@@ -102,6 +138,13 @@ export default function SheetDataEditor({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    columnResizeMode: 'onChange',
+    columnResizeDirection: 'ltr',
+    defaultColumn: {
+      minSize: DATA_COLUMN_MIN_WIDTH,
+      maxSize: DATA_COLUMN_MAX_WIDTH,
+      size: DATA_COLUMN_WIDTH,
+    },
   });
 
   function onCellValueChanged(
@@ -149,11 +192,9 @@ export default function SheetDataEditor({
           tableContainerRef={tableContainerRef}
           table={table}
           sheetDefinition={sheetDefinition}
-          visibleData={rowData}
           allData={allData}
           sheetValidationErrors={sheetValidationErrors}
           onCellValueChanged={onCellValueChanged}
-          selectedRows={selectedRows}
           setSelectedRows={setSelectedRows}
           enumLabelDict={enumLabelDict}
         />

@@ -9,18 +9,16 @@ import {
   ImporterValidationError,
   TranslationKey,
 } from '@/types';
-import { Checkbox } from '@/components';
 import { useTranslations } from '@/i18';
 import { findRowIndex } from '../utils';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { RefObject } from 'preact/compat';
-import { ESTIMATED_ROW_HEIGHT } from '@/constants';
+import { CHECKBOX_COLUMN_ID, ESTIMATED_ROW_HEIGHT } from '@/constants';
 
 interface Props {
   table: Table<SheetRow>;
   sheetDefinition: SheetDefinition;
-  visibleData: SheetRow[];
   allData: SheetState[];
   sheetValidationErrors: ImporterValidationError[];
   onCellValueChanged: (
@@ -28,7 +26,6 @@ interface Props {
     columnId: string,
     value: ImporterOutputFieldType
   ) => void;
-  selectedRows: SheetRow[];
   setSelectedRows: (rows: SheetRow[]) => void;
   tableContainerRef: RefObject<HTMLDivElement>;
   enumLabelDict: EnumLabelDict;
@@ -37,11 +34,9 @@ interface Props {
 export default function SheetDataEditorTable({
   table,
   sheetDefinition,
-  visibleData,
   allData,
   sheetValidationErrors,
   onCellValueChanged,
-  selectedRows,
   setSelectedRows,
   tableContainerRef,
   enumLabelDict,
@@ -55,29 +50,10 @@ export default function SheetDataEditorTable({
     );
   }
 
-  const selectAllChecked =
-    selectedRows.length === visibleData.length && visibleData.length > 0;
-
-  function toggleSelectAll() {
-    if (selectAllChecked) {
-      setSelectedRows([]);
-    } else {
-      setSelectedRows(visibleData);
-    }
-  }
-
-  function toggleRowSelection(row: SheetRow) {
-    if (selectedRows.includes(row)) {
-      setSelectedRows(selectedRows.filter((r) => r !== row));
-    } else {
-      setSelectedRows([...selectedRows, row]);
-    }
-  }
-
   const headerClass =
     'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300';
   const cellClass =
-    'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300 max-w-[350px]';
+    'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300';
 
   const rows = table.getRowModel().rows;
 
@@ -114,23 +90,25 @@ export default function SheetDataEditorTable({
 
   return (
     <table
-      className="min-w-full border-separate border-spacing-0"
+      className="w-full table-fixed border-separate border-spacing-0"
       aria-label={t('sheet.sheetTitle')}
     >
       <thead className="bg-hello-csv-muted sticky top-0 z-10">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
-            <th className={`${headerClass} sticky left-0 z-20`}>
-              <Checkbox
-                checked={selectAllChecked}
-                setChecked={toggleSelectAll}
-              />
-            </th>
-
             {headerGroup.headers.map((header) => (
-              <th key={header.id} className={`z-10 ${headerClass}`}>
+              <th
+                key={header.id}
+                className={
+                  header.column.id === CHECKBOX_COLUMN_ID
+                    ? `${headerClass} sticky left-0 z-20`
+                    : `relative z-10 ${headerClass}`
+                }
+                colSpan={header.colSpan}
+                style={{ width: header.getSize() }}
+              >
                 <div
-                  className={`flex ${
+                  className={`flex w-full ${
                     header.column.getCanSort()
                       ? 'cursor-pointer select-none'
                       : ''
@@ -157,6 +135,14 @@ export default function SheetDataEditorTable({
                       ),
                     }[header.column.getIsSorted() as string] ?? null}
                   </span>
+
+                  {header.column.getCanResize() && (
+                    <div
+                      onMouseDown={header.getResizeHandler()}
+                      onTouchStart={header.getResizeHandler()}
+                      className="absolute top-0 right-0 h-full w-0.5 cursor-col-resize touch-none bg-gray-200 select-none"
+                    />
+                  )}
                 </div>
               </th>
             ))}
@@ -180,19 +166,21 @@ export default function SheetDataEditorTable({
             data-index={index}
             ref={(node) => rowVirtualizer.measureElement(node)}
           >
-            <td
-              aria-label={`Select row ${Number(row.id) + 1}`}
-              className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 py-3.5 pr-3 pl-4`}
-            >
-              <Checkbox
-                checked={selectedRows.includes(row.original)}
-                setChecked={() => toggleRowSelection(row.original)}
-                label={`${Number(row.id) + 1}`}
-              />
-            </td>
-
             {row.getVisibleCells().map((cell, cellIndex) => {
-              const columnId = sheetDefinition.columns[cellIndex].id;
+              if (cell.column.id === CHECKBOX_COLUMN_ID) {
+                return (
+                  <td
+                    aria-label={`Select row ${Number(row.id) + 1}`}
+                    className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 pr-3 pl-4`}
+                    style={{ width: cell.column.getSize() }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                );
+              }
+
+              // We subtract 1 because we have a checkbox column on the first position
+              const columnId = sheetDefinition.columns[cellIndex - 1].id;
               // TODO: Check if it works correctly for 2 identical rows
               const rowIndex = findRowIndex(
                 allData,
@@ -205,7 +193,11 @@ export default function SheetDataEditorTable({
                 .join(', ');
 
               return (
-                <td key={cell.id} className={cellClass}>
+                <td
+                  key={cell.id}
+                  className={cellClass}
+                  style={{ width: cell.column.getSize() }}
+                >
                   <SheetDataEditorCell
                     rowId={row.id}
                     columnDefinition={
