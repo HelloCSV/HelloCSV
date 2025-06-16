@@ -170,6 +170,7 @@ export default function SheetDataEditorTable({
               if (cell.column.id === CHECKBOX_COLUMN_ID) {
                 return (
                   <td
+                    key={cell.id}
                     aria-label={`Select row ${Number(row.id) + 1}`}
                     className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 pr-3 pl-4`}
                     style={{ width: cell.column.getSize() }}

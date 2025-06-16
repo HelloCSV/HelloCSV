@@ -1,8 +1,7 @@
 import { SheetRow } from '@/types';
 import { Checkbox } from '@/components';
 import { Row } from '@tanstack/react-table';
-import { Dispatch } from 'preact/compat';
-import { SetStateAction } from 'preact/compat';
+import { SetStateAction, Dispatch } from 'preact/compat';
 
 interface Props {
   row: Row<SheetRow>;
