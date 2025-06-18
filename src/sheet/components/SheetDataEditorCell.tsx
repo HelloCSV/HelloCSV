@@ -1,33 +1,40 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import {
+  EnumLabelDict,
   ImporterOutputFieldType,
   SheetColumnDefinition,
   SheetState,
-} from '../../types';
-import { Input, Select, SheetTooltip } from '../../components';
+} from '@/types';
+import { Input, Select, SheetTooltip } from '@/components';
 import {
   extractReferenceColumnPossibleValues,
+  getCellDisplayValue,
   isColumnReadOnly,
 } from '../utils';
-import { useTranslations } from '../../i18';
-import { useLongPress } from '../../utils/hooks';
+import { getLabelDict, getLabelDictValue } from '@/utils';
+import { useTranslations } from '@/i18';
+import { useLongPress } from '@/utils/hooks';
 
 interface Props {
+  rowId: string;
   columnDefinition: SheetColumnDefinition;
   value: ImporterOutputFieldType;
   onUpdated: (value: ImporterOutputFieldType) => void;
   allData: SheetState[];
   clearRowsSelection: () => void;
   errorsText: string;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function SheetDataEditorCell({
+  rowId,
   columnDefinition,
   value,
   onUpdated,
   allData,
   clearRowsSelection,
   errorsText,
+  enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
 
@@ -45,16 +52,12 @@ export default function SheetDataEditorCell({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editMode]);
 
-  const extractedValue =
-    columnDefinition.type === 'enum'
-      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
-          ?.label ?? value)
-      : value;
-  const valueEmpty =
-    extractedValue == null ||
-    (typeof extractedValue === 'string' && extractedValue.trim() === '');
-  // Use non-breaking space to keep the cell height
-  const nonEmptyValue = valueEmpty ? '\u00A0' : extractedValue;
+  const { displayValue, valueEmpty } = getCellDisplayValue(
+    columnDefinition,
+    value,
+    enumLabelDict
+  );
+
   const readOnly = isColumnReadOnly(columnDefinition);
 
   const longPressHandlers = useLongPress(
@@ -79,12 +82,17 @@ export default function SheetDataEditorCell({
         }
       >
         <div
+          role="button"
+          tabIndex={0}
+          aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${displayValue}`}
           {...longPressHandlers}
           onClick={(e) => !readOnly && e.detail > 1 && setEditMode(true)}
           className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
-          title={valueEmpty ? undefined : `${nonEmptyValue}`}
+          title={valueEmpty ? undefined : `${displayValue}`}
         >
-          {nonEmptyValue}
+          {columnDefinition.customRender
+            ? columnDefinition.customRender(value, displayValue)
+            : displayValue}
         </div>
       </SheetTooltip>
     );
@@ -110,13 +118,16 @@ export default function SheetDataEditorCell({
       allData
     );
 
+    const labelDict = getLabelDict(columnDefinition, enumLabelDict);
+
     const selectOptions = referenceData.map((value) => ({
-      label: value,
+      label: String(getLabelDictValue(labelDict, value)),
       value,
     }));
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
@@ -132,6 +143,7 @@ export default function SheetDataEditorCell({
 
     return (
       <Select
+        searchable
         options={selectOptions}
         value={value}
         onChange={(value) =>
@@ -143,6 +155,7 @@ export default function SheetDataEditorCell({
 
   return (
     <Input
+      aria-label={`edit row ${Number(rowId) + 1}'s ${columnDefinition.label}`}
       type={columnDefinition.type === 'number' ? 'number' : 'text'}
       classes="block w-full"
       value={value}

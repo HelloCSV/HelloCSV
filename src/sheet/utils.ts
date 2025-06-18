@@ -1,5 +1,12 @@
-import { isEmptyCell, normalizeValue } from '../utils';
 import {
+  isEmptyCell,
+  normalizeValue,
+  getLabelDict,
+  getLabelDictValue,
+} from '../utils';
+import {
+  EnumLabelDict,
+  ImporterOutputFieldType,
   ImporterValidationError,
   SheetColumnDefinition,
   SheetColumnReferenceDefinition,
@@ -8,7 +15,6 @@ import {
   SheetState,
   SheetViewMode,
 } from '../types';
-import { DOWNLOADED_CSV_SEPARATOR } from '../constants';
 import { useMemo } from 'preact/hooks';
 
 export function extractReferenceColumnPossibleValues(
@@ -26,31 +32,6 @@ export function extractReferenceColumnPossibleValues(
       ?.filter((c) => !isEmptyCell(c))
       ?.filter((c, index, allData) => allData.indexOf(c) === index) ?? [] // Remove dupplicates
   );
-}
-
-export function downloadSheetAsCsv(
-  sheetDefinition: SheetDefinition,
-  data: SheetRow[]
-) {
-  const headers = sheetDefinition.columns
-    .map((column) => column.id)
-    .join(DOWNLOADED_CSV_SEPARATOR);
-
-  const rows = data.map((row) =>
-    sheetDefinition.columns
-      .map((column) => row[column.id])
-      .join(DOWNLOADED_CSV_SEPARATOR)
-  );
-
-  const csv = [headers, ...rows].join('\n');
-
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${sheetDefinition.label}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
 }
 
 export function findRowIndex(
@@ -130,4 +111,49 @@ export function isColumnReadOnly(
   }
 
   return !!columnDefinition.isReadOnly;
+}
+
+export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
+  return Object.fromEntries(
+    sheetDefinitions.map((sheet) => [
+      sheet.id,
+      Object.fromEntries(
+        sheet.columns
+          .filter((column) => column.type === 'enum')
+          .map((column) => [
+            column.id,
+            Object.fromEntries(
+              column.typeArguments.values.map(({ label, value }) => [
+                value,
+                label,
+              ])
+            ),
+          ])
+      ),
+    ])
+  );
+}
+
+export function getCellDisplayValue(
+  columnDefinition: SheetColumnDefinition,
+  value: ImporterOutputFieldType,
+  enumLabelDict: EnumLabelDict
+) {
+  const extractedValue =
+    columnDefinition.type === 'enum'
+      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
+          ?.label ?? value)
+      : columnDefinition.type === 'reference' && value != null
+        ? getLabelDictValue(
+            getLabelDict(columnDefinition, enumLabelDict),
+            value
+          )
+        : value;
+
+  const valueEmpty =
+    extractedValue == null ||
+    (typeof extractedValue === 'string' && extractedValue.trim() === '');
+
+  // Use non-breaking space to keep the cell height
+  return { displayValue: valueEmpty ? '\u00A0' : extractedValue, valueEmpty };
 }

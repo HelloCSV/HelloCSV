@@ -1,13 +1,13 @@
 import { useState } from 'preact/hooks';
 import {
   ButtonGroup,
-  ButtonGroupType,
+  ButtonGroupDefinition,
   ConfirmationModal,
   Input,
   Select,
   Tooltip,
-} from '../../components';
-import { downloadSheetAsCsv } from '../utils';
+} from '@/components';
+import { downloadSheetAsCsv, removeDuplicates } from '@/utils';
 import {
   XMarkIcon,
   TrashIcon,
@@ -15,10 +15,16 @@ import {
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
-import { useTranslations } from '../../i18';
-import { SheetDefinition, SheetRow, SheetViewMode } from '../types';
-import { ImporterValidationError, RemoveRowsPayload } from '../../types';
-import { removeDuplicates } from '../../utils';
+import { useTranslations } from '@/i18';
+import {
+  ImporterValidationError,
+  RemoveRowsPayload,
+  EnumLabelDict,
+  SheetDefinition,
+  SheetRow,
+  SheetViewMode,
+} from '@/types';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -36,6 +42,7 @@ interface Props {
   sheetValidationErrors: ImporterValidationError[];
   rowValidationSummary: Record<SheetViewMode, number>;
   resetState: () => void;
+  enumLabelDict: EnumLabelDict;
 }
 
 export default function SheetDataEditorActions({
@@ -54,7 +61,9 @@ export default function SheetDataEditorActions({
   sheetValidationErrors,
   rowValidationSummary,
   resetState,
+  enumLabelDict,
 }: Props) {
+  const { csvDownloadMode } = useImporterDefinition();
   const { t } = useTranslations();
 
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
@@ -94,7 +103,7 @@ export default function SheetDataEditorActions({
     filterByErrorOptions.push(errorFilterOption(errorColumnFilter));
   }
 
-  const viewModeButtons: ButtonGroupType[] = [
+  const viewModeButtons: ButtonGroupDefinition[] = [
     {
       value: 'all',
       label: t('sheet.all') + ` (${rowValidationSummary.all})`,
@@ -152,9 +161,14 @@ export default function SheetDataEditorActions({
           )}
         >
           <TrashIcon
-            className={`h-6 w-6 ${
-              selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses
-            }`}
+            role="button"
+            tabIndex={0}
+            aria-label={t(
+              selectedRows.length <= 0
+                ? 'sheet.removeRowsTooltipNoRowsSelected'
+                : 'sheet.removeRowsTooltip'
+            )}
+            className={`h-6 w-6 ${selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses}`}
             onClick={() => setRemoveConfirmationModalOpen(true)}
           />
         </Tooltip>
@@ -168,7 +182,14 @@ export default function SheetDataEditorActions({
             className={`h-6 w-6 ${
               rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
             }`}
-            onClick={() => downloadSheetAsCsv(sheetDefinition, rowData)}
+            onClick={() =>
+              downloadSheetAsCsv(
+                sheetDefinition,
+                rowData,
+                enumLabelDict,
+                csvDownloadMode
+              )
+            }
           />
         </Tooltip>
 

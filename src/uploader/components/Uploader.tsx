@@ -1,26 +1,19 @@
-import { CustomFileLoader, SheetDefinition } from '../../types';
 import ImporterRequirements from './ImporterRequirements';
 import FileUploader from './FileUploader';
 import { getImporterRequirements } from '../utils';
-import { useTranslations } from '../../i18';
+import { useTranslations } from '@/i18';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
-  sheets: SheetDefinition[];
   onFileUploaded: (file: File) => void;
   onEnterDataManually: () => void;
-  allowManualDataEntry?: boolean;
-  maxFileSizeInBytes: number;
-  customFileLoaders?: CustomFileLoader[];
 }
 
 export default function Uploader({
-  sheets,
   onFileUploaded,
   onEnterDataManually,
-  allowManualDataEntry,
-  maxFileSizeInBytes,
-  customFileLoaders,
 }: Props) {
+  const { sheets } = useImporterDefinition();
   const importerRequirements = getImporterRequirements(sheets);
   const { t } = useTranslations();
 
@@ -35,10 +28,7 @@ export default function Uploader({
           <div className="flex-1 lg:flex-2">
             <FileUploader
               setFile={onFileUploaded}
-              allowManualDataEntry={allowManualDataEntry}
               onEnterDataManually={onEnterDataManually}
-              maxFileSizeInBytes={maxFileSizeInBytes}
-              customFileLoaders={customFileLoaders}
             />
           </div>
         </div>

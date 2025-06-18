@@ -16,7 +16,7 @@
     "preact": "^10.25.4",
     "prism-code-editor": "^3.4.0",
     "tippy.js": "^6.3.7",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",

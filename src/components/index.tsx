@@ -8,7 +8,7 @@ export { default as Select } from './Select';
 export { default as Tabs } from './Tabs';
 export { default as SheetTooltip } from './SheetTooltip';
 export { default as ButtonGroup } from './ButtonGroup';
-export type { ButtonGroupType } from './ButtonGroup';
+export type { ButtonGroupDefinition } from './ButtonGroup';
 export { default as Tooltip } from './Tooltip';
 export { default as Badge } from './Badge';
 export { default as Alert } from './Alert';

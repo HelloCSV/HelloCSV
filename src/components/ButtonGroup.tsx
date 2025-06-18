@@ -2,10 +2,10 @@ import { cva } from 'cva';
 
 interface Props {
   activeButton: string;
-  buttons: ButtonGroupType[];
+  buttons: ButtonGroupDefinition[];
 }
 
-export type ButtonGroupType = {
+export type ButtonGroupDefinition = {
   value: string;
   label: string;
   onClick: () => void;
@@ -63,6 +63,7 @@ export default function ButtonGroup({ activeButton, buttons }: Props) {
           key={button.value}
           type="button"
           onClick={button.onClick}
+          aria-current={button.value === activeButton}
           className={buttonStyles({
             active: button.value === activeButton,
             variant: button.variant,

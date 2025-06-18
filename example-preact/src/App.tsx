@@ -4,13 +4,13 @@ import { EXAMPLE_CODE } from './constants';
 import {
   EmployeeSheetImporter,
   EmployeeImporter,
+  ExcelImporter,
 } from './components/importers';
 import InstallTabs from './components/InstallTabs';
 import Section from './components/Section';
 import Content from './components/Content';
 import DocumentContainer from './components/DocumentContainer';
 import TryItYourself from './components/TryItYourself';
-import ExcelImporter from './components/importers/ExcelImporter';
 
 export default function App() {
   return (
@@ -47,7 +47,7 @@ export default function App() {
               Javascript application. <b>No React required.</b> (
               <a
                 className="text-blue-500 underline"
-                href="https://hellocsv.mintlify.app/v0.3.1/get-started/usage#react"
+                href="https://hellocsv.mintlify.app/v0.3.2/get-started/usage#react"
                 target="_blank"
                 rel="noreferrer noopener"
               >

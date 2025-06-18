@@ -153,6 +153,7 @@ export default function EmployeeSheetImporter() {
       </DocumentContainer>
       <div className="mt-4 flex h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
         <Importer
+          allowManualDataEntry
           sheets={[EMPLOYEE_SHEET, COMPANY_SHEET]}
           onDataColumnsMapped={(sheets) => {
             const sheet = sheets.find(
@@ -171,6 +172,7 @@ export default function EmployeeSheetImporter() {
           persistenceConfig={{
             enabled: true,
           }}
+          csvDownloadMode="label"
         />
       </div>
       {ready && (

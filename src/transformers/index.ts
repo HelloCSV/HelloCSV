@@ -1,3 +1,4 @@
+import { isEmptyCell } from '@/utils';
 import {
   ImporterOutputFieldType,
   SheetColumnDefinition,
@@ -33,11 +34,12 @@ function transformSheet(
       if (!hasData(row)) {
         return;
       }
-      if (!(columnId in row)) {
-        return;
-      }
 
-      row[columnId] = pipeline.transform(row[columnId]);
+      const cellValue = row[columnId];
+
+      if (!isEmptyCell(cellValue)) {
+        row[columnId] = pipeline.transform(cellValue);
+      }
     });
   });
 

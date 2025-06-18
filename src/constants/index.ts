@@ -14,3 +14,13 @@ export const MAX_CHARACTERS_IN_MAPPING_EXAMPLES = 500;
 export const HEALDESS_UI_PORTAL_ROOT_ID = 'headlessui-portal-root';
 
 export const ROOT_CLASS = 'hello-csv';
+
+// Used for virtualizer, should be updated if the row height changes
+export const ESTIMATED_ROW_HEIGHT = 52.62;
+
+export const CHECKBOX_COLUMN_ID = 'checkbox-column-id';
+
+export const CHECKBOX_COLUMN_WIDTH = 110;
+export const DATA_COLUMN_MIN_WIDTH = 50;
+export const DATA_COLUMN_MAX_WIDTH = 500;
+export const DATA_COLUMN_WIDTH = 150;

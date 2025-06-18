@@ -7,7 +7,6 @@ import example3 from '../../assets/datasets/example-3.xlsx?url';
 const XLSX_FILE_MIME_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-
 export default function ExcelImporter() {
   const [ready, setReady] = useState(false);
 
@@ -46,8 +45,17 @@ export default function ExcelImporter() {
         </h3>
         <div className="container leading-8">
           <p>
-            HelloCSV supports importing XLSX, PDF files, and anything else
-            you can parse by implementing a <code className="rounded-md bg-gray-200 p-1 hover:underline"><a href="https://hellocsv.mintlify.app/v0.3.1/api-reference/importer-props#customfileloaders" target="_blank">CustomFileLoader</a></code>.
+            HelloCSV supports importing XLSX, PDF files, and anything else you
+            can parse by implementing a{' '}
+            <code className="rounded-md bg-gray-200 p-1 hover:underline">
+              <a
+                href="https://hellocsv.mintlify.app/v0.3.2/api-reference/importer-props#customfileloaders"
+                target="_blank"
+              >
+                CustomFileLoader
+              </a>
+            </code>
+            .
           </p>
         </div>
         <p className="mt-8 text-lg underline decoration-blue-500 decoration-4 underline-offset-6">
@@ -60,6 +68,7 @@ export default function ExcelImporter() {
       </DocumentContainer>
       <div className="mt-4 flex h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
         <Importer
+          allowManualDataEntry
           maxFileSizeInBytes={10 * 1024 * 1024} // 10MB
           sheets={[
             {
@@ -146,11 +155,13 @@ export default function ExcelImporter() {
               mimeType: XLSX_FILE_MIME_TYPE,
               label: 'XLSX',
               convert: (loadEvent, file) => {
-                const data = new Uint8Array(loadEvent.target?.result as ArrayBuffer);
+                const data = new Uint8Array(
+                  loadEvent.target?.result as ArrayBuffer
+                );
                 const workbook = XLSX.read(data, { type: 'array' });
                 const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                const csvData = XLSX.utils.sheet_to_csv(firstSheet);   
-        
+                const csvData = XLSX.utils.sheet_to_csv(firstSheet);
+
                 return { fileName: file.name, csvData };
               },
             },
@@ -158,6 +169,7 @@ export default function ExcelImporter() {
           onComplete={onComplete}
           persistenceConfig={{
             enabled: true,
+            customKey: 'excel-importer',
           }}
         />
       </div>

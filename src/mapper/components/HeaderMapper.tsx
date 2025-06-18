@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'preact/hooks';
-import { Button, Error } from '../../components';
-import { useTranslations } from '../../i18';
-import { ColumnMapping, ParsedFile, SheetDefinition } from '../../types';
+import { Button, Error } from '@/components';
+import { useTranslations } from '@/i18';
+import { ColumnMapping } from '@/types';
 import {
   areAllRequiredMappingsSet,
   calculateMappingExamples,
@@ -10,26 +10,27 @@ import {
 } from '../utils';
 import HeaderMapperDataPreview from './HeaderMapperDataPreview';
 import HeaderMapperSelection from './HeaderMapperSelection';
+import { useImporterDefinition } from '@/importer/hooks';
+import { useImporterState } from '@/importer/reducer';
 
 interface Props {
-  parsed: ParsedFile;
-  sheetDefinitions: SheetDefinition[];
-  currentMapping: ColumnMapping[];
   onMappingsChanged: (mappings: ColumnMapping[]) => void;
   onMappingsSet: () => void;
   onBack: () => void;
 }
 
 export default function HeaderMapper({
-  parsed,
-  sheetDefinitions,
-  currentMapping,
   onMappingsChanged,
   onMappingsSet,
   onBack,
 }: Props) {
+  const { columnMappings, parsedFile } = useImporterState();
+  const { sheets: sheetDefinitions } = useImporterDefinition();
   const { t } = useTranslations();
   const [hoveredCsvHeader, setHoveredCsvHeader] = useState<string | null>(null);
+
+  const currentMapping = columnMappings ?? [];
+  const parsed = parsedFile!;
 
   const data = parsed.data;
   const csvHeaders = parsed.meta.fields!;

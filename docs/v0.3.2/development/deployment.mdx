@@ -6,7 +6,7 @@ Deployment is done with the following steps
 
 1. Change version in `package.json` (to the target version) - use branch `release/v{x.y.z}`
 
-2. Run `npm i` in the root directory as well as in `example-preact`, `example-vanilla`, and `example-react` directories
+2. Run `npm i` in the root directory as well as in `example-preact`, `example-vanilla`, `example-react` and `example-next-js` directories
 
 3. Update version in docs
 
@@ -23,7 +23,7 @@ For major version release
 - create a new version entry in `docs/docs.json` file
 - write upgrade guide and put it in the docs
 
-4. Update version in `InstallTabs.tsx::no build`, `example-preact/index.html`, `README.md` and `example-preact/src/App.tsx`
+4. Update version in `InstallTabs.tsx::no build`, `example-preact/index.html`, `README.md`, `example-preact/src/App.tsx` and `custom-file-loaders.mdx`
 
 5. Verify if `importer/storage.ts:DB_VERSION` needs to be bumped. It should be bumped anytime the release contains any breaking changes to `ImporterState`. If it is true, increment the `DB_VERSION`.
 

@@ -1,26 +1,20 @@
 import { useRef, useState } from 'preact/hooks';
-import { Button, Card } from '../../components';
+import { Button, Card } from '@/components';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
-import { useTranslations } from '../../i18';
-import { SUPPORTED_FILE_MIME_TYPES } from '../../constants';
+import { useTranslations } from '@/i18';
+import { SUPPORTED_FILE_MIME_TYPES } from '@/constants';
 import { formatFileSize } from '../utils';
-import { CustomFileLoader } from '../../types';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
   setFile: (file: File) => void;
-  allowManualDataEntry?: boolean;
   onEnterDataManually?: () => void;
-  maxFileSizeInBytes: number;
-  customFileLoaders?: CustomFileLoader[];
 }
 
-export default function FileUploader({
-  setFile,
-  allowManualDataEntry = true,
-  onEnterDataManually,
-  maxFileSizeInBytes,
-  customFileLoaders,
-}: Props) {
+export default function FileUploader({ setFile, onEnterDataManually }: Props) {
+  const { maxFileSizeInBytes, customFileLoaders, allowManualDataEntry } =
+    useImporterDefinition();
+
   const { t, tHtml } = useTranslations();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -85,6 +79,9 @@ export default function FileUploader({
           {allowManualDataEntry && (
             <div className="mt-3 text-sm">
               <p
+                role="button"
+                tabIndex={0}
+                aria-label={t('uploader.enterManually')}
                 onClick={(e) => {
                   e.stopPropagation();
                   onEnterDataManually?.();
@@ -98,10 +95,11 @@ export default function FileUploader({
         </div>
 
         <input
+          aria-label={t('uploader.uploadAFile')}
           ref={fileInputRef}
           type="file"
           accept={supportedMimeTypes.join(',')}
-          style={{ display: 'none' }}
+          className="sr-only"
           onChange={(e) => handleFileSelect(e)}
         />
       </div>

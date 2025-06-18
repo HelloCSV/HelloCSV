@@ -19,7 +19,7 @@ export class RegexValidator extends Validator {
   }
 
   isValid(fieldValue: ImporterOutputFieldType) {
-    const matches = this.regexp.test(fieldValue?.toString());
+    const matches = this.regexp.test(fieldValue?.toString() ?? '');
     if (!matches) {
       return this.definition.error || 'validators.regex';
     }

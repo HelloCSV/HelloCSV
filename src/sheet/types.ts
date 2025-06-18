@@ -1,9 +1,18 @@
+import type { RowData } from '@tanstack/react-table';
+import { ReactNode } from 'preact/compat';
 import {
   ImporterOutputFieldType,
   ImporterTransformerDefinition,
   ImporterValidatorDefinition,
   SelectOption,
 } from '../types';
+
+declare module '@tanstack/react-table' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export interface ColumnMeta<TData extends RowData, TValue> {
+    columnLabel?: string;
+  }
+}
 
 // --------- Sheet Definition Types ---------
 export interface SheetDefinition {
@@ -26,6 +35,10 @@ interface SheetColumnBaseDefinition {
   isReadOnly?: boolean;
   validators?: ImporterValidatorDefinition[];
   transformers?: ImporterTransformerDefinition[];
+  customRender?: (
+    value: ImporterOutputFieldType,
+    displayValue: ImporterOutputFieldType
+  ) => ReactNode;
 }
 
 interface SheetColumnStringDefinition extends SheetColumnBaseDefinition {
@@ -61,6 +74,14 @@ interface SheetColumnCalculatedDefinition
     getValue: (row: SheetRow) => ImporterOutputFieldType;
   };
 }
+
+export type EnumLabelDict = {
+  [sheetId: string]: {
+    [columnId: string]: {
+      [value: string]: ImporterOutputFieldType;
+    };
+  };
+};
 
 // --------- Sheet State Types ---------
 export type SheetRow = Record<string, ImporterOutputFieldType>;

@@ -43,6 +43,7 @@ export default function HeaderMapperSelection({
 
         <div className="mx-2.5 flex-1">
           <Select
+            aria-label={`column mapping for ${csvHeader}`}
             searchable
             clearable
             compareFunction={(a, b) => {

@@ -1,13 +1,18 @@
-import { useRef, useEffect } from 'preact/hooks';
+import { useRef, useEffect, useMemo, useId } from 'preact/hooks';
 
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
 import { delay } from '../utils/timing';
-import { usePersistedReducer } from './reducer';
+import {
+  ReducerProvider,
+  useImporterState,
+  useImporterStateDispatch,
+} from './reducer';
 import {
   CellChangedPayload,
   ColumnMapping,
+  ImporterDefinitionWithDefaults,
   ImporterDefinition,
   RemoveRowsPayload,
 } from '../types';
@@ -24,25 +29,26 @@ import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
 import { convertCsvFile } from '../uploader/utils';
+import { getEnumLabelDict } from '../sheet/utils';
+import { ImporterDefinitionProvider } from './hooks';
 
 function ImporterBody({
-  theme,
   onComplete,
-  allowManualDataEntry,
   sheets,
   customFileLoaders,
   onDataColumnsMapped,
   preventUploadOnValidationErrors,
-  maxFileSizeInBytes = 20 * 1024 * 1024, // 20MB,
   customSuggestedMapper,
-  onSummaryFinished,
-  persistenceConfig = { enabled: false },
-}: ImporterDefinition) {
+}: ImporterDefinitionWithDefaults) {
   const { t } = useTranslations();
 
   const isInitialRender = useRef(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
-  const [state, dispatch] = usePersistedReducer(sheets, persistenceConfig);
+
+  const state = useImporterState();
+  const dispatch = useImporterStateDispatch();
+
+  const idPrefix = useId();
 
   const {
     mode,
@@ -51,8 +57,6 @@ function ImporterBody({
     columnMappings,
     parsedFile,
     validationErrors,
-    importProgress,
-    importStatistics,
   } = state;
 
   useEffect(() => {
@@ -68,9 +72,17 @@ function ImporterBody({
     (sheet) => sheet.sheetId === currentSheetId
   )!;
 
+  const sheetCountDict = useMemo(() => {
+    return Object.fromEntries(
+      sheetData.map((sheet) => [sheet.sheetId, sheet.rows.length])
+    );
+  }, [sheetData]);
+
   const currentSheetDefinition = sheets.find(
     (sheet) => sheet.id === currentSheetId
   )!;
+
+  const enumLabelDict = getEnumLabelDict(sheets);
 
   const preventUploadOnErrors =
     typeof preventUploadOnValidationErrors === 'function'
@@ -154,7 +166,7 @@ function ImporterBody({
     dispatch({ type: 'PROGRESS', payload: { progress: 0 } });
     dispatch({ type: 'SUBMIT' });
     try {
-      // TODO THIS BRANCH: Should we filter invalid data?
+      // TODO: Should we filter invalid data?
       const data = applyTransformations(
         sheets,
         sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
@@ -192,27 +204,20 @@ function ImporterBody({
   }
 
   return (
-    <ThemeSetter theme={theme}>
+    <ThemeSetter>
       <Root
         ref={targetRef}
         className={`${mode === 'submit' || mode === 'failed' || mode === 'completed' ? 'h-full' : ''}`}
       >
         {mode === 'upload' && (
           <Uploader
-            sheets={sheets}
             onFileUploaded={onFileUploaded}
             onEnterDataManually={onEnterDataManually}
-            allowManualDataEntry={allowManualDataEntry}
-            maxFileSizeInBytes={maxFileSizeInBytes}
-            customFileLoaders={customFileLoaders}
           />
         )}
 
         {mode === 'mapping' && (
           <HeaderMapper
-            parsed={parsedFile!}
-            sheetDefinitions={sheets}
-            currentMapping={columnMappings ?? []}
             onMappingsChanged={onMappingsChanged}
             onMappingsSet={onMappingsSet}
             onBack={onBackToUpload}
@@ -223,18 +228,22 @@ function ImporterBody({
           <div className="flex h-full flex-col">
             <div className="flex-none">
               <SheetsSwitcher
-                activeSheetId={currentSheetId}
-                sheetDefinitions={sheets}
+                idPrefix={idPrefix}
+                sheetCountDict={sheetCountDict}
                 onSheetChange={(sheetId) =>
                   dispatch({ type: 'SHEET_CHANGED', payload: { sheetId } })
                 }
-                validationErrors={validationErrors}
               />
             </div>
-            <div className="flex-1 overflow-auto">
+            <div
+              className="flex-1 overflow-auto"
+              role="tabpanel"
+              id={`${idPrefix}-tabpanel-${currentSheetId}`}
+              aria-labelledby={`${idPrefix}-tab-${currentSheetId}`}
+              tabIndex={0}
+            >
               <SheetDataEditor
                 data={currentSheetData}
-                allData={sheetData}
                 sheetDefinition={currentSheetDefinition}
                 sheetValidationErrors={validationErrors.filter(
                   (error) => error.sheetId === currentSheetDefinition?.id
@@ -243,6 +252,7 @@ function ImporterBody({
                 removeRows={onRemoveRows}
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}
+                enumLabelDict={enumLabelDict}
               />
             </div>
             <div className="flex-none">
@@ -269,15 +279,10 @@ function ImporterBody({
 
         {(mode === 'submit' || mode === 'failed' || mode === 'completed') && (
           <ImportStatus
-            mode={mode}
-            progress={importProgress}
             onRetry={onSubmit}
             onBackToPreview={onBackToPreview}
             resetState={resetState}
-            sheetData={sheetData}
-            statistics={importStatistics}
-            rowFile={state.rowFile}
-            onSummaryFinished={onSummaryFinished}
+            enumLabelDict={enumLabelDict}
           />
         )}
       </Root>
@@ -286,12 +291,24 @@ function ImporterBody({
 }
 
 export default function Importer(props: ImporterDefinition) {
+  const propsWithDefaults: ImporterDefinitionWithDefaults = {
+    ...props,
+    maxFileSizeInBytes: props.maxFileSizeInBytes ?? 20 * 1024 * 1024, // 20MB,
+    persistenceConfig: props.persistenceConfig ?? { enabled: false },
+    csvDownloadMode: props.csvDownloadMode ?? 'value',
+    allowManualDataEntry: props.allowManualDataEntry ?? false,
+  };
+
   return (
-    <TranslationProvider
-      selectedLocale={props.locale}
-      translationResources={props.translationResources}
-    >
-      <ImporterBody {...props} />
-    </TranslationProvider>
+    <ImporterDefinitionProvider importerDefintion={propsWithDefaults}>
+      <ReducerProvider
+        sheets={propsWithDefaults.sheets}
+        persistenceConfig={propsWithDefaults.persistenceConfig}
+      >
+        <TranslationProvider>
+          <ImporterBody {...propsWithDefaults} />
+        </TranslationProvider>
+      </ReducerProvider>
+    </ImporterDefinitionProvider>
   );
 }
