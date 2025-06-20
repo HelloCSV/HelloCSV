@@ -46,7 +46,7 @@
     "./react": {
       "import": "./dist/react/index.es.js",
       "require": "./dist/react/index.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types-react/index.d.ts"
     },
     "./react/index.css": "./dist/react/hello-csv.css",
     "./preact": {
