@@ -31,5 +31,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src/**/*", "global.d.ts", "shims"]
+  "include": ["src/**/*", "global.d.ts"]
 }

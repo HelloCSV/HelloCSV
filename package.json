@@ -52,13 +52,13 @@
     "./preact": {
       "import": "./dist/preact/index.es.js",
       "require": "./dist/preact/index.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types-preact/index.d.ts"
     },
     "./preact/index.css": "./dist/preact/hello-csv.css",
     "./bundled": {
       "import": "./dist/bundled/index.es.js",
       "require": "./dist/bundled/index.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types-preact/index.d.ts"
     },
     "./bundled/index.css": "./dist/bundled/hello-csv.css"
   },

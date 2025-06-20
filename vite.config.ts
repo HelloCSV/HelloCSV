@@ -28,7 +28,7 @@ export default defineConfig(({ mode }): UserConfig => {
       isReact ? react() : preact(),
       dts({
         tsconfigPath: isReact ? './tsconfig.react.json' : './tsconfig.json',
-        outDir: isReact ? 'dist/types-react' : 'dist/types',
+        outDir: isReact ? 'dist/types-react' : 'dist/types-preact',
         insertTypesEntry: true,
       }),
     ],
