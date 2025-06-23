@@ -15,14 +15,14 @@
   "navigation": {
     "versions": [
       {
-        "version": "0.3.2",
+        "version": "0.3.3",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
               "common/get-started/introduction",
               "common/get-started/why",
-              "v0.3.2/get-started/usage",
+              "v0.3.3/get-started/usage",
               "common/get-started/demo",
               "common/get-started/multiple-sheets",
               "common/get-started/persistence",
@@ -32,20 +32,20 @@
           {
             "group": "API Reference",
             "pages": [
-              "v0.3.2/api-reference/importer-props",
-              "v0.3.2/api-reference/sheet-definition-props",
-              "v0.3.2/api-reference/column-types",
-              "v0.3.2/api-reference/common-column-props",
-              "v0.3.2/api-reference/importer-state",
-              "v0.3.2/api-reference/sheet-state",
-              "v0.3.2/api-reference/validators",
-              "v0.3.2/api-reference/transformers",
-              "v0.3.2/api-reference/importer-validation-error"
+              "v0.3.3/api-reference/importer-props",
+              "v0.3.3/api-reference/sheet-definition-props",
+              "v0.3.3/api-reference/column-types",
+              "v0.3.3/api-reference/common-column-props",
+              "v0.3.3/api-reference/importer-state",
+              "v0.3.3/api-reference/sheet-state",
+              "v0.3.3/api-reference/validators",
+              "v0.3.3/api-reference/transformers",
+              "v0.3.3/api-reference/importer-validation-error"
             ]
           },
           {
             "group": "Configuration",
-            "pages": ["v0.3.2/configuration/bundle-versions"]
+            "pages": ["v0.3.3/configuration/bundle-versions"]
           },
           {
             "group": "Customization",
@@ -56,15 +56,15 @@
           },
           {
             "group": "Upgrade",
-            "pages": ["v0.3.2/upgrade/from-v-0-2-0"]
+            "pages": ["v0.3.3/upgrade/from-v-0-2-0"]
           },
           {
             "group": "Development",
             "pages": [
-              "v0.3.2/development/setup",
+              "v0.3.3/development/setup",
               "common/development/no-build-example",
               "common/development/docs",
-              "v0.3.2/development/deployment"
+              "v0.3.3/development/deployment"
             ]
           }
         ],
