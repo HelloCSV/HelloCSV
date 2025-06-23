@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "outDir": "dist/types-react",
+    "declarationDir": "dist/types-react",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "preact": ["./shims/react-compat-types-shim.d.ts"],
+      "preact/*": ["./shims/react-compat-types-shim.d.ts"]
+    }
+  },
+  "include": ["src/**/*", "global.d.ts"]
+}

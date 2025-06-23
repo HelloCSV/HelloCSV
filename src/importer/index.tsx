@@ -207,7 +207,9 @@ function ImporterBody({
     <ThemeSetter>
       <Root
         ref={targetRef}
-        className={`${mode === 'submit' || mode === 'failed' || mode === 'completed' ? 'h-full' : ''}`}
+        withFullHeight={
+          mode === 'submit' || mode === 'failed' || mode === 'completed'
+        }
       >
         {mode === 'upload' && (
           <Uploader

@@ -27,7 +27,8 @@ export default defineConfig(({ mode }): UserConfig => {
       tailwindcss(),
       isReact ? react() : preact(),
       dts({
-        outDir: 'dist/types',
+        tsconfigPath: isReact ? './tsconfig.react.json' : './tsconfig.json',
+        outDir: isReact ? 'dist/types-react' : 'dist/types-preact',
         insertTypesEntry: true,
       }),
     ],
@@ -38,10 +39,7 @@ export default defineConfig(({ mode }): UserConfig => {
       alias: isReact
         ? {
             ...baseAlias,
-            'preact/compat': resolve(
-              __dirname,
-              'src/shims/react-compat-shim.js'
-            ),
+            'preact/compat': resolve(__dirname, 'shims/react-compat-shim.js'),
             'preact/jsx-runtime': 'react/jsx-runtime',
             'preact/hooks': 'react',
             'preact/test-utils': 'react-dom/test-utils',

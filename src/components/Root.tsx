@@ -4,11 +4,11 @@ import { HEALDESS_UI_PORTAL_ROOT_ID, ROOT_CLASS } from '../constants';
 
 interface Props {
   children?: ReactNode;
-  className?: string;
+  withFullHeight?: boolean;
 }
 
 export default forwardRef<HTMLDivElement, Props>(function Root(
-  { children, className },
+  { children, withFullHeight },
   ref
 ) {
   useEffect(() => {
@@ -37,10 +37,15 @@ export default forwardRef<HTMLDivElement, Props>(function Root(
     <div
       role="group"
       aria-label="Hello CSV"
-      ref={ref}
-      className={`${ROOT_CLASS} min-h-0 w-full bg-white p-6 overflow-auto${className ? ` ${className}` : ''}`}
+      className={`${ROOT_CLASS}`}
+      style={{ display: 'contents' }}
     >
-      {children}
+      <div
+        ref={ref}
+        className={`min-h-0 w-full overflow-auto bg-white ${withFullHeight ? 'h-full' : ''}`}
+      >
+        {children}
+      </div>
     </div>
   );
 });

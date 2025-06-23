@@ -1,6 +1,6 @@
 {
   "name": "hello-csv",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "A modern CSV importer written in Preact",
   "author": "HelloCSV",
   "license": "MIT",
@@ -46,19 +46,19 @@
     "./react": {
       "import": "./dist/react/index.es.js",
       "require": "./dist/react/index.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types-react/index.d.ts"
     },
     "./react/index.css": "./dist/react/hello-csv.css",
     "./preact": {
       "import": "./dist/preact/index.es.js",
       "require": "./dist/preact/index.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types-preact/index.d.ts"
     },
     "./preact/index.css": "./dist/preact/hello-csv.css",
     "./bundled": {
       "import": "./dist/bundled/index.es.js",
       "require": "./dist/bundled/index.cjs.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types-preact/index.d.ts"
     },
     "./bundled/index.css": "./dist/bundled/hello-csv.css"
   },
