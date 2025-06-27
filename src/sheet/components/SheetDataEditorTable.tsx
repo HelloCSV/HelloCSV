@@ -13,7 +13,7 @@ import { useTranslations } from '@/i18';
 import { findRowIndex } from '../utils';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { RefObject } from 'preact/compat';
+import { RefObject, useCallback } from 'preact/compat';
 import { CHECKBOX_COLUMN_ID, ESTIMATED_ROW_HEIGHT } from '@/constants';
 
 interface Props {
@@ -87,6 +87,13 @@ export default function SheetDataEditorTable({
           ),
         ]
       : [0, 0];
+
+  const measureRef = useCallback(
+    (node: HTMLElement | null) => {
+      if (node) rowVirtualizer.measureElement(node);
+    },
+    [rowVirtualizer]
+  );
 
   return (
     <table
@@ -164,7 +171,7 @@ export default function SheetDataEditorTable({
           <tr
             key={row.id}
             data-index={index}
-            ref={(node) => rowVirtualizer.measureElement(node)}
+            ref={measureRef}
           >
             {row.getVisibleCells().map((cell, cellIndex) => {
               if (cell.column.id === CHECKBOX_COLUMN_ID) {
