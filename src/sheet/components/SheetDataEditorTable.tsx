@@ -168,11 +168,7 @@ export default function SheetDataEditorTable({
           <td style={{ height: paddingTop }} />
         </tr>
         {visibleRows.map(({ row, index }) => (
-          <tr
-            key={row.id}
-            data-index={index}
-            ref={measureRef}
-          >
+          <tr key={row.id} data-index={index} ref={measureRef}>
             {row.getVisibleCells().map((cell, cellIndex) => {
               if (cell.column.id === CHECKBOX_COLUMN_ID) {
                 return (
