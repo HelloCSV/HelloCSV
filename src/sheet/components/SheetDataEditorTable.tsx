@@ -122,14 +122,19 @@ export default function SheetDataEditorTable({
                   }`}
                   onClick={header.column.getToggleSortingHandler()}
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
+                  {header.isPlaceholder ? null : (
+                    <div key={`header-${headerGroup.id}-${header.id}`}>
+                      {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
+                    </div>
+                  )}
 
-                  <span className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200">
+                  <span
+                    key={`sort-icon-${headerGroup.id}-${header.id}`}
+                    className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200"
+                  >
                     {{
                       asc: (
                         <ChevronUpIcon aria-hidden="true" className="size-5" />
@@ -145,6 +150,7 @@ export default function SheetDataEditorTable({
 
                   {header.column.getCanResize() && (
                     <div
+                      key={`resize-icon-${headerGroup.id}-${header.id}`}
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className="absolute top-0 right-0 h-full w-0.5 cursor-col-resize touch-none bg-gray-200 select-none"
