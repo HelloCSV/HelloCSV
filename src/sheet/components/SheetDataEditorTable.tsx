@@ -13,7 +13,7 @@ import { useTranslations } from '@/i18';
 import { findRowIndex } from '../utils';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { RefObject } from 'preact/compat';
+import { RefObject, useCallback } from 'preact/compat';
 import { CHECKBOX_COLUMN_ID, ESTIMATED_ROW_HEIGHT } from '@/constants';
 
 interface Props {
@@ -88,6 +88,13 @@ export default function SheetDataEditorTable({
         ]
       : [0, 0];
 
+  const measureRef = useCallback(
+    (node: HTMLElement | null) => {
+      if (node) rowVirtualizer.measureElement(node);
+    },
+    [rowVirtualizer]
+  );
+
   return (
     <table
       className="w-full table-fixed border-separate border-spacing-0"
@@ -115,14 +122,19 @@ export default function SheetDataEditorTable({
                   }`}
                   onClick={header.column.getToggleSortingHandler()}
                 >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
+                  {header.isPlaceholder ? null : (
+                    <div key={`header-${headerGroup.id}-${header.id}`}>
+                      {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
+                    </div>
+                  )}
 
-                  <span className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200">
+                  <span
+                    key={`sort-icon-${headerGroup.id}-${header.id}`}
+                    className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200"
+                  >
                     {{
                       asc: (
                         <ChevronUpIcon aria-hidden="true" className="size-5" />
@@ -138,6 +150,7 @@ export default function SheetDataEditorTable({
 
                   {header.column.getCanResize() && (
                     <div
+                      key={`resize-icon-${headerGroup.id}-${header.id}`}
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
                       className="absolute top-0 right-0 h-full w-0.5 cursor-col-resize touch-none bg-gray-200 select-none"
@@ -161,11 +174,7 @@ export default function SheetDataEditorTable({
           <td style={{ height: paddingTop }} />
         </tr>
         {visibleRows.map(({ row, index }) => (
-          <tr
-            key={row.id}
-            data-index={index}
-            ref={(node) => rowVirtualizer.measureElement(node)}
-          >
+          <tr key={row.id} data-index={index} ref={measureRef}>
             {row.getVisibleCells().map((cell, cellIndex) => {
               if (cell.column.id === CHECKBOX_COLUMN_ID) {
                 return (
