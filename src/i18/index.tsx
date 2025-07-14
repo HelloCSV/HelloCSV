@@ -1,4 +1,4 @@
-import { createContext } from 'preact';
+import { createContext, Fragment } from 'preact';
 import enTranslation from './en/translation.json';
 import frTranslation from './fr/translation.json';
 import ptBRTranslation from './pt-BR/translation.json';
@@ -65,14 +65,15 @@ function replaceArgumentsHtml(
     <span>
       {argumentMatches.map((argument) => {
         const argumentMatch = argument.match(/{{([^}]+)}}/);
+        let result: ReactNode = argument;
         if (argumentMatch) {
           const key = argumentMatch[1];
           const argumentValue = argumentValues[key];
 
-          return argumentValue ?? `{${key}}`;
+          result = argumentValue ?? `{${key}}`;
         }
 
-        return argument;
+        return <Fragment key={argument}>{result}</Fragment>;
       })}
     </span>
   );
