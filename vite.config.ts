@@ -59,7 +59,7 @@ export default defineConfig(({ mode }): UserConfig => {
         external: isBundled
           ? []
           : isReact
-            ? ['react', 'react-dom']
+            ? ['react', 'react-dom', 'react/jsx-runtime']
             : ['preact'],
         output: {
           globals: isBundled
@@ -68,6 +68,7 @@ export default defineConfig(({ mode }): UserConfig => {
                 preact: isReact ? 'React' : 'Preact',
                 react: 'React',
                 'react-dom': 'ReactDOM',
+                'react/jsx-runtime': 'jsxRuntime',
               },
         },
       },
