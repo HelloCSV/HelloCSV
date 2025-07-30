@@ -32,6 +32,7 @@ export interface ImporterDefinition {
   preventUploadOnValidationErrors?:
     | boolean
     | ((errors: ImporterValidationError[]) => boolean);
+  availableActions?: AvailableAction[];
   maxFileSizeInBytes?: number;
   onSummaryFinished?: () => void;
   customSuggestedMapper?: (
@@ -41,6 +42,17 @@ export interface ImporterDefinition {
   persistenceConfig?: PersistenceConfig;
   csvDownloadMode?: CsvDownloadMode;
 }
+
+export const availableActionList = [
+  'addRows',
+  'removeRows',
+  'editRows',
+  'downloadCsv',
+  'search',
+  'resetState',
+  'backToPreviousStep',
+] as const;
+export type AvailableAction = (typeof availableActionList)[number];
 
 export type CsvDownloadMode = 'value' | 'label';
 
@@ -132,5 +144,6 @@ export type ImporterDefinitionWithDefaults = WithRequired<
   | 'maxFileSizeInBytes'
   | 'persistenceConfig'
   | 'csvDownloadMode'
-  | 'allowManualDataEntry' // List of optional fields that need default value
+  | 'allowManualDataEntry'
+  | 'availableActions' // List of optional fields that need default value
 >;

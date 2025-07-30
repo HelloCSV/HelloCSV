@@ -15,6 +15,7 @@ import {
   ImporterDefinitionWithDefaults,
   ImporterDefinition,
   RemoveRowsPayload,
+  availableActionList,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
 import { filterEmptyRows } from '../utils';
@@ -29,8 +30,12 @@ import { ImporterDefinitionProvider } from './hooks';
 import { InnerStateBuilder } from './state';
 
 function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
-  const { onComplete, sheets, preventUploadOnValidationErrors } =
-    importerDefinition;
+  const {
+    onComplete,
+    sheets,
+    preventUploadOnValidationErrors,
+    availableActions,
+  } = importerDefinition;
 
   const { t } = useTranslations();
 
@@ -214,9 +219,12 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
               {currentSheetData.rows.length > 0 && (
                 <div className="mt-5 flex justify-between">
                   <div>
-                    {columnMappings != null && (
-                      <BackToMappingButton onBackToMapping={onBackToMapping} />
-                    )}
+                    {columnMappings != null &&
+                      availableActions.includes('backToPreviousStep') && (
+                        <BackToMappingButton
+                          onBackToMapping={onBackToMapping}
+                        />
+                      )}
                   </div>
                   <Tooltip
                     tooltipText={t('importer.uploadBlocked')}
@@ -252,6 +260,7 @@ export default function Importer(props: ImporterDefinition) {
     persistenceConfig: props.persistenceConfig ?? { enabled: false },
     csvDownloadMode: props.csvDownloadMode ?? 'value',
     allowManualDataEntry: props.allowManualDataEntry ?? false,
+    availableActions: props.availableActions ?? [...availableActionList],
   };
 
   return (

@@ -63,7 +63,7 @@ export default function SheetDataEditorActions({
   resetState,
   enumLabelDict,
 }: Props) {
-  const { csvDownloadMode } = useImporterDefinition();
+  const { csvDownloadMode, availableActions } = useImporterDefinition();
   const { t } = useTranslations();
 
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
@@ -145,53 +145,64 @@ export default function SheetDataEditorActions({
           <ButtonGroup activeButton={viewMode} buttons={viewModeButtons} />
         </div>
 
-        <Input
-          clearable
-          value={searchPhrase}
-          onChange={(v) => setSearchPhrase(v as string)}
-          placeholder={t('sheet.search')}
-          iconBuilder={(props) => <MagnifyingGlassIcon {...props} />}
-        />
+        {availableActions.includes('search') && (
+          <Input
+            clearable
+            value={searchPhrase}
+            onChange={(v) => setSearchPhrase(v as string)}
+            placeholder={t('sheet.search')}
+            iconBuilder={(props) => <MagnifyingGlassIcon {...props} />}
+          />
+        )}
 
-        <Tooltip
-          tooltipText={t(
-            selectedRows.length <= 0
-              ? 'sheet.removeRowsTooltipNoRowsSelected'
-              : 'sheet.removeRowsTooltip'
-          )}
-        >
-          <TrashIcon
-            role="button"
-            tabIndex={0}
-            aria-label={t(
+        {availableActions.includes('removeRows') && (
+          <Tooltip
+            tooltipText={t(
               selectedRows.length <= 0
                 ? 'sheet.removeRowsTooltipNoRowsSelected'
                 : 'sheet.removeRowsTooltip'
             )}
-            className={`h-6 w-6 ${selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses}`}
-            onClick={() => setRemoveConfirmationModalOpen(true)}
-          />
-        </Tooltip>
+          >
+            <TrashIcon
+              role="button"
+              tabIndex={0}
+              aria-label={t(
+                selectedRows.length <= 0
+                  ? 'sheet.removeRowsTooltipNoRowsSelected'
+                  : 'sheet.removeRowsTooltip'
+              )}
+              className={`h-6 w-6 ${selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses}`}
+              onClick={() => setRemoveConfirmationModalOpen(true)}
+            />
+          </Tooltip>
+        )}
 
-        <Tooltip tooltipText={t('sheet.addRowsTooltip')}>
-          <PlusIcon className="h-6 w-6 cursor-pointer" onClick={addEmptyRow} />
-        </Tooltip>
+        {availableActions.includes('addRows') && (
+          <Tooltip tooltipText={t('sheet.addRowsTooltip')}>
+            <PlusIcon
+              className="h-6 w-6 cursor-pointer"
+              onClick={addEmptyRow}
+            />
+          </Tooltip>
+        )}
 
-        <Tooltip tooltipText={t('sheet.downloadSheetTooltip')}>
-          <ArrowDownTrayIcon
-            className={`h-6 w-6 ${
-              rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
-            }`}
-            onClick={() =>
-              downloadSheetAsCsv(
-                sheetDefinition,
-                rowData,
-                enumLabelDict,
-                csvDownloadMode
-              )
-            }
-          />
-        </Tooltip>
+        {availableActions.includes('downloadCsv') && (
+          <Tooltip tooltipText={t('sheet.downloadSheetTooltip')}>
+            <ArrowDownTrayIcon
+              className={`h-6 w-6 ${
+                rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
+              }`}
+              onClick={() =>
+                downloadSheetAsCsv(
+                  sheetDefinition,
+                  rowData,
+                  enumLabelDict,
+                  csvDownloadMode
+                )
+              }
+            />
+          </Tooltip>
+        )}
 
         <Select
           clearable
@@ -203,34 +214,42 @@ export default function SheetDataEditorActions({
           onChange={(value) => setErrorColumnFilter(value as string)}
         />
 
-        <ConfirmationModal
-          open={removeConfirmationModalOpen}
-          setOpen={setRemoveConfirmationModalOpen}
-          onConfirm={onRemoveRows}
-          title={t('sheet.removeConfirmationModalTitle')}
-          confirmationText={t('sheet.removeConfirmationModalConfirmationText')}
-          subTitle={t('sheet.removeConfirmationModalSubTitle', {
-            rowsCount: selectedRows.length,
-          })}
-          variant="danger"
-        />
+        {availableActions.includes('removeRows') && (
+          <ConfirmationModal
+            open={removeConfirmationModalOpen}
+            setOpen={setRemoveConfirmationModalOpen}
+            onConfirm={onRemoveRows}
+            title={t('sheet.removeConfirmationModalTitle')}
+            confirmationText={t(
+              'sheet.removeConfirmationModalConfirmationText'
+            )}
+            subTitle={t('sheet.removeConfirmationModalSubTitle', {
+              rowsCount: selectedRows.length,
+            })}
+            variant="danger"
+          />
+        )}
       </div>
-      <Tooltip className="ml-5" tooltipText={t('sheet.resetTooltip')}>
-        <XMarkIcon
-          className="h-6 w-6 cursor-pointer"
-          onClick={() => setResetConfirmationModalOpen(true)}
-        />
-      </Tooltip>
+      {availableActions.includes('resetState') && (
+        <>
+          <Tooltip className="ml-5" tooltipText={t('sheet.resetTooltip')}>
+            <XMarkIcon
+              className="h-6 w-6 cursor-pointer"
+              onClick={() => setResetConfirmationModalOpen(true)}
+            />
+          </Tooltip>
 
-      <ConfirmationModal
-        open={resetConfirmationModalOpen}
-        setOpen={setResetConfirmationModalOpen}
-        onConfirm={resetState}
-        title={t('sheet.resetConfirmationModalTitle')}
-        confirmationText={t('sheet.resetConfirmationModalConfirmationText')}
-        subTitle={t('sheet.resetConfirmationModalSubTitle')}
-        variant="danger"
-      />
+          <ConfirmationModal
+            open={resetConfirmationModalOpen}
+            setOpen={setResetConfirmationModalOpen}
+            onConfirm={resetState}
+            title={t('sheet.resetConfirmationModalTitle')}
+            confirmationText={t('sheet.resetConfirmationModalConfirmationText')}
+            subTitle={t('sheet.resetConfirmationModalSubTitle')}
+            variant="danger"
+          />
+        </>
+      )}
     </div>
   );
 }
