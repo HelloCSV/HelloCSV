@@ -140,7 +140,7 @@ export default function SheetDataEditor({
           }) as ColumnDef<SheetRow>
       ),
     ];
-  }, [sheetDefinition, selectedRows, rowData]);
+  }, [sheetDefinition, selectedRows, rowData, availableActions]);
 
   const table = useReactTable<SheetRow>({
     data: rowData,
