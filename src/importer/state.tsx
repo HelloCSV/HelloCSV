@@ -65,7 +65,9 @@ async function buildStateWithIndexedDB(
 
 class StateBuilder {
   private state: ImporterState;
+
   private importerDefinition: ImporterDefinition;
+
   protected buildSteps: ImporterAction[];
 
   constructor(importerDefinition: ImporterDefinition, state?: ImporterState) {
@@ -153,12 +155,14 @@ class StateBuilder {
 }
 
 export class OuterStateBuilder extends StateBuilder {
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(importerDefinition: ImporterDefinition) {
     super(importerDefinition);
   }
 }
 
 export class InnerStateBuilder extends StateBuilder {
+  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(importerDefinition: ImporterDefinition, state: ImporterState) {
     super(importerDefinition, state);
   }
