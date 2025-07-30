@@ -14,6 +14,7 @@ import {
 import { getLabelDict, getLabelDictValue } from '@/utils';
 import { useTranslations } from '@/i18';
 import { useLongPress } from '@/utils/hooks';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
   rowId: string;
@@ -37,6 +38,7 @@ export default function SheetDataEditorCell({
   enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
+  const { availableActions } = useImporterDefinition();
 
   const [editMode, setEditMode] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,7 +60,9 @@ export default function SheetDataEditorCell({
     enumLabelDict
   );
 
-  const readOnly = isColumnReadOnly(columnDefinition);
+  const readOnly =
+    isColumnReadOnly(columnDefinition) ||
+    !availableActions.includes('editRows');
 
   const longPressHandlers = useLongPress(
     () => {
