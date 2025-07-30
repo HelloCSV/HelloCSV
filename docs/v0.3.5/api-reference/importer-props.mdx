@@ -33,6 +33,21 @@ These statistics will be displayed in the import summary and can be used to show
 
 ---
 
+## initialState
+
+**Type:** `ImporterState`
+
+**Required:** No
+
+**Description:**  
+
+Initial state for the importer. If provided, the importer will start with this state instead of the default one.
+Please use the [CSV Importer State Builder](/v0.3.5/api-reference/csv-importer-state-builder) to build the initial state.
+
+When using `initialState` the persisted state will be ignored.
+
+---
+
 ## theme
 
 **Type:** `'default' | 'theme-1' | 'theme-2'`

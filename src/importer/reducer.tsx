@@ -8,10 +8,11 @@ import {
   SheetDefinition,
   SheetRow,
 } from '../types';
-import { getIndexedDBState, setIndexedDBState } from './storage';
+import { setIndexedDBState } from './storage';
 import { applyValidations } from '../validators';
 import { createContext } from 'preact';
 import { ReactNode } from 'preact/compat';
+import { buildInitialState, buildState } from './state';
 
 function recalculateCalculatedColumns(
   row: SheetRow,
@@ -35,53 +36,7 @@ function recalculateCalculatedColumns(
   return row;
 }
 
-function buildInitialState(sheetDefinitions: SheetDefinition[]): ImporterState {
-  return {
-    sheetDefinitions,
-    currentSheetId: sheetDefinitions[0].id,
-    mode: 'upload',
-    validationErrors: [],
-    sheetData: sheetDefinitions.map((sheet) => ({
-      sheetId: sheet.id,
-      rows: [],
-    })),
-    importProgress: 0,
-  };
-}
-
-async function buildState(
-  sheetDefinitions: SheetDefinition[],
-  persistenceConfig: PersistenceConfig
-): Promise<ImporterState> {
-  const defaultState = buildInitialState(sheetDefinitions);
-  try {
-    if (!persistenceConfig.enabled) return defaultState;
-
-    return await buildStateWithIndexedDB(sheetDefinitions, persistenceConfig);
-  } catch (_error) {
-    return defaultState;
-  }
-}
-
-async function buildStateWithIndexedDB(
-  sheetDefinitions: SheetDefinition[],
-  persistenceConfig: PersistenceConfig
-): Promise<ImporterState> {
-  const state = await getIndexedDBState(
-    sheetDefinitions,
-    persistenceConfig.customKey
-  );
-
-  if (state != null) {
-    return state;
-  }
-
-  const newState = buildInitialState(sheetDefinitions);
-  setIndexedDBState(newState, persistenceConfig.customKey);
-  return newState;
-}
-
-const reducer = (
+export const reducer = (
   state: ImporterState,
   action: ImporterAction
 ): ImporterState => {
@@ -217,16 +172,22 @@ const reducer = (
 
 const usePersistedReducer = (
   sheets: SheetDefinition[],
-  persistenceConfig: PersistenceConfig
+  persistenceConfig: PersistenceConfig,
+  initialState?: ImporterState
 ): [ImporterState, (action: ImporterAction) => void] => {
-  const [state, dispatch] = useReducer(reducer, buildInitialState(sheets));
+  const [state, dispatch] = useReducer(
+    reducer,
+    initialState ?? buildInitialState(sheets)
+  );
 
   useEffect(() => {
     const fetchState = async () => {
       const newState = await buildState(sheets, persistenceConfig);
       dispatch({ type: 'SET_STATE', payload: { state: newState } });
     };
-    fetchState();
+    if (initialState == null) {
+      fetchState();
+    }
     // We only want to fetch the state once
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -249,13 +210,19 @@ const ImporterStateDispatchContext = createContext<Dispatch<ImporterAction>>(
 export function ReducerProvider({
   sheets,
   persistenceConfig,
+  initialState,
   children,
 }: {
   sheets: SheetDefinition[];
   persistenceConfig: PersistenceConfig;
+  initialState?: ImporterState;
   children: ReactNode;
 }) {
-  const [state, dispatch] = usePersistedReducer(sheets, persistenceConfig);
+  const [state, dispatch] = usePersistedReducer(
+    sheets,
+    persistenceConfig,
+    initialState
+  );
 
   return (
     <ImporterStateContext.Provider value={state}>

@@ -3,17 +3,18 @@ import { CSVParsedData, ParsedFile } from './types';
 // eslint-disable-next-line import/default
 import Papa from 'papaparse';
 
-export function parseCsv({
-  file,
-  onCompleted,
-}: {
-  file: File;
-  onCompleted: (data: ParsedFile) => void;
-}) {
-  // eslint-disable-next-line import/no-named-as-default-member
-  Papa.parse<CSVParsedData>(file, {
-    skipEmptyLines: true,
-    header: true,
-    complete: onCompleted,
+export async function parseCsv({ file }: { file: File }): Promise<ParsedFile> {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line import/no-named-as-default-member
+    Papa.parse<CSVParsedData>(file, {
+      skipEmptyLines: true,
+      header: true,
+      complete: (results) => {
+        resolve(results as ParsedFile);
+      },
+      error: (error) => {
+        reject(error);
+      },
+    });
   });
 }

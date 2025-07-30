@@ -17,6 +17,7 @@ import type {
 
 export interface ImporterDefinition {
   sheets: SheetDefinition[];
+  initialState?: ImporterState;
   translationResources?: Record<string, Translation>;
   theme?: ThemeVariant;
   // Called after the columns are mapped to sheet definitions by the user
