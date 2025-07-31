@@ -192,7 +192,11 @@ export default function Select<T>({
               )}
               {items.map((option) => (
                 <ComboboxOption
-                  key={option.value as string}
+                  key={
+                    typeof option.value === 'object'
+                      ? JSON.stringify(option.value)
+                      : String(option.value)
+                  }
                   value={option.value}
                   className="group data-focus:bg-hello-csv-primary relative flex cursor-default items-center py-2 pr-9 pl-3 text-gray-900 select-none data-focus:text-white data-focus:outline-hidden"
                 >
