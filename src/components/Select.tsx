@@ -1,18 +1,18 @@
 import {
   Combobox,
   ComboboxButton,
-  ComboboxInput,
   ComboboxOption,
   ComboboxOptions,
+  ComboboxInput,
 } from '@headlessui/react';
 import {
-  CheckIcon,
   ChevronUpDownIcon,
   XMarkIcon,
+  CheckIcon,
 } from '@heroicons/react/20/solid';
-import { ReactNode } from 'preact/compat';
-import { useState } from 'preact/hooks';
 import { useTranslations } from '../i18';
+import { useState } from 'preact/hooks';
+import { ReactNode } from 'preact/compat';
 
 export interface SelectOption<T> {
   label: string;
@@ -190,11 +190,11 @@ export default function Select<T>({
                   {label}
                 </div>
               )}
-              {items.map((option, index) => (
+              {items.map((option) => (
                 <ComboboxOption
                   key={
-                    typeof option.value === 'object' && option.value !== null
-                      ? `${option.label}-${index}`
+                    typeof option.value === 'object'
+                      ? JSON.stringify(option.value)
                       : String(option.value)
                   }
                   value={option.value}
