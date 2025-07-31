@@ -64,7 +64,7 @@ async function buildStateWithIndexedDB(
 }
 
 class StateBuilder {
-  private state: ImporterState;
+  private initialState: ImporterState;
 
   private importerDefinition: StateBuilderImporterDefinition;
 
@@ -72,18 +72,22 @@ class StateBuilder {
 
   constructor(
     importerDefinition: StateBuilderImporterDefinition,
-    state?: ImporterState
+    initialState?: ImporterState
   ) {
     this.importerDefinition = importerDefinition;
-    this.state = state ?? buildInitialState(importerDefinition.sheets);
+    this.initialState =
+      initialState ?? buildInitialState(importerDefinition.sheets);
     this.buildSteps = [];
   }
 
   public getState(): ImporterState {
+    let state = this.initialState;
+
     this.buildSteps.forEach((step) => {
-      this.state = reducer(this.state, step);
+      state = reducer(state, step);
     });
-    return this.state;
+
+    return state;
   }
 
   public async uploadFile(file: File) {
@@ -139,6 +143,7 @@ class StateBuilder {
 
   public async confirmMappings() {
     const stateSoFar = this.getState();
+
     const mappedData = getMappedData(
       this.importerDefinition.sheets,
       stateSoFar.columnMappings ?? [],
@@ -168,9 +173,9 @@ export class InnerStateBuilder extends StateBuilder {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(
     importerDefinition: StateBuilderImporterDefinition,
-    state: ImporterState
+    initialState: ImporterState
   ) {
-    super(importerDefinition, state);
+    super(importerDefinition, initialState);
   }
 
   public dispatchChange(dispatch: Dispatch<ImporterAction>) {
