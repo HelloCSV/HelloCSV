@@ -6,7 +6,12 @@ This section describes the state builder object of the importer.
 
 ## constructor
 
-**Parameters:** `importerDefinition: ImporterDefinition`
+**Parameters:** `importerDefinition: Pick<
+  ImporterDefinition,
+  | 'sheets'
+  | 'customFileLoaders'
+  | 'customSuggestedMapper'
+  | 'onDataColumnsMapped'>`
 
 **Description:**  
 Defines the importer configuration. Checkout the [Importer Props](/v0.3.5/api-reference/importer-props) section for more information.

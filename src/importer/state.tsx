@@ -2,10 +2,10 @@ import { Dispatch } from 'preact/hooks';
 import {
   ColumnMapping,
   ImporterAction,
-  ImporterDefinition,
   ImporterState,
   PersistenceConfig,
   SheetDefinition,
+  StateBuilderImporterDefinition,
 } from '../types';
 import { getIndexedDBState, setIndexedDBState } from './storage';
 import { buildSuggestedHeaderMappings } from '@/mapper/utils';
@@ -66,11 +66,14 @@ async function buildStateWithIndexedDB(
 class StateBuilder {
   private state: ImporterState;
 
-  private importerDefinition: ImporterDefinition;
+  private importerDefinition: StateBuilderImporterDefinition;
 
   protected buildSteps: ImporterAction[];
 
-  constructor(importerDefinition: ImporterDefinition, state?: ImporterState) {
+  constructor(
+    importerDefinition: StateBuilderImporterDefinition,
+    state?: ImporterState
+  ) {
     this.importerDefinition = importerDefinition;
     this.state = state ?? buildInitialState(importerDefinition.sheets);
     this.buildSteps = [];
@@ -156,14 +159,17 @@ class StateBuilder {
 
 export class OuterStateBuilder extends StateBuilder {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(importerDefinition: ImporterDefinition) {
+  constructor(importerDefinition: StateBuilderImporterDefinition) {
     super(importerDefinition);
   }
 }
 
 export class InnerStateBuilder extends StateBuilder {
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(importerDefinition: ImporterDefinition, state: ImporterState) {
+  constructor(
+    importerDefinition: StateBuilderImporterDefinition,
+    state: ImporterState
+  ) {
     super(importerDefinition, state);
   }
 

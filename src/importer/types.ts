@@ -61,6 +61,14 @@ export interface PersistenceConfig {
   customKey?: string;
 }
 
+export type StateBuilderImporterDefinition = Pick<
+  ImporterDefinition,
+  | 'sheets'
+  | 'customFileLoaders'
+  | 'customSuggestedMapper'
+  | 'onDataColumnsMapped'
+>;
+
 /**
  * mapping - user is mapping the columns from the file to the sheet columns
  * preview - user is reviewing the data to be imported or is imputing data manually
