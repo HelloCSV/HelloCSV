@@ -14,6 +14,7 @@ import {
   ColumnMapping,
   ImporterDefinitionWithDefaults,
   ImporterDefinition,
+  ImporterMode,
   RemoveRowsPayload,
   availableActionList,
 } from '../types';
@@ -35,6 +36,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
     sheets,
     preventUploadOnValidationErrors,
     availableActions,
+    onModeChange,
   } = importerDefinition;
 
   const { t } = useTranslations();
@@ -50,6 +52,8 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
   const { mode, currentSheetId, sheetData, columnMappings, validationErrors } =
     state;
 
+  const previousMode = useRef<ImporterMode>(mode);
+
   useEffect(() => {
     if (isInitialRender.current) {
       isInitialRender.current = false;
@@ -58,6 +62,14 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
 
     targetRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [mode]);
+
+  useEffect(() => {
+    const prev = previousMode.current;
+    if (prev !== mode) {
+      onModeChange?.(prev, mode);
+      previousMode.current = mode;
+    }
+  }, [mode, onModeChange]);
 
   const currentSheetData = sheetData.find(
     (sheet) => sheet.sheetId === currentSheetId
