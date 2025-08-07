@@ -34,6 +34,7 @@ export interface ImporterDefinition {
     | ((errors: ImporterValidationError[]) => boolean);
   availableActions?: AvailableAction[];
   maxFileSizeInBytes?: number;
+  onModeChange?: (previousMode: ImporterMode, newMode: ImporterMode) => void;
   onSummaryFinished?: () => void;
   customSuggestedMapper?: (
     sheetDefinitions: SheetDefinition[],
