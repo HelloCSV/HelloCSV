@@ -10,7 +10,7 @@ This section details each property available for the Importer component.
 
 **Required:** Yes
 
-**Description:**  
+**Description:**
 Array of sheet definitions for importing data. This property defines the structure of the data to be imported.
 
 ---
@@ -21,7 +21,7 @@ Array of sheet definitions for importing data. This property defines the structu
 
 **Required:** Yes
 
-**Description:**  
+**Description:**
 A callback function invoked when the import process completes. It receives the final data and a progress callback.
 An `ImportStatistics` object can be returned to provide detailed information about the import results. The statistics object has the following properties:
 
@@ -39,7 +39,7 @@ These statistics will be displayed in the import summary and can be used to show
 
 **Required:** No
 
-**Description:**  
+**Description:**
 
 Initial state for the importer. If provided, the importer will start with this state instead of the default one.
 Please use the [CSV Importer State Builder](/v0.3.5/api-reference/csv-importer-state-builder) to build the initial state.
@@ -54,7 +54,7 @@ When using `initialState` the persisted state will be ignored.
 
 **Required:** No (Default: `default`)
 
-**Description:**  
+**Description:**
 Determines the visual theme of the importer component.
 
 ---
@@ -65,7 +65,7 @@ Determines the visual theme of the importer component.
 
 **Required:** No
 
-**Description:**  
+**Description:**
 Callback executed after CSV columns are mapped to the sheet definitions. Allows for custom post-mapping processing.
 
 ---
@@ -76,7 +76,7 @@ Callback executed after CSV columns are mapped to the sheet definitions. Allows 
 
 **Required:** No (Default: `false`)
 
-**Description:**  
+**Description:**
 Indicates whether manual data entry is allowed during the preview phase.
 
 ---
@@ -87,7 +87,7 @@ Indicates whether manual data entry is allowed during the preview phase.
 
 **Required:** No (Default: `en`)
 
-**Description:**  
+**Description:**
 Specifies the locale for internationalization purposes.
 
 ---
@@ -98,7 +98,7 @@ Specifies the locale for internationalization purposes.
 
 **Required:** No (Default: `false`)
 
-**Description:**  
+**Description:**
 Controls whether file upload should be prevented when validation errors occur. Can be a boolean or a function that returns a boolean.
 
 ---
@@ -109,7 +109,7 @@ Controls whether file upload should be prevented when validation errors occur. C
 
 **Required:** No (Default: `20971520` i.e., 20MB)
 
-**Description:**  
+**Description:**
 Sets the maximum allowed file size in bytes. Files exceeding this limit will be rejected.
 
 ---
@@ -120,7 +120,7 @@ Sets the maximum allowed file size in bytes. Files exceeding this limit will be 
 
 **Required:** No
 
-**Description:**  
+**Description:**
 Provides a custom function to generate suggested mappings based on CSV headers.
 
 ---
@@ -131,7 +131,7 @@ Provides a custom function to generate suggested mappings based on CSV headers.
 
 **Required:** No
 
-**Description:**  
+**Description:**
 Callback executed when the user has finished reviewing the import summary. This can be used to navigate users to a results page, dashboard, or next step in the workflow after the import process completes successfully.
 
 ---
@@ -142,7 +142,7 @@ Callback executed when the user has finished reviewing the import summary. This 
 
 **Required:** No
 
-**Description:**  
+**Description:**
 Configuration for IndexedDB storage. When enabled, the importer state will be persisted in the browser's IndexedDB storage, allowing users to resume their import process if the page is refreshed or closed. The `customKey` option allows specifying a unique identifier for the stored data.
 
 Use cases for `customKey`:
@@ -161,7 +161,7 @@ Use cases for `customKey`:
 
 **Required:** No
 
-**Description:**  
+**Description:**
 A dictionary of translations for the importer component. The keys are the locale codes, and the values are the translations.
 
 ---
@@ -172,7 +172,7 @@ A dictionary of translations for the importer component. The keys are the locale
 
 **Required:** No
 
-**Description:**  
+**Description:**
 A list of custom file loaders for the importer component.
 
 Use cases for `customFileLoaders`:
@@ -197,7 +197,7 @@ const XLSX_FILE_MIME_TYPE =
         const data = new Uint8Array(loadEvent.target?.result as ArrayBuffer);
         const workbook = XLSX.read(data, { type: 'array' });
         const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-        const csvData = XLSX.utils.sheet_to_csv(firstSheet);   
+        const csvData = XLSX.utils.sheet_to_csv(firstSheet);
 
         return { fileName: file.name, csvData };
       },
@@ -214,10 +214,10 @@ const XLSX_FILE_MIME_TYPE =
 
 **Required:** No (Default: `value`)
 
-**Description:**  
-Determines the mode for CSV download. 
+**Description:**
+Determines the mode for CSV download.
 
-When set to `value`, the CSV will contain the raw values from the sheet. This includes enum fields values and column ids for CSV headers. 
+When set to `value`, the CSV will contain the raw values from the sheet. This includes enum fields values and column ids for CSV headers.
 
 When set to `label`, the CSV will contain the labels of the values as  well as column labels for CSV headers.
 
@@ -229,9 +229,20 @@ When set to `label`, the CSV will contain the labels of the values as  well as c
 
 **Required:** No (Default: `['addRows', 'removeRows', 'editRows', 'downloadCsv', 'search', 'resetState', 'backToPreviousStep'] - all the actions`)
 
-**Description:**  
+**Description:**
 Determines which actions are available to the user on the preview screen.
 
 Use cases for `availableActions`:
 
 - **No actions**: You can use it to hide all the actions and make the preview screen read only.
+
+---
+
+## onStateChanged
+
+**Type:** `(previous: ImporterState, next: ImporterState) => void`
+
+**Required:** No
+
+**Description:**
+Callback executed whenever the importer state updates. It receives both the previous and the new state, enabling parent components to respond to state changes.

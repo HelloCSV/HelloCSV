@@ -1,4 +1,10 @@
-import { useReducer, useEffect, Dispatch, useContext } from 'preact/hooks';
+import {
+  useReducer,
+  useEffect,
+  Dispatch,
+  useContext,
+  useRef,
+} from 'preact/hooks';
 import { applyTransformations } from '../transformers';
 import {
   CellChangedPayload,
@@ -211,11 +217,13 @@ export function ReducerProvider({
   sheets,
   persistenceConfig,
   initialState,
+  onStateChanged,
   children,
 }: {
   sheets: SheetDefinition[];
   persistenceConfig: PersistenceConfig;
   initialState?: ImporterState;
+  onStateChanged?: (prev: ImporterState, next: ImporterState) => void;
   children: ReactNode;
 }) {
   const [state, dispatch] = usePersistedReducer(
@@ -223,6 +231,15 @@ export function ReducerProvider({
     persistenceConfig,
     initialState
   );
+
+  const previousStateRef = useRef(state);
+
+  useEffect(() => {
+    if (previousStateRef.current !== state) {
+      onStateChanged?.(previousStateRef.current, state);
+      previousStateRef.current = state;
+    }
+  }, [state, onStateChanged]);
 
   return (
     <ImporterStateContext.Provider value={state}>
