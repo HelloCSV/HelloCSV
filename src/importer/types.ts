@@ -35,6 +35,7 @@ export interface ImporterDefinition {
   availableActions?: AvailableAction[];
   maxFileSizeInBytes?: number;
   onSummaryFinished?: () => void;
+  onStateChanged?: (previous: ImporterState, next: ImporterState) => void;
   customSuggestedMapper?: (
     sheetDefinitions: SheetDefinition[],
     csvHeaders: string[]

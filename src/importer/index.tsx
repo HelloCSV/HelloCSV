@@ -269,6 +269,7 @@ export default function Importer(props: ImporterDefinition) {
         sheets={propsWithDefaults.sheets}
         persistenceConfig={propsWithDefaults.persistenceConfig}
         initialState={propsWithDefaults.initialState}
+        onStateChanged={propsWithDefaults.onStateChanged}
       >
         <TranslationProvider>
           <ImporterBody {...propsWithDefaults} />
