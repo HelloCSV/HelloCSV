@@ -15,6 +15,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { RefObject, useCallback } from 'preact/compat';
 import { CHECKBOX_COLUMN_ID, ESTIMATED_ROW_HEIGHT } from '@/constants';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
   table: Table<SheetRow>;
@@ -42,6 +43,7 @@ export default function SheetDataEditorTable({
   enumLabelDict,
 }: Props) {
   const { t } = useTranslations();
+  const { availableActions } = useImporterDefinition();
 
   function cellErrors(columnId: string, rowIndex: number) {
     return sheetValidationErrors.filter(
@@ -190,7 +192,10 @@ export default function SheetDataEditorTable({
               }
 
               // We subtract 1 because we have a checkbox column on the first position
-              const columnId = sheetDefinition.columns[cellIndex - 1].id;
+              const hasCheckboxColumn = availableActions.includes('removeRows');
+              const columnId =
+                sheetDefinition.columns[cellIndex - (hasCheckboxColumn ? 1 : 0)]
+                  .id;
               // TODO: Check if it works correctly for 2 identical rows
               const rowIndex = findRowIndex(
                 allData,

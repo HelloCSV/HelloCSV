@@ -17,6 +17,7 @@ import type {
 
 export interface ImporterDefinition {
   sheets: SheetDefinition[];
+  initialState?: ImporterState;
   translationResources?: Record<string, Translation>;
   theme?: ThemeVariant;
   // Called after the columns are mapped to sheet definitions by the user
@@ -31,8 +32,10 @@ export interface ImporterDefinition {
   preventUploadOnValidationErrors?:
     | boolean
     | ((errors: ImporterValidationError[]) => boolean);
+  availableActions?: AvailableAction[];
   maxFileSizeInBytes?: number;
   onSummaryFinished?: () => void;
+  onStateChanged?: (previous: ImporterState, next: ImporterState) => void;
   customSuggestedMapper?: (
     sheetDefinitions: SheetDefinition[],
     csvHeaders: string[]
@@ -41,12 +44,31 @@ export interface ImporterDefinition {
   csvDownloadMode?: CsvDownloadMode;
 }
 
+export const availableActionList = [
+  'addRows',
+  'removeRows',
+  'editRows',
+  'downloadCsv',
+  'search',
+  'resetState',
+  'backToPreviousStep',
+] as const;
+export type AvailableAction = (typeof availableActionList)[number];
+
 export type CsvDownloadMode = 'value' | 'label';
 
 export interface PersistenceConfig {
   enabled: boolean;
   customKey?: string;
 }
+
+export type StateBuilderImporterDefinition = Pick<
+  ImporterDefinition,
+  | 'sheets'
+  | 'customFileLoaders'
+  | 'customSuggestedMapper'
+  | 'onDataColumnsMapped'
+>;
 
 /**
  * mapping - user is mapping the columns from the file to the sheet columns
@@ -131,5 +153,6 @@ export type ImporterDefinitionWithDefaults = WithRequired<
   | 'maxFileSizeInBytes'
   | 'persistenceConfig'
   | 'csvDownloadMode'
-  | 'allowManualDataEntry' // List of optional fields that need default value
+  | 'allowManualDataEntry'
+  | 'availableActions' // List of optional fields that need default value
 >;

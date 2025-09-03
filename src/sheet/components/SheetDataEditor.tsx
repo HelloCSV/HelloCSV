@@ -30,6 +30,7 @@ import {
   DATA_COLUMN_MAX_WIDTH,
   DATA_COLUMN_MIN_WIDTH,
 } from '@/constants';
+import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -53,6 +54,7 @@ export default function SheetDataEditor({
   enumLabelDict,
 }: Props) {
   const { sheetData: allData } = useImporterState();
+  const { availableActions } = useImporterDefinition();
 
   const [selectedRows, setSelectedRows] = useState<SheetRow[]>([]);
   const [viewMode, setViewMode] = useState<SheetViewMode>('all');
@@ -92,31 +94,39 @@ export default function SheetDataEditor({
     };
   }, [data, sheetValidationErrors]);
 
-  const columns = useMemo<ColumnDef<SheetRow>[]>(
-    () => [
-      {
-        id: CHECKBOX_COLUMN_ID,
-        header: () => (
-          <SheetDataEditorSelectAllCheckbox
-            visibleData={rowData}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-          />
-        ),
-        cell: ({ row }) => (
-          <SheetDataEditorSelectCheckbox
-            row={row}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-          />
-        ),
-        enableResizing: false,
-        enableSorting: false,
-        enableColumnFilter: false,
-        enableMultiSort: false,
-        enableGlobalFilter: false,
-        size: CHECKBOX_COLUMN_WIDTH,
-      },
+  const columns = useMemo<ColumnDef<SheetRow>[]>(() => {
+    const baseColumns: ColumnDef<SheetRow>[] = availableActions.includes(
+      'removeRows'
+    )
+      ? [
+          {
+            id: CHECKBOX_COLUMN_ID,
+            header: () => (
+              <SheetDataEditorSelectAllCheckbox
+                visibleData={rowData}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+              />
+            ),
+            cell: ({ row }) => (
+              <SheetDataEditorSelectCheckbox
+                row={row}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+              />
+            ),
+            enableResizing: false,
+            enableSorting: false,
+            enableColumnFilter: false,
+            enableMultiSort: false,
+            enableGlobalFilter: false,
+            size: CHECKBOX_COLUMN_WIDTH,
+          },
+        ]
+      : [];
+
+    return [
+      ...baseColumns,
       ...sheetDefinition.columns.map(
         (column) =>
           ({
@@ -129,9 +139,8 @@ export default function SheetDataEditor({
             enableResizing: true,
           }) as ColumnDef<SheetRow>
       ),
-    ],
-    [sheetDefinition, selectedRows, rowData]
-  );
+    ];
+  }, [sheetDefinition, selectedRows, rowData, availableActions]);
 
   const table = useReactTable<SheetRow>({
     data: rowData,

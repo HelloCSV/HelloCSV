@@ -15,31 +15,28 @@ import {
   ImporterDefinitionWithDefaults,
   ImporterDefinition,
   RemoveRowsPayload,
+  availableActionList,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
-import { parseCsv } from '../parser';
-import { getMappedData } from '../mapper';
 import { filterEmptyRows } from '../utils';
 import { applyTransformations } from '../transformers';
-import { buildSuggestedHeaderMappings } from '../mapper/utils';
-import { NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT } from '../constants';
 import SheetsSwitcher from '../sheet/components/SheetsSwitcher';
 import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
 import BackToMappingButton from './components/BackToMappingButton';
 import { Uploader } from '../uploader';
-import { convertCsvFile } from '../uploader/utils';
 import { getEnumLabelDict } from '../sheet/utils';
 import { ImporterDefinitionProvider } from './hooks';
+import { InnerStateBuilder } from './state';
 
-function ImporterBody({
-  onComplete,
-  sheets,
-  customFileLoaders,
-  onDataColumnsMapped,
-  preventUploadOnValidationErrors,
-  customSuggestedMapper,
-}: ImporterDefinitionWithDefaults) {
+function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
+  const {
+    onComplete,
+    sheets,
+    preventUploadOnValidationErrors,
+    availableActions,
+  } = importerDefinition;
+
   const { t } = useTranslations();
 
   const isInitialRender = useRef(true);
@@ -50,14 +47,8 @@ function ImporterBody({
 
   const idPrefix = useId();
 
-  const {
-    mode,
-    currentSheetId,
-    sheetData,
-    columnMappings,
-    parsedFile,
-    validationErrors,
-  } = state;
+  const { mode, currentSheetId, sheetData, columnMappings, validationErrors } =
+    state;
 
   useEffect(() => {
     if (isInitialRender.current) {
@@ -91,59 +82,26 @@ function ImporterBody({
 
   const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
 
-  function onFileUploaded(file: File) {
-    convertCsvFile(file, customFileLoaders).then((csvFile) => {
-      parseCsv({
-        file: csvFile,
-        onCompleted: async (newParsed) => {
-          const csvHeaders = newParsed.meta.fields!;
+  const stateBuilder = new InnerStateBuilder(importerDefinition, state);
 
-          const suggestedMappings =
-            customSuggestedMapper != null
-              ? await customSuggestedMapper(sheets, csvHeaders)
-              : buildSuggestedHeaderMappings(sheets, csvHeaders);
-
-          dispatch({
-            type: 'FILE_PARSED',
-            payload: { parsed: newParsed, rowFile: file },
-          });
-
-          dispatch({
-            type: 'COLUMN_MAPPING_CHANGED',
-            payload: {
-              mappings: suggestedMappings,
-            },
-          });
-        },
-      });
-    });
+  async function onFileUploaded(file: File) {
+    await stateBuilder.uploadFile(file);
+    stateBuilder.dispatchChange(dispatch);
   }
 
   function onEnterDataManually() {
-    dispatch({
-      type: 'ENTER_DATA_MANUALLY',
-      payload: {
-        amountOfEmptyRowsToAdd: NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT,
-      },
-    });
+    stateBuilder.setEnterDataManually();
+    stateBuilder.dispatchChange(dispatch);
   }
 
   function onMappingsChanged(mappings: ColumnMapping[]) {
-    dispatch({
-      type: 'COLUMN_MAPPING_CHANGED',
-      payload: { mappings },
-    });
+    stateBuilder.setMappings(mappings);
+    stateBuilder.dispatchChange(dispatch);
   }
 
   async function onMappingsSet() {
-    const mappedData = getMappedData(sheets, columnMappings ?? [], parsedFile!);
-
-    const newMappedData =
-      onDataColumnsMapped != null
-        ? await onDataColumnsMapped(mappedData)
-        : mappedData;
-
-    dispatch({ type: 'DATA_MAPPED', payload: { mappedData: newMappedData } });
+    await stateBuilder.confirmMappings();
+    stateBuilder.dispatchChange(dispatch);
   }
 
   function onCellChanged(payload: CellChangedPayload) {
@@ -261,9 +219,12 @@ function ImporterBody({
               {currentSheetData.rows.length > 0 && (
                 <div className="mt-5 flex justify-between">
                   <div>
-                    {columnMappings != null && (
-                      <BackToMappingButton onBackToMapping={onBackToMapping} />
-                    )}
+                    {columnMappings != null &&
+                      availableActions.includes('backToPreviousStep') && (
+                        <BackToMappingButton
+                          onBackToMapping={onBackToMapping}
+                        />
+                      )}
                   </div>
                   <Tooltip
                     tooltipText={t('importer.uploadBlocked')}
@@ -299,6 +260,7 @@ export default function Importer(props: ImporterDefinition) {
     persistenceConfig: props.persistenceConfig ?? { enabled: false },
     csvDownloadMode: props.csvDownloadMode ?? 'value',
     allowManualDataEntry: props.allowManualDataEntry ?? false,
+    availableActions: props.availableActions ?? [...availableActionList],
   };
 
   return (
@@ -306,6 +268,8 @@ export default function Importer(props: ImporterDefinition) {
       <ReducerProvider
         sheets={propsWithDefaults.sheets}
         persistenceConfig={propsWithDefaults.persistenceConfig}
+        initialState={propsWithDefaults.initialState}
+        onStateChanged={propsWithDefaults.onStateChanged}
       >
         <TranslationProvider>
           <ImporterBody {...propsWithDefaults} />

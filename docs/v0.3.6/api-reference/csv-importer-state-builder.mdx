@@ -1,0 +1,233 @@
+---
+title: "CSV Importer State Builder"
+---
+
+This section describes the state builder object of the importer.
+
+## constructor
+
+**Parameters:** `importerDefinition: Pick<
+  ImporterDefinition,
+  | 'sheets'
+  | 'customFileLoaders'
+  | 'customSuggestedMapper'
+  | 'onDataColumnsMapped'>`
+
+**Description:**  
+Defines the importer configuration. Checkout the [Importer Props](/v0.3.6/api-reference/importer-props) section for more information.
+
+---
+
+# Methods
+
+The order of the methods might be important. Please follow the order defined below. You don't need to run all the methods though.
+
+## uploadFile
+
+**Parameters:** `file: File`
+
+**Required to call next steps:** Yes
+
+**Description:**  
+Keep in mind that this is asynchronous function. Make sure to await the result of it.
+
+The function simulates the upload of a file. It will parse the file and build the suggested mappings.
+
+## setEnterDataManually
+
+**Parameters:** `amountOfEmptyRowsToAdd?: number`
+
+**Required to call next steps:** No
+
+**Description:**  
+This method will add empty rows to the current sheet and switch the mode to preview - this means that it will skip 
+the mapping step and ignore uploaded file.
+
+## setMappings
+
+**Parameters:** `mappings: ColumnMapping[]`
+
+**Required to call next steps:** No
+
+**Description:**  
+This method will set the mappings for the current sheet.
+
+## confirmMappings
+
+**Parameters:** `mappings: ColumnMapping[]`
+
+**Required to call next steps:** Yes
+
+**Description:** 
+
+Remember that this is asynchronous function. Make sure to await the result of it.
+
+Confirm the mappings for the current sheet. This will switch the mode to preview. 
+
+## getState
+
+**Parameters:** `none`
+
+**Description:**  
+Returns the built state. This should be the last method you call.
+
+
+# Example
+
+```tsx
+import { useEffect, useState } from 'preact/hooks';
+import Importer, {
+  CsvImporterStateBuilder,
+  ImporterDefinition,
+  ImporterState,
+} from 'hello-csv/preact';
+import Content from '../Content';
+import DocumentContainer from '../DocumentContainer';
+import example1 from '../../assets/datasets/example-1.csv?url';
+
+export default function EmployeeImporter() {
+  const [ready, setReady] = useState(false);
+  const [initialState, setInitialState] = useState<ImporterState | undefined>(
+    undefined
+  );
+
+  const onComplete = async (
+    data: ImporterState,
+    onProgress: (progress: number) => void
+  ) => {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    onProgress(20);
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    onProgress(50);
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    onProgress(100);
+    console.log(data);
+    setReady(true);
+  };
+
+  const importerDefinition: ImporterDefinition = {
+    allowManualDataEntry: true,
+    maxFileSizeInBytes: 10 * 1024 * 1024, // 10MB
+    sheets: [
+      {
+        id: 'employees',
+        label: 'Employees',
+        columns: [
+          {
+            label: 'Employee ID',
+            id: 'employee.id',
+            type: 'number',
+            validators: [
+              { validate: 'required' },
+              {
+                validate: 'unique',
+                error: 'This employee ID is not unique',
+              },
+              {
+                validate: 'is_integer',
+                error: 'This value must be a number',
+              },
+            ],
+          },
+          {
+            label: 'Email',
+            id: 'email',
+            type: 'string',
+            validators: [
+              { validate: 'required' },
+              { validate: 'unique', error: 'This email is not unique' },
+              {
+                validate: 'email',
+                error: 'This email is not valid',
+              },
+            ],
+          },
+          {
+            label: 'Phone Number',
+            id: 'phone_number',
+            type: 'string',
+            validators: [
+              { validate: 'required' },
+              { validate: 'phone_number' },
+            ],
+          },
+          {
+            label: 'Address',
+            id: 'address',
+            type: 'string',
+            validators: [{ validate: 'required' }],
+          },
+          { label: 'City', id: 'city', type: 'string' },
+          {
+            label: 'State',
+            id: 'state',
+            type: 'string',
+            transformers: [{ transformer: 'state_code' }],
+          },
+          {
+            label: 'Zip Code',
+            id: 'zip_code',
+            type: 'string',
+            validators: [{ validate: 'required' }, { validate: 'postal_code' }],
+          },
+          {
+            label: 'Full address',
+            id: 'full_address',
+            type: 'calculated',
+            typeArguments: {
+              getValue: (row) =>
+                `${row.address}, ${row.city}, ${row.state} ${row.zip_code}`,
+            },
+          },
+        ],
+      },
+    ],
+    onDataColumnsMapped: (dataColumns) => {
+      return dataColumns;
+    },
+    onComplete,
+    preventUploadOnValidationErrors: true,
+    persistenceConfig: {
+      enabled: true,
+    },
+  };
+
+  useEffect(() => {
+    const run = async () => {
+      const stateBuilder = new CsvImporterStateBuilder(importerDefinition);
+
+      const csvContent = `employee_id,email,phone_number,address,city,state,zip_code
+  1234567,john.smith@company.com,555-123-4567,123 Main Street,Seattle,WA,98101
+  2345678,emma.wilson@company.com,555-234-5678,456 Oak Avenue,Portland,OR,97201`;
+
+      const file = new File([csvContent], 'example-1.csv', {
+        type: 'text/csv',
+      });
+
+      await stateBuilder.uploadFile(file);
+      await stateBuilder.confirmMappings();
+
+      setInitialState(stateBuilder.getState());
+    };
+
+    run();
+  }, []);
+
+  if (initialState == null) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <>
+      <div className="mt-4 flex max-h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
+        <Importer {...importerDefinition} initialState={initialState} />
+      </div>
+      {ready && (
+        <div>
+          <h4>Check the console for the output!</h4>
+        </div>
+      )}
+    </>
+  );
+}
+```
