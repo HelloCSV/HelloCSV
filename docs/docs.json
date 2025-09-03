@@ -15,14 +15,14 @@
   "navigation": {
     "versions": [
       {
-        "version": "0.3.5",
+        "version": "0.3.6",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
               "common/get-started/introduction",
               "common/get-started/why",
-              "v0.3.5/get-started/usage",
+              "v0.3.6/get-started/usage",
               "common/get-started/demo",
               "common/get-started/multiple-sheets",
               "common/get-started/persistence",
@@ -32,21 +32,21 @@
           {
             "group": "API Reference",
             "pages": [
-              "v0.3.5/api-reference/importer-props",
-              "v0.3.5/api-reference/sheet-definition-props",
-              "v0.3.5/api-reference/column-types",
-              "v0.3.5/api-reference/common-column-props",
-              "v0.3.5/api-reference/importer-state",
-              "v0.3.5/api-reference/sheet-state",
-              "v0.3.5/api-reference/validators",
-              "v0.3.5/api-reference/transformers",
-              "v0.3.5/api-reference/importer-validation-error",
-              "v0.3.5/api-reference/csv-importer-state-builder"
+              "v0.3.6/api-reference/importer-props",
+              "v0.3.6/api-reference/sheet-definition-props",
+              "v0.3.6/api-reference/column-types",
+              "v0.3.6/api-reference/common-column-props",
+              "v0.3.6/api-reference/importer-state",
+              "v0.3.6/api-reference/sheet-state",
+              "v0.3.6/api-reference/validators",
+              "v0.3.6/api-reference/transformers",
+              "v0.3.6/api-reference/importer-validation-error",
+              "v0.3.6/api-reference/csv-importer-state-builder"
             ]
           },
           {
             "group": "Configuration",
-            "pages": ["v0.3.5/configuration/bundle-versions"]
+            "pages": ["v0.3.6/configuration/bundle-versions"]
           },
           {
             "group": "Customization",
@@ -57,15 +57,15 @@
           },
           {
             "group": "Upgrade",
-            "pages": ["v0.3.5/upgrade/from-v-0-2-0"]
+            "pages": ["v0.3.6/upgrade/from-v-0-2-0"]
           },
           {
             "group": "Development",
             "pages": [
-              "v0.3.5/development/setup",
+              "v0.3.6/development/setup",
               "common/development/no-build-example",
               "common/development/docs",
-              "v0.3.5/development/deployment"
+              "v0.3.6/development/deployment"
             ]
           }
         ],

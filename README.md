@@ -53,8 +53,8 @@ npm install hello-csv
 From CDN
 
 ```
-<script src="https://cdn.jsdelivr.net/npm/hello-csv@0.3.5/dist/bundled/index.es.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hello-csv@0.3.5/dist/bundled/hello-csv.css">
+<script src="https://cdn.jsdelivr.net/npm/hello-csv@0.3.6/dist/bundled/index.es.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hello-csv@0.3.6/dist/bundled/hello-csv.css">
 ```
 
 ## Documentation
