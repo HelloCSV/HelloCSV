@@ -39,6 +39,7 @@ export default defineConfig(({ mode }): UserConfig => {
       alias: isReact
         ? {
             ...baseAlias,
+            'preact/compat/client': 'react-dom/client',
             'preact/compat': resolve(__dirname, 'shims/react-compat-shim.js'),
             'preact/jsx-runtime': 'react/jsx-runtime',
             'preact/hooks': 'react',
@@ -59,7 +60,7 @@ export default defineConfig(({ mode }): UserConfig => {
         external: isBundled
           ? []
           : isReact
-            ? ['react', 'react-dom', 'react/jsx-runtime']
+            ? ['react', 'react-dom', 'react/jsx-runtime', 'react-dom/client']
             : ['preact'],
         output: {
           globals: isBundled
