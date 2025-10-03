@@ -1,4 +1,5 @@
-import { render, h } from 'preact';
+import { createRoot } from 'preact/compat/client';
+import { createElement } from 'preact';
 
 import Importer from './importer';
 export * from './types';
@@ -13,7 +14,7 @@ export function renderImporter(
   element: HTMLElement,
   props: ImporterDefinition
 ) {
-  render(h(Importer, props), element);
+  createRoot(element).render(createElement(Importer, props));
 }
 
 export { OuterStateBuilder as CsvImporterStateBuilder };
