@@ -138,9 +138,8 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
         state.sheetDefinitions.map((sheetDefinition) => ({
           file: generateCsvContent(
             sheetDefinition,
-            state.sheetData.find(
-              (sheet) => sheet.sheetId === sheetDefinition.id
-            )?.rows ?? [],
+            data.find((sheet) => sheet.sheetId === sheetDefinition.id)?.rows ??
+              [],
             {},
             'value'
           ),
