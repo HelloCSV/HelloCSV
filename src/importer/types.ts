@@ -26,7 +26,8 @@ export interface ImporterDefinition {
   allowManualDataEntry?: boolean;
   onComplete: (
     state: ImporterState,
-    onProgress: (progress: number) => void
+    onProgress: (progress: number) => void,
+    submissionFiles: ImporterSubmissionFile[]
   ) => Promise<void> | Promise<ImportStatistics>;
   locale?: string;
   preventUploadOnValidationErrors?:
@@ -96,6 +97,11 @@ export interface ImporterState {
   columnMappings?: ColumnMapping[];
   importProgress: number;
   importStatistics?: ImportStatistics;
+}
+
+export interface ImporterSubmissionFile {
+  file: Blob;
+  sheetId: string;
 }
 
 export type ImporterOutputFieldType = string | number | undefined;
