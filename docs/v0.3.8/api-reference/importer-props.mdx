@@ -17,7 +17,7 @@ Array of sheet definitions for importing data. This property defines the structu
 
 ## onComplete
 
-**Type:** `(data: ImporterState, onProgress: (progress: number) => void) => Promise<ImportStatistics | void>`
+**Type:** `(data: ImporterState, onProgress: (progress: number) => void, submissionFiles: ImporterSubmissionFile[]) => Promise<ImportStatistics | void>`
 
 **Required:** Yes
 
@@ -30,6 +30,18 @@ An `ImportStatistics` object can be returned to provide detailed information abo
 - `skipped`: Number of rows that were skipped
 
 These statistics will be displayed in the import summary and can be used to show detailed import results to the user.
+
+The `submissionFiles` parameter is an array of files that were submitted by the user. This can be used to provide the files to upload to the server.
+
+The `submissionFiles` is defined as
+```ts
+interface ImporterSubmissionFile {
+  file: Blob;
+  sheetId: string;
+}
+```
+
+The `file` is the file that was processed by the importer. The `sheetId` is the id of the sheet that the file belongs to.
 
 ---
 
