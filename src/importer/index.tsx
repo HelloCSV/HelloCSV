@@ -18,7 +18,7 @@ import {
   availableActionList,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
-import { filterEmptyRows } from '../utils';
+import { filterEmptyRows, generateCsvContent } from '../utils';
 import { applyTransformations } from '../transformers';
 import SheetsSwitcher from '../sheet/components/SheetsSwitcher';
 import { Button, Root, Tooltip } from '../components';
@@ -134,7 +134,17 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
         { ...state, sheetData: data },
         (progress) => {
           dispatch({ type: 'PROGRESS', payload: { progress } });
-        }
+        },
+        state.sheetDefinitions.map((sheetDefinition) => ({
+          file: generateCsvContent(
+            sheetDefinition,
+            data.find((sheet) => sheet.sheetId === sheetDefinition.id)?.rows ??
+              [],
+            {},
+            'value'
+          ),
+          sheetId: sheetDefinition.id,
+        }))
       );
 
       await delay(400);
