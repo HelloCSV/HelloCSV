@@ -66,12 +66,6 @@ export default function EmployeeImporter() {
                   ],
                 },
                 {
-                  label: 'Active',
-                  id: 'active',
-                  type: 'boolean',
-                  validators: [{ validate: 'required' }],
-                },
-                {
                   label: 'Email',
                   id: 'email',
                   type: 'string',
