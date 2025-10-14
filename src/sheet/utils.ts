@@ -148,7 +148,13 @@ export function getCellDisplayValue(
             getLabelDict(columnDefinition, enumLabelDict),
             value
           )
-        : value;
+        : columnDefinition.type === 'boolean'
+          ? value === true
+            ? 'Yes'
+            : value === false
+              ? 'No'
+              : value
+          : value;
 
   const valueEmpty =
     extractedValue == null ||

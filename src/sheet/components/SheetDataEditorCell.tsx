@@ -116,6 +116,23 @@ export default function SheetDataEditorCell({
     }
   }
 
+  if (columnDefinition.type === 'boolean') {
+    const selectOptions = [true, false].map((value) => ({
+      label: value ? 'Yes' : 'No',
+      value,
+    }));
+
+    return (
+      <Select
+        options={selectOptions}
+        value={value}
+        onChange={(value) =>
+          updateValue((value as ImporterOutputFieldType) ?? '')
+        }
+      />
+    );
+  }
+
   if (columnDefinition.type === 'reference') {
     const referenceData = extractReferenceColumnPossibleValues(
       columnDefinition,
