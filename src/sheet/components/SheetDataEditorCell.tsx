@@ -15,6 +15,10 @@ import { getLabelDict, getLabelDictValue } from '@/utils';
 import { useTranslations } from '@/i18';
 import { useLongPress } from '@/utils/hooks';
 import { useImporterDefinition } from '@/importer/hooks';
+import {
+  DEFAULT_BOOLEAN_FALSE_LABEL,
+  DEFAULT_BOOLEAN_TRUE_LABEL,
+} from '@/constants';
 
 interface Props {
   rowId: string;
@@ -118,7 +122,11 @@ export default function SheetDataEditorCell({
 
   if (columnDefinition.type === 'boolean') {
     const selectOptions = [true, false].map((value) => ({
-      label: value ? 'Yes' : 'No',
+      label: value
+        ? (columnDefinition.typeArguments?.trueLabel ??
+          DEFAULT_BOOLEAN_TRUE_LABEL)
+        : (columnDefinition.typeArguments?.falseLabel ??
+          DEFAULT_BOOLEAN_FALSE_LABEL),
       value,
     }));
 

@@ -53,6 +53,10 @@ interface SheetColumnNumberDefinition extends SheetColumnBaseDefinition {
 
 interface SheetColumnBooleanDefinition extends SheetColumnBaseDefinition {
   type: 'boolean';
+  typeArguments?: {
+    trueLabel?: string;
+    falseLabel?: string;
+  };
 }
 
 export interface SheetColumnReferenceDefinition
