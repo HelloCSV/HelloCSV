@@ -11,7 +11,15 @@ Ensures the field is not empty.
 
 **Additional:**  
 Accepts an optional `error` message.
+Additionally, accepts a `when` function that returns a boolean value. If the function returns false, the validation is skipped. Defaults to `() => true`.
 
+Example:
+
+```json
+{
+  "validate": "required",
+  "when": (row) => row['employee.type'] === 'other'
+}
 ---
 
 ## unique

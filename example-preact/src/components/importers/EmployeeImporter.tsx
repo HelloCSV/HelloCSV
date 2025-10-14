@@ -4,6 +4,9 @@ import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
 import example1 from '../../assets/datasets/example-1.csv?url';
 
+const isValidName = (name: string | null | undefined): name is string =>
+  name != null && name.trim() !== '';
+
 export default function EmployeeImporter() {
   const [ready, setReady] = useState(false);
 
@@ -50,73 +53,38 @@ export default function EmployeeImporter() {
               label: 'Employees',
               columns: [
                 {
-                  label: 'Employee ID',
-                  id: 'employee.id',
-                  type: 'number',
-                  validators: [
-                    { validate: 'required' },
-                    {
-                      validate: 'unique',
-                      error: 'This employee ID is not unique',
-                    },
-                    {
-                      validate: 'is_integer',
-                      error: 'This value must be a number',
-                    },
-                  ],
-                },
-                {
-                  label: 'Email',
-                  id: 'email',
-                  type: 'string',
-                  validators: [
-                    { validate: 'required' },
-                    { validate: 'unique', error: 'This email is not unique' },
-                    {
-                      validate: 'email',
-                      error: 'This email is not valid',
-                    },
-                  ],
-                },
-                {
-                  label: 'Phone Number',
-                  id: 'phone_number',
-                  type: 'string',
-                  validators: [
-                    { validate: 'required' },
-                    { validate: 'phone_number' },
-                  ],
-                },
-                {
-                  label: 'Address',
-                  id: 'address',
-                  type: 'string',
+                  label: 'Employee Type',
+                  id: 'employee.type',
+                  type: 'enum',
+                  typeArguments: {
+                    values: [
+                      { label: 'A', value: 'a' },
+                      { label: 'B', value: 'b' },
+                      { label: 'Other', value: 'other' },
+                    ],
+                  },
                   validators: [{ validate: 'required' }],
                 },
-                { label: 'City', id: 'city', type: 'string' },
                 {
-                  label: 'State',
-                  id: 'state',
-                  type: 'string',
-                  transformers: [{ transformer: 'state_code' }],
-                },
-                {
-                  label: 'Zip Code',
-                  id: 'zip_code',
+                  label: 'Employee Type description',
+                  id: 'employee.type_description',
                   type: 'string',
                   validators: [
-                    { validate: 'required' },
-                    { validate: 'postal_code' },
+                    {
+                      validate: 'required',
+                      when: (row) => row['employee.type'] === 'other',
+                    },
                   ],
                 },
                 {
-                  label: 'Full address',
-                  id: 'full_address',
-                  type: 'calculated',
-                  typeArguments: {
-                    getValue: (row) =>
-                      `${row.address}, ${row.city}, ${row.state} ${row.zip_code}`,
-                  },
+                  label: 'Employee number',
+                  id: 'employee.number',
+                  type: 'number',
+                  validators: [
+                    {
+                      validate: 'required',
+                    },
+                  ],
                 },
               ],
             },
