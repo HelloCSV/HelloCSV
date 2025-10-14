@@ -8,6 +8,7 @@ import {
   SheetState,
 } from '../types';
 import { DOWNLOADED_CSV_SEPARATOR } from '../constants';
+import { applyTransformations } from '@/transformers';
 
 export const isUndefinedOrNull = (a: any) => {
   return a === null || a === undefined;
@@ -139,4 +140,14 @@ export function getLabelDictValue(
   }
 
   return labelDict[value] ?? value;
+}
+
+export function getSubmittedSheetData(
+  sheets: SheetDefinition[],
+  sheetData: SheetState[]
+) {
+  return applyTransformations(
+    sheets,
+    sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
+  );
 }

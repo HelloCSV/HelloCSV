@@ -24,6 +24,7 @@ export interface SheetDefinition {
 export type SheetColumnDefinition =
   | SheetColumnStringDefinition
   | SheetColumnNumberDefinition
+  | SheetColumnBooleanDefinition
   | SheetColumnReferenceDefinition
   | SheetColumnEnumDefinition
   | SheetColumnCalculatedDefinition;
@@ -48,6 +49,14 @@ interface SheetColumnStringDefinition extends SheetColumnBaseDefinition {
 interface SheetColumnNumberDefinition extends SheetColumnBaseDefinition {
   type: 'number';
   // TODO: Should we add precision here?
+}
+
+interface SheetColumnBooleanDefinition extends SheetColumnBaseDefinition {
+  type: 'boolean';
+  typeArguments?: {
+    trueLabel?: string;
+    falseLabel?: string;
+  };
 }
 
 export interface SheetColumnReferenceDefinition

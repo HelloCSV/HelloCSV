@@ -24,3 +24,6 @@ export const CHECKBOX_COLUMN_WIDTH = 110;
 export const DATA_COLUMN_MIN_WIDTH = 50;
 export const DATA_COLUMN_MAX_WIDTH = 500;
 export const DATA_COLUMN_WIDTH = 150;
+
+export const DEFAULT_BOOLEAN_TRUE_LABEL = 'Yes';
+export const DEFAULT_BOOLEAN_FALSE_LABEL = 'No';

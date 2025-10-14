@@ -16,6 +16,10 @@ import {
   SheetViewMode,
 } from '../types';
 import { useMemo } from 'preact/hooks';
+import {
+  DEFAULT_BOOLEAN_FALSE_LABEL,
+  DEFAULT_BOOLEAN_TRUE_LABEL,
+} from '@/constants';
 
 export function extractReferenceColumnPossibleValues(
   columnDefinition: SheetColumnReferenceDefinition,
@@ -148,7 +152,15 @@ export function getCellDisplayValue(
             getLabelDict(columnDefinition, enumLabelDict),
             value
           )
-        : value;
+        : columnDefinition.type === 'boolean'
+          ? value === true
+            ? (columnDefinition.typeArguments?.trueLabel ??
+              DEFAULT_BOOLEAN_TRUE_LABEL)
+            : value === false
+              ? (columnDefinition.typeArguments?.falseLabel ??
+                DEFAULT_BOOLEAN_FALSE_LABEL)
+              : value
+          : value;
 
   const valueEmpty =
     extractedValue == null ||
