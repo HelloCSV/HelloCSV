@@ -11,6 +11,7 @@ import { Button, Badge } from '@/components';
 import { useTranslations } from '@/i18';
 import { useImporterState } from '@/importer/reducer';
 import { useImporterDefinition } from '@/importer/hooks';
+import { getSubmittedSheetData } from '@/utils';
 
 type Props = {
   completedWithErrors?: boolean;
@@ -24,10 +25,13 @@ export default function SummaryInfo({
   const {
     rowFile,
     mode,
-    sheetData,
+    sheetData: stateSheetData,
     importStatistics: statistics,
     sheetDefinitions,
   } = useImporterState();
+
+  const sheetData = getSubmittedSheetData(sheetDefinitions, stateSheetData);
+
   const { csvDownloadMode } = useImporterDefinition();
   const { t } = useTranslations();
   const totalRows = getTotalRows(sheetData);

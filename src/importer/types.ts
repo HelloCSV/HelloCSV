@@ -104,7 +104,7 @@ export interface ImporterSubmissionFile {
   sheetId: string;
 }
 
-export type ImporterOutputFieldType = string | number | undefined;
+export type ImporterOutputFieldType = string | number | boolean | undefined;
 
 export interface CellChangedPayload {
   sheetId: string;

@@ -22,6 +22,7 @@ export type ImporterValidatorType =
   | 'custom';
 
 export type ImporterValidatorDefinition =
+  | RequiredValidatorDefinition
   | ImporterValidatorDefinitionBase
   | MultiIncludesValidatorDefinition
   | IncludesValidatorDefinition
@@ -31,6 +32,12 @@ export type ImporterValidatorDefinition =
 export interface ImporterValidatorDefinitionBase {
   validate: ImporterValidatorType;
   error?: string;
+}
+
+export interface RequiredValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'required';
+  when?: (row: SheetRow) => boolean;
 }
 
 export interface MultiIncludesValidatorDefinition

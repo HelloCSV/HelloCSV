@@ -18,8 +18,7 @@ import {
   availableActionList,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
-import { filterEmptyRows, generateCsvContent } from '../utils';
-import { applyTransformations } from '../transformers';
+import { generateCsvContent, getSubmittedSheetData } from '../utils';
 import SheetsSwitcher from '../sheet/components/SheetsSwitcher';
 import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
@@ -125,10 +124,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
     dispatch({ type: 'SUBMIT' });
     try {
       // TODO: Should we filter invalid data?
-      const data = applyTransformations(
-        sheets,
-        sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
-      );
+      const data = getSubmittedSheetData(sheets, sheetData);
 
       const statistics = await onComplete(
         { ...state, sheetData: data },
@@ -173,12 +169,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
 
   return (
     <ThemeSetter>
-      <Root
-        ref={targetRef}
-        withFullHeight={
-          mode === 'submit' || mode === 'failed' || mode === 'completed'
-        }
-      >
+      <Root ref={targetRef}>
         {mode === 'upload' && (
           <Uploader
             onFileUploaded={onFileUploaded}

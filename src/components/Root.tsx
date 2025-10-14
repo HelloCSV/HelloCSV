@@ -4,11 +4,10 @@ import { HEALDESS_UI_PORTAL_ROOT_ID, ROOT_CLASS } from '../constants';
 
 interface Props {
   children?: ReactNode;
-  withFullHeight?: boolean;
 }
 
 export default forwardRef<HTMLDivElement, Props>(function Root(
-  { children, withFullHeight },
+  { children },
   ref
 ) {
   useEffect(() => {
@@ -40,10 +39,7 @@ export default forwardRef<HTMLDivElement, Props>(function Root(
       className={`${ROOT_CLASS}`}
       style={{ display: 'contents' }}
     >
-      <div
-        ref={ref}
-        className={`min-h-0 w-full overflow-auto bg-white ${withFullHeight ? 'h-full' : ''}`}
-      >
+      <div ref={ref} className="min-h-0 w-full overflow-auto bg-white">
         {children}
       </div>
     </div>

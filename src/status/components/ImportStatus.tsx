@@ -20,7 +20,7 @@ export default function ImportStatus({
   const { mode } = useImporterState();
 
   return (
-    <div className="h-full">
+    <div className="h-full overflow-auto">
       {mode === 'submit' && <Uploading resetState={resetState} />}
 
       {mode === 'failed' && (
