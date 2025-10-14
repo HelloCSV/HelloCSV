@@ -18,8 +18,8 @@ export default function Failed({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-full w-full flex-col">
-        <div className="text-2xl">{t('importStatus.dataImport')}</div>
+      <div className="text-2xl">{t('importStatus.dataImport')}</div>
+      <div className="grow overflow-auto">
         <div className="mt-4">
           <Alert
             variant="error"
@@ -30,15 +30,15 @@ export default function Failed({
         <div className="mt-6">
           <Summary completedWithErrors={false} enumLabelDict={enumLabelDict} />
         </div>
+      </div>
 
-        <div className="mt-6 flex justify-between">
-          <Button onClick={onBackToPreview} variant="secondary" outline>
-            {t('importer.loader.backToPreview')}
-          </Button>
-          <Button onClick={onRetry} variant="primary">
-            {t('importer.loader.retry')}
-          </Button>
-        </div>
+      <div className="mt-6 flex justify-between">
+        <Button onClick={onBackToPreview} variant="secondary" outline>
+          {t('importer.loader.backToPreview')}
+        </Button>
+        <Button onClick={onRetry} variant="primary">
+          {t('importer.loader.retry')}
+        </Button>
       </div>
     </div>
   );
