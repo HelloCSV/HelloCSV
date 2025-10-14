@@ -1,16 +1,28 @@
 import { hasData, eachWithObject } from '../utils/functional';
-import { ImporterValidationError, ImporterValidatorDefinition } from './types';
+import {
+  ImporterValidationError,
+  ImporterValidatorDefinition,
+  RequiredValidatorDefinition,
+} from './types';
 import { SheetColumnDefinition, SheetDefinition, SheetState } from '../types';
 import { Validator } from './validator_definitions/base';
 import { buildValidatorFromDefinition } from './validator_definitions';
 import { extractReferenceColumnPossibleValues } from '../sheet/utils';
 
-export function fieldIsRequired(columnDefinition: SheetColumnDefinition) {
+export function fieldIsRequired(
+  columnDefinition: SheetColumnDefinition,
+  { skipConditionCheck }: { skipConditionCheck?: boolean } = {}
+) {
   if (columnDefinition.validators && columnDefinition.validators.length > 0) {
     const isRequired = columnDefinition.validators.find(
       (v) => v.validate === 'required'
     );
-    return !!isRequired;
+    return (
+      isRequired != null &&
+      (skipConditionCheck
+        ? true
+        : (isRequired as RequiredValidatorDefinition).when == null)
+    );
   }
   return false;
 }
@@ -73,7 +85,11 @@ function validateSheet(
       if (!hasData(row)) {
         return;
       }
-      if (!(columnDefinition.id in row) && !fieldIsRequired(columnDefinition)) {
+
+      if (
+        !(columnDefinition.id in row) &&
+        !fieldIsRequired(columnDefinition, { skipConditionCheck: true })
+      ) {
         return;
       }
       const value = row[columnDefinition.id];
