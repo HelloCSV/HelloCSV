@@ -21,8 +21,15 @@ export type ImporterValidatorType =
   | 'postal_code'
   | 'custom';
 
+export interface UniqueValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'unique';
+  caseInsensitive?: boolean;
+}
+
 export type ImporterValidatorDefinition =
   | RequiredValidatorDefinition
+  | UniqueValidatorDefinition
   | ImporterValidatorDefinitionBase
   | MultiIncludesValidatorDefinition
   | IncludesValidatorDefinition
