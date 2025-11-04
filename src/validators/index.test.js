@@ -67,6 +67,16 @@ describe('UniqueValidator', () => {
     expect(validator.isValid(2)).toEqual(undefined);
     expect(validator.isValid(1)).toEqual('validators.unique');
   });
+
+  it('validates uniqueness case-insensitively when configured', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'unique',
+      caseInsensitive: true,
+    });
+    expect(validator.isValid('Foo')).toEqual(undefined);
+    expect(validator.isValid('bar')).toEqual(undefined);
+    expect(validator.isValid('foo')).toEqual('validators.unique');
+  });
 });
 
 describe('RequiredValidator', () => {
