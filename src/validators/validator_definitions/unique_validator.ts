@@ -9,7 +9,6 @@ export class UniqueValidator extends Validator {
 
   constructor(definition: UniqueValidatorDefinition) {
     super(definition);
-    this.definition = definition;
     this.seen = new Set();
   }
 
