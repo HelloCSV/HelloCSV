@@ -5,8 +5,6 @@ import { Validator } from './base';
 export class UniqueValidator extends Validator {
   seen: Set<ImporterOutputFieldType>;
 
-  definition: UniqueValidatorDefinition;
-
   constructor(definition: UniqueValidatorDefinition) {
     super(definition);
     this.seen = new Set();
