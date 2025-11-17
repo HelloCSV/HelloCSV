@@ -138,6 +138,24 @@ describe('EmailValidator', () => {
     expect(validator.isValid('test')).toEqual('validators.regex');
     expect(validator.isValid('')).toEqual('validators.regex');
   });
+
+  it('returns custom error when provided', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'email',
+      error: 'Invalid email address',
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('Invalid email address');
+  });
+
+  it('ignores overridden regex definitions', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'email',
+      regex: /.*/,
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('validators.regex');
+  });
 });
 
 describe('applyValidation', () => {
