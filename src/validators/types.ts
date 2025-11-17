@@ -34,7 +34,8 @@ export type ImporterValidatorDefinition =
   | MultiIncludesValidatorDefinition
   | IncludesValidatorDefinition
   | CustomValidatorDefinition
-  | RegexValidatorDefinition;
+  | RegexValidatorDefinition
+  | EmailValidatorDefinition;
 
 export interface ImporterValidatorDefinitionBase {
   validate: ImporterValidatorType;
@@ -61,6 +62,11 @@ export interface IncludesValidatorDefinition
 export interface RegexValidatorDefinition
   extends ImporterValidatorDefinitionBase {
   regex: string | RegExp;
+}
+
+export interface EmailValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'email';
 }
 
 export interface CustomValidatorDefinition
