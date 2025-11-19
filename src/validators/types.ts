@@ -34,7 +34,10 @@ export type ImporterValidatorDefinition =
   | MultiIncludesValidatorDefinition
   | IncludesValidatorDefinition
   | CustomValidatorDefinition
-  | RegexValidatorDefinition;
+  | RegexValidatorDefinition
+  | EmailValidatorDefinition
+  | PhoneNumberValidatorDefinition
+  | PostalCodeValidatorDefinition;
 
 export interface ImporterValidatorDefinitionBase {
   validate: ImporterValidatorType;
@@ -61,6 +64,21 @@ export interface IncludesValidatorDefinition
 export interface RegexValidatorDefinition
   extends ImporterValidatorDefinitionBase {
   regex: string | RegExp;
+}
+
+export interface EmailValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'email';
+}
+
+export interface PhoneNumberValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'phone_number';
+}
+
+export interface PostalCodeValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'postal_code';
 }
 
 export interface CustomValidatorDefinition
