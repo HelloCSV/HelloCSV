@@ -113,6 +113,15 @@ describe('PostalCodeValidator', () => {
     expect(validator.isValid('12345-12345678')).toEqual('validators.regex');
     expect(validator.isValid('12345-123456789')).toEqual('validators.regex');
   });
+
+  it('returns custom error when provided', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'postal_code',
+      error: 'Invalid postal code',
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('Invalid postal code');
+  });
 });
 
 describe('PhoneNumberValidator', () => {
@@ -126,6 +135,15 @@ describe('PhoneNumberValidator', () => {
     expect(validator.isValid('invalid')).toEqual('validators.regex');
     expect(validator.isValid('123-45-678')).toEqual('validators.regex');
     expect(validator.isValid('')).toEqual('validators.regex');
+  });
+
+  it('returns custom error when provided', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'phone_number',
+      error: 'Invalid phone number',
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('Invalid phone number');
   });
 });
 
