@@ -76,23 +76,6 @@ export default function EmployeeImporter() {
                       validate: 'email',
                       error: 'This email is not valid',
                     },
-                    {
-                      validate: 'custom',
-                      key: 'email_length_check',
-                      validateFn: async (value) => {
-                        await new Promise((resolve) =>
-                          setTimeout(resolve, 5000)
-                        );
-                        if (
-                          value &&
-                          typeof value === 'string' &&
-                          value.length < 15
-                        ) {
-                          return 'This email is too short';
-                        }
-                        return undefined;
-                      },
-                    },
                   ],
                 },
                 {
