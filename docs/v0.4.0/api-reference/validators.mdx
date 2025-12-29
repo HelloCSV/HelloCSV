@@ -1,0 +1,113 @@
+---
+title: "Validators"
+---
+
+This section describes the available validation rules.
+
+## required
+
+**Description:**  
+Ensures the field is not empty.
+
+**Additional:**  
+Accepts an optional `error` message.
+Additionally, accepts a `when` function that returns a boolean value. If the function returns false, the validation is skipped. Defaults to `() => true`.
+
+Example:
+
+```ts
+{
+  "validate": "required",
+  "when": (row) => row['employee.type'] === 'other'
+}
+```
+
+---
+
+## unique
+
+**Description:**  
+Ensures the value is unique across rows.
+
+**Additional:**  
+Accepts an optional `error` message.
+
+---
+
+## regex_matches
+
+**Description:**  
+Validates a field against a regular expression.
+
+**Additional:**  
+Expects a `regex` and an optional `error` message.
+
+---
+
+## includes
+
+**Description:**  
+Checks if a value is within a predefined list.
+
+**Additional:**  
+Requires a list of valid values.
+
+---
+
+## multi_includes
+
+**Description:**  
+Checks if all delimited values are valid.
+
+**Additional:**  
+Accepts `values`, a `delimiter`, and an optional `error` message.
+
+---
+
+## is_integer
+
+**Description:**  
+Validates that the value is an integer.
+
+**Additional:**  
+Optional `error` message.
+
+---
+
+## phone_number
+
+**Description:**  
+Validates phone number formatting.
+
+**Additional:**  
+Optional `error` message.
+
+---
+
+## email
+
+**Description:**  
+Validates email format.
+
+**Additional:**  
+Optional `error` message.
+
+---
+
+## postal_code
+
+**Description:**  
+Validates postal code format.
+
+**Additional:**  
+Optional `error` message.
+
+---
+
+## custom
+
+**Description:**  
+Custom validation function.
+
+**Additional:**  
+Requires a `key` and a `validateFn` that returns an error message if validation fails.

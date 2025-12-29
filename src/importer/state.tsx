@@ -6,12 +6,15 @@ import {
   PersistenceConfig,
   SheetDefinition,
   StateBuilderImporterDefinition,
+  RemoveRowsPayload,
+  CellChangedPayload,
 } from '../types';
 import { getIndexedDBState, setIndexedDBState } from './storage';
 import { buildSuggestedHeaderMappings } from '@/mapper/utils';
 import { convertCsvFile } from '@/uploader/utils';
 import { parseCsv } from '@/parser';
 import { reducer } from './reducer';
+import { applyValidations } from '../validators';
 import { NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT } from '@/constants';
 import { getMappedData } from '@/mapper';
 
@@ -37,6 +40,7 @@ export function buildInitialState(
     currentSheetId: sheetDefinitions[0].id,
     mode: 'upload',
     validationErrors: [],
+    validationInProgress: false,
     sheetData: sheetDefinitions.map((sheet) => ({
       sheetId: sheet.id,
       rows: [],
@@ -80,14 +84,19 @@ class StateBuilder {
     this.buildSteps = [];
   }
 
-  public getState(): ImporterState {
+  public async getState(): Promise<ImporterState> {
     let state = this.initialState;
 
     this.buildSteps.forEach((step) => {
       state = reducer(state, step);
     });
 
-    return state;
+    const validationErrors = await applyValidations(
+      this.importerDefinition.sheets,
+      state.sheetData
+    );
+
+    return { ...state, validationErrors };
   }
 
   public async uploadFile(file: File) {
@@ -142,7 +151,7 @@ class StateBuilder {
   }
 
   public async confirmMappings() {
-    const stateSoFar = this.getState();
+    const stateSoFar = await this.getState();
 
     const mappedData = getMappedData(
       this.importerDefinition.sheets,
@@ -159,6 +168,14 @@ class StateBuilder {
       type: 'DATA_MAPPED',
       payload: { mappedData: newMappedData },
     });
+  }
+
+  public changeCell(payload: CellChangedPayload) {
+    this.buildSteps.push({ type: 'CELL_CHANGED', payload });
+  }
+
+  public removeRows(payload: RemoveRowsPayload) {
+    this.buildSteps.push({ type: 'REMOVE_ROWS', payload });
   }
 }
 
@@ -178,9 +195,33 @@ export class InnerStateBuilder extends StateBuilder {
     super(importerDefinition, initialState);
   }
 
-  public dispatchChange(dispatch: Dispatch<ImporterAction>) {
+  private static readonly actionTypesThatRequireValidation: ReadonlySet<
+    ImporterAction['type']
+  > = new Set<ImporterAction['type']>([
+    'DATA_MAPPED',
+    'CELL_CHANGED',
+    'REMOVE_ROWS',
+  ]);
+
+  public async dispatchChange(dispatch: Dispatch<ImporterAction>) {
+    const shouldValidate = this.buildSteps.some((step) =>
+      InnerStateBuilder.actionTypesThatRequireValidation.has(step.type)
+    );
+
+    if (shouldValidate) {
+      dispatch({ type: 'VALIDATION_STARTED' });
+    }
+
     this.buildSteps.forEach((step) => {
       dispatch(step);
     });
+
+    if (shouldValidate) {
+      const finalState = await this.getState();
+      dispatch({
+        type: 'VALIDATION_COMPLETED',
+        payload: { errors: finalState.validationErrors },
+      });
+    }
   }
 }

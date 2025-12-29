@@ -68,10 +68,7 @@ export default function SheetDataEditorActions({
   const { csvDownloadMode, availableActions } = useImporterDefinition();
   const { t } = useTranslations();
 
-  // TODO THIS BRANCH: this should come from reducer state (mappingInProgress flag).
-  // For now hardcode it where state is extracted and pass it down.
-  const state = useImporterState();
-  const mappingInProgress = (state as any).mappingInProgress ?? true;
+  const { validationInProgress } = useImporterState();
 
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
     useState(false);
@@ -238,7 +235,7 @@ export default function SheetDataEditorActions({
         )}
       </div>
       <div className="ml-5 flex items-center">
-        {mappingInProgress && (
+        {validationInProgress && (
           <>
             <Spinner color="dark" />
             <div className="mr-2" />

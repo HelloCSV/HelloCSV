@@ -15,7 +15,6 @@ import {
   SheetRow,
 } from '../types';
 import { setIndexedDBState } from './storage';
-import { applyValidations } from '../validators';
 import { createContext } from 'preact';
 import { ReactNode } from 'preact/compat';
 import { buildInitialState, buildState } from './state';
@@ -81,10 +80,6 @@ export const reducer = (
           action.payload.mappedData
         ),
         mode: 'preview',
-        validationErrors: applyValidations(
-          state.sheetDefinitions,
-          action.payload.mappedData
-        ),
       };
     }
     case 'CELL_CHANGED': {
@@ -109,7 +104,6 @@ export const reducer = (
       return {
         ...state,
         sheetData: applyTransformations(state.sheetDefinitions, newData),
-        validationErrors: applyValidations(state.sheetDefinitions, newData),
       };
     }
 
@@ -130,7 +124,6 @@ export const reducer = (
       return {
         ...state,
         sheetData: newData,
-        validationErrors: applyValidations(state.sheetDefinitions, newData),
       };
     }
 
@@ -171,6 +164,17 @@ export const reducer = (
       return buildInitialState(state.sheetDefinitions);
     case 'SET_STATE':
       return action.payload.state;
+    case 'VALIDATION_STARTED':
+      return {
+        ...state,
+        validationInProgress: true,
+      };
+    case 'VALIDATION_COMPLETED':
+      return {
+        ...state,
+        validationErrors: action.payload.errors,
+        validationInProgress: false,
+      };
     default:
       return state;
   }

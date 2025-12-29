@@ -96,6 +96,7 @@ export interface ImporterState {
   rowFile?: File;
   columnMappings?: ColumnMapping[];
   importProgress: number;
+  validationInProgress?: boolean;
   importStatistics?: ImportStatistics;
 }
 
@@ -150,7 +151,12 @@ export type ImporterAction =
   | { type: 'PREVIEW' } // Changes the mode to 'preview' - used when uploading failed and user wants to retry
   | { type: 'MAPPING' } // Changes the mode to 'mapping' - used to go back to mappings screen in case there were some mapping issues
   | { type: 'RESET' } // Resets the state to the initial state
-  | { type: 'SET_STATE'; payload: { state: ImporterState } }; // Fetches the state from the indexedDB
+  | { type: 'SET_STATE'; payload: { state: ImporterState } } // Fetches the state from the indexedDB
+  | { type: 'VALIDATION_STARTED' } // Sets validationInProgress flag to true
+  | {
+      type: 'VALIDATION_COMPLETED';
+      payload: { errors: ImporterValidationError[] };
+    }; // Sets validation errors and validationInProgress flag
 
 type WithRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 

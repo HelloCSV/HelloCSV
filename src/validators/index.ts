@@ -55,12 +55,13 @@ function automaticFieldValidators(
   return result;
 }
 
-function validateSheet(
+async function validateSheet(
   sheetDefinition: SheetDefinition,
   sheetData: SheetState,
   allData: SheetState[]
 ) {
   const validationErrors: ImporterValidationError[] = [];
+  const validationPromises: Promise<void>[] = [];
 
   const validatorsByColumnId = eachWithObject<
     SheetColumnDefinition,
@@ -92,44 +93,52 @@ function validateSheet(
       ) {
         return;
       }
+
       const value = row[columnDefinition.id];
       const validators = validatorsByColumnId[columnDefinition.id];
 
       validators.forEach((v) => {
-        const result = v.isValid(value, row);
-
-        if (result != null) {
-          validationErrors.push({
-            sheetId: sheetDefinition.id,
-            columnId: columnDefinition.id,
-            rowIndex,
-            message: result,
-          });
-        }
+        const promise = Promise.resolve(v.isValid(value, row)).then(
+          (result) => {
+            if (result != null) {
+              validationErrors.push({
+                sheetId: sheetDefinition.id,
+                columnId: columnDefinition.id,
+                rowIndex,
+                message: result,
+              });
+            }
+          }
+        );
+        validationPromises.push(promise);
       });
     });
   });
 
+  await Promise.all(validationPromises);
   return validationErrors;
 }
 
-export function applyValidations(
+export async function applyValidations(
   sheetDefinitions: SheetDefinition[],
   sheetStates: SheetState[]
 ) {
-  const validationErrors: ImporterValidationError[] = [];
-
-  sheetDefinitions.forEach((sheetDefinition) => {
+  const promises = sheetDefinitions.map(async (sheetDefinition) => {
     const sheetData = sheetStates.find(
       (state) => state.sheetId === sheetDefinition.id
     );
 
     if (sheetData) {
-      const errors = validateSheet(sheetDefinition, sheetData, sheetStates);
-
-      validationErrors.push(...errors);
+      const errors = await validateSheet(
+        sheetDefinition,
+        sheetData,
+        sheetStates
+      );
+      return errors;
     }
+    return [];
   });
 
-  return validationErrors;
+  const allErrors = await Promise.all(promises);
+  return allErrors.flat();
 }
