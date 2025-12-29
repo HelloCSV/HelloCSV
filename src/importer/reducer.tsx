@@ -168,12 +168,21 @@ export const reducer = (
       return {
         ...state,
         validationInProgress: true,
+        validationRunId: action.payload.runId,
       };
     case 'VALIDATION_COMPLETED':
+      // Only apply validation results if they correspond to the latest
+      // validation run id recorded in state. This avoids race conditions
+      // where slower, earlier validations overwrite newer results.
+      if (state.validationRunId !== action.payload.runId) {
+        return state;
+      }
+
       return {
         ...state,
         validationErrors: action.payload.errors,
         validationInProgress: false,
+        validationRunId: undefined,
       };
     default:
       return state;

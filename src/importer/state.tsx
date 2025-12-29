@@ -15,6 +15,7 @@ import { convertCsvFile } from '@/uploader/utils';
 import { parseCsv } from '@/parser';
 import { reducer } from './reducer';
 import { applyValidations } from '../validators';
+import { generateValidationRunId } from '@/validators/utils';
 import { NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT } from '@/constants';
 import { getMappedData } from '@/mapper';
 
@@ -94,7 +95,7 @@ class StateBuilder {
     const validationErrors = await applyValidations(
       this.importerDefinition.sheets,
       state.sheetData
-    );
+    ).catch(() => state.validationErrors);
 
     return { ...state, validationErrors };
   }
@@ -208,8 +209,10 @@ export class InnerStateBuilder extends StateBuilder {
       InnerStateBuilder.actionTypesThatRequireValidation.has(step.type)
     );
 
+    const runId = generateValidationRunId();
+
     if (shouldValidate) {
-      dispatch({ type: 'VALIDATION_STARTED' });
+      dispatch({ type: 'VALIDATION_STARTED', payload: { runId } });
     }
 
     this.buildSteps.forEach((step) => {
@@ -220,7 +223,7 @@ export class InnerStateBuilder extends StateBuilder {
       const finalState = await this.getState();
       dispatch({
         type: 'VALIDATION_COMPLETED',
-        payload: { errors: finalState.validationErrors },
+        payload: { errors: finalState.validationErrors, runId },
       });
     }
   }

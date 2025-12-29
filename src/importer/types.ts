@@ -97,6 +97,13 @@ export interface ImporterState {
   columnMappings?: ColumnMapping[];
   importProgress: number;
   validationInProgress?: boolean;
+  /**
+   * Monotonic id for the currently running validation batch. When async
+   * validations complete we only apply results if the runId matches the
+   * latest value stored in state. This avoids race conditions where slow
+   * validators from earlier runs overwrite newer results.
+   */
+  validationRunId?: string;
   importStatistics?: ImportStatistics;
 }
 
@@ -152,11 +159,11 @@ export type ImporterAction =
   | { type: 'MAPPING' } // Changes the mode to 'mapping' - used to go back to mappings screen in case there were some mapping issues
   | { type: 'RESET' } // Resets the state to the initial state
   | { type: 'SET_STATE'; payload: { state: ImporterState } } // Fetches the state from the indexedDB
-  | { type: 'VALIDATION_STARTED' } // Sets validationInProgress flag to true
+  | { type: 'VALIDATION_STARTED'; payload: { runId: string } } // Sets validationInProgress flag to true and records run id
   | {
       type: 'VALIDATION_COMPLETED';
-      payload: { errors: ImporterValidationError[] };
-    }; // Sets validation errors and validationInProgress flag
+      payload: { errors: ImporterValidationError[]; runId: string };
+    }; // Sets validation errors and validationInProgress flag only if runId matches
 
 type WithRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
