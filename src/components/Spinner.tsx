@@ -7,7 +7,7 @@ interface Props {
 }
 
 const spinner = cva(
-  'inline-block rounded-full animate-spin border-t-transparent h-3 w-3 border-2',
+  'inline-block rounded-full animate-spin border-t-transparent h-4 w-4 border-2',
   {
     variants: {
       color: {
