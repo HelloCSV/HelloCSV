@@ -15,6 +15,76 @@
   "navigation": {
     "versions": [
       {
+        "version": "0.4.0",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "common/get-started/introduction",
+              "common/get-started/why",
+              "v0.4.0/get-started/usage",
+              "common/get-started/demo",
+              "common/get-started/multiple-sheets",
+              "common/get-started/persistence",
+              "common/get-started/custom-file-loaders"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "v0.4.0/api-reference/importer-props",
+              "v0.4.0/api-reference/sheet-definition-props",
+              "v0.4.0/api-reference/column-types",
+              "v0.4.0/api-reference/common-column-props",
+              "v0.4.0/api-reference/importer-state",
+              "v0.4.0/api-reference/sheet-state",
+              "v0.4.0/api-reference/validators",
+              "v0.4.0/api-reference/transformers",
+              "v0.4.0/api-reference/importer-validation-error",
+              "v0.4.0/api-reference/csv-importer-state-builder"
+            ]
+          },
+          {
+            "group": "Configuration",
+            "pages": ["v0.4.0/configuration/bundle-versions"]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "common/customization/height-and-width",
+              "common/customization/theme-styles"
+            ]
+          },
+          {
+            "group": "Upgrade",
+            "pages": ["v0.4.0/upgrade/from-v-0-3-9"]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "v0.4.0/development/setup",
+              "common/development/no-build-example",
+              "common/development/docs",
+              "v0.4.0/development/deployment"
+            ]
+          }
+        ],
+        "global": {
+          "anchors": [
+            {
+              "anchor": "Demo",
+              "href": "https://hellocsv.github.io/HelloCSV/",
+              "icon": "play"
+            },
+            {
+              "anchor": "Source Code",
+              "href": "https://github.com/HelloCSV/HelloCSV",
+              "icon": "github"
+            }
+          ]
+        }
+      },
+      {
         "version": "0.3.9",
         "groups": [
           {

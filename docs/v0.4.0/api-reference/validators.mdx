@@ -26,11 +26,12 @@ Example:
 
 ## unique
 
-**Description:**
+**Description:**  
 Ensures the value is unique across rows.
 
-**Additional:**
-Accepts an optional `error` message.
+**Additional:**  
+Accepts an optional `error` message. Set `caseInsensitive` to `true` to compare
+string values case-insensitively.
 
 ---
 
@@ -110,4 +111,23 @@ Optional `error` message.
 Custom validation function.
 
 **Additional:**  
-Requires a `key` and a `validateFn` that returns an error message if validation fails.
+ Requires a `key` and a `validateFn` that returns an error message if validation fails. The `validateFn` may be synchronous or asynchronous — it may return a `string | null | undefined` or a `Promise<string | null | undefined>`.
+
+Example (async):
+
+```ts
+{
+  validate: 'custom',
+  key: 'email_remote_check',
+  validateFn: async (value) => {
+    if (value && typeof value === 'string') {
+      // simulate async check (e.g. remote service)
+      const isEmailValid = await fetch('/api/validate-email', { method: 'POST', body: value });
+      if(!isEmailValid) {
+        return 'This email is too short';
+      }
+    }
+    return undefined;
+  },
+}
+```

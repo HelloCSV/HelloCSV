@@ -6,6 +6,7 @@ import {
   Input,
   Select,
   Tooltip,
+  Spinner,
 } from '@/components';
 import { downloadSheetAsCsv, removeDuplicates } from '@/utils';
 import {
@@ -25,6 +26,7 @@ import {
   SheetViewMode,
 } from '@/types';
 import { useImporterDefinition } from '@/importer/hooks';
+import { useImporterState } from '@/importer/reducer';
 
 interface Props {
   sheetDefinition: SheetDefinition;
@@ -65,6 +67,8 @@ export default function SheetDataEditorActions({
 }: Props) {
   const { csvDownloadMode, availableActions } = useImporterDefinition();
   const { t } = useTranslations();
+
+  const { validationInProgress } = useImporterState();
 
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
     useState(false);
@@ -230,26 +234,37 @@ export default function SheetDataEditorActions({
           />
         )}
       </div>
-      {availableActions.includes('resetState') && (
-        <>
-          <Tooltip className="ml-5" tooltipText={t('sheet.resetTooltip')}>
-            <XMarkIcon
-              className="h-6 w-6 cursor-pointer"
-              onClick={() => setResetConfirmationModalOpen(true)}
-            />
-          </Tooltip>
+      <div className="ml-5 flex items-center">
+        {validationInProgress && (
+          <>
+            <Spinner color="dark" />
+            <div className="mr-2" />
+          </>
+        )}
 
-          <ConfirmationModal
-            open={resetConfirmationModalOpen}
-            setOpen={setResetConfirmationModalOpen}
-            onConfirm={resetState}
-            title={t('sheet.resetConfirmationModalTitle')}
-            confirmationText={t('sheet.resetConfirmationModalConfirmationText')}
-            subTitle={t('sheet.resetConfirmationModalSubTitle')}
-            variant="danger"
-          />
-        </>
-      )}
+        {availableActions.includes('resetState') && (
+          <>
+            <Tooltip tooltipText={t('sheet.resetTooltip')}>
+              <XMarkIcon
+                className="h-6 w-6 cursor-pointer"
+                onClick={() => setResetConfirmationModalOpen(true)}
+              />
+            </Tooltip>
+
+            <ConfirmationModal
+              open={resetConfirmationModalOpen}
+              setOpen={setResetConfirmationModalOpen}
+              onConfirm={resetState}
+              title={t('sheet.resetConfirmationModalTitle')}
+              confirmationText={t(
+                'sheet.resetConfirmationModalConfirmationText'
+              )}
+              subTitle={t('sheet.resetConfirmationModalSubTitle')}
+              variant="danger"
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 }
