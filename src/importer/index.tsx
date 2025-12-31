@@ -104,11 +104,13 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
   }
 
   function onCellChanged(payload: CellChangedPayload) {
-    dispatch({ type: 'CELL_CHANGED', payload });
+    stateBuilder.changeCell(payload);
+    stateBuilder.dispatchChange(dispatch);
   }
 
   function onRemoveRows(payload: RemoveRowsPayload) {
-    dispatch({ type: 'REMOVE_ROWS', payload });
+    stateBuilder.removeRows(payload);
+    stateBuilder.dispatchChange(dispatch);
   }
 
   function addEmptyRow() {

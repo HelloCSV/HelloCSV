@@ -229,47 +229,47 @@ describe('applyValidation', () => {
   ];
 
   it('runs validations correctly', () => {
-    const validationErrors = applyValidations(sheetDefinitions, data);
+    return applyValidations(sheetDefinitions, data).then((validationErrors) => {
+      expect(
+        validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 0)
+      ).toBeUndefined();
+      expect(
+        validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 1)
+      ).toBeUndefined();
+      expect(
+        validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 2)
+      ).not.toBeUndefined();
 
-    expect(
-      validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 0)
-    ).toBeUndefined();
-    expect(
-      validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 1)
-    ).toBeUndefined();
-    expect(
-      validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 2)
-    ).not.toBeUndefined();
+      expect(
+        validationErrors.find((e) => e.columnId === 'email' && e.rowIndex === 0)
+      ).toBeUndefined();
+      expect(
+        validationErrors.find((e) => e.columnId === 'email' && e.rowIndex === 1)
+      ).not.toBeUndefined();
+      expect(
+        validationErrors.find((e) => e.columnId === 'email' && e.rowIndex === 2)
+      ).not.toBeUndefined();
 
-    expect(
-      validationErrors.find((e) => e.columnId === 'email' && e.rowIndex === 0)
-    ).toBeUndefined();
-    expect(
-      validationErrors.find((e) => e.columnId === 'email' && e.rowIndex === 1)
-    ).not.toBeUndefined();
-    expect(
-      validationErrors.find((e) => e.columnId === 'email' && e.rowIndex === 2)
-    ).not.toBeUndefined();
-
-    expect(
-      validationErrors.find(
-        (e) => e.columnId === 'phone_number' && e.rowIndex === 0
-      )
-    ).toBeUndefined();
-    expect(
-      validationErrors.find(
-        (e) => e.columnId === 'phone_number' && e.rowIndex === 1
-      )
-    ).not.toBeUndefined();
-    expect(
-      validationErrors.find(
-        (e) => e.columnId === 'phone_number' && e.rowIndex === 2
-      )
-    ).toBeUndefined();
+      expect(
+        validationErrors.find(
+          (e) => e.columnId === 'phone_number' && e.rowIndex === 0
+        )
+      ).toBeUndefined();
+      expect(
+        validationErrors.find(
+          (e) => e.columnId === 'phone_number' && e.rowIndex === 1
+        )
+      ).not.toBeUndefined();
+      expect(
+        validationErrors.find(
+          (e) => e.columnId === 'phone_number' && e.rowIndex === 2
+        )
+      ).toBeUndefined();
+    });
   });
 
   it('validates required columns', () => {
-    const validationErrors = applyValidations(
+    return applyValidations(
       [
         {
           id: 'a',
@@ -282,14 +282,14 @@ describe('applyValidation', () => {
           rows: [{ email: 'czhu12@gmail.com' }, { email: 'czhu13@gmail.com' }],
         },
       ]
-    );
-
-    expect(
-      validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 0)
-    ).not.toBeUndefined();
-    expect(
-      validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 1)
-    ).not.toBeUndefined();
+    ).then((validationErrors) => {
+      expect(
+        validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 0)
+      ).not.toBeUndefined();
+      expect(
+        validationErrors.find((e) => e.columnId === 'name' && e.rowIndex === 1)
+      ).not.toBeUndefined();
+    });
   });
 });
 

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'preact/hooks';
-import { Button, Error } from '@/components';
+import { Button, Error, Spinner } from '@/components';
 import { useTranslations } from '@/i18';
 import { ColumnMapping } from '@/types';
 import {
@@ -15,7 +15,7 @@ import { useImporterState } from '@/importer/reducer';
 
 interface Props {
   onMappingsChanged: (mappings: ColumnMapping[]) => void;
-  onMappingsSet: () => void;
+  onMappingsSet: () => Promise<void>;
   onBack: () => void;
 }
 
@@ -49,6 +49,17 @@ export default function HeaderMapper({
     if (!hoveredCsvHeader) return [];
     return calculateMappingExamples(data, hoveredCsvHeader);
   }, [hoveredCsvHeader, data]);
+
+  const [isMappingInProgress, setIsMappingInProgress] = useState(false);
+
+  async function handleConfirm() {
+    try {
+      setIsMappingInProgress(true);
+      await onMappingsSet();
+    } finally {
+      setIsMappingInProgress(false);
+    }
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -106,11 +117,27 @@ export default function HeaderMapper({
       )}
       <div className="mt-auto flex-none">
         <div className="mt-5 flex justify-between">
-          <Button variant="secondary" outline onClick={onBack}>
+          <Button
+            variant="secondary"
+            outline
+            onClick={onBack}
+            disabled={isMappingInProgress}
+          >
             {t('mapper.back')}
           </Button>
-          <Button onClick={onMappingsSet} disabled={!mapingsValid}>
-            {t('mapper.confirm')}
+          <Button
+            onClick={handleConfirm}
+            disabled={!mapingsValid || isMappingInProgress}
+          >
+            <div className="flex items-center">
+              {isMappingInProgress && (
+                <>
+                  <Spinner color="light" />
+                  <div className="mr-2" />
+                </>
+              )}
+              {t('mapper.confirm')}
+            </div>
           </Button>
         </div>
       </div>

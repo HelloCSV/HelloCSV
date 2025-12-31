@@ -7,7 +7,10 @@ export interface ImporterValidationError {
   message: string;
 }
 
-export type ImporterValidatorOutput = string | null | undefined;
+type ImporterValidatorBaseOutput = string | null | undefined;
+export type ImporterValidatorOutput =
+  | ImporterValidatorBaseOutput
+  | Promise<ImporterValidatorBaseOutput>;
 
 export type ImporterValidatorType =
   | 'regex_matches'
