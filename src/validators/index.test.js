@@ -67,6 +67,16 @@ describe('UniqueValidator', () => {
     expect(validator.isValid(2)).toEqual(undefined);
     expect(validator.isValid(1)).toEqual('validators.unique');
   });
+
+  it('validates uniqueness case-insensitively when configured', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'unique',
+      caseInsensitive: true,
+    });
+    expect(validator.isValid('Foo')).toEqual(undefined);
+    expect(validator.isValid('bar')).toEqual(undefined);
+    expect(validator.isValid('foo')).toEqual('validators.unique');
+  });
 });
 
 describe('RequiredValidator', () => {
@@ -103,6 +113,15 @@ describe('PostalCodeValidator', () => {
     expect(validator.isValid('12345-12345678')).toEqual('validators.regex');
     expect(validator.isValid('12345-123456789')).toEqual('validators.regex');
   });
+
+  it('returns custom error when provided', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'postal_code',
+      error: 'Invalid postal code',
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('Invalid postal code');
+  });
 });
 
 describe('PhoneNumberValidator', () => {
@@ -117,6 +136,15 @@ describe('PhoneNumberValidator', () => {
     expect(validator.isValid('123-45-678')).toEqual('validators.regex');
     expect(validator.isValid('')).toEqual('validators.regex');
   });
+
+  it('returns custom error when provided', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'phone_number',
+      error: 'Invalid phone number',
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('Invalid phone number');
+  });
 });
 
 describe('EmailValidator', () => {
@@ -127,6 +155,24 @@ describe('EmailValidator', () => {
     expect(validator.isValid('test@')).toEqual('validators.regex');
     expect(validator.isValid('test')).toEqual('validators.regex');
     expect(validator.isValid('')).toEqual('validators.regex');
+  });
+
+  it('returns custom error when provided', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'email',
+      error: 'Invalid email address',
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('Invalid email address');
+  });
+
+  it('ignores overridden regex definitions', () => {
+    const validator = buildValidatorFromDefinition({
+      validate: 'email',
+      regex: /.*/,
+    });
+
+    expect(validator.isValid('not-an-email')).toEqual('validators.regex');
   });
 });
 
