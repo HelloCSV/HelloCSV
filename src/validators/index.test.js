@@ -151,6 +151,7 @@ describe('EmailValidator', () => {
   it('validates email', () => {
     const validator = buildValidatorFromDefinition({ validate: 'email' });
     expect(validator.isValid('test@example.com')).toEqual(undefined);
+    expect(validator.isValid('TEST@ExAmPlE.com')).toEqual(undefined);
     expect(validator.isValid('test@example')).toEqual('validators.regex');
     expect(validator.isValid('test@')).toEqual('validators.regex');
     expect(validator.isValid('test')).toEqual('validators.regex');
