@@ -150,11 +150,31 @@ describe('PhoneNumberValidator', () => {
 describe('EmailValidator', () => {
   it('validates email', () => {
     const validator = buildValidatorFromDefinition({ validate: 'email' });
+    const invalid = 'validators.regex';
+
+    // valid
     expect(validator.isValid('test@example.com')).toEqual(undefined);
-    expect(validator.isValid('test@example')).toEqual('validators.regex');
-    expect(validator.isValid('test@')).toEqual('validators.regex');
-    expect(validator.isValid('test')).toEqual('validators.regex');
-    expect(validator.isValid('')).toEqual('validators.regex');
+    expect(validator.isValid('TEST@ExAmPlE.com')).toEqual(undefined);
+    expect(validator.isValid('first.last@example.com')).toEqual(undefined);
+    expect(validator.isValid('first_last@example.com')).toEqual(undefined);
+    expect(validator.isValid('first+tag@example.com')).toEqual(undefined);
+    expect(validator.isValid('first%tag@example.com')).toEqual(undefined);
+
+    // invalid structure
+    expect(validator.isValid('test@example')).toEqual(invalid);
+    expect(validator.isValid('test@')).toEqual(invalid);
+    expect(validator.isValid('test')).toEqual(invalid);
+    expect(validator.isValid('')).toEqual(invalid);
+
+    // invalid domain dots
+    expect(validator.isValid('test@example..com')).toEqual(invalid);
+    expect(validator.isValid('test@.example.com')).toEqual(invalid);
+    expect(validator.isValid('test@example.com.')).toEqual(invalid);
+
+    // explicitly disallowed
+    expect(validator.isValid('test*@example.com')).toEqual(invalid);
+    expect(validator.isValid('"quoted"@example.com')).toEqual(invalid);
+    expect(validator.isValid('user@[127.0.0.1]')).toEqual(invalid);
   });
 
   it('returns custom error when provided', () => {
