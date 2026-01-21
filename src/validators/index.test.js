@@ -155,6 +155,7 @@ describe('EmailValidator', () => {
     expect(validator.isValid('test@')).toEqual('validators.regex');
     expect(validator.isValid('test')).toEqual('validators.regex');
     expect(validator.isValid('')).toEqual('validators.regex');
+    expect(validator.isValid('test*@example.com')).toEqual('validators.regex');
   });
 
   it('returns custom error when provided', () => {
