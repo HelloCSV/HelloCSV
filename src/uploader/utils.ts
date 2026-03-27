@@ -32,6 +32,9 @@ export function getImporterRequirements(
   return groups;
 }
 
+export const getFileExtension = (fileName: string): string =>
+  '.' + (fileName.split('.').pop() ?? '').toLowerCase();
+
 export const formatFileSize = (bytes: number): string => {
   const units = ['B', 'KB', 'MB', 'GB'];
   let size = bytes;

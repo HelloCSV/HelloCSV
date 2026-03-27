@@ -41,7 +41,9 @@
     "dragAndDrop": "Drag and drop your file here",
     "maxFileSizeInBytes": "Limit {{size}}",
     "browseFiles": "Browse Files",
-    "enterManually": "Or just manually enter your data"
+    "enterManually": "Or just manually enter your data",
+    "unsupportedFileType": "Unsupported file type. Please upload a {{formats}} file.",
+    "fileTooLarge": "File is too large. Maximum size is {{size}}."
   },
   "mapper": {
     "numberRowsImported": "{{count}} Rows Imported",
