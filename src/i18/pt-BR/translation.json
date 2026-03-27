@@ -41,7 +41,9 @@
     "dragAndDrop": "Arraste e solte seu arquivo aqui",
     "maxFileSizeInBytes": "Limite {{size}}",
     "browseFiles": "Procurar arquivos",
-    "enterManually": "Ou apenas insira seus dados manualmente"
+    "enterManually": "Ou apenas insira seus dados manualmente",
+    "unsupportedFileType": "Tipo de arquivo não suportado. Por favor, envie um arquivo {{formats}}.",
+    "fileTooLarge": "O arquivo é muito grande. O tamanho máximo é {{size}}."
   },
   "mapper": {
     "numberRowsImported": "{{count}} linhas importadas",
