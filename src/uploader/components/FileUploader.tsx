@@ -1,9 +1,12 @@
 import { useRef, useState } from 'preact/hooks';
-import { Button, Card } from '@/components';
+import { Button, Card, Error } from '@/components';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { useTranslations } from '@/i18';
-import { SUPPORTED_FILE_MIME_TYPES } from '@/constants';
-import { formatFileSize } from '../utils';
+import {
+  SUPPORTED_FILE_EXTENSIONS,
+  SUPPORTED_FILE_MIME_TYPES,
+} from '@/constants';
+import { formatFileSize, getFileExtension } from '../utils';
 import { useImporterDefinition } from '@/importer/hooks';
 
 interface Props {
@@ -18,19 +21,37 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
   const { t, tHtml } = useTranslations();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [fileError, setFileError] = useState<string | null>(null);
   const supportedMimeTypes = SUPPORTED_FILE_MIME_TYPES.concat(
     customFileLoaders?.map((loader) => loader.mimeType) ?? []
   );
+  const supportedExtensions = SUPPORTED_FILE_EXTENSIONS;
+  const acceptedFormats = ['CSV', 'TSV']
+    .concat(customFileLoaders?.map((loader) => loader.label) ?? [])
+    .join(', ');
 
-  // TODO: Add error handling
   const validateAndSetFile = (file: File, maxFileSizeInBytes: number) => {
-    if (!supportedMimeTypes.includes(file.type)) {
+    const ext = getFileExtension(file.name);
+    const validType =
+      supportedMimeTypes.includes(file.type) ||
+      supportedExtensions.includes(ext);
+
+    if (!validType) {
+      setFileError(
+        t('uploader.unsupportedFileType', { formats: acceptedFormats })
+      );
       return;
     }
 
-    if (file.size <= maxFileSizeInBytes) {
-      setFile(file);
+    if (file.size > maxFileSizeInBytes) {
+      setFileError(
+        t('uploader.fileTooLarge', { size: formatFileSize(maxFileSizeInBytes) })
+      );
+      return;
     }
+
+    setFileError(null);
+    setFile(file);
   };
 
   const handleFileSelect = (event: Event) => {
@@ -76,6 +97,11 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
           <div className="mt-3">
             <Button>{t('uploader.browseFiles')}</Button>
           </div>
+          {fileError && (
+            <div className="mt-2">
+              <Error>{fileError}</Error>
+            </div>
+          )}
           {allowManualDataEntry && (
             <div className="mt-3 text-sm">
               <p
@@ -98,7 +124,7 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
           aria-label={t('uploader.uploadAFile')}
           ref={fileInputRef}
           type="file"
-          accept={supportedMimeTypes.join(',')}
+          accept={supportedMimeTypes.concat(supportedExtensions).join(',')}
           className="sr-only"
           onChange={(e) => handleFileSelect(e)}
         />
