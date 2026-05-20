@@ -215,6 +215,7 @@ export default function SheetDataEditorTable({
                 >
                   <SheetDataEditorCell
                     rowId={row.id}
+                    sheetDefinition={sheetDefinition}
                     columnDefinition={
                       sheetDefinition.columns.find((c) => c.id === columnId)!
                     }

@@ -75,7 +75,8 @@ export default function SheetDataEditor({
     sheetValidationErrors,
     errorColumnFilter,
     sheetDefinition,
-    searchPhrase
+    searchPhrase,
+    enumLabelDict
   );
 
   const rowValidationSummary = useMemo(() => {

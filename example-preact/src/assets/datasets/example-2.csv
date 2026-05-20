@@ -1,41 +1,41 @@
-employee_id,email,phone,city,state,company,industry
-1,employee1@healthlife.com,155-162-4925,Atlanta,GA,HealthLife,Healthcare
-2,employee2@buildsmart.com,527-437-3227,Denver,CO,BuildSmart,Construction
-3,employee3@ecogreen.com,920-354-3761,Austin,TX,EcoGreen,Environmental Services
-4,employee4@buildsmart.com,610-511-9249,Boston,MA,BuildSmart,Construction
-5,employee5@buildsmart.com,398-351-8368,Atlanta,GA,BuildSmart,Construction
-6,employee6@buildsmart.com,712-976-9695,Chicago,IL,BuildSmart,Construction
-7,employee7@healthlife.com,952-874-2041,Denver,CO,HealthLife,Healthcare
-8,employee8@ecogreen.com,634-184-1922,Boston,MA,EcoGreen,Environmental Services
-9,employee9@buildsmart.com,633-194-9522,Atlanta,GA,BuildSmart,Construction
-10,employee10@buildsmart.com,605-170-3107,New York,NY,BuildSmart,Construction
-11,employee11@healthlife.com,388-902-9553,Chicago,IL,HealthLife,Healthcare
-12,employee12@healthlife.com,751-215-1332,Denver,CO,HealthLife,Healthcare
-13,employee13@ecogreen.com,867-605-7567,Chicago,IL,EcoGreen,Environmental Services
-14,employee14@ecogreen.com,512-876-2531,Miami,FL,EcoGreen,Environmental Services
-15,employee15@healthlife.com,629-622-4735,Portland,OR,HealthLife,Healthcare
-16,employee16@buildsmart.com,924-889-5046,Atlanta,GA,BuildSmart,Construction
-17,employee17@ecogreen.com,884-331-8367,Boston,MA,EcoGreen,Environmental Services
-18,employee18@techcorp.com,637-339-5096,Miami,FL,TechCorp,Technology
-19,employee19@healthlife.com,433-783-8768,Boston,MA,HealthLife,Healthcare
-20,employee20@healthlife.com,160-141-3321,Chicago,IL,HealthLife,Healthcare
-21,employee21@ecogreen.com,203-797-5431,Seattle,WA,EcoGreen,Environmental Services
-22,employee22@techcorp.com,109-546-2563,Atlanta,GA,TechCorp,Technology
-23,employee23@buildsmart.com,619-103-2703,Atlanta,GA,BuildSmart,Construction
-24,employee24@ecogreen.com,845-203-7127,Portland,OR,EcoGreen,Environmental Services
-25,employee25@eduworld.com,462-799-5707,Austin,TX,EduWorld,Education
-26,employee26@eduworld.com,793-247-2003,Seattle,WA,EduWorld,Education
-27,employee27@healthlife.com,455-737-1941,Atlanta,GA,HealthLife,Healthcare
-28,employee28@techcorp.com,298-179-2119,New York,NY,TechCorp,Technology
-29,employee29@buildsmart.com,982-150-7800,Miami,FL,BuildSmart,Construction
-30,employee30@ecogreen.com,941-102-9140,Austin,TX,EcoGreen,Environmental Services
-31,employee31@techcorp.com,546-818-6590,New York,NY,TechCorp,Technology
-32,employee32@buildsmart.com,421-286-4878,San Francisco,CA,BuildSmart,Construction
-33,employee33@ecogreen.com,299-329-9180,Chicago,IL,EcoGreen,Environmental Services
-34,employee34@eduworld.com,843-201-2865,Chicago,IL,EduWorld,Education
-35,employee35@ecogreen.com,157-395-5949,Miami,FL,EcoGreen,Environmental Services
-36,employee36@eduworld.com,869-916-8499,Boston,MA,EduWorld,Education
-37,employee37@eduworld.com,847-585-7542,Boston,MA,EduWorld,Education
-38,employee38@healthlife.com,414-980-5702,Austin,TX,HealthLife,Healthcare
-39,employee39@healthlife.com,304-658-9670,Portland,OR,HealthLife,Healthcare
-40,employee40@healthlife.com,520-259-6469,Miami,FL,HealthLife,Healthcare
+employee_id,email,phone,city,state,company,industry,skills
+1,employee1@healthlife.com,155-162-4925,Atlanta,GA,HealthLife,Healthcare,"python, data_analysis"
+2,employee2@buildsmart.com,527-437-3227,Denver,CO,BuildSmart,Construction,sql
+3,employee3@ecogreen.com,920-354-3761,Austin,TX,EcoGreen,Environmental Services,"js, react"
+4,employee4@buildsmart.com,610-511-9249,Boston,MA,BuildSmart,Construction,"python, sql"
+5,employee5@buildsmart.com,398-351-8368,Atlanta,GA,BuildSmart,Construction,data_analysis
+6,employee6@buildsmart.com,712-976-9695,Chicago,IL,BuildSmart,Construction,"js, ts"
+7,employee7@healthlife.com,952-874-2041,Denver,CO,HealthLife,Healthcare,"react, ts"
+8,employee8@ecogreen.com,634-184-1922,Boston,MA,EcoGreen,Environmental Services,python
+9,employee9@buildsmart.com,633-194-9522,Atlanta,GA,BuildSmart,Construction,"sql, data_analysis"
+10,employee10@buildsmart.com,605-170-3107,New York,NY,BuildSmart,Construction,"js, python, react"
+11,employee11@healthlife.com,388-902-9553,Chicago,IL,HealthLife,Healthcare,ts
+12,employee12@healthlife.com,751-215-1332,Denver,CO,HealthLife,Healthcare,"python, data_analysis, sql"
+13,employee13@ecogreen.com,867-605-7567,Chicago,IL,EcoGreen,Environmental Services,"js, react, ts"
+14,employee14@ecogreen.com,512-876-2531,Miami,FL,EcoGreen,Environmental Services,react
+15,employee15@healthlife.com,629-622-4735,Portland,OR,HealthLife,Healthcare,"python, sql"
+16,employee16@buildsmart.com,924-889-5046,Atlanta,GA,BuildSmart,Construction,"data_analysis, ts"
+17,employee17@ecogreen.com,884-331-8367,Boston,MA,EcoGreen,Environmental Services,js
+18,employee18@techcorp.com,637-339-5096,Miami,FL,TechCorp,Technology,"js, react, ts"
+19,employee19@healthlife.com,433-783-8768,Boston,MA,HealthLife,Healthcare,"python, data_analysis"
+20,employee20@healthlife.com,160-141-3321,Chicago,IL,HealthLife,Healthcare,sql
+21,employee21@ecogreen.com,203-797-5431,Seattle,WA,EcoGreen,Environmental Services,"react, python"
+22,employee22@techcorp.com,109-546-2563,Atlanta,GA,TechCorp,Technology,"js, ts, sql"
+23,employee23@buildsmart.com,619-103-2703,Atlanta,GA,BuildSmart,Construction,data_analysis
+24,employee24@ecogreen.com,845-203-7127,Portland,OR,EcoGreen,Environmental Services,"python, react"
+25,employee25@eduworld.com,462-799-5707,Austin,TX,EduWorld,Education,"js, data_analysis"
+26,employee26@eduworld.com,793-247-2003,Seattle,WA,EduWorld,Education,"python, sql"
+27,employee27@healthlife.com,455-737-1941,Atlanta,GA,HealthLife,Healthcare,ts
+28,employee28@techcorp.com,298-179-2119,New York,NY,TechCorp,Technology,"js, react, python"
+29,employee29@buildsmart.com,982-150-7800,Miami,FL,BuildSmart,Construction,sql
+30,employee30@ecogreen.com,941-102-9140,Austin,TX,EcoGreen,Environmental Services,"data_analysis, python"
+31,employee31@techcorp.com,546-818-6590,New York,NY,TechCorp,Technology,"ts, react"
+32,employee32@buildsmart.com,421-286-4878,San Francisco,CA,BuildSmart,Construction,"js, sql"
+33,employee33@ecogreen.com,299-329-9180,Chicago,IL,EcoGreen,Environmental Services,python
+34,employee34@eduworld.com,843-201-2865,Chicago,IL,EduWorld,Education,"react, data_analysis"
+35,employee35@ecogreen.com,157-395-5949,Miami,FL,EcoGreen,Environmental Services,"js, ts"
+36,employee36@eduworld.com,869-916-8499,Boston,MA,EduWorld,Education,"python, sql, data_analysis"
+37,employee37@eduworld.com,847-585-7542,Boston,MA,EduWorld,Education,react
+38,employee38@healthlife.com,414-980-5702,Austin,TX,HealthLife,Healthcare,"js, python"
+39,employee39@healthlife.com,304-658-9670,Portland,OR,HealthLife,Healthcare,"ts, sql"
+40,employee40@healthlife.com,520-259-6469,Miami,FL,HealthLife,Healthcare,"react, data_analysis"

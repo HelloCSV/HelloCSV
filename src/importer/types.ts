@@ -112,7 +112,12 @@ export interface ImporterSubmissionFile {
   sheetId: string;
 }
 
-export type ImporterOutputFieldType = string | number | boolean | undefined;
+export type ImporterOutputFieldType =
+  | string
+  | number
+  | boolean
+  | string[]
+  | undefined;
 
 export interface CellChangedPayload {
   sheetId: string;

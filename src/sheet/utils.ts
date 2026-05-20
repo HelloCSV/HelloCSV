@@ -1,9 +1,4 @@
-import {
-  isEmptyCell,
-  normalizeValue,
-  getLabelDict,
-  getLabelDictValue,
-} from '../utils';
+import { isEmptyCell, normalizeValue, getColumnDisplayValue } from '../utils';
 import {
   EnumLabelDict,
   ImporterOutputFieldType,
@@ -16,10 +11,6 @@ import {
   SheetViewMode,
 } from '../types';
 import { useMemo } from 'preact/hooks';
-import {
-  DEFAULT_BOOLEAN_FALSE_LABEL,
-  DEFAULT_BOOLEAN_TRUE_LABEL,
-} from '@/constants';
 
 export function extractReferenceColumnPossibleValues(
   columnDefinition: SheetColumnReferenceDefinition,
@@ -53,7 +44,8 @@ export function useFilteredRowData(
   sheetValidationErrors: ImporterValidationError[],
   errorColumnFilter: string | null,
   sheetDefinition: SheetDefinition,
-  searchPhrase: string
+  searchPhrase: string,
+  enumLabelDict: EnumLabelDict
 ) {
   const rowData = useMemo(() => {
     let rows = data.rows;
@@ -86,10 +78,19 @@ export function useFilteredRowData(
     }
 
     if (searchPhrase.trim() !== '') {
+      const normalizedSearch = normalizeValue(searchPhrase)!;
       rows = rows.filter((row) =>
-        Object.values(row).some((cellValue) =>
-          normalizeValue(cellValue)?.includes(normalizeValue(searchPhrase)!)
-        )
+        sheetDefinition.columns.some((column) => {
+          const cellValue = row[column.id];
+
+          const { displayValue } = getCellDisplayValue(
+            sheetDefinition,
+            column,
+            cellValue,
+            enumLabelDict
+          );
+          return normalizeValue(displayValue)?.includes(normalizedSearch);
+        })
       );
     }
 
@@ -99,9 +100,10 @@ export function useFilteredRowData(
     viewMode,
     sheetValidationErrors,
     errorColumnFilter,
-    sheetDefinition.id,
+    sheetDefinition,
     allData,
     searchPhrase,
+    enumLabelDict,
   ]);
 
   return rowData;
@@ -139,32 +141,19 @@ export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
 }
 
 export function getCellDisplayValue(
+  sheetDefinition: SheetDefinition,
   columnDefinition: SheetColumnDefinition,
   value: ImporterOutputFieldType,
   enumLabelDict: EnumLabelDict
 ) {
-  const extractedValue =
-    columnDefinition.type === 'enum'
-      ? (columnDefinition.typeArguments.values.find((e) => e.value === value)
-          ?.label ?? value)
-      : columnDefinition.type === 'reference' && value != null
-        ? getLabelDictValue(
-            getLabelDict(columnDefinition, enumLabelDict),
-            value
-          )
-        : columnDefinition.type === 'boolean'
-          ? value === true
-            ? (columnDefinition.typeArguments?.trueLabel ??
-              DEFAULT_BOOLEAN_TRUE_LABEL)
-            : value === false
-              ? (columnDefinition.typeArguments?.falseLabel ??
-                DEFAULT_BOOLEAN_FALSE_LABEL)
-              : value
-          : value;
+  const extractedValue = getColumnDisplayValue(
+    sheetDefinition,
+    columnDefinition,
+    value,
+    enumLabelDict
+  );
 
-  const valueEmpty =
-    extractedValue == null ||
-    (typeof extractedValue === 'string' && extractedValue.trim() === '');
+  const valueEmpty = isEmptyCell(extractedValue);
 
   // Use non-breaking space to keep the cell height
   return { displayValue: valueEmpty ? '\u00A0' : extractedValue, valueEmpty };

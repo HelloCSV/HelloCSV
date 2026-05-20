@@ -8,6 +8,7 @@ import {
   SheetRow,
   ColumnMapping,
   MappedData,
+  SheetColumnEnumDefinition,
 } from '../types';
 
 const FLOAT = /^\s*-?(\d+\.?|\.\d+|\d+\.\d+)([eE][-+]?\d+)?\s*$/;
@@ -106,33 +107,60 @@ function isFloat(value: string): boolean {
   return false;
 }
 
-function getCellTypedValue(
+function extractEnumValue(
   csvColumnValue: CSVCell,
-  columnDefinition: SheetColumnDefinition
+  columnDefinition: SheetColumnEnumDefinition
 ): ImporterOutputFieldType {
-  if (columnDefinition.type === 'number' && isFloat(csvColumnValue)) {
-    return parseFloat(csvColumnValue);
+  const args = columnDefinition.typeArguments;
+  const values = args.values;
+
+  if (args.multiple) {
+    const actualDelimiter = args.delimiter ?? ',';
+    const csvString = csvColumnValue?.toString() ?? '';
+
+    if (csvString.trim() === '') {
+      return [];
+    }
+
+    const labels = csvString
+      .split(actualDelimiter)
+      .map((s) => s.trim())
+      .filter((s) => s !== '');
+
+    return labels.map((label) => {
+      const enumDef = values.find((v) => v.label === label);
+      return enumDef?.value ?? label;
+    });
   }
 
-  return csvColumnValue;
+  const enumDefinition = values.find(
+    (definition) => definition.label === csvColumnValue
+  );
+
+  return enumDefinition?.value ?? csvColumnValue;
 }
 
-/// Checks to see if CSV value doesn't match the enum label, if so converts it into enum value
+function extractNumberValue(csvColumnValue: CSVCell): ImporterOutputFieldType {
+  if (!isFloat(csvColumnValue)) {
+    return csvColumnValue;
+  }
+
+  return parseFloat(csvColumnValue);
+}
+
 function getCellValue(
   csvColumnValue: CSVCell,
   columnDefinition: SheetColumnDefinition
 ): ImporterOutputFieldType {
   if (columnDefinition.type === 'enum') {
-    const enumDefinition = columnDefinition.typeArguments.values.find(
-      (definition) => definition.label === csvColumnValue
-    );
-
-    if (enumDefinition != null) {
-      return enumDefinition.value;
-    }
+    return extractEnumValue(csvColumnValue, columnDefinition);
   }
 
-  return getCellTypedValue(csvColumnValue, columnDefinition);
+  if (columnDefinition.type === 'number') {
+    return extractNumberValue(csvColumnValue);
+  }
+
+  return csvColumnValue;
 }
 
 function mapRegularColumns(

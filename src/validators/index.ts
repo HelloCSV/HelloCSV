@@ -4,7 +4,12 @@ import {
   ImporterValidatorDefinition,
   RequiredValidatorDefinition,
 } from './types';
-import { SheetColumnDefinition, SheetDefinition, SheetState } from '../types';
+import {
+  SheetColumnDefinition,
+  SheetDefinition,
+  SheetState,
+  SelectOption,
+} from '../types';
 import { Validator } from './validator_definitions/base';
 import { buildValidatorFromDefinition } from './validator_definitions';
 import { extractReferenceColumnPossibleValues } from '../sheet/utils';
@@ -34,10 +39,24 @@ function automaticFieldValidators(
   const result: ImporterValidatorDefinition[] = [];
 
   if (columnDefinition.type === 'enum') {
-    result.push({
-      values: columnDefinition.typeArguments.values.map((v) => v.value),
-      validate: 'includes',
-    });
+    const { values, multiple } = columnDefinition.typeArguments as {
+      values: SelectOption<string>[];
+      multiple?: boolean;
+    };
+
+    const validValues = values.map((v) => v.value);
+
+    if (multiple) {
+      result.push({
+        values: validValues,
+        validate: 'multi_includes',
+      });
+    } else {
+      result.push({
+        values: validValues,
+        validate: 'includes',
+      });
+    }
   }
 
   if (columnDefinition.type === 'reference') {

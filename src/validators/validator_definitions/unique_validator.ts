@@ -14,6 +14,12 @@ export class UniqueValidator extends Validator {
   }
 
   private comparableValue(fieldValue: ImporterOutputFieldType) {
+    if (Array.isArray(fieldValue)) {
+      const sorted = [...fieldValue].sort();
+      return this.caseInsensitive
+        ? JSON.stringify(sorted.map((v) => v.toLocaleLowerCase()))
+        : JSON.stringify(sorted);
+    }
     if (this.caseInsensitive && typeof fieldValue === 'string') {
       return fieldValue.toLocaleLowerCase();
     }

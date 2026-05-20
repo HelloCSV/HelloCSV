@@ -19,8 +19,14 @@ export class MultiIncludesValidator extends Validator {
   }
 
   isValid(fieldValue: ImporterOutputFieldType) {
+    if (Array.isArray(fieldValue)) {
+      if (fieldValue.some((value) => !this.values.includes(value))) {
+        return this.definition.error || 'validators.multiIncludes';
+      }
+      return;
+    }
+
     const values = fieldValue?.toString()?.split(this.delimiter) ?? [];
-    // If any of the values are not in the list of valid values, then the field is invalid
     if (values.some((value) => !this.values.includes(value.trim()))) {
       return this.definition.error || 'validators.multiIncludes';
     }

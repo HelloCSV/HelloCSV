@@ -2,12 +2,17 @@ import {
   CsvDownloadMode,
   EnumLabelDict,
   ImporterOutputFieldType,
+  SheetColumnDefinition,
   SheetColumnReferenceDefinition,
   SheetDefinition,
   SheetRow,
   SheetState,
 } from '../types';
-import { DOWNLOADED_CSV_SEPARATOR } from '../constants';
+import {
+  DEFAULT_BOOLEAN_FALSE_LABEL,
+  DEFAULT_BOOLEAN_TRUE_LABEL,
+  DOWNLOADED_CSV_SEPARATOR,
+} from '../constants';
 import { applyTransformations } from '@/transformers';
 
 export const isUndefinedOrNull = (a: any) => {
@@ -20,8 +25,17 @@ export const filterEmptyRows = (state: SheetState) => {
   return state.rows.filter((d) => Object.keys(d).length > 0);
 };
 
-export function isEmptyCell(value: any): value is null | undefined {
-  return isUndefinedOrNull(value) || value === '';
+export function isEmptyCell(value: any): boolean {
+  if (isUndefinedOrNull(value)) {
+    return true;
+  }
+  if (typeof value === 'string') {
+    return value.trim() === '';
+  }
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  }
+  return false;
 }
 
 export const removeDuplicates = (array: any[]) => {
@@ -82,19 +96,14 @@ export function generateCsvContent(
         let processedValue: ImporterOutputFieldType;
 
         if (csvDownloadMode === 'value' || value == null) {
-          processedValue = value;
-        } else if (column.type === 'enum') {
-          processedValue = getLabelDictValue(
-            enumLabelDict[sheetDefinition.id][column.id],
-            value
-          );
-        } else if (column.type === 'reference') {
-          processedValue = getLabelDictValue(
-            getLabelDict(column, enumLabelDict),
-            value
-          );
+          processedValue = Array.isArray(value) ? value.join(', ') : value;
         } else {
-          processedValue = value;
+          processedValue = getColumnDisplayValue(
+            sheetDefinition,
+            column,
+            value,
+            enumLabelDict
+          );
         }
 
         return escapeCsvCell(processedValue);
@@ -139,11 +148,52 @@ export function getLabelDictValue(
   labelDict: Record<string, ImporterOutputFieldType>,
   value: ImporterOutputFieldType
 ): ImporterOutputFieldType {
+  if (Array.isArray(value)) {
+    return value.map((v) => labelDict[v] ?? v).join(', ');
+  }
+
   if (typeof value !== 'string') {
     return value;
   }
 
   return labelDict[value] ?? value;
+}
+
+export function getColumnDisplayValue(
+  sheetDefinition: SheetDefinition,
+  columnDefinition: SheetColumnDefinition,
+  value: ImporterOutputFieldType,
+  enumLabelDict: EnumLabelDict
+): ImporterOutputFieldType {
+  if (columnDefinition.type === 'enum') {
+    return getLabelDictValue(
+      enumLabelDict[sheetDefinition.id]?.[columnDefinition.id] ?? {},
+      value
+    );
+  }
+
+  if (columnDefinition.type === 'reference' && value != null) {
+    return getLabelDictValue(
+      getLabelDict(columnDefinition, enumLabelDict),
+      value
+    );
+  }
+
+  if (columnDefinition.type === 'boolean') {
+    if (value === true) {
+      return (
+        columnDefinition.typeArguments?.trueLabel ?? DEFAULT_BOOLEAN_TRUE_LABEL
+      );
+    }
+    if (value === false) {
+      return (
+        columnDefinition.typeArguments?.falseLabel ??
+        DEFAULT_BOOLEAN_FALSE_LABEL
+      );
+    }
+  }
+
+  return value;
 }
 
 export function getSubmittedSheetData(

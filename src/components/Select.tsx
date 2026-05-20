@@ -25,6 +25,7 @@ interface Props<T> {
   value: T[] | T | null;
   options: SelectOption<T>[];
   onChange: (value: T[] | T | null) => void;
+  onClose?: () => void;
   multiple?: boolean;
   compareFunction?: (a: T, b: T) => boolean;
   clearable?: boolean;
@@ -39,6 +40,7 @@ export default function Select<T>({
   value,
   options,
   onChange,
+  onClose,
   multiple = false,
   compareFunction = (a, b) => a === b,
   clearable = false,
@@ -125,7 +127,12 @@ export default function Select<T>({
   const clearButtonDisplayed = clearable && selectedOptions.length > 0;
 
   return (
-    <Combobox value={value as any} onChange={handleChange} multiple={multiple}>
+    <Combobox
+      value={value as any}
+      onChange={handleChange}
+      onClose={onClose}
+      multiple={multiple}
+    >
       <div className="relative">
         <ComboboxButton
           className="w-full"

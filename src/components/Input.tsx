@@ -64,7 +64,11 @@ const Input = forwardRef<HTMLInputElement, Props>(
           inputMode={type === 'number' ? 'numeric' : 'text'}
           placeholder={placeholder}
           value={
-            typeof localValue === 'boolean' ? localValue.toString() : localValue
+            typeof localValue === 'boolean'
+              ? localValue.toString()
+              : Array.isArray(localValue)
+                ? ''
+                : (localValue ?? '')
           }
           onChange={(e) =>
             onChange?.(getParsedValue(e)) ?? setLocalValue(getParsedValue(e))
