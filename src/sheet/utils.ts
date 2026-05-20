@@ -82,7 +82,7 @@ export function useFilteredRowData(
       rows = rows.filter((row) =>
         sheetDefinition.columns.some((column) => {
           const cellValue = row[column.id];
-          // Use display value (labels) for search instead of raw values
+
           const { displayValue } = getCellDisplayValue(
             sheetDefinition,
             column,
