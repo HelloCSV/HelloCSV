@@ -4,6 +4,8 @@ import {
   ImporterOutputFieldType,
   SheetColumnDefinition,
   SheetState,
+  SelectOption,
+  SheetDefinition,
 } from '@/types';
 import { Input, Select, SheetTooltip } from '@/components';
 import {
@@ -22,6 +24,7 @@ import {
 
 interface Props {
   rowId: string;
+  sheetDefinition: SheetDefinition;
   columnDefinition: SheetColumnDefinition;
   value: ImporterOutputFieldType;
   onUpdated: (value: ImporterOutputFieldType) => void;
@@ -33,6 +36,7 @@ interface Props {
 
 export default function SheetDataEditorCell({
   rowId,
+  sheetDefinition,
   columnDefinition,
   value,
   onUpdated,
@@ -59,6 +63,7 @@ export default function SheetDataEditorCell({
   }, [editMode]);
 
   const { displayValue, valueEmpty } = getCellDisplayValue(
+    sheetDefinition,
     columnDefinition,
     value,
     enumLabelDict
@@ -167,16 +172,32 @@ export default function SheetDataEditorCell({
   }
 
   if (columnDefinition.type === 'enum') {
-    const enumArguments = columnDefinition.typeArguments;
-    const selectOptions = enumArguments.values;
+    const { values, multiple } = columnDefinition.typeArguments as {
+      values: SelectOption<string>[];
+      multiple?: boolean;
+    };
+
+    if (multiple) {
+      return (
+        <Select
+          searchable
+          clearable
+          multiple
+          options={values}
+          value={value}
+          onChange={(newValue) => onUpdated((newValue as string[]) ?? [])}
+          onClose={() => setEditMode(false)}
+        />
+      );
+    }
 
     return (
       <Select
         searchable
-        options={selectOptions}
+        options={values}
         value={value}
-        onChange={(value) =>
-          updateValue((value as ImporterOutputFieldType) ?? '')
+        onChange={(newValue) =>
+          updateValue((newValue as ImporterOutputFieldType) ?? '')
         }
       />
     );

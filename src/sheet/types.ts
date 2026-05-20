@@ -68,11 +68,24 @@ export interface SheetColumnReferenceDefinition
   };
 }
 
-interface SheetColumnEnumDefinition extends SheetColumnBaseDefinition {
+interface SheetColumnEnumSingleTypeArguments {
+  values: SelectOption<string>[];
+  multiple?: false;
+}
+
+interface SheetColumnEnumMultipleTypeArguments {
+  values: SelectOption<string>[];
+  multiple: true;
+  delimiter?: string | RegExp;
+}
+
+type SheetColumnEnumTypeArguments =
+  | SheetColumnEnumSingleTypeArguments
+  | SheetColumnEnumMultipleTypeArguments;
+
+export interface SheetColumnEnumDefinition extends SheetColumnBaseDefinition {
   type: 'enum';
-  typeArguments: {
-    values: SelectOption<string>[];
-  };
+  typeArguments: SheetColumnEnumTypeArguments;
 }
 
 interface SheetColumnCalculatedDefinition

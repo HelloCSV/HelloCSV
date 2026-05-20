@@ -89,6 +89,23 @@ const EMPLOYEE_SHEET: SheetDefinition = {
       },
       validators: [{ validate: 'required' }],
     },
+    {
+      label: 'Skills',
+      id: 'skills',
+      type: 'enum',
+      validators: [{ validate: 'required' }],
+      typeArguments: {
+        values: [
+          { label: 'JavaScript', value: 'js' },
+          { label: 'Python', value: 'python' },
+          { label: 'React', value: 'react' },
+          { label: 'TypeScript', value: 'ts' },
+          { label: 'SQL', value: 'sql' },
+          { label: 'Data Analysis', value: 'data_analysis' },
+        ],
+        multiple: true,
+      },
+    },
   ],
 };
 

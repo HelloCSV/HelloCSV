@@ -53,13 +53,27 @@ Computed column value (read-only).
 
 ## enum
 
-**Description:**  
-Column with predefined values.
+**Description:**
+Column with predefined values. Supports both single-select and multi-select modes.
 
-**Additional:**  
-`typeArguments: { values: SelectOption<string>[] }`
+**Additional:**
+```ts
+// Single-select (default)
+typeArguments: {
+  values: SelectOption<string>[];
+  multiple?: false;
+}
+
+// Multi-select
+typeArguments: {
+  values: SelectOption<string>[];
+  multiple: true;
+  delimiter?: string | RegExp;  // Default: ','
+}
+```
 
 **Notes:**
+
 ```ts
 export interface SelectOption<T> {
   label: ImporterOutputFieldType;
@@ -68,3 +82,29 @@ export interface SelectOption<T> {
   group?: string;
 }
 ```
+
+**Multi-Select Behavior:**
+- When `multiple: true`, values are stored as `string[]` instead of `string`
+- CSV values are split by `delimiter` (default: comma)
+- Each part is trimmed and mapped from label to value
+- Display shows comma-separated labels
+
+**Example:**
+```ts
+{
+  label: 'Skills',
+  id: 'skills',
+  type: 'enum',
+  typeArguments: {
+    values: [
+      { label: 'JavaScript', value: 'js' },
+      { label: 'Python', value: 'py' },
+      { label: 'React', value: 'react' },
+    ],
+    multiple: true,
+    delimiter: ',',
+  },
+}
+```
+
+For a CSV cell containing `"JavaScript, Python"`, the stored value will be `["js", "py"]`.
