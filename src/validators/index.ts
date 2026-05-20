@@ -4,7 +4,12 @@ import {
   ImporterValidatorDefinition,
   RequiredValidatorDefinition,
 } from './types';
-import { SheetColumnDefinition, SheetDefinition, SheetState, SelectOption } from '../types';
+import {
+  SheetColumnDefinition,
+  SheetDefinition,
+  SheetState,
+  SelectOption,
+} from '../types';
 import { Validator } from './validator_definitions/base';
 import { buildValidatorFromDefinition } from './validator_definitions';
 import { extractReferenceColumnPossibleValues } from '../sheet/utils';

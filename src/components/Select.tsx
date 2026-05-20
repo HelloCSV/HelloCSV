@@ -127,7 +127,12 @@ export default function Select<T>({
   const clearButtonDisplayed = clearable && selectedOptions.length > 0;
 
   return (
-    <Combobox value={value as any} onChange={handleChange} onClose={onClose} multiple={multiple}>
+    <Combobox
+      value={value as any}
+      onChange={handleChange}
+      onClose={onClose}
+      multiple={multiple}
+    >
       <div className="relative">
         <ComboboxButton
           className="w-full"
