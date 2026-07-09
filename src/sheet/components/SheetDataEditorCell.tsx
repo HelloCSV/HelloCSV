@@ -9,10 +9,12 @@ import {
 } from '@/types';
 import { Input, Select, SheetTooltip } from '@/components';
 import {
+  buildMultiEnumEditorOptions,
   extractReferenceColumnPossibleValues,
   getCellDisplayValue,
   isColumnReadOnly,
 } from '../utils';
+import { ExclamationTriangleIcon } from '@heroicons/react/20/solid';
 import { getLabelDict, getLabelDictValue } from '@/utils';
 import { useTranslations } from '@/i18';
 import { useLongPress } from '@/utils/hooks';
@@ -178,12 +180,22 @@ export default function SheetDataEditorCell({
     };
 
     if (multiple) {
+      const optionsWithInvalidValues = buildMultiEnumEditorOptions(
+        value,
+        values,
+        (raw) => t('components.select.invalidOption', { value: raw }),
+        <ExclamationTriangleIcon
+          className="text-hello-csv-danger mr-2 h-5 w-5 shrink-0"
+          aria-hidden="true"
+        />
+      );
+
       return (
         <Select
           searchable
           clearable
           multiple
-          options={values}
+          options={optionsWithInvalidValues}
           value={value}
           onChange={(newValue) => onUpdated((newValue as string[]) ?? [])}
           onClose={() => setEditMode(false)}
