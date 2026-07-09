@@ -3,6 +3,7 @@ import {
   EnumLabelDict,
   ImporterOutputFieldType,
   ImporterValidationError,
+  SelectOption,
   SheetColumnDefinition,
   SheetColumnReferenceDefinition,
   SheetDefinition,
@@ -11,6 +12,7 @@ import {
   SheetViewMode,
 } from '../types';
 import { useMemo } from 'preact/hooks';
+import { ReactNode } from 'preact/compat';
 
 export function extractReferenceColumnPossibleValues(
   columnDefinition: SheetColumnReferenceDefinition,
@@ -138,6 +140,32 @@ export function getEnumLabelDict(sheetDefinitions: SheetDefinition[]) {
       ),
     ])
   );
+}
+
+// Given the current multi-enum cell value and the enum's valid options, return an
+// options list that also includes a warning-styled pseudo-option for every current
+// value not present in the valid options. This makes invalid tokens (e.g. an
+// unmatched value imported from CSV) visible and removable in the editor, instead of
+// lingering invisibly in the value array and keeping the cell invalid.
+export function buildMultiEnumEditorOptions(
+  value: ImporterOutputFieldType,
+  values: SelectOption<string>[],
+  makeInvalidLabel: (raw: string) => string,
+  invalidIcon: ReactNode
+): SelectOption<string>[] {
+  const current = Array.isArray(value) ? (value as string[]) : [];
+  const validValues = new Set(values.map((option) => option.value));
+
+  const invalidOptions = current
+    .filter((v) => !validValues.has(v))
+    .map((v) => ({
+      label: makeInvalidLabel(String(v)),
+      value: v,
+      icon: invalidIcon,
+    }));
+
+  // Invalid options first, for prominence.
+  return [...invalidOptions, ...values];
 }
 
 export function getCellDisplayValue(
