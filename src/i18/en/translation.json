@@ -7,7 +7,8 @@
     "select": {
       "optionPlaceholder": "Select an option",
       "noOptions": "No options",
-      "clear": "Clear"
+      "clear": "Clear",
+      "invalidOption": "{{value}} (invalid)"
     },
     "input": {
       "clear": "Clear"
