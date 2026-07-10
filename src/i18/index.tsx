@@ -1,6 +1,7 @@
 import { createContext, Fragment } from 'preact';
 import enTranslation from './en/translation.json';
 import frTranslation from './fr/translation.json';
+import koTranslation from './ko/translation.json';
 import ptBRTranslation from './pt-BR/translation.json';
 import { useContext } from 'preact/hooks';
 import { ReactNode } from 'preact/compat';
@@ -17,6 +18,7 @@ const resources: Record<string, Translation | undefined> = {
   en: enTranslation,
   fr: frTranslation,
   'pt-BR': ptBRTranslation,
+  ko: koTranslation,
 } satisfies Resources;
 
 const defaultLocale = 'en';
