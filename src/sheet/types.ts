@@ -56,6 +56,12 @@ interface SheetColumnBooleanDefinition extends SheetColumnBaseDefinition {
   typeArguments?: {
     trueLabel?: string;
     falseLabel?: string;
+    /** Raw strings that coerce to `true` (case-insensitive). Falls back to
+     * the built-in defaults when omitted. The `trueLabel` always counts too. */
+    trueValues?: string[];
+    /** Raw strings that coerce to `false` (case-insensitive). Falls back to
+     * the built-in defaults when omitted. The `falseLabel` always counts too. */
+    falseValues?: string[];
   };
 }
 

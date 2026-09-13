@@ -61,7 +61,10 @@ export function normalizeValue(value: ImporterOutputFieldType) {
     );
 }
 
-function escapeCsvCell(value: ImporterOutputFieldType): string {
+export function escapeDelimitedCell(
+  value: ImporterOutputFieldType,
+  delimiter: string
+): string {
   if (value == null) {
     return '';
   }
@@ -70,11 +73,22 @@ function escapeCsvCell(value: ImporterOutputFieldType): string {
 
   cell = cell.replace(/"/g, '""');
 
-  if (/[",\n\r]/.test(cell)) {
+  if (cell.includes('"') || cell.includes(delimiter) || /[\n\r]/.test(cell)) {
     cell = `"${cell}"`;
   }
 
   return cell;
+}
+
+export function serializeRows(
+  rows: ImporterOutputFieldType[][],
+  delimiter: string
+): string {
+  return rows
+    .map((row) =>
+      row.map((cell) => escapeDelimitedCell(cell, delimiter)).join(delimiter)
+    )
+    .join('\n');
 }
 
 export function generateCsvContent(
@@ -83,35 +97,28 @@ export function generateCsvContent(
   enumLabelDict: EnumLabelDict,
   csvDownloadMode: CsvDownloadMode
 ) {
-  const headers = sheetDefinition.columns
-    .map((column) =>
-      escapeCsvCell(csvDownloadMode === 'label' ? column.label : column.id)
-    )
-    .join(DOWNLOADED_CSV_SEPARATOR);
-
-  const rows = data.map((row) =>
-    sheetDefinition.columns
-      .map((column) => {
-        const value = row[column.id];
-        let processedValue: ImporterOutputFieldType;
-
-        if (csvDownloadMode === 'value' || value == null) {
-          processedValue = Array.isArray(value) ? value.join(', ') : value;
-        } else {
-          processedValue = getColumnDisplayValue(
-            sheetDefinition,
-            column,
-            value,
-            enumLabelDict
-          );
-        }
-
-        return escapeCsvCell(processedValue);
-      })
-      .join(DOWNLOADED_CSV_SEPARATOR)
+  const headerRow = sheetDefinition.columns.map((column) =>
+    csvDownloadMode === 'label' ? column.label : column.id
   );
 
-  const csv = [headers, ...rows].join('\n');
+  const dataRows = data.map((row) =>
+    sheetDefinition.columns.map((column) => {
+      const value = row[column.id];
+
+      if (csvDownloadMode === 'value' || value == null) {
+        return Array.isArray(value) ? value.join(', ') : value;
+      }
+
+      return getColumnDisplayValue(
+        sheetDefinition,
+        column,
+        value,
+        enumLabelDict
+      );
+    })
+  );
+
+  const csv = serializeRows([headerRow, ...dataRows], DOWNLOADED_CSV_SEPARATOR);
   return new Blob([csv], { type: 'text/csv' });
 }
 

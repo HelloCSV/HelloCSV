@@ -18,6 +18,7 @@ export type ImporterValidatorType =
   | 'unique'
   | 'includes'
   | 'multi_includes'
+  | 'boolean'
   | 'is_integer'
   | 'phone_number'
   | 'email'

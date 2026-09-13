@@ -108,6 +108,15 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
     stateBuilder.dispatchChange(dispatch);
   }
 
+  // Apply many cell edits (paste, fill-down, range clear) under a single
+  // validation run. Payloads must already be coalesced to one merged row per
+  // rowIndex (see groupChangesByRow) — changeCell accumulates whole-row steps.
+  function onCellsChanged(payloads: CellChangedPayload[]) {
+    if (payloads.length === 0) return;
+    payloads.forEach((payload) => stateBuilder.changeCell(payload));
+    stateBuilder.dispatchChange(dispatch);
+  }
+
   function onRemoveRows(payload: RemoveRowsPayload) {
     stateBuilder.removeRows(payload);
     stateBuilder.dispatchChange(dispatch);
@@ -212,6 +221,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
                   (error) => error.sheetId === currentSheetDefinition?.id
                 )}
                 setRowData={onCellChanged}
+                setRowsData={onCellsChanged}
                 removeRows={onRemoveRows}
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}

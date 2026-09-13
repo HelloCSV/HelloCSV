@@ -1,4 +1,11 @@
-import { formatData, filterEmptyRows, normalizeValue } from './';
+import {
+  formatData,
+  filterEmptyRows,
+  normalizeValue,
+  escapeDelimitedCell,
+  serializeRows,
+  generateCsvContent,
+} from './';
 import { describe, it, expect } from 'vitest';
 
 const headerMappings = {
@@ -60,10 +67,75 @@ describe('filterEmptyRows', () => {
   });
 });
 
-
 describe('normalizeValue', () => {
   it('normalizes a value', () => {
-    expect(normalizeValue('patient.data-SEX_AT_BIRTH')).toEqual('patientdatasexatbirth');
+    expect(normalizeValue('patient.data-SEX_AT_BIRTH')).toEqual(
+      'patientdatasexatbirth'
+    );
   });
 });
 
+describe('escapeDelimitedCell', () => {
+  it('leaves plain cells untouched and renders null as empty', () => {
+    expect(escapeDelimitedCell('hello', ',')).toEqual('hello');
+    expect(escapeDelimitedCell(42, ',')).toEqual('42');
+    expect(escapeDelimitedCell(null, ',')).toEqual('');
+    expect(escapeDelimitedCell(undefined, ',')).toEqual('');
+  });
+
+  it('quotes and escapes cells containing the delimiter, quotes or newlines', () => {
+    expect(escapeDelimitedCell('a,b', ',')).toEqual('"a,b"');
+    expect(escapeDelimitedCell('a,b', '\t')).toEqual('a,b'); // comma is fine under TSV
+    expect(escapeDelimitedCell('a\tb', '\t')).toEqual('"a\tb"');
+    expect(escapeDelimitedCell('say "hi"', ',')).toEqual('"say ""hi"""');
+    expect(escapeDelimitedCell('line\nbreak', ',')).toEqual('"line\nbreak"');
+  });
+});
+
+describe('serializeRows', () => {
+  it('joins a 2D block with the delimiter and newlines', () => {
+    expect(
+      serializeRows(
+        [
+          ['a', 'b'],
+          ['c', 'd'],
+        ],
+        ','
+      )
+    ).toEqual('a,b\nc,d');
+    expect(serializeRows([['a', 'b']], '\t')).toEqual('a\tb');
+  });
+});
+
+describe('generateCsvContent', () => {
+  const sheetDefinition = {
+    id: 'people',
+    label: 'People',
+    columns: [
+      { id: 'name', label: 'Name', type: 'string' },
+      { id: 'age', label: 'Age', type: 'number' },
+    ],
+  };
+  const enumLabelDict = {};
+
+  async function csvText(mode) {
+    const blob = generateCsvContent(
+      sheetDefinition,
+      [
+        { name: 'Ann', age: 30 },
+        { name: 'Bob, Jr', age: 25 },
+      ],
+      enumLabelDict,
+      mode
+    );
+    return blob.text();
+  }
+
+  it('serializes headers + rows and quotes cells with the separator', async () => {
+    expect(await csvText('value')).toEqual('name,age\nAnn,30\n"Bob, Jr",25');
+  });
+
+  it('uses column labels as headers in label mode', async () => {
+    expect(await csvText('label')).toEqual('Name,Age\nAnn,30\n"Bob, Jr",25');
+  });
+});
