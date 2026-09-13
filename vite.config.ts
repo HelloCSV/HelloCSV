@@ -12,6 +12,7 @@ import type { UserConfig } from 'vite';
 export default defineConfig(({ mode }): UserConfig => {
   const isBundled = mode === 'bundled';
   const isReact = mode === 'react';
+  const isTest = mode === 'test';
   const outDir = isBundled
     ? 'dist/bundled'
     : isReact
@@ -20,6 +21,16 @@ export default defineConfig(({ mode }): UserConfig => {
 
   const baseAlias = {
     '@': path.resolve(__dirname, './src'),
+    // In tests everything renders with Preact; map React (pulled in by
+    // @tanstack/react-table) onto preact/compat so a single renderer is used.
+    ...(isTest
+      ? {
+          react: 'preact/compat',
+          'react-dom': 'preact/compat',
+          'react/jsx-runtime': 'preact/jsx-runtime',
+          'react-dom/test-utils': 'preact/test-utils',
+        }
+      : {}),
   };
 
   return {
@@ -48,6 +59,21 @@ export default defineConfig(({ mode }): UserConfig => {
             preact: 'react',
           }
         : baseAlias,
+    },
+    test: {
+      // Component tests render with Preact; the React→preact/compat aliases live
+      // in resolve.alias (test-only). Inline the TanStack deps so those aliases
+      // apply during transform instead of being pre-bundled with real React.
+      // Per-file DOM environments are selected via `@vitest-environment` docblocks.
+      server: {
+        deps: {
+          inline: [
+            '@tanstack/react-table',
+            '@tanstack/react-virtual',
+            '@headlessui/react',
+          ],
+        },
+      },
     },
     build: {
       lib: {

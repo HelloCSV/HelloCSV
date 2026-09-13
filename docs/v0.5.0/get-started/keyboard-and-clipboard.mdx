@@ -1,0 +1,57 @@
+---
+title: 'Keyboard & Clipboard'
+---
+
+The data editor grid supports spreadsheet-style keyboard navigation, range
+selection, editing, and clipboard/fill — similar to Google Sheets or Excel.
+Click a cell (or press a navigation key) to make it active, then use the
+shortcuts below. On macOS use <kbd>Cmd</kbd> wherever <kbd>Ctrl</kbd> is listed.
+
+## Navigation
+
+| Shortcut | Action |
+| --- | --- |
+| <kbd>↑</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> | Move the active cell |
+| <kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd> | Move right / left |
+| <kbd>Enter</kbd> / <kbd>Shift</kbd>+<kbd>Enter</kbd> | Move down / up |
+| <kbd>Ctrl</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd>/<kbd>←</kbd>/<kbd>→</kbd> | Jump to the edge of the current data block |
+| <kbd>Home</kbd> / <kbd>End</kbd> | First / last cell in the row |
+| <kbd>Ctrl</kbd>+<kbd>Home</kbd> / <kbd>Ctrl</kbd>+<kbd>End</kbd> | First / last cell in the grid |
+| <kbd>PageUp</kbd> / <kbd>PageDown</kbd> | Move up / down one viewport |
+
+## Selection
+
+| Shortcut | Action |
+| --- | --- |
+| <kbd>Shift</kbd>+arrow | Extend the selection |
+| <kbd>Ctrl</kbd>+<kbd>A</kbd> | Select the whole grid |
+| Click | Select a cell |
+| <kbd>Shift</kbd>+click | Extend the selection to the clicked cell |
+| Click + drag | Select a range |
+
+## Editing
+
+| Shortcut | Action |
+| --- | --- |
+| <kbd>F2</kbd> or double-click | Edit the active cell |
+| Start typing | Edit the cell, seeded with the typed character |
+| <kbd>Enter</kbd> / <kbd>Tab</kbd> | Commit and move to the next cell |
+| <kbd>Escape</kbd> | Cancel the edit |
+| <kbd>Delete</kbd> / <kbd>Backspace</kbd> | Clear the selected cells |
+
+Read-only cells (for example [calculated](/v0.5.0/api-reference/column-types#calculated)
+columns) can't be edited or cleared.
+
+## Clipboard & fill
+
+| Shortcut | Action |
+| --- | --- |
+| <kbd>Ctrl</kbd>+<kbd>C</kbd> | Copy the selection |
+| <kbd>Ctrl</kbd>+<kbd>X</kbd> | Cut the selection |
+| <kbd>Ctrl</kbd>+<kbd>V</kbd> | Paste at the active cell (or fill the selection with a single copied cell) |
+| <kbd>Ctrl</kbd>+<kbd>D</kbd> | Fill the top row of the selection down |
+
+Copy/paste uses tab-separated values, so you can move data between HelloCSV and
+spreadsheet apps like Excel or Google Sheets. Multi-select
+[enum](/v0.5.0/api-reference/column-types#enum) cells are serialized using the
+column's `delimiter`, so copying and pasting them round-trips correctly.
