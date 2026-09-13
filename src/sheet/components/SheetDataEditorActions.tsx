@@ -15,6 +15,8 @@ import {
   PlusIcon,
   ArrowDownTrayIcon,
   MagnifyingGlassIcon,
+  ArrowUturnLeftIcon,
+  ArrowUturnRightIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslations } from '@/i18';
 import {
@@ -44,6 +46,10 @@ interface Props {
   sheetValidationErrors: ImporterValidationError[];
   rowValidationSummary: Record<SheetViewMode, number>;
   resetState: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   enumLabelDict: EnumLabelDict;
 }
 
@@ -63,6 +69,10 @@ export default function SheetDataEditorActions({
   sheetValidationErrors,
   rowValidationSummary,
   resetState,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
   enumLabelDict,
 }: Props) {
   const { csvDownloadMode, availableActions } = useImporterDefinition();
@@ -157,6 +167,32 @@ export default function SheetDataEditorActions({
             placeholder={t('sheet.search')}
             iconBuilder={(props) => <MagnifyingGlassIcon {...props} />}
           />
+        )}
+
+        {availableActions.includes('undoRedo') && (
+          <>
+            <Tooltip tooltipText={t('sheet.undoTooltip')}>
+              <ArrowUturnLeftIcon
+                role="button"
+                tabIndex={0}
+                aria-label={t('sheet.undoTooltip')}
+                aria-disabled={!canUndo}
+                className={`h-6 w-6 ${canUndo ? 'cursor-pointer' : disabledButtonClasses}`}
+                onClick={() => canUndo && undo()}
+              />
+            </Tooltip>
+
+            <Tooltip tooltipText={t('sheet.redoTooltip')}>
+              <ArrowUturnRightIcon
+                role="button"
+                tabIndex={0}
+                aria-label={t('sheet.redoTooltip')}
+                aria-disabled={!canRedo}
+                className={`h-6 w-6 ${canRedo ? 'cursor-pointer' : disabledButtonClasses}`}
+                onClick={() => canRedo && redo()}
+              />
+            </Tooltip>
+          </>
         )}
 
         {availableActions.includes('removeRows') && (

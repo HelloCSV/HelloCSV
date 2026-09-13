@@ -41,6 +41,19 @@ export function resolveKeyAction(
   dims: GridDimensions,
   isEditable: (active: GridSelectionState['active']) => boolean
 ): GridAction {
+  // Undo/redo are global to the grid: they work with no active cell and even
+  // when every row was just deleted (empty grid), so they're resolved before the
+  // guards below. While editing a cell we defer to the input's native text undo.
+  if (!state.editing && hasCmdModifier(descriptor)) {
+    const key = descriptor.key.toLowerCase();
+    if (key === 'z') {
+      return descriptor.shiftKey ? { type: 'Redo' } : { type: 'Undo' };
+    }
+    if (key === 'y') {
+      return { type: 'Redo' };
+    }
+  }
+
   if (dims.rowCount === 0 || dims.colCount === 0) {
     return { type: 'NoOp' };
   }

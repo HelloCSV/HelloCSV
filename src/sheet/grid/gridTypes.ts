@@ -89,4 +89,6 @@ export type GridAction =
   | { type: 'Copy' }
   | { type: 'Cut' }
   | { type: 'Paste' }
-  | { type: 'FillDown' };
+  | { type: 'FillDown' }
+  | { type: 'Undo' }
+  | { type: 'Redo' };
