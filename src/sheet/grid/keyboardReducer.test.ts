@@ -277,4 +277,73 @@ describe('resolveKeyAction — no active cell', () => {
       resolveKeyAction(key('ArrowDown'), empty, DIMS, alwaysEditable)
     ).toEqual({ type: 'MoveActive', to: { row: 0, col: 0 } });
   });
+
+  it('ctrl/cmd+z still resolves to Undo with no active cell', () => {
+    expect(
+      resolveKeyAction(key('z', { ctrlKey: true }), empty, DIMS, alwaysEditable)
+    ).toEqual({ type: 'Undo' });
+  });
+});
+
+describe('resolveKeyAction — undo/redo', () => {
+  it('ctrl+z and cmd+z resolve to Undo', () => {
+    expect(
+      resolveKeyAction(key('z', { ctrlKey: true }), base, DIMS, alwaysEditable)
+    ).toEqual({ type: 'Undo' });
+    expect(
+      resolveKeyAction(key('z', { metaKey: true }), base, DIMS, alwaysEditable)
+    ).toEqual({ type: 'Undo' });
+  });
+
+  it('ctrl/cmd+shift+z resolves to Redo', () => {
+    expect(
+      resolveKeyAction(
+        key('z', { ctrlKey: true, shiftKey: true }),
+        base,
+        DIMS,
+        alwaysEditable
+      )
+    ).toEqual({ type: 'Redo' });
+    // Some platforms deliver shift+z as an uppercase key.
+    expect(
+      resolveKeyAction(
+        key('Z', { metaKey: true, shiftKey: true }),
+        base,
+        DIMS,
+        alwaysEditable
+      )
+    ).toEqual({ type: 'Redo' });
+  });
+
+  it('ctrl/cmd+y resolves to Redo', () => {
+    expect(
+      resolveKeyAction(key('y', { ctrlKey: true }), base, DIMS, alwaysEditable)
+    ).toEqual({ type: 'Redo' });
+  });
+
+  it('undo works even when the grid is empty', () => {
+    expect(
+      resolveKeyAction(
+        key('z', { ctrlKey: true }),
+        base,
+        { rowCount: 0, colCount: 0 },
+        alwaysEditable
+      )
+    ).toEqual({ type: 'Undo' });
+  });
+
+  it('defers to native text undo while editing a cell', () => {
+    const editing: GridSelectionState = {
+      ...base,
+      editing: { row: 2, col: 1 },
+    };
+    expect(
+      resolveKeyAction(
+        key('z', { ctrlKey: true }),
+        editing,
+        DIMS,
+        alwaysEditable
+      )
+    ).toEqual({ type: 'NoOp' });
+  });
 });

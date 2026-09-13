@@ -43,6 +43,10 @@ interface Props {
   removeRows: (payload: RemoveRowsPayload) => void;
   addEmptyRow: () => void;
   resetState: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   enumLabelDict: EnumLabelDict;
 }
 
@@ -55,6 +59,10 @@ export default function SheetDataEditor({
   removeRows,
   addEmptyRow,
   resetState,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
   enumLabelDict,
 }: Props) {
   const { sheetData: allData } = useImporterState();
@@ -80,6 +88,7 @@ export default function SheetDataEditor({
 
   const hasCheckboxColumn = availableActions.includes('removeRows');
   const canEditRows = availableActions.includes('editRows');
+  const canUseUndoRedo = availableActions.includes('undoRedo');
 
   // Keyboard grid: selection, navigation, editing, clipboard and fill.
   const { selection, dims, tableContainerRef, handleGridKeyDown } =
@@ -90,6 +99,9 @@ export default function SheetDataEditor({
       allData,
       canEditRows,
       setRowsData,
+      // Gate the keyboard shortcuts on the same flag as the toolbar buttons.
+      undo: canUseUndoRedo ? undo : undefined,
+      redo: canUseUndoRedo ? redo : undefined,
     });
 
   useEffect(() => {
@@ -217,6 +229,10 @@ export default function SheetDataEditor({
           sheetValidationErrors={sheetValidationErrors}
           rowValidationSummary={rowValidationSummary}
           resetState={resetState}
+          undo={undo}
+          redo={redo}
+          canUndo={canUndo}
+          canRedo={canRedo}
           enumLabelDict={enumLabelDict}
         />
       </div>

@@ -76,6 +76,8 @@
     "removeRowsTooltipNoRowsSelected": "Veuillez sélectionner au moins un enregistrement avant de le supprimer",
     "addRowsTooltip": "Ajouter une nouvelle ligne",
     "downloadSheetTooltip": "Télécharger cette feuille",
+    "undoTooltip": "Annuler",
+    "redoTooltip": "Rétablir",
     "reset": "Recommencer",
     "resetTooltip": "Recommencer",
     "resetConfirmationModalTitle": "Recommencer",

@@ -13,7 +13,13 @@ const sheetDefinition = {
   ],
 } as SheetDefinition;
 
-function setup(opts: { canEditRows?: boolean } = {}) {
+function setup(
+  opts: {
+    canEditRows?: boolean;
+    undo?: () => void;
+    redo?: () => void;
+  } = {}
+) {
   // findRowIndex resolves rows by reference, so allData must share the objects.
   const rows: SheetRow[] = [
     { name: 'Ann', age: '30' },
@@ -31,6 +37,8 @@ function setup(opts: { canEditRows?: boolean } = {}) {
       allData,
       canEditRows: opts.canEditRows ?? true,
       setRowsData,
+      undo: opts.undo,
+      redo: opts.redo,
     })
   );
 
@@ -115,5 +123,39 @@ describe('useGridActions', () => {
     expect(setRowsData).toHaveBeenCalledWith([
       { sheetId: 'people', rowIndex: 1, value: { name: 'Ann', age: '25' } },
     ]);
+  });
+
+  it('Ctrl+Z invokes the undo callback when enabled', () => {
+    const undo = vi.fn();
+    const { result } = setup({ undo });
+    act(() => result.current.selection.setActive({ row: 0, col: 0 }));
+    act(() =>
+      result.current.handleGridKeyDown(key({ key: 'z', ctrlKey: true }))
+    );
+    expect(undo).toHaveBeenCalledTimes(1);
+  });
+
+  it('Ctrl+Shift+Z and Ctrl+Y invoke the redo callback when enabled', () => {
+    const redo = vi.fn();
+    const { result } = setup({ redo });
+    act(() => result.current.selection.setActive({ row: 0, col: 0 }));
+    act(() =>
+      result.current.handleGridKeyDown(
+        key({ key: 'z', ctrlKey: true, shiftKey: true })
+      )
+    );
+    act(() =>
+      result.current.handleGridKeyDown(key({ key: 'y', ctrlKey: true }))
+    );
+    expect(redo).toHaveBeenCalledTimes(2);
+  });
+
+  it('does nothing on Ctrl+Z when undo/redo is disabled (no callbacks)', () => {
+    const { result } = setup();
+    act(() => result.current.selection.setActive({ row: 0, col: 0 }));
+    // Should not throw when the callback is undefined.
+    act(() =>
+      result.current.handleGridKeyDown(key({ key: 'z', ctrlKey: true }))
+    );
   });
 });
