@@ -238,12 +238,17 @@ When set to `label`, the CSV will contain the labels of the values as well as co
 
 ## availableActions
 
-**Type:** `'addRows' | 'removeRows' | 'editRows' | 'downloadCsv' | 'search' | 'resetState' | 'backToPreviousStep'[]`
+**Type:** `'addRows' | 'removeRows' | 'editRows' | 'downloadCsv' | 'search' | 'resetState' | 'backToPreviousStep' | 'undoRedo'[]`
 
-**Required:** No (Default: `['addRows', 'removeRows', 'editRows', 'downloadCsv', 'search', 'resetState', 'backToPreviousStep'] - all the actions`)
+**Required:** No (Default: `['addRows', 'removeRows', 'editRows', 'downloadCsv', 'search', 'resetState', 'backToPreviousStep', 'undoRedo'] - all the actions`)
 
 **Description:**
 Determines which actions are available to the user on the preview screen.
+
+The `undoRedo` action enables the Back/Forward toolbar buttons **and** the
+undo/redo keyboard shortcuts (see
+[Keyboard & Clipboard](/v0.5.0/get-started/keyboard-and-clipboard#undo-redo)).
+Omitting it hides the buttons and disables the shortcuts.
 
 Use cases for `availableActions`:
 

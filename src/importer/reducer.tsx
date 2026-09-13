@@ -142,6 +142,9 @@ export const reducer = (
       return { ...state, sheetData: newData };
     }
 
+    case 'RESTORE_SHEET_DATA':
+      return { ...state, sheetData: action.payload.sheetData };
+
     case 'SHEET_CHANGED':
       return { ...state, currentSheetId: action.payload.sheetId };
     case 'SUBMIT':

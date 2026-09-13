@@ -76,6 +76,8 @@
     "removeRowsTooltipNoRowsSelected": "Selecione pelo menos um registro para deletá-lo",
     "addRowsTooltip": "Adicionar nova linha",
     "downloadSheetTooltip": "Baixar esta planilha",
+    "undoTooltip": "Desfazer",
+    "redoTooltip": "Refazer",
     "reset": "Recomeçar",
     "resetTooltip": "Recomeçar",
     "resetConfirmationModalTitle": "Recomeçar",

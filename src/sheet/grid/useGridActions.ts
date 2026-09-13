@@ -32,6 +32,10 @@ interface UseGridActionsParams {
   allData: SheetState[];
   canEditRows: boolean;
   setRowsData: (payloads: CellChangedPayload[]) => void;
+  /** Undo the last operation. Omitted when undo/redo is disabled. */
+  undo?: () => void;
+  /** Redo the last undone operation. Omitted when undo/redo is disabled. */
+  redo?: () => void;
 }
 
 interface UseGridActionsResult {
@@ -57,6 +61,8 @@ export function useGridActions({
   allData,
   canEditRows,
   setRowsData,
+  undo,
+  redo,
 }: UseGridActionsParams): UseGridActionsResult {
   const selection = useGridSelection();
   const clipboard = useClipboard();
@@ -323,6 +329,20 @@ export function useGridActions({
       case 'FillDown':
         executeFillDown();
         e.preventDefault();
+        break;
+      case 'Undo':
+        // Only claim the key when undo/redo is enabled; otherwise let the
+        // browser handle it natively.
+        if (undo) {
+          undo();
+          e.preventDefault();
+        }
+        break;
+      case 'Redo':
+        if (redo) {
+          redo();
+          e.preventDefault();
+        }
         break;
       case 'NoOp':
       default:

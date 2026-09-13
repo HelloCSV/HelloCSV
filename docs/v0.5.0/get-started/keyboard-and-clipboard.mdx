@@ -55,3 +55,21 @@ Copy/paste uses tab-separated values, so you can move data between HelloCSV and
 spreadsheet apps like Excel or Google Sheets. Multi-select
 [enum](/v0.5.0/api-reference/column-types#enum) cells are serialized using the
 column's `delimiter`, so copying and pasting them round-trips correctly.
+
+## Undo & Redo
+
+| Shortcut | Action |
+| --- | --- |
+| <kbd>Ctrl</kbd>+<kbd>Z</kbd> | Undo the last change |
+| <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd> | Redo |
+| <kbd>Ctrl</kbd>+<kbd>Y</kbd> | Redo |
+
+Each user operation is one step, so a mass action — pasting a block of cells,
+filling down, clearing a range, or removing rows — is undone (or redone) in a
+single press. Back and Forward buttons in the toolbar do the same thing. While
+you're editing a cell, <kbd>Ctrl</kbd>+<kbd>Z</kbd> falls back to the browser's
+native text undo inside that cell.
+
+History is kept in memory only and is cleared on reload. Both the shortcuts and
+the toolbar buttons are controlled by the `undoRedo`
+[available action](/v0.5.0/api-reference/importer-props#availableactions).
