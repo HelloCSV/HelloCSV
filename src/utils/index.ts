@@ -25,6 +25,45 @@ export const filterEmptyRows = (state: SheetState) => {
   return state.rows.filter((d) => Object.keys(d).length > 0);
 };
 
+export interface SheetRowLimitInfo {
+  sheetId: string;
+  label: string;
+  /** Effective (non-empty) row count for the sheet. */
+  count: number;
+  maxRows: number;
+  exceeded: boolean;
+}
+
+/**
+ * Returns row-limit info for every sheet that declares a `maxRows`. The count
+ * is the effective (non-empty) row count — matching what actually gets
+ * submitted via `getSubmittedSheetData` — so the manual-entry empty rows do not
+ * falsely trip the limit. Drives both the sheet-tab counter and the upload gate.
+ */
+export function getSheetRowLimitInfo(
+  sheets: SheetDefinition[],
+  sheetData: SheetState[]
+): SheetRowLimitInfo[] {
+  return sheets.flatMap((sheet) => {
+    if (sheet.maxRows == null) {
+      return [];
+    }
+
+    const state = sheetData.find((d) => d.sheetId === sheet.id);
+    const count = state != null ? filterEmptyRows(state).length : 0;
+
+    return [
+      {
+        sheetId: sheet.id,
+        label: sheet.label,
+        count,
+        maxRows: sheet.maxRows,
+        exceeded: count > sheet.maxRows,
+      },
+    ];
+  });
+}
+
 export function isEmptyCell(value: any): boolean {
   if (isUndefinedOrNull(value)) {
     return true;

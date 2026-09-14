@@ -34,3 +34,21 @@ Display name for the sheet.
 
 **Description:**  
 Array of column definitions for the sheet.
+
+---
+
+## maxRows
+
+**Type:** `number`
+
+**Required:** No (Default: no limit)
+
+**Description:**  
+Maximum number of rows that can be imported for this sheet. Empty rows are not
+counted toward the limit. When the limit is exceeded the user can still upload,
+map, and browse all of their data, but the **Upload** button is disabled (with an
+explanatory tooltip) until enough rows are removed. The sheet tab shows a
+`count / maxRows` counter and is flagged when over the limit.
+
+To apply a single limit across a multi-sheet import, set the same `maxRows` on
+each sheet.
