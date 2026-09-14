@@ -77,7 +77,11 @@ describe('useSheetRowLimits', () => {
       sheetData: [{ sheetId: 'a', rows: rows(3) }],
     });
 
-    expect(result.byId.a).toMatchObject({ count: 3, maxRows: 5, exceeded: false });
+    expect(result.byId.a).toMatchObject({
+      count: 3,
+      maxRows: 5,
+      exceeded: false,
+    });
     expect(result.byId.a.tooltip).toBe(
       `importer.rowLimitExceeded ${JSON.stringify({
         sheet: 'A',
