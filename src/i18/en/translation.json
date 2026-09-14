@@ -17,6 +17,9 @@
   "importer": {
     "upload": "Upload",
     "uploadBlocked": "Your data has validation errors. Fix them before uploading.",
+    "rowLimitExceeded": "\"{{sheet}}\" has {{count}} rows, which exceeds the maximum of {{limit}}. Remove rows to continue.",
+    "rowLimitExceededMultiple": "These sheets exceed their row limit: {{sheets}}. Remove rows to continue.",
+    "sheetValidationErrors": "This sheet has validation errors. Fix them before uploading.",
     "back": "Back",
     "loader": {
       "failed": "Something went wrong",
