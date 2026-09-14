@@ -5,6 +5,7 @@ import {
   escapeDelimitedCell,
   serializeRows,
   generateCsvContent,
+  getSheetRowLimitInfo,
 } from './';
 import { describe, it, expect } from 'vitest';
 
@@ -64,6 +65,70 @@ describe('filterEmptyRows', () => {
     ).toEqual(1);
     expect(filterEmptyRows({ rows: [{}, {}, {}] }).length).toEqual(0);
     expect(filterEmptyRows({ rows: [] }).length).toEqual(0);
+  });
+});
+
+describe('getSheetRowLimitInfo', () => {
+  const sheet = (id, extra = {}) => ({
+    id,
+    label: id.toUpperCase(),
+    columns: [],
+    ...extra,
+  });
+  const rows = (n) => Array.from({ length: n }, () => ({ key: 'v' }));
+
+  it('omits sheets without a maxRows', () => {
+    const info = getSheetRowLimitInfo(
+      [sheet('a')],
+      [{ sheetId: 'a', rows: rows(100) }]
+    );
+    expect(info).toEqual([]);
+  });
+
+  it('includes sheets under/at the limit as not exceeded', () => {
+    const info = getSheetRowLimitInfo(
+      [sheet('a', { maxRows: 5 })],
+      [{ sheetId: 'a', rows: rows(5) }]
+    );
+    expect(info).toEqual([
+      { sheetId: 'a', label: 'A', count: 5, maxRows: 5, exceeded: false },
+    ]);
+  });
+
+  it('flags sheets over the limit as exceeded', () => {
+    const info = getSheetRowLimitInfo(
+      [sheet('a', { maxRows: 5 })],
+      [{ sheetId: 'a', rows: rows(6) }]
+    );
+    expect(info[0]).toMatchObject({ count: 6, maxRows: 5, exceeded: true });
+  });
+
+  it('does not count empty rows toward the limit', () => {
+    const info = getSheetRowLimitInfo(
+      [sheet('a', { maxRows: 5 })],
+      [{ sheetId: 'a', rows: [...rows(3), {}, {}, {}, {}, {}] }]
+    );
+    expect(info[0]).toMatchObject({ count: 3, exceeded: false });
+  });
+
+  it('reports each limited sheet independently', () => {
+    const info = getSheetRowLimitInfo(
+      [sheet('a', { maxRows: 5 }), sheet('b'), sheet('c', { maxRows: 2 })],
+      [
+        { sheetId: 'a', rows: rows(4) },
+        { sheetId: 'b', rows: rows(999) },
+        { sheetId: 'c', rows: rows(10) },
+      ]
+    );
+    expect(info.map((i) => [i.sheetId, i.exceeded])).toEqual([
+      ['a', false],
+      ['c', true],
+    ]);
+  });
+
+  it('treats a missing sheet state as zero rows', () => {
+    const info = getSheetRowLimitInfo([sheet('a', { maxRows: 5 })], []);
+    expect(info[0]).toMatchObject({ count: 0, exceeded: false });
   });
 });
 
