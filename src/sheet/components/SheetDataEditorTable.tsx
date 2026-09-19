@@ -62,9 +62,9 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 whitespace-nowrap border-y border-gray-300';
+    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-hello-csv-text whitespace-nowrap border-y border-hello-csv-border-strong';
   const cellClass =
-    'text-sm font-medium whitespace-nowrap text-gray-900 border-b border-gray-300';
+    'text-sm font-medium whitespace-nowrap text-hello-csv-text border-b border-hello-csv-border-strong';
 
   const rows = table.getRowModel().rows;
 
@@ -205,7 +205,7 @@ export default function SheetDataEditorTable({
 
                   <span
                     key={`sort-icon-${headerGroup.id}-${header.id}`}
-                    className="ml-2 flex-none rounded-sm bg-gray-500 text-gray-200"
+                    className="bg-hello-csv-text-muted text-hello-csv-surface ml-2 flex-none rounded-sm"
                   >
                     {{
                       asc: (
@@ -225,7 +225,7 @@ export default function SheetDataEditorTable({
                       key={`resize-icon-${headerGroup.id}-${header.id}`}
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
-                      className="absolute top-0 right-0 h-full w-0.5 cursor-col-resize touch-none bg-gray-200 select-none"
+                      className="bg-hello-csv-border absolute top-0 right-0 h-full w-0.5 cursor-col-resize touch-none select-none"
                     />
                   )}
                 </div>
@@ -236,7 +236,7 @@ export default function SheetDataEditorTable({
       </thead>
 
       <tbody
-        className="divide-y divide-gray-200"
+        className="divide-hello-csv-border divide-y"
         style={{
           height: `${rowVirtualizer.getTotalSize()}px`,
         }}

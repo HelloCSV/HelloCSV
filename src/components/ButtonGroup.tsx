@@ -13,12 +13,12 @@ export type ButtonGroupDefinition = {
 };
 
 const buttonStyles = cva(
-  'relative inline-flex cursor-pointer items-center px-3 py-2 text-sm font-semibold ring-gray-300 ring-1 ring-inset focus:z-10',
+  'relative inline-flex cursor-pointer items-center px-3 py-2 text-sm font-semibold ring-hello-csv-border-strong ring-1 ring-inset focus:z-10',
   {
     variants: {
       active: {
         true: '',
-        false: 'bg-white hover:bg-gray-50',
+        false: 'bg-hello-csv-surface hover:bg-hello-csv-surface-sunken',
       },
       variant: {
         default: '',
@@ -34,17 +34,17 @@ const buttonStyles = cva(
       {
         active: true,
         variant: 'default',
-        className: 'bg-gray-900 text-white',
+        className: 'bg-hello-csv-primary text-hello-csv-primary-contrast',
       },
       {
         active: true,
         variant: 'danger',
-        className: 'bg-hello-csv-danger text-white',
+        className: 'bg-hello-csv-danger text-hello-csv-danger-contrast',
       },
       {
         active: false,
         variant: 'default',
-        className: 'text-gray-900',
+        className: 'text-hello-csv-text',
       },
       {
         active: false,

@@ -187,7 +187,7 @@ export default function Select<T>({
         >
           <ComboboxInput
             ref={inputRef}
-            className={`${classes} focus:outline-hello-csv-primary block w-full cursor-pointer truncate rounded-md bg-white py-1.5 focus:cursor-text ${clearButtonDisplayed ? 'pr-12' : 'pr-2'} pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm`}
+            className={`${classes} focus:outline-hello-csv-primary bg-hello-csv-surface block w-full cursor-pointer truncate rounded-md py-1.5 focus:cursor-text ${clearButtonDisplayed ? 'pr-12' : 'pr-2'} text-hello-csv-text outline-hello-csv-border-strong pl-3 text-left outline-1 -outline-offset-1 focus:outline-2 focus:-outline-offset-2 sm:text-sm`}
             displayValue={getDisplayValue}
             onChange={(event) =>
               searchable && setQuery((event.target as HTMLInputElement).value)
@@ -213,10 +213,10 @@ export default function Select<T>({
               e.stopPropagation();
               handleClearButton();
             }}
-            className="absolute inset-y-0 right-6 flex cursor-pointer items-center text-gray-500 hover:text-gray-700"
+            className="text-hello-csv-text-muted hover:text-hello-csv-text absolute inset-y-0 right-6 flex cursor-pointer items-center"
           >
             <XMarkIcon
-              className="h-5 w-5 text-gray-500 hover:text-gray-700"
+              className="text-hello-csv-text-muted hover:text-hello-csv-text h-5 w-5"
               aria-hidden="true"
             />
           </span>
@@ -224,21 +224,21 @@ export default function Select<T>({
         <ComboboxButton className="absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2">
           <ChevronUpDownIcon
             aria-hidden="true"
-            className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+            className="text-hello-csv-text-muted col-start-1 row-start-1 size-5 self-center justify-self-end sm:size-4"
           />
         </ComboboxButton>
 
         <ComboboxOptions
           anchor="bottom"
           transition
-          className="absolute z-99 mt-1 max-h-60 w-[var(--input-width)] overflow-auto rounded-md bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+          className="bg-hello-csv-surface-raised ring-hello-csv-border absolute z-99 mt-1 max-h-60 w-[var(--input-width)] overflow-auto rounded-md py-1 text-base ring-1 shadow-lg focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
         >
           {hasNoOptions && (
             <ComboboxOption
               key="no-options"
               disabled
               value={null}
-              className="pointer-events-none relative flex items-center justify-center py-2 pr-9 pl-3 text-gray-400 select-none"
+              className="text-hello-csv-text-subtle pointer-events-none relative flex items-center justify-center py-2 pr-9 pl-3 select-none"
             >
               <span className="block truncate font-normal">
                 {t('components.select.noOptions')}
@@ -248,7 +248,7 @@ export default function Select<T>({
           {groupedOptions.map(({ label, items }) => (
             <div key={`${label || 'all'}:${query}`}>
               {label && (
-                <div className="py-2 pr-9 pl-3 text-gray-400 uppercase">
+                <div className="text-hello-csv-text-subtle py-2 pr-9 pl-3 uppercase">
                   {label}
                 </div>
               )}
@@ -268,8 +268,8 @@ export default function Select<T>({
                   className={({ focus }) =>
                     `relative flex cursor-default items-center py-2 pr-9 pl-3 outline-hidden select-none ${
                       focus
-                        ? 'bg-hello-csv-primary text-white'
-                        : 'text-gray-900'
+                        ? 'bg-hello-csv-primary text-hello-csv-primary-contrast'
+                        : 'text-hello-csv-text'
                     }`
                   }
                 >
@@ -286,7 +286,9 @@ export default function Select<T>({
                       {selected && (
                         <span
                           className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
-                            focus ? 'text-white' : 'text-hello-csv-primary'
+                            focus
+                              ? 'text-hello-csv-primary-contrast'
+                              : 'text-hello-csv-primary'
                           }`}
                         >
                           <CheckIcon aria-hidden="true" className="h-5 w-5" />

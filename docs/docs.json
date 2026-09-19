@@ -53,7 +53,8 @@
             "group": "Customization",
             "pages": [
               "common/customization/height-and-width",
-              "common/customization/theme-styles"
+              "v0.5.0/customization/theme-styles",
+              "v0.5.0/customization/dark-mode"
             ]
           },
           {

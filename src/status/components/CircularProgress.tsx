@@ -40,7 +40,7 @@ export default function CircularProgress({ progress, pending }: Props) {
         cy="50"
         r={radius}
         fill="transparent"
-        className="text-gray-200"
+        className="text-hello-csv-border"
         strokeWidth="10"
         stroke="currentColor"
       />

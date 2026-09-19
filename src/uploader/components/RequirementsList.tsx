@@ -19,7 +19,7 @@ export default function RequirementsList({ importerRequirements }: Props) {
 
           return (
             <div key={groupName} className="me-3">
-              <div className="my-3 border-b border-gray-200 pb-4 text-sm font-light uppercase">
+              <div className="border-hello-csv-border my-3 border-b pb-4 text-sm font-light uppercase">
                 {t(`uploader.${group}Columns`)}
               </div>
               <div className="mt-4">
@@ -33,7 +33,7 @@ export default function RequirementsList({ importerRequirements }: Props) {
                       <Tooltip
                         tooltipText={t(`uploader.${group}ColumnsTooltip`)}
                       >
-                        <InformationCircleIcon className="size-5 text-gray-500" />
+                        <InformationCircleIcon className="text-hello-csv-text-muted size-5" />
                       </Tooltip>
                     </div>
                   </div>

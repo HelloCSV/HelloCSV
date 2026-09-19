@@ -2,8 +2,11 @@ import 'tippy.js/dist/tippy.css'; // optional for styling
 import rainbow from '../assets/images/rainbow.jpg';
 import logo from '../assets/images/logo.png';
 import demo from '../assets/images/demo.mp4';
+import { useDarkMode } from '../DarkModeContext';
 
 export default function Header() {
+  const { darkMode, toggleDarkMode } = useDarkMode();
+
   return (
     <div
       className="clip-diagonal bg-cover bg-center text-white"
@@ -20,13 +23,35 @@ export default function Header() {
               <span className="ml-[1px] font-semibold">CSV</span>
             </span>
           </div>
-          <iframe
-            src="https://ghbtns.com/github-btn.html?user=HelloCSV&repo=HelloCSV&type=star&count=true"
-            scrolling="0"
-            width="100"
-            height="30"
-            title="GitHub"
-          ></iframe>
+          <div className="flex items-center gap-4">
+            <iframe
+              src="https://ghbtns.com/github-btn.html?user=HelloCSV&repo=HelloCSV&type=star&count=true"
+              scrolling="0"
+              width="100"
+              height="20"
+              title="GitHub"
+              className="block"
+            ></iframe>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={darkMode}
+              aria-label="Toggle dark mode"
+              title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+              onClick={toggleDarkMode}
+              className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full transition-colors ${
+                darkMode ? 'bg-indigo-500' : 'bg-white/40'
+              }`}
+            >
+              <span
+                className={`inline-flex h-5 w-5 transform items-center justify-center rounded-full bg-white text-[10px] shadow transition-transform ${
+                  darkMode ? 'translate-x-5' : 'translate-x-0.5'
+                }`}
+              >
+                {darkMode ? '🌙' : '☀️'}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
       <div
@@ -48,7 +73,8 @@ export default function Header() {
             <br />
             🌎 Fully supports multiple languages for a seamless experience.
             <br />
-            💾 Save progress to local storage, so user's don't lose progress on a page refresh.
+            💾 Save progress to local storage, so user's don't lose progress on
+            a page refresh.
             <br />
             🔒 Frontend only, so data <b>never</b> leaves your application.
             <br />
