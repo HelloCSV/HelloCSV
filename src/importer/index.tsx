@@ -28,14 +28,10 @@ import { getEnumLabelDict } from '../sheet/utils';
 import { ImporterDefinitionProvider } from './hooks';
 import { InnerStateBuilder } from './state';
 import { useUndoRedo } from './useUndoRedo';
+import { useSheetRowLimits } from './useSheetRowLimits';
 
 function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
-  const {
-    onComplete,
-    sheets,
-    preventUploadOnValidationErrors,
-    availableActions,
-  } = importerDefinition;
+  const { onComplete, sheets, availableActions } = importerDefinition;
 
   const { t } = useTranslations();
 
@@ -75,12 +71,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
 
   const enumLabelDict = getEnumLabelDict(sheets);
 
-  const preventUploadOnErrors =
-    typeof preventUploadOnValidationErrors === 'function'
-      ? (preventUploadOnValidationErrors?.(validationErrors) ?? false)
-      : (preventUploadOnValidationErrors ?? false);
-
-  const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
+  const { preventUpload, uploadBlockedTooltip } = useSheetRowLimits();
 
   const stateBuilder = new InnerStateBuilder(importerDefinition, state);
 
@@ -278,7 +269,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
                       )}
                   </div>
                   <Tooltip
-                    tooltipText={t('importer.uploadBlocked')}
+                    tooltipText={uploadBlockedTooltip}
                     hidden={!preventUpload}
                   >
                     <Button onClick={onSubmit} disabled={preventUpload}>

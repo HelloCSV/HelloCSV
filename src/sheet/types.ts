@@ -19,6 +19,7 @@ export interface SheetDefinition {
   id: string;
   label: string;
   columns: SheetColumnDefinition[];
+  maxRows?: number;
 }
 
 export type SheetColumnDefinition =
