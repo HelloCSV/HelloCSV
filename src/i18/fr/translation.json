@@ -17,6 +17,9 @@
   "importer": {
     "upload": "Télécharger",
     "uploadBlocked": "Vos données comportent des erreurs de validation. Corrigez-les avant de les télécharger.",
+    "rowLimitExceeded": "« {{sheet}} » comporte {{count}} lignes, ce qui dépasse le maximum de {{limit}}. Supprimez des lignes pour continuer.",
+    "rowLimitExceededMultiple": "Ces feuilles dépassent leur limite de lignes : {{sheets}}. Supprimez des lignes pour continuer.",
+    "sheetValidationErrors": "Cette feuille comporte des erreurs de validation. Corrigez-les avant de télécharger.",
     "back": "Retour",
     "loader": {
       "failed": "Quelque chose a mal tourné",
@@ -76,6 +79,8 @@
     "removeRowsTooltipNoRowsSelected": "Veuillez sélectionner au moins un enregistrement avant de le supprimer",
     "addRowsTooltip": "Ajouter une nouvelle ligne",
     "downloadSheetTooltip": "Télécharger cette feuille",
+    "undoTooltip": "Annuler",
+    "redoTooltip": "Rétablir",
     "reset": "Recommencer",
     "resetTooltip": "Recommencer",
     "resetConfirmationModalTitle": "Recommencer",

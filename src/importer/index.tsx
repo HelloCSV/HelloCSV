@@ -27,14 +27,11 @@ import { Uploader } from '../uploader';
 import { getEnumLabelDict } from '../sheet/utils';
 import { ImporterDefinitionProvider } from './hooks';
 import { InnerStateBuilder } from './state';
+import { useUndoRedo } from './useUndoRedo';
+import { useSheetRowLimits } from './useSheetRowLimits';
 
 function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
-  const {
-    onComplete,
-    sheets,
-    preventUploadOnValidationErrors,
-    availableActions,
-  } = importerDefinition;
+  const { onComplete, sheets, availableActions } = importerDefinition;
 
   const { t } = useTranslations();
 
@@ -74,14 +71,18 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
 
   const enumLabelDict = getEnumLabelDict(sheets);
 
-  const preventUploadOnErrors =
-    typeof preventUploadOnValidationErrors === 'function'
-      ? (preventUploadOnValidationErrors?.(validationErrors) ?? false)
-      : (preventUploadOnValidationErrors ?? false);
-
-  const preventUpload = preventUploadOnErrors && validationErrors.length > 0;
+  const { preventUpload, uploadBlockedTooltip } = useSheetRowLimits();
 
   const stateBuilder = new InnerStateBuilder(importerDefinition, state);
+
+  const history = useUndoRedo();
+
+  // Snapshot the current data before a mutating operation so it can be undone.
+  // Called once per user operation — a multi-cell paste (a single onCellsChanged)
+  // therefore records one snapshot and is reverted by a single undo.
+  function recordHistory() {
+    history.record(sheetData);
+  }
 
   async function onFileUploaded(file: File) {
     await stateBuilder.uploadFile(file);
@@ -89,6 +90,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
   }
 
   function onEnterDataManually() {
+    history.reset();
     stateBuilder.setEnterDataManually();
     stateBuilder.dispatchChange(dispatch);
   }
@@ -99,11 +101,14 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
   }
 
   async function onMappingsSet() {
+    // Entering the preview with a freshly mapped dataset starts a new history.
+    history.reset();
     await stateBuilder.confirmMappings();
     stateBuilder.dispatchChange(dispatch);
   }
 
   function onCellChanged(payload: CellChangedPayload) {
+    recordHistory();
     stateBuilder.changeCell(payload);
     stateBuilder.dispatchChange(dispatch);
   }
@@ -113,20 +118,40 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
   // rowIndex (see groupChangesByRow) — changeCell accumulates whole-row steps.
   function onCellsChanged(payloads: CellChangedPayload[]) {
     if (payloads.length === 0) return;
+    recordHistory();
     payloads.forEach((payload) => stateBuilder.changeCell(payload));
     stateBuilder.dispatchChange(dispatch);
   }
 
   function onRemoveRows(payload: RemoveRowsPayload) {
+    recordHistory();
     stateBuilder.removeRows(payload);
     stateBuilder.dispatchChange(dispatch);
   }
 
   function addEmptyRow() {
+    recordHistory();
     dispatch({ type: 'ADD_EMPTY_ROW' });
   }
 
+  function onUndo() {
+    const snapshot = history.undo(sheetData);
+    if (snapshot == null) return;
+
+    stateBuilder.restoreSheetData(snapshot);
+    stateBuilder.dispatchChange(dispatch);
+  }
+
+  function onRedo() {
+    const snapshot = history.redo(sheetData);
+    if (snapshot == null) return;
+
+    stateBuilder.restoreSheetData(snapshot);
+    stateBuilder.dispatchChange(dispatch);
+  }
+
   function resetState() {
+    history.reset();
     dispatch({ type: 'RESET' });
   }
 
@@ -225,6 +250,10 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
                 removeRows={onRemoveRows}
                 addEmptyRow={addEmptyRow}
                 resetState={resetState}
+                undo={onUndo}
+                redo={onRedo}
+                canUndo={history.canUndo}
+                canRedo={history.canRedo}
                 enumLabelDict={enumLabelDict}
               />
             </div>
@@ -240,7 +269,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
                       )}
                   </div>
                   <Tooltip
-                    tooltipText={t('importer.uploadBlocked')}
+                    tooltipText={uploadBlockedTooltip}
                     hidden={!preventUpload}
                   >
                     <Button onClick={onSubmit} disabled={preventUpload}>

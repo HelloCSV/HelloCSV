@@ -8,6 +8,7 @@ import {
   StateBuilderImporterDefinition,
   RemoveRowsPayload,
   CellChangedPayload,
+  SheetState,
 } from '../types';
 import { getIndexedDBState, setIndexedDBState } from './storage';
 import { buildSuggestedHeaderMappings } from '@/mapper/utils';
@@ -178,6 +179,13 @@ class StateBuilder {
   public removeRows(payload: RemoveRowsPayload) {
     this.buildSteps.push({ type: 'REMOVE_ROWS', payload });
   }
+
+  public restoreSheetData(sheetData: SheetState[]) {
+    this.buildSteps.push({
+      type: 'RESTORE_SHEET_DATA',
+      payload: { sheetData },
+    });
+  }
 }
 
 export class OuterStateBuilder extends StateBuilder {
@@ -202,6 +210,7 @@ export class InnerStateBuilder extends StateBuilder {
     'DATA_MAPPED',
     'CELL_CHANGED',
     'REMOVE_ROWS',
+    'RESTORE_SHEET_DATA',
   ]);
 
   public async dispatchChange(dispatch: Dispatch<ImporterAction>) {

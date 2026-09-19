@@ -17,6 +17,9 @@
   "importer": {
     "upload": "Enviar",
     "uploadBlocked": "Seus dados têm erros de validação. Corrija-os antes de enviar.",
+    "rowLimitExceeded": "\"{{sheet}}\" tem {{count}} linhas, o que excede o máximo de {{limit}}. Remova linhas para continuar.",
+    "rowLimitExceededMultiple": "Estas planilhas excedem o limite de linhas: {{sheets}}. Remova linhas para continuar.",
+    "sheetValidationErrors": "Esta planilha tem erros de validação. Corrija-os antes de enviar.",
     "back": "Voltar",
     "loader": {
       "failed": "Algo deu errado",
@@ -76,6 +79,8 @@
     "removeRowsTooltipNoRowsSelected": "Selecione pelo menos um registro para deletá-lo",
     "addRowsTooltip": "Adicionar nova linha",
     "downloadSheetTooltip": "Baixar esta planilha",
+    "undoTooltip": "Desfazer",
+    "redoTooltip": "Refazer",
     "reset": "Recomeçar",
     "resetTooltip": "Recomeçar",
     "resetConfirmationModalTitle": "Recomeçar",

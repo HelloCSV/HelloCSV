@@ -1,5 +1,8 @@
 export const NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT = 100;
 
+// Maximum number of undo/redo snapshots kept in memory per importer session.
+export const MAX_UNDO_HISTORY = 50;
+
 export const NUMBER_OF_EXAMPLES_IN_MAPPING = 5;
 
 export const SUPPORTED_FILE_MIME_TYPES = [

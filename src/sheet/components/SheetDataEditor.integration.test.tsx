@@ -64,16 +64,19 @@ function makeData(): SheetState {
 function setup(
   overrides: Partial<Parameters<typeof SheetDataEditor>[0]> = {},
   def: SheetDefinition = sheetDefinition,
-  data: SheetState = makeData()
+  data: SheetState = makeData(),
+  availableActions: string[] = ['editRows', 'removeRows']
 ) {
   holders.state.value = { sheetData: [data], validationInProgress: false };
   holders.def.value = {
-    availableActions: ['editRows', 'removeRows'],
+    availableActions,
     csvDownloadMode: 'value',
   };
 
   const setRowData = vi.fn();
   const setRowsData = vi.fn();
+  const undo = vi.fn();
+  const redo = vi.fn();
 
   const utils = render(
     <TranslationProvider>
@@ -86,6 +89,10 @@ function setup(
         removeRows={vi.fn()}
         addEmptyRow={vi.fn()}
         resetState={vi.fn()}
+        undo={undo}
+        redo={redo}
+        canUndo={false}
+        canRedo={false}
         enumLabelDict={{}}
         {...overrides}
       />
@@ -97,7 +104,7 @@ function setup(
       `[data-cell-row="${row}"][data-cell-col="${col}"]`
     )!;
 
-  return { ...utils, data, setRowData, setRowsData, cellAt };
+  return { ...utils, data, setRowData, setRowsData, undo, redo, cellAt };
 }
 
 let clipboardText = '';
@@ -459,5 +466,41 @@ describe('SheetDataEditor keyboard grid', () => {
       relatedTarget: document.body,
     });
     expect(cellAt(0, 0).querySelector('input')).toBeNull();
+  });
+});
+
+describe('SheetDataEditor undo/redo toolbar', () => {
+  it('does not render the buttons unless undoRedo is enabled', () => {
+    const { queryByRole } = setup({}, sheetDefinition, makeData(), [
+      'editRows',
+    ]);
+    expect(queryByRole('button', { name: 'Undo' })).toBeNull();
+    expect(queryByRole('button', { name: 'Redo' })).toBeNull();
+  });
+
+  it('renders Back/Forward buttons and invokes the callbacks when enabled', () => {
+    const { getByRole, undo, redo } = setup(
+      { canUndo: true, canRedo: true },
+      sheetDefinition,
+      makeData(),
+      ['undoRedo']
+    );
+
+    fireEvent.click(getByRole('button', { name: 'Undo' }));
+    expect(undo).toHaveBeenCalledTimes(1);
+
+    fireEvent.click(getByRole('button', { name: 'Redo' }));
+    expect(redo).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not invoke undo when there is nothing to undo', () => {
+    const { getByRole, undo } = setup(
+      { canUndo: false },
+      sheetDefinition,
+      makeData(),
+      ['undoRedo']
+    );
+    fireEvent.click(getByRole('button', { name: 'Undo' }));
+    expect(undo).not.toHaveBeenCalled();
   });
 });
