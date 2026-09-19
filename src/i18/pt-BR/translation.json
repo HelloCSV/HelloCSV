@@ -83,6 +83,7 @@
     "resetConfirmationModalSubTitle": "Tem certeza que deseja recomeçar? Isso removerá todos os dados e resetará a planilha ao seu estado inicial."
   },
   "validators": {
+    "boolean": "Este valor deve ser verdadeiro ou falso",
     "includes": "O valor não está na lista de valores permitidos",
     "integer": "Este não é um número válido",
     "multiIncludes": "Este valor não é válido",

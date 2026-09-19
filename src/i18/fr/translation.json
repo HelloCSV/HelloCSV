@@ -83,6 +83,7 @@
     "resetConfirmationModalSubTitle": "Êtes-vous sûr de vouloir recommencer ? Cela supprimera toutes les données et réinitialisera la feuille à son état initial."
   },
   "validators": {
+    "boolean": "Cette valeur doit être vraie ou fausse",
     "includes": "La valeur n'est pas dans la liste des valeurs autorisées",
     "integer": "Ce n'est pas un nombre valide",
     "multiIncludes": "Cette valeur n'est pas valide",

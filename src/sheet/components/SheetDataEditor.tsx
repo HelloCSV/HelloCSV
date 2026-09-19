@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import {
   ColumnDef,
   getCoreRowModel,
@@ -31,12 +31,15 @@ import {
   DATA_COLUMN_MIN_WIDTH,
 } from '@/constants';
 import { useImporterDefinition } from '@/importer/hooks';
+import { GridSelectionProvider } from '../grid/GridSelectionContext';
+import { useGridActions } from '../grid/useGridActions';
 
 interface Props {
   sheetDefinition: SheetDefinition;
   data: SheetState;
   sheetValidationErrors: ImporterValidationError[];
   setRowData: (payload: CellChangedPayload) => void;
+  setRowsData: (payloads: CellChangedPayload[]) => void;
   removeRows: (payload: RemoveRowsPayload) => void;
   addEmptyRow: () => void;
   resetState: () => void;
@@ -48,6 +51,7 @@ export default function SheetDataEditor({
   data,
   sheetValidationErrors,
   setRowData,
+  setRowsData,
   removeRows,
   addEmptyRow,
   resetState,
@@ -63,11 +67,6 @@ export default function SheetDataEditor({
     null
   );
 
-  useEffect(() => {
-    setSelectedRows([]); // On changing sheets
-    setViewMode('all');
-  }, [sheetDefinition]);
-
   const rowData = useFilteredRowData(
     data,
     allData,
@@ -78,6 +77,29 @@ export default function SheetDataEditor({
     searchPhrase,
     enumLabelDict
   );
+
+  const hasCheckboxColumn = availableActions.includes('removeRows');
+  const canEditRows = availableActions.includes('editRows');
+
+  // Keyboard grid: selection, navigation, editing, clipboard and fill.
+  const { selection, dims, tableContainerRef, handleGridKeyDown } =
+    useGridActions({
+      sheetDefinition,
+      data,
+      rowData,
+      allData,
+      canEditRows,
+      setRowsData,
+    });
+
+  useEffect(() => {
+    // Reset selection and view when switching sheets.
+    setSelectedRows([]);
+    setViewMode('all');
+    selection.reset();
+    // selection.reset is stable (useCallback); re-running on its identity is unwanted.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheetDefinition]);
 
   const rowValidationSummary = useMemo(() => {
     const allRows = data.rows;
@@ -163,7 +185,11 @@ export default function SheetDataEditor({
     value: ImporterOutputFieldType
   ) {
     const rowValue = { ...data.rows[rowIndex] };
-    rowValue[columnId] = value;
+    if (value === undefined) {
+      delete rowValue[columnId];
+    } else {
+      rowValue[columnId] = value;
+    }
 
     setRowData({
       sheetId: sheetDefinition.id,
@@ -171,8 +197,6 @@ export default function SheetDataEditor({
       rowIndex,
     });
   }
-
-  const tableContainerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="flex h-full flex-col">
@@ -197,18 +221,27 @@ export default function SheetDataEditor({
         />
       </div>
 
-      <div className="min-h-0 flex-1 overflow-auto" ref={tableContainerRef}>
-        <SheetDataEditorTable
-          tableContainerRef={tableContainerRef}
-          table={table}
-          sheetDefinition={sheetDefinition}
-          allData={allData}
-          sheetValidationErrors={sheetValidationErrors}
-          onCellValueChanged={onCellValueChanged}
-          setSelectedRows={setSelectedRows}
-          enumLabelDict={enumLabelDict}
-        />
-      </div>
+      <GridSelectionProvider value={selection}>
+        <div
+          className="min-h-0 flex-1 overflow-auto"
+          ref={tableContainerRef}
+          tabIndex={0}
+          onKeyDown={handleGridKeyDown}
+        >
+          <SheetDataEditorTable
+            tableContainerRef={tableContainerRef}
+            table={table}
+            sheetDefinition={sheetDefinition}
+            allData={allData}
+            sheetValidationErrors={sheetValidationErrors}
+            onCellValueChanged={onCellValueChanged}
+            setSelectedRows={setSelectedRows}
+            enumLabelDict={enumLabelDict}
+            gridDims={dims}
+            hasCheckboxColumn={hasCheckboxColumn}
+          />
+        </div>
+      </GridSelectionProvider>
     </div>
   );
 }

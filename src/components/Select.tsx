@@ -11,8 +11,9 @@ import {
   CheckIcon,
 } from '@heroicons/react/20/solid';
 import { useTranslations } from '../i18';
-import { useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { ReactNode } from 'preact/compat';
+import { resolveSingleSelectChange } from './selectChange';
 
 export interface SelectOption<T> {
   label: string;
@@ -33,6 +34,15 @@ interface Props<T> {
   placeholder?: string;
   classes?: string;
   displayPlaceholderWhenSelected?: boolean;
+  autoFocus?: boolean;
+  /** Open the dropdown as soon as the input is focused (used for grid editing). */
+  immediate?: boolean;
+  /**
+   * Treat the input purely as a search/filter box: it shows the typed query
+   * (not the selected value's label), so clearing it only clears the filter and
+   * never the selection. Used for grid editing.
+   */
+  searchInputAsFilter?: boolean;
   'aria-label'?: string;
 }
 
@@ -48,10 +58,22 @@ export default function Select<T>({
   placeholder,
   classes,
   displayPlaceholderWhenSelected = false,
+  autoFocus = false,
+  immediate = false,
+  searchInputAsFilter = false,
   ...props
 }: Props<T>) {
   const { t } = useTranslations();
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus on mount (more reliable than the autoFocus attribute across remounts).
+  // Combined with `immediate`, this opens the dropdown when grid editing starts.
+  useEffect(() => {
+    if (autoFocus) inputRef.current?.focus();
+    // Run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isSelected = (valueToCheck: T) => {
     if (multiple && Array.isArray(value)) {
@@ -65,8 +87,16 @@ export default function Select<T>({
     if (multiple) {
       const selectedArray = Array.isArray(selected) ? selected : [selected];
       onChange(selectedArray);
-    } else {
-      onChange(selected as T);
+      return;
+    }
+
+    const decision = resolveSingleSelectChange(
+      (selected ?? null) as T | null,
+      value as T | null | undefined,
+      { searchInputAsFilter, compareFunction }
+    );
+    if (decision.type === 'change') {
+      onChange(decision.value);
     }
   };
 
@@ -93,6 +123,9 @@ export default function Select<T>({
     placeholder ?? t('components.select.optionPlaceholder');
 
   const getDisplayValue = () => {
+    if (searchInputAsFilter) {
+      return query;
+    }
     if (searchable) {
       return baseDisplayValue;
     }
@@ -124,14 +157,28 @@ export default function Select<T>({
     : [{ label: null, items: filteredOptions }];
 
   const hasNoOptions = groupedOptions.every(({ items }) => items.length === 0);
-  const clearButtonDisplayed = clearable && selectedOptions.length > 0;
+
+  const clearButtonDisplayed = searchInputAsFilter
+    ? query.length > 0
+    : clearable && selectedOptions.length > 0;
+
+  const handleClearButton = () => {
+    if (searchInputAsFilter) {
+      setQuery('');
+      if (inputRef.current) inputRef.current.value = '';
+      inputRef.current?.focus();
+    } else {
+      clear();
+    }
+  };
 
   return (
     <Combobox
-      value={value as any}
+      value={(value ?? (multiple ? [] : null)) as any}
       onChange={handleChange}
       onClose={onClose}
       multiple={multiple}
+      immediate={immediate}
     >
       <div className="relative">
         <ComboboxButton
@@ -139,6 +186,7 @@ export default function Select<T>({
           aria-label={props['aria-label'] ?? placeholder}
         >
           <ComboboxInput
+            ref={inputRef}
             className={`${classes} focus:outline-hello-csv-primary block w-full cursor-pointer truncate rounded-md bg-white py-1.5 focus:cursor-text ${clearButtonDisplayed ? 'pr-12' : 'pr-2'} pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 sm:text-sm`}
             displayValue={getDisplayValue}
             onChange={(event) =>
@@ -154,9 +202,16 @@ export default function Select<T>({
             role="button"
             tabIndex={0}
             aria-label={t('components.select.clear')}
+            // Prevent the input from blurring and headlessui's outside-click
+            // handler from firing — both would close the dropdown and (in grid
+            // editing) exit edit mode. We only want to clear.
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
             onClick={(e) => {
               e.stopPropagation();
-              clear();
+              handleClearButton();
             }}
             className="absolute inset-y-0 right-6 flex cursor-pointer items-center text-gray-500 hover:text-gray-700"
           >
@@ -191,7 +246,7 @@ export default function Select<T>({
             </ComboboxOption>
           )}
           {groupedOptions.map(({ label, items }) => (
-            <div key={label || 'all'}>
+            <div key={`${label || 'all'}:${query}`}>
               {label && (
                 <div className="py-2 pr-9 pl-3 text-gray-400 uppercase">
                   {label}
@@ -205,18 +260,39 @@ export default function Select<T>({
                       : String(option.value)
                   }
                   value={option.value}
-                  className="group data-focus:bg-hello-csv-primary relative flex cursor-default items-center py-2 pr-9 pl-3 text-gray-900 select-none data-focus:text-white data-focus:outline-hidden"
+                  // Drive the highlight from headlessui's render state (`focus`)
+                  // rather than the `data-focus` attribute + Tailwind variant:
+                  // under preact/compat the attribute isn't reliably cleared from
+                  // the previously-active option while re-filtering, which left two
+                  // options highlighted at once.
+                  className={({ focus }) =>
+                    `relative flex cursor-default items-center py-2 pr-9 pl-3 outline-hidden select-none ${
+                      focus
+                        ? 'bg-hello-csv-primary text-white'
+                        : 'text-gray-900'
+                    }`
+                  }
                 >
-                  {option.icon}
+                  {({ focus, selected }) => (
+                    <>
+                      {option.icon}
 
-                  <span className="block truncate font-normal group-data-selected:font-semibold">
-                    {option.label}
-                  </span>
+                      <span
+                        className={`block truncate ${selected ? 'font-semibold' : 'font-normal'}`}
+                      >
+                        {option.label}
+                      </span>
 
-                  {isSelected(option.value) && (
-                    <span className="text-hello-csv-primary absolute inset-y-0 right-0 flex items-center pr-4 group-data-focus:text-white">
-                      <CheckIcon aria-hidden="true" className="h-5 w-5" />
-                    </span>
+                      {selected && (
+                        <span
+                          className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
+                            focus ? 'text-white' : 'text-hello-csv-primary'
+                          }`}
+                        >
+                          <CheckIcon aria-hidden="true" className="h-5 w-5" />
+                        </span>
+                      )}
+                    </>
                   )}
                 </ComboboxOption>
               ))}

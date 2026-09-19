@@ -83,6 +83,7 @@
     "resetConfirmationModalSubTitle": "Are you sure you want to start over? This will remove all data and reset the sheet to its initial state."
   },
   "validators": {
+    "boolean": "This value must be true or false",
     "includes": "Value is not in the list of allowed values",
     "integer": "This is not a valid number",
     "multiIncludes": "This value is not valid",

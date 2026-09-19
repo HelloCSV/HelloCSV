@@ -43,6 +43,18 @@ describe('MultiIncludesValidator', () => {
   });
 });
 
+describe('BooleanValidator', () => {
+  it('accepts real booleans and empty, flags anything else', () => {
+    const validator = buildValidatorFromDefinition({ validate: 'boolean' });
+    expect(validator.isValid(true)).toEqual(undefined);
+    expect(validator.isValid(false)).toEqual(undefined);
+    expect(validator.isValid('')).toEqual(undefined);
+    expect(validator.isValid(null)).toEqual(undefined);
+    expect(validator.isValid(undefined)).toEqual(undefined);
+    expect(validator.isValid('maybe')).toEqual('validators.boolean');
+  });
+});
+
 describe('CustomValidator', () => {
   it('works with function', () => {
     const validator = buildValidatorFromDefinition({

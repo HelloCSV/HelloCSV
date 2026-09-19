@@ -29,3 +29,6 @@ export const DATA_COLUMN_WIDTH = 150;
 
 export const DEFAULT_BOOLEAN_TRUE_LABEL = 'Yes';
 export const DEFAULT_BOOLEAN_FALSE_LABEL = 'No';
+
+export const DEFAULT_TRUE_TOKENS = ['true', '1', 'yes', 'y'];
+export const DEFAULT_FALSE_TOKENS = ['false', '0', 'no', 'n'];

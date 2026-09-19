@@ -8,12 +8,8 @@ import {
   SheetRow,
   ColumnMapping,
   MappedData,
-  SheetColumnEnumDefinition,
 } from '../types';
-
-const FLOAT = /^\s*-?(\d+\.?|\.\d+|\d+\.\d+)([eE][-+]?\d+)?\s*$/;
-const MAX_FLOAT = Math.pow(2, 53);
-const MIN_FLOAT = -MAX_FLOAT;
+import { coerceCellValue } from '../sheet/valueCoercion';
 
 export { default as HeaderMapper } from './components/HeaderMapper';
 
@@ -97,70 +93,11 @@ function mapCalculatedColumns(
   );
 }
 
-function isFloat(value: string): boolean {
-  if (FLOAT.test(value)) {
-    const floatValue = parseFloat(value);
-    if (floatValue > MIN_FLOAT && floatValue < MAX_FLOAT) {
-      return true;
-    }
-  }
-  return false;
-}
-
-function extractEnumValue(
-  csvColumnValue: CSVCell,
-  columnDefinition: SheetColumnEnumDefinition
-): ImporterOutputFieldType {
-  const args = columnDefinition.typeArguments;
-  const values = args.values;
-
-  if (args.multiple) {
-    const actualDelimiter = args.delimiter ?? ',';
-    const csvString = csvColumnValue?.toString() ?? '';
-
-    if (csvString.trim() === '') {
-      return [];
-    }
-
-    const labels = csvString
-      .split(actualDelimiter)
-      .map((s) => s.trim())
-      .filter((s) => s !== '');
-
-    return labels.map((label) => {
-      const enumDef = values.find((v) => v.label === label);
-      return enumDef?.value ?? label;
-    });
-  }
-
-  const enumDefinition = values.find(
-    (definition) => definition.label === csvColumnValue
-  );
-
-  return enumDefinition?.value ?? csvColumnValue;
-}
-
-function extractNumberValue(csvColumnValue: CSVCell): ImporterOutputFieldType {
-  if (!isFloat(csvColumnValue)) {
-    return csvColumnValue;
-  }
-
-  return parseFloat(csvColumnValue);
-}
-
 function getCellValue(
   csvColumnValue: CSVCell,
   columnDefinition: SheetColumnDefinition
 ): ImporterOutputFieldType {
-  if (columnDefinition.type === 'enum') {
-    return extractEnumValue(csvColumnValue, columnDefinition);
-  }
-
-  if (columnDefinition.type === 'number') {
-    return extractNumberValue(csvColumnValue);
-  }
-
-  return csvColumnValue;
+  return coerceCellValue(columnDefinition, csvColumnValue ?? '');
 }
 
 function mapRegularColumns(

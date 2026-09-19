@@ -71,6 +71,10 @@ function automaticFieldValidators(
     });
   }
 
+  if (columnDefinition.type === 'boolean') {
+    result.push({ validate: 'boolean' });
+  }
+
   return result;
 }
 
