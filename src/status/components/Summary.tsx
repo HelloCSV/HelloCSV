@@ -17,10 +17,10 @@ export default function Summary({ completedWithErrors, enumLabelDict }: Props) {
         <div className="px-4 pb-2 text-xl">
           {t('importStatus.importDetails')}
         </div>
-        <div className="px-4 pb-2 text-sm text-gray-500">
+        <div className="text-hello-csv-text-muted px-4 pb-2 text-sm">
           {t('importStatus.importDetailsDescription')}
         </div>
-        <div className="border-b border-gray-200 pb-2"></div>
+        <div className="border-hello-csv-border border-b pb-2"></div>
         <SummaryInfo
           completedWithErrors={completedWithErrors}
           enumLabelDict={enumLabelDict}

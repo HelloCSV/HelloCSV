@@ -23,13 +23,15 @@ const baseClasses = cva(
   {
     variants: {
       variant: {
-        primary: 'shadow-xs bg-hello-csv-primary text-white',
+        primary:
+          'shadow-xs bg-hello-csv-primary text-hello-csv-primary-contrast',
         secondary:
-          'bg-white text-hello-csv-primary ring-1 shadow-xs ring-bg-hello-csv-primary ring-inset',
+          'bg-hello-csv-surface text-hello-csv-primary ring-1 shadow-xs ring-bg-hello-csv-primary ring-inset',
         tertiary:
-          'bg-white text-gray-900 ring-1 shadow-xs ring-hello-csv-tertiary ring-inset',
-        success: 'shadow-xs bg-hello-csv-success text-white',
-        danger: 'shadow-xs bg-hello-csv-danger text-white',
+          'bg-hello-csv-surface text-hello-csv-text ring-1 shadow-xs ring-hello-csv-tertiary ring-inset',
+        success:
+          'shadow-xs bg-hello-csv-success text-hello-csv-success-contrast',
+        danger: 'shadow-xs bg-hello-csv-danger text-hello-csv-danger-contrast',
       },
       withFullWidth: {
         true: 'w-full',

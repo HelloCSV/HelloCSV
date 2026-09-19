@@ -85,7 +85,7 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
         <div className="flex flex-1 flex-col items-center justify-center">
           <CloudArrowUpIcon className="text-hello-csv-primary h-12 w-12" />
           <p className="mt-3 text-center">{t('uploader.dragAndDrop')}</p>
-          <div className="mt-3 text-sm text-gray-500">
+          <div className="text-hello-csv-text-muted mt-3 text-sm">
             {tHtml('uploader.maxFileSizeInBytes', {
               size: <b>{formatFileSize(maxFileSizeInBytes)}</b>,
             })}{' '}

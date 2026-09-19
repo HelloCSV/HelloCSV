@@ -18,12 +18,12 @@ interface Props {
 }
 
 const tooltipBaseClasses = cva(
-  'bg-gray-900 text-white absolute left-0 z-20 hidden w-max max-w-xs whitespace-normal rounded-md border-l-4 py-2 pr-3 pl-2.5 text-xs shadow-lg group-focus-within:block group-hover:block',
+  'bg-hello-csv-tooltip-surface text-hello-csv-tooltip-text absolute left-0 z-20 hidden w-max max-w-xs whitespace-normal rounded-md border-l-4 py-2 pr-3 pl-2.5 text-xs shadow-lg group-focus-within:block group-hover:block',
   {
     variants: {
       variant: {
         error: 'border-hello-csv-danger',
-        info: 'border-gray-400',
+        info: 'border-hello-csv-border-strong',
       },
       placement: {
         bottom: 'top-full mt-2',
@@ -61,7 +61,7 @@ export default function SheetTooltip({
     withOutline: !!tooltipText,
   });
 
-  const arrowClassName = `absolute left-3 h-2 w-2 rotate-45 bg-gray-900 ${
+  const arrowClassName = `absolute left-3 h-2 w-2 rotate-45 bg-hello-csv-tooltip-surface ${
     placement === 'top' ? '-bottom-1' : '-top-1'
   }`;
 

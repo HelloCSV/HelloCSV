@@ -39,7 +39,10 @@ export default forwardRef<HTMLDivElement, Props>(function Root(
       className={`${ROOT_CLASS}`}
       style={{ display: 'contents' }}
     >
-      <div ref={ref} className="min-h-0 w-full overflow-auto bg-white">
+      <div
+        ref={ref}
+        className="bg-hello-csv-surface min-h-0 w-full overflow-auto"
+      >
         {children}
       </div>
     </div>

@@ -1,0 +1,125 @@
+---
+title: 'Theme Styles'
+---
+
+The importer is styled entirely through CSS custom properties, so you can adapt it
+to your brand by overriding these variables in your own `index.css`.
+
+## Accent colors
+
+```css
+:root {
+  --hello-csv-color-primary: #007bff;
+  --hello-csv-color-primary-light: #66b3ff;
+  --hello-csv-color-primary-extra-light: #cce7ff;
+  --hello-csv-color-secondary: #6c757d;
+  --hello-csv-color-tertiary: #17a2b8;
+  --hello-csv-color-tertiary-light: #5bc0de;
+  --hello-csv-color-success: #15803d;
+  --hello-csv-color-success-light: #4ade80;
+  --hello-csv-color-success-extra-light: #f0fdf4;
+  --hello-csv-color-danger: #dc3545;
+  --hello-csv-color-danger-light: #f5c6cb;
+  --hello-csv-color-danger-extra-light: #fef2f2;
+  --hello-csv-color-warning: #a16207;
+  --hello-csv-color-warning-light: #facc15;
+  --hello-csv-color-warning-extra-light: #fefce8;
+  --hello-csv-color-info: #17a2b8;
+  --hello-csv-color-muted: #f9fafb;
+  --hello-csv-color-muted-light: #f3f4f6;
+  /* content (text/icons) that sits on top of an accent fill */
+  --hello-csv-color-primary-contrast: #ffffff;
+  --hello-csv-color-success-contrast: #ffffff;
+  --hello-csv-color-danger-contrast: #ffffff;
+}
+```
+
+Most accent colors come in up to three shades that share a role:
+
+- **base** (e.g. `--hello-csv-color-primary`) — the main color, used for text, icons,
+  fills, and borders.
+- **`-light`** — a hover / emphasis variant of the base.
+- **`-extra-light`** — a soft tint used as a background behind the base color.
+
+| Token                 | Role                                                                                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `primary`             | Main brand color — primary buttons, active tabs/pills, links, checkboxes, focus rings                                                                        |
+| `primary-light`       | Primary hover state                                                                                                                                          |
+| `primary-extra-light` | Subtle primary-tinted backgrounds                                                                                                                            |
+| `secondary`           | Secondary accent — secondary button focus outline                                                                                                            |
+| `tertiary`            | Tertiary (neutral) button ring/border                                                                                                                        |
+| `tertiary-light`      | Tertiary button hover background                                                                                                                             |
+| `success`             | Success text and icons, success button                                                                                                                       |
+| `success-light`       | Lighter success accent (icons, progress indicator)                                                                                                           |
+| `success-extra-light` | Success-tinted background (e.g. success alert)                                                                                                               |
+| `danger`              | Error text and icons, danger button, error borders                                                                                                           |
+| `danger-light`        | Danger hover / lighter danger accent                                                                                                                         |
+| `danger-extra-light`  | Danger-tinted background (e.g. error alert, delete modal icon)                                                                                               |
+| `warning`             | Warning text and icons                                                                                                                                       |
+| `warning-light`       | Lighter warning accent (icons)                                                                                                                               |
+| `warning-extra-light` | Warning-tinted background (e.g. warning alert)                                                                                                               |
+| `info`                | Informational icons and accents (info alert)                                                                                                                 |
+| `muted`               | Muted surface — cards, table headers, the upload drop zone                                                                                                   |
+| `muted-light`         | Lighter muted surface (e.g. drop zone hover)                                                                                                                 |
+| `primary-contrast`    | Text/icons rendered **on top of** a `primary` fill (e.g. primary button label, spinner, checkbox tick). Override this if you set `primary` to a light color. |
+| `success-contrast`    | Text/icons on top of a `success` fill (e.g. success button label)                                                                                            |
+| `danger-contrast`     | Text/icons on top of a `danger` fill (e.g. danger button label)                                                                                              |
+
+## Neutral / structural colors
+
+<Info>
+  New in v0.5.0. These role-based neutral tokens back every surface, text, and
+  border in the importer, and are what make [dark
+  mode](/v0.5.0/customization/dark-mode) possible. Override them to fine-tune
+  backgrounds, text, and borders.
+</Info>
+
+```css
+:root {
+  /* surfaces */
+  --hello-csv-color-surface: #ffffff; /* default page/control background */
+  --hello-csv-color-surface-raised: #ffffff; /* elevated surfaces (modals, dropdowns) */
+  --hello-csv-color-surface-sunken: #f9fafb; /* hover / disabled fills */
+  /* text */
+  --hello-csv-color-text: #111827; /* primary text */
+  --hello-csv-color-text-muted: #6b7280; /* secondary text, icons */
+  --hello-csv-color-text-subtle: #9ca3af; /* placeholders, faint icons */
+  /* borders */
+  --hello-csv-color-border: #e5e7eb;
+  --hello-csv-color-border-strong: #d1d5db;
+  /* misc */
+  --hello-csv-color-overlay: #6b7280; /* modal backdrop (used at 75% opacity) */
+  --hello-csv-color-tooltip-surface: #111827; /* tooltip background */
+  --hello-csv-color-tooltip-text: #ffffff; /* tooltip text */
+}
+```
+
+| Token             | Role                                                                   |
+| ----------------- | ---------------------------------------------------------------------- |
+| `surface`         | Default background for the importer and its controls (inputs, selects) |
+| `surface-raised`  | Elevated surfaces that float above the page — modals, dropdown menus   |
+| `surface-sunken`  | Recessed fills — hover backgrounds, disabled controls                  |
+| `text`            | Primary text color                                                     |
+| `text-muted`      | Secondary text and most icons                                          |
+| `text-subtle`     | De-emphasized text — input placeholders, faint icons                   |
+| `border`          | Default borders and dividers                                           |
+| `border-strong`   | Higher-contrast borders — input outlines, table cell borders           |
+| `overlay`         | Modal backdrop (applied at 75% opacity)                                |
+| `tooltip-surface` | Tooltip background (intentionally inverted relative to the page)       |
+| `tooltip-text`    | Tooltip text                                                           |
+
+## Built-in theme variants
+
+The importer ships with a few ready-made variants. Select one with the
+[`theme`](/v0.5.0/api-reference/importer-props#theme) prop:
+
+| `theme` value | Description                                                   |
+| ------------- | ------------------------------------------------------------- |
+| `default`     | Light theme (used when omitted)                               |
+| `theme-1`     | Alternate light palette                                       |
+| `theme-2`     | Alternate light palette                                       |
+| `dark`        | Dark theme — see [Dark Mode](/v0.5.0/customization/dark-mode) |
+
+```tsx
+<Importer theme="theme-1" sheets={...} />
+```
