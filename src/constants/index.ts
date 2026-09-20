@@ -20,6 +20,21 @@ export const HEALDESS_UI_PORTAL_ROOT_ID = 'headlessui-portal-root';
 
 export const ROOT_CLASS = 'hello-csv';
 
+/** Marks the portaled DatePicker popover so the grid cell's blur logic can tell
+ * focus is still "inside" the editor even though it's rendered outside the cell. */
+export const DATE_PICKER_PANEL_ATTR = 'data-hellocsv-datepicker';
+
+/** Spread onto every importer text input so password managers (Bitwarden,
+ * 1Password, LastPass, Dashlane) don't overlay autofill popups — importer
+ * fields are data cells, never credentials. */
+export const PASSWORD_MANAGER_IGNORE_PROPS = {
+  autoComplete: 'off',
+  'data-bwignore': true,
+  'data-1p-ignore': true,
+  'data-lpignore': 'true',
+  'data-form-type': 'other',
+} as const;
+
 // Used for virtualizer, should be updated if the row height changes
 export const ESTIMATED_ROW_HEIGHT = 52.62;
 

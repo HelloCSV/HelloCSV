@@ -12,6 +12,29 @@
     },
     "input": {
       "clear": "Clear"
+    },
+    "datePicker": {
+      "calendarLabel": "Choose date",
+      "pickerLabel": "Date picker",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "today": "Today",
+      "clear": "Clear",
+      "done": "Done",
+      "weekdays": {
+        "sun": "Su",
+        "mon": "Mo",
+        "tue": "Tu",
+        "wed": "We",
+        "thu": "Th",
+        "fri": "Fr",
+        "sat": "Sa"
+      },
+      "previous": "Previous",
+      "next": "Next",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "importer": {
@@ -94,7 +117,11 @@
     "multiIncludes": "This value is not valid",
     "regex": "This value is invalid",
     "required": "This value is required",
-    "unique": "This value is not unique"
+    "unique": "This value is not unique",
+    "date": "This is not a valid date",
+    "datetime": "This is not a valid date and time",
+    "time": "This is not a valid time",
+    "dateOutOfRange": "This date is outside the allowed range"
   },
   "importStatus": {
     "success": "Success",

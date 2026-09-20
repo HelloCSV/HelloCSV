@@ -7,6 +7,7 @@ import {
   SheetDefinition,
   SheetRow,
   SheetState,
+  isDateLikeColumn,
 } from '../types';
 import {
   DEFAULT_BOOLEAN_FALSE_LABEL,
@@ -14,6 +15,7 @@ import {
   DOWNLOADED_CSV_SEPARATOR,
 } from '../constants';
 import { applyTransformations } from '@/transformers';
+import { formatDisplay } from '@/components/dateUtils';
 
 export const isUndefinedOrNull = (a: any) => {
   return a === null || a === undefined;
@@ -237,6 +239,14 @@ export function getColumnDisplayValue(
         DEFAULT_BOOLEAN_FALSE_LABEL
       );
     }
+  }
+
+  if (isDateLikeColumn(columnDefinition) && typeof value === 'string') {
+    return formatDisplay(
+      value,
+      columnDefinition.type,
+      columnDefinition.typeArguments
+    );
   }
 
   return value;

@@ -118,6 +118,7 @@
     "@tanstack/react-table": "^8.21.2",
     "@tanstack/react-virtual": "^3.13.8",
     "cva": "npm:class-variance-authority@^0.7.1",
+    "dayjs": "^1.11.23",
     "papaparse": "^5.4.1"
   }
 }

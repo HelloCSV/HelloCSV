@@ -79,6 +79,23 @@ provide a custom `error` message.
 
 ---
 
+## date
+
+**Description:**  
+Ensures the value is a valid date / datetime / time and, optionally, within a
+configured range. Empty values pass; a value that couldn't be parsed against the
+column's format (or the ISO fallback) fails.
+
+**Additional:**  
+Added **automatically** to every [date](/v0.5.0/api-reference/column-types#date),
+[datetime](/v0.5.0/api-reference/column-types#datetime), and
+[time](/v0.5.0/api-reference/column-types#time) column, using that column's
+`outputFormat`, `displayFormat`, `min`, and `max`, so you normally don't
+configure it. Out-of-range values report a distinct error. You can also add it
+explicitly to provide a custom `error` message.
+
+---
+
 ## is_integer
 
 **Description:**  

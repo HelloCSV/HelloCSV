@@ -12,6 +12,29 @@
     },
     "input": {
       "clear": "Limpar"
+    },
+    "datePicker": {
+      "calendarLabel": "Escolher data",
+      "pickerLabel": "Seletor de data",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "seconds": "Segundos",
+      "today": "Hoje",
+      "clear": "Limpar",
+      "done": "Concluído",
+      "weekdays": {
+        "sun": "Dom",
+        "mon": "Seg",
+        "tue": "Ter",
+        "wed": "Qua",
+        "thu": "Qui",
+        "fri": "Sex",
+        "sat": "Sáb"
+      },
+      "previous": "Anterior",
+      "next": "Próximo",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "importer": {
@@ -94,7 +117,11 @@
     "multiIncludes": "Este valor não é válido",
     "regex": "Este valor é inválido",
     "required": "Este valor é obrigatório",
-    "unique": "Este valor não é único"
+    "unique": "Este valor não é único",
+    "date": "Esta data não é válida",
+    "datetime": "Esta data e hora não são válidas",
+    "time": "Este horário não é válido",
+    "dateOutOfRange": "Esta data está fora do intervalo permitido"
   },
   "importStatus": {
     "success": "Sucesso",
