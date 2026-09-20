@@ -53,6 +53,7 @@ export const availableActionList = [
   'search',
   'resetState',
   'backToPreviousStep',
+  'undoRedo',
 ] as const;
 export type AvailableAction = (typeof availableActionList)[number];
 
@@ -155,6 +156,10 @@ export type ImporterAction =
   | {
       type: 'ADD_EMPTY_ROW';
     } // Removes rows from the sheetData
+  | {
+      type: 'RESTORE_SHEET_DATA';
+      payload: { sheetData: SheetState[] };
+    } // Replaces sheetData wholesale (undo/redo); re-runs validation
   | { type: 'SHEET_CHANGED'; payload: { sheetId: string } } // Calls onComplete callback with state.sheetData, changes mode to 'submit'
   | { type: 'SUBMIT' } // Calls onComplete callback with state.sheetData, changes mode to 'submit'
   | { type: 'PROGRESS'; payload: { progress: number } } // Updates importProgress

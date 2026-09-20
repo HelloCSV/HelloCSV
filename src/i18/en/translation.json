@@ -12,11 +12,37 @@
     },
     "input": {
       "clear": "Clear"
+    },
+    "datePicker": {
+      "calendarLabel": "Choose date",
+      "pickerLabel": "Date picker",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "today": "Today",
+      "clear": "Clear",
+      "done": "Done",
+      "weekdays": {
+        "sun": "Su",
+        "mon": "Mo",
+        "tue": "Tu",
+        "wed": "We",
+        "thu": "Th",
+        "fri": "Fr",
+        "sat": "Sa"
+      },
+      "previous": "Previous",
+      "next": "Next",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "importer": {
     "upload": "Upload",
     "uploadBlocked": "Your data has validation errors. Fix them before uploading.",
+    "rowLimitExceeded": "\"{{sheet}}\" has {{count}} rows, which exceeds the maximum of {{limit}}. Remove rows to continue.",
+    "rowLimitExceededMultiple": "These sheets exceed their row limit: {{sheets}}. Remove rows to continue.",
+    "sheetValidationErrors": "This sheet has validation errors. Fix them before uploading.",
     "back": "Back",
     "loader": {
       "failed": "Something went wrong",
@@ -76,6 +102,8 @@
     "removeRowsTooltipNoRowsSelected": "Please select at least one record in order to delete it",
     "addRowsTooltip": "Add a new row",
     "downloadSheetTooltip": "Download this sheet",
+    "undoTooltip": "Undo",
+    "redoTooltip": "Redo",
     "reset": "Start over",
     "resetTooltip": "Start over",
     "resetConfirmationModalTitle": "Start over",
@@ -83,12 +111,17 @@
     "resetConfirmationModalSubTitle": "Are you sure you want to start over? This will remove all data and reset the sheet to its initial state."
   },
   "validators": {
+    "boolean": "This value must be true or false",
     "includes": "Value is not in the list of allowed values",
     "integer": "This is not a valid number",
     "multiIncludes": "This value is not valid",
     "regex": "This value is invalid",
     "required": "This value is required",
-    "unique": "This value is not unique"
+    "unique": "This value is not unique",
+    "date": "This is not a valid date",
+    "datetime": "This is not a valid date and time",
+    "time": "This is not a valid time",
+    "dateOutOfRange": "This date is outside the allowed range"
   },
   "importStatus": {
     "success": "Success",

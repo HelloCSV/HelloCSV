@@ -1,0 +1,66 @@
+---
+title: 'Dark Mode'
+---
+
+HelloCSV ships with a built-in **dark** theme. Because the importer is embedded
+inside your application, dark mode is **opt-in** — HelloCSV never forces a dark
+appearance based on the operating system, so it always matches whatever your host
+page decides.
+
+## Enabling dark mode
+
+Pass `dark` to the [`theme`](/v0.5.0/api-reference/importer-props#theme) prop:
+
+```tsx
+<Importer theme="dark" sheets={...} />
+```
+
+## Following your app's light / dark state
+
+The recommended pattern is to drive the `theme` prop from whatever signal your app
+already uses for light/dark mode, so the importer flips together with the rest of
+the page:
+
+```tsx
+function MyImporter({ isDarkMode }: { isDarkMode: boolean }) {
+  return (
+    <Importer theme={isDarkMode ? 'dark' : 'default'} sheets={...} />
+  );
+}
+```
+
+<Tip>
+  Want the OS preference to drive it? Read `prefers-color-scheme` in your own app
+  and feed the result into the `theme` prop:
+
+```ts
+const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+```
+
+</Tip>
+
+## How it works
+
+The dark theme simply reassigns the same CSS variables documented in
+[Theme Styles](/v0.5.0/customization/theme-styles) — both the accent colors and
+the neutral surface/text/border tokens — so every part of the importer (including
+portalled dropdowns, tooltips, and modals) adapts automatically.
+
+## Customizing the dark palette
+
+To fine-tune the dark colors, override the tokens under the `dark` theme selector
+in your own CSS:
+
+```css
+[hello-csv-data-theme='dark'] {
+  --hello-csv-color-surface: #0b1120;
+  --hello-csv-color-surface-raised: #111827;
+  --hello-csv-color-text: #e2e8f0;
+  --hello-csv-color-border: #334155;
+  --hello-csv-color-primary: #818cf8;
+  /* ...any other tokens you want to adjust */
+}
+```
+
+See [Theme Styles](/v0.5.0/customization/theme-styles) for the full list of
+available tokens.

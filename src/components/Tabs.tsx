@@ -25,7 +25,7 @@ export default function Tabs({
         />
       </div>
       <div className="hidden sm:block">
-        <div className="border-b border-gray-200">
+        <div className="border-hello-csv-border border-b">
           <nav
             aria-label="Tabs"
             className="-mb-px flex space-x-8"
@@ -43,7 +43,7 @@ export default function Tabs({
                 className={` ${
                   tab.value === activeTab
                     ? 'border-hello-csv-primary text-hello-csv-primary'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    : 'text-hello-csv-text-muted hover:border-hello-csv-border-strong hover:text-hello-csv-text border-transparent'
                 } flex cursor-pointer items-center border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap`}
               >
                 {tab.icon}

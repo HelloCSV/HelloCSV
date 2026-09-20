@@ -5,6 +5,7 @@ export { default as ConfirmationModal } from './ConfirmationModal';
 export { default as Root } from './Root';
 export { default as Input } from './Input';
 export { default as Select } from './Select';
+export { default as DatePicker } from './DatePicker';
 export { default as Tabs } from './Tabs';
 export { default as SheetTooltip } from './SheetTooltip';
 export { default as ButtonGroup } from './ButtonGroup';

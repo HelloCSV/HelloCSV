@@ -6,9 +6,11 @@ import {
 } from './types';
 import {
   SheetColumnDefinition,
+  SheetColumnDateTypeArguments,
   SheetDefinition,
   SheetState,
   SelectOption,
+  isDateLikeColumn,
 } from '../types';
 import { Validator } from './validator_definitions/base';
 import { buildValidatorFromDefinition } from './validator_definitions';
@@ -68,6 +70,25 @@ function automaticFieldValidators(
     result.push({
       values: referenceData,
       validate: 'includes',
+    });
+  }
+
+  if (columnDefinition.type === 'boolean') {
+    result.push({ validate: 'boolean' });
+  }
+
+  if (isDateLikeColumn(columnDefinition)) {
+    // Widen to the superset — `date` has no showSeconds (stays undefined).
+    const { outputFormat, displayFormat, min, max, showSeconds } =
+      (columnDefinition.typeArguments as SheetColumnDateTypeArguments) ?? {};
+    result.push({
+      validate: 'date',
+      dateType: columnDefinition.type,
+      outputFormat,
+      displayFormat,
+      min,
+      max,
+      showSeconds,
     });
   }
 

@@ -12,11 +12,37 @@
     },
     "input": {
       "clear": "Effacer"
+    },
+    "datePicker": {
+      "calendarLabel": "Choisir une date",
+      "pickerLabel": "Sélecteur de date",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes",
+      "today": "Aujourd'hui",
+      "clear": "Effacer",
+      "done": "Terminé",
+      "weekdays": {
+        "sun": "Di",
+        "mon": "Lu",
+        "tue": "Ma",
+        "wed": "Me",
+        "thu": "Je",
+        "fri": "Ve",
+        "sat": "Sa"
+      },
+      "previous": "Précédent",
+      "next": "Suivant",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "importer": {
     "upload": "Télécharger",
     "uploadBlocked": "Vos données comportent des erreurs de validation. Corrigez-les avant de les télécharger.",
+    "rowLimitExceeded": "« {{sheet}} » comporte {{count}} lignes, ce qui dépasse le maximum de {{limit}}. Supprimez des lignes pour continuer.",
+    "rowLimitExceededMultiple": "Ces feuilles dépassent leur limite de lignes : {{sheets}}. Supprimez des lignes pour continuer.",
+    "sheetValidationErrors": "Cette feuille comporte des erreurs de validation. Corrigez-les avant de télécharger.",
     "back": "Retour",
     "loader": {
       "failed": "Quelque chose a mal tourné",
@@ -76,6 +102,8 @@
     "removeRowsTooltipNoRowsSelected": "Veuillez sélectionner au moins un enregistrement avant de le supprimer",
     "addRowsTooltip": "Ajouter une nouvelle ligne",
     "downloadSheetTooltip": "Télécharger cette feuille",
+    "undoTooltip": "Annuler",
+    "redoTooltip": "Rétablir",
     "reset": "Recommencer",
     "resetTooltip": "Recommencer",
     "resetConfirmationModalTitle": "Recommencer",
@@ -83,12 +111,17 @@
     "resetConfirmationModalSubTitle": "Êtes-vous sûr de vouloir recommencer ? Cela supprimera toutes les données et réinitialisera la feuille à son état initial."
   },
   "validators": {
+    "boolean": "Cette valeur doit être vraie ou fausse",
     "includes": "La valeur n'est pas dans la liste des valeurs autorisées",
     "integer": "Ce n'est pas un nombre valide",
     "multiIncludes": "Cette valeur n'est pas valide",
     "regex": "Cette valeur est invalide",
     "required": "Cette valeur est obligatoire",
-    "unique": "Cette valeur n'est pas unique"
+    "unique": "Cette valeur n'est pas unique",
+    "date": "Cette date n'est pas valide",
+    "datetime": "Cette date et heure ne sont pas valides",
+    "time": "Cette heure n'est pas valide",
+    "dateOutOfRange": "Cette date est en dehors de la plage autorisée"
   },
   "importStatus": {
     "success": "Importation réussie",

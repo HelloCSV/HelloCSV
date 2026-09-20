@@ -1,0 +1,143 @@
+---
+title: 'Importer State'
+---
+
+This section describes the state object of the importer.
+
+## sheetDefinitions
+
+**Type:** `SheetDefinition[]`
+
+**Required:** Yes
+
+**Description:**  
+Defines the structure of the import.
+
+---
+
+## currentSheetId
+
+**Type:** `string`
+
+**Required:** Yes
+
+**Description:**  
+ID of the currently selected sheet.
+
+---
+
+## mode
+
+**Type:** `'upload' | 'mapping' | 'preview' | 'submit' | 'completed' | 'failed'`
+
+**Required:** Yes
+
+**Description:**  
+Current state of the importer.
+
+---
+
+## validationErrors
+
+**Type:** `ImporterValidationError[]`
+
+**Required:** Yes
+
+**Description:**  
+List of validation errors.
+
+---
+
+## validationInProgress
+
+**Type:** `boolean`
+
+**Required:** No
+
+**Description:**
+Indicates whether an asynchronous validation run is currently in progress. When `true`, the importer is computing validation results; components may use this to show global loading indicators.
+
+---
+
+## validationRunId
+
+**Type:** `string`
+
+**Required:** No
+
+**Description:**
+Identifier for the currently running validation batch. This is a short-lived string (UUID or timestamp-based id) that can be used to correlate `VALIDATION_STARTED` / `VALIDATION_COMPLETED` lifecycle events and to ignore stale validation results when multiple validation runs overlap.
+
+---
+
+## sheetData
+
+**Type:** `SheetState[]`
+
+**Required:** Yes
+
+**Description:**  
+Data for each sheet.
+
+---
+
+## parsedFile
+
+**Type:** `ParsedFile`
+
+**Required:** No
+
+**Description:**  
+Parsed CSV file data, if available.
+
+---
+
+## rowFile
+
+**Type:** `File`
+
+**Required:** No
+
+**Description:**  
+Original uploaded file.
+
+---
+
+## columnMappings
+
+**Type:** `ColumnMapping[]`
+
+**Required:** No
+
+**Description:**  
+Mappings between CSV columns and sheet columns.
+
+---
+
+## importProgress
+
+**Type:** `number`
+
+**Required:** Yes
+
+**Description:**  
+Import progress percentage (0-100).
+
+---
+
+## importStatistics
+
+**Type:** `ImportStatistics`
+
+**Required:** No
+
+**Description:**  
+Statistics about the import.
+
+**Fields:**
+
+- `imported`: number - Number of rows successfully imported
+- `failed`: number - Number of rows that failed to import
+- `skipped`: number - Number of rows that were skipped during import
+
+---

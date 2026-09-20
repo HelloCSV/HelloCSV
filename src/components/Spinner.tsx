@@ -11,8 +11,8 @@ const spinner = cva(
   {
     variants: {
       color: {
-        light: 'border-white',
-        dark: 'border-black',
+        light: 'border-hello-csv-primary-contrast',
+        dark: 'border-hello-csv-text',
       },
     },
     defaultVariants: {

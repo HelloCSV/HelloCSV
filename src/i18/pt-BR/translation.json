@@ -12,11 +12,37 @@
     },
     "input": {
       "clear": "Limpar"
+    },
+    "datePicker": {
+      "calendarLabel": "Escolher data",
+      "pickerLabel": "Seletor de data",
+      "hours": "Horas",
+      "minutes": "Minutos",
+      "seconds": "Segundos",
+      "today": "Hoje",
+      "clear": "Limpar",
+      "done": "Concluído",
+      "weekdays": {
+        "sun": "Dom",
+        "mon": "Seg",
+        "tue": "Ter",
+        "wed": "Qua",
+        "thu": "Qui",
+        "fri": "Sex",
+        "sat": "Sáb"
+      },
+      "previous": "Anterior",
+      "next": "Próximo",
+      "am": "AM",
+      "pm": "PM"
     }
   },
   "importer": {
     "upload": "Enviar",
     "uploadBlocked": "Seus dados têm erros de validação. Corrija-os antes de enviar.",
+    "rowLimitExceeded": "\"{{sheet}}\" tem {{count}} linhas, o que excede o máximo de {{limit}}. Remova linhas para continuar.",
+    "rowLimitExceededMultiple": "Estas planilhas excedem o limite de linhas: {{sheets}}. Remova linhas para continuar.",
+    "sheetValidationErrors": "Esta planilha tem erros de validação. Corrija-os antes de enviar.",
     "back": "Voltar",
     "loader": {
       "failed": "Algo deu errado",
@@ -76,6 +102,8 @@
     "removeRowsTooltipNoRowsSelected": "Selecione pelo menos um registro para deletá-lo",
     "addRowsTooltip": "Adicionar nova linha",
     "downloadSheetTooltip": "Baixar esta planilha",
+    "undoTooltip": "Desfazer",
+    "redoTooltip": "Refazer",
     "reset": "Recomeçar",
     "resetTooltip": "Recomeçar",
     "resetConfirmationModalTitle": "Recomeçar",
@@ -83,12 +111,17 @@
     "resetConfirmationModalSubTitle": "Tem certeza que deseja recomeçar? Isso removerá todos os dados e resetará a planilha ao seu estado inicial."
   },
   "validators": {
+    "boolean": "Este valor deve ser verdadeiro ou falso",
     "includes": "O valor não está na lista de valores permitidos",
     "integer": "Este não é um número válido",
     "multiIncludes": "Este valor não é válido",
     "regex": "Este valor é inválido",
     "required": "Este valor é obrigatório",
-    "unique": "Este valor não é único"
+    "unique": "Este valor não é único",
+    "date": "Esta data não é válida",
+    "datetime": "Esta data e hora não são válidas",
+    "time": "Este horário não é válido",
+    "dateOutOfRange": "Esta data está fora do intervalo permitido"
   },
   "importStatus": {
     "success": "Sucesso",

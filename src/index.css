@@ -43,9 +43,31 @@
   --color-hello-csv-info: var(--hello-csv-color-info);
   --color-hello-csv-muted: var(--hello-csv-color-muted);
   --color-hello-csv-muted-light: var(--hello-csv-color-muted-light);
+
+  /* contrast tokens — content (text/icons) that sits on top of accent fills */
+  --color-hello-csv-primary-contrast: var(--hello-csv-color-primary-contrast);
+  --color-hello-csv-success-contrast: var(--hello-csv-color-success-contrast);
+  --color-hello-csv-danger-contrast: var(--hello-csv-color-danger-contrast);
+
+  /* neutral / structural tokens */
+  --color-hello-csv-surface: var(--hello-csv-color-surface);
+  --color-hello-csv-surface-raised: var(--hello-csv-color-surface-raised);
+  --color-hello-csv-surface-sunken: var(--hello-csv-color-surface-sunken);
+  --color-hello-csv-text: var(--hello-csv-color-text);
+  --color-hello-csv-text-muted: var(--hello-csv-color-text-muted);
+  --color-hello-csv-text-subtle: var(--hello-csv-color-text-subtle);
+  --color-hello-csv-border: var(--hello-csv-color-border);
+  --color-hello-csv-border-strong: var(--hello-csv-color-border-strong);
+  --color-hello-csv-overlay: var(--hello-csv-color-overlay);
+  --color-hello-csv-tooltip-surface: var(--hello-csv-color-tooltip-surface);
+  --color-hello-csv-tooltip-text: var(--hello-csv-color-tooltip-text);
 }
 
 @layer base {
+  .hello-csv {
+    color: var(--hello-csv-color-text);
+  }
+
   :root {
     --hello-csv-color-primary: theme(colors.indigo.600);
     --hello-csv-color-primary-light: theme(colors.indigo.500);
@@ -65,6 +87,20 @@
     --hello-csv-color-info: theme(colors.sky.500);
     --hello-csv-color-muted: theme(colors.gray.50);
     --hello-csv-color-muted-light: theme(colors.gray.100);
+    --hello-csv-color-primary-contrast: theme(colors.white);
+    --hello-csv-color-success-contrast: theme(colors.white);
+    --hello-csv-color-danger-contrast: theme(colors.white);
+    --hello-csv-color-surface: theme(colors.white);
+    --hello-csv-color-surface-raised: theme(colors.white);
+    --hello-csv-color-surface-sunken: theme(colors.gray.50);
+    --hello-csv-color-text: theme(colors.gray.900);
+    --hello-csv-color-text-muted: theme(colors.gray.500);
+    --hello-csv-color-text-subtle: theme(colors.gray.400);
+    --hello-csv-color-border: theme(colors.gray.200);
+    --hello-csv-color-border-strong: theme(colors.gray.300);
+    --hello-csv-color-overlay: theme(colors.gray.500);
+    --hello-csv-color-tooltip-surface: theme(colors.gray.900);
+    --hello-csv-color-tooltip-text: theme(colors.white);
   }
 
   [hello-csv-data-theme='theme-1'] {
@@ -86,6 +122,20 @@
     --hello-csv-color-info: theme(colors.sky.400);
     --hello-csv-color-muted: theme(colors.gray.50);
     --hello-csv-color-muted-light: theme(colors.gray.100);
+    --hello-csv-color-primary-contrast: theme(colors.white);
+    --hello-csv-color-success-contrast: theme(colors.white);
+    --hello-csv-color-danger-contrast: theme(colors.white);
+    --hello-csv-color-surface: theme(colors.white);
+    --hello-csv-color-surface-raised: theme(colors.white);
+    --hello-csv-color-surface-sunken: theme(colors.gray.50);
+    --hello-csv-color-text: theme(colors.gray.900);
+    --hello-csv-color-text-muted: theme(colors.gray.500);
+    --hello-csv-color-text-subtle: theme(colors.gray.400);
+    --hello-csv-color-border: theme(colors.gray.200);
+    --hello-csv-color-border-strong: theme(colors.gray.300);
+    --hello-csv-color-overlay: theme(colors.gray.500);
+    --hello-csv-color-tooltip-surface: theme(colors.gray.900);
+    --hello-csv-color-tooltip-text: theme(colors.white);
   }
 
   [hello-csv-data-theme='theme-2'] {
@@ -107,5 +157,54 @@
     --hello-csv-color-info: theme(colors.sky.700);
     --hello-csv-color-muted: theme(colors.gray.50);
     --hello-csv-color-muted-light: theme(colors.gray.100);
+    --hello-csv-color-primary-contrast: theme(colors.white);
+    --hello-csv-color-success-contrast: theme(colors.white);
+    --hello-csv-color-danger-contrast: theme(colors.white);
+    --hello-csv-color-surface: theme(colors.white);
+    --hello-csv-color-surface-raised: theme(colors.white);
+    --hello-csv-color-surface-sunken: theme(colors.gray.50);
+    --hello-csv-color-text: theme(colors.gray.900);
+    --hello-csv-color-text-muted: theme(colors.gray.500);
+    --hello-csv-color-text-subtle: theme(colors.gray.400);
+    --hello-csv-color-border: theme(colors.gray.200);
+    --hello-csv-color-border-strong: theme(colors.gray.300);
+    --hello-csv-color-overlay: theme(colors.gray.500);
+    --hello-csv-color-tooltip-surface: theme(colors.gray.900);
+    --hello-csv-color-tooltip-text: theme(colors.white);
+  }
+
+  [hello-csv-data-theme='dark'] {
+    --hello-csv-color-primary: theme(colors.indigo.400);
+    --hello-csv-color-primary-light: theme(colors.indigo.300);
+    --hello-csv-color-primary-extra-light: theme(colors.indigo.950);
+    --hello-csv-color-secondary: theme(colors.sky.400);
+    --hello-csv-color-tertiary: theme(colors.slate.600);
+    --hello-csv-color-tertiary-light: theme(colors.slate.800);
+    --hello-csv-color-success: theme(colors.green.400);
+    --hello-csv-color-success-light: theme(colors.green.500);
+    --hello-csv-color-success-extra-light: theme(colors.green.950);
+    --hello-csv-color-danger: theme(colors.red.400);
+    --hello-csv-color-danger-light: theme(colors.red.500);
+    --hello-csv-color-danger-extra-light: theme(colors.red.950);
+    --hello-csv-color-warning: theme(colors.yellow.400);
+    --hello-csv-color-warning-light: theme(colors.yellow.500);
+    --hello-csv-color-warning-extra-light: theme(colors.yellow.950);
+    --hello-csv-color-info: theme(colors.sky.400);
+    --hello-csv-color-muted: theme(colors.slate.800);
+    --hello-csv-color-muted-light: theme(colors.slate.700);
+    --hello-csv-color-primary-contrast: theme(colors.white);
+    --hello-csv-color-success-contrast: theme(colors.white);
+    --hello-csv-color-danger-contrast: theme(colors.white);
+    --hello-csv-color-surface: theme(colors.slate.900);
+    --hello-csv-color-surface-raised: theme(colors.slate.800);
+    --hello-csv-color-surface-sunken: theme(colors.slate.950);
+    --hello-csv-color-text: theme(colors.slate.100);
+    --hello-csv-color-text-muted: theme(colors.slate.400);
+    --hello-csv-color-text-subtle: theme(colors.slate.500);
+    --hello-csv-color-border: theme(colors.slate.700);
+    --hello-csv-color-border-strong: theme(colors.slate.600);
+    --hello-csv-color-overlay: theme(colors.black);
+    --hello-csv-color-tooltip-surface: theme(colors.slate.100);
+    --hello-csv-color-tooltip-text: theme(colors.slate.900);
   }
 }
