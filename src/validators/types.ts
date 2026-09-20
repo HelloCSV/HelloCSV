@@ -1,4 +1,4 @@
-import { ImporterOutputFieldType, SheetRow } from '../types';
+import { DateColumnType, ImporterOutputFieldType, SheetRow } from '../types';
 
 export interface ImporterValidationError {
   sheetId: string;
@@ -23,6 +23,7 @@ export type ImporterValidatorType =
   | 'phone_number'
   | 'email'
   | 'postal_code'
+  | 'date'
   | 'custom';
 
 export interface UniqueValidatorDefinition
@@ -41,7 +42,8 @@ export type ImporterValidatorDefinition =
   | RegexValidatorDefinition
   | EmailValidatorDefinition
   | PhoneNumberValidatorDefinition
-  | PostalCodeValidatorDefinition;
+  | PostalCodeValidatorDefinition
+  | DateValidatorDefinition;
 
 export interface ImporterValidatorDefinitionBase {
   validate: ImporterValidatorType;
@@ -83,6 +85,17 @@ export interface PhoneNumberValidatorDefinition
 export interface PostalCodeValidatorDefinition
   extends ImporterValidatorDefinitionBase {
   validate: 'postal_code';
+}
+
+export interface DateValidatorDefinition
+  extends ImporterValidatorDefinitionBase {
+  validate: 'date';
+  dateType: DateColumnType;
+  outputFormat?: string;
+  displayFormat?: string;
+  min?: string;
+  max?: string;
+  showSeconds?: boolean;
 }
 
 export interface CustomValidatorDefinition

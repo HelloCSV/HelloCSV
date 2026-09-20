@@ -13,6 +13,7 @@ import {
 import { useTranslations } from '../i18';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { ReactNode } from 'preact/compat';
+import { PASSWORD_MANAGER_IGNORE_PROPS } from '../constants';
 import { resolveSingleSelectChange } from './selectChange';
 
 export interface SelectOption<T> {
@@ -186,6 +187,7 @@ export default function Select<T>({
           aria-label={props['aria-label'] ?? placeholder}
         >
           <ComboboxInput
+            {...PASSWORD_MANAGER_IGNORE_PROPS}
             ref={inputRef}
             className={`${classes} focus:outline-hello-csv-primary bg-hello-csv-surface block w-full cursor-pointer truncate rounded-md py-1.5 focus:cursor-text ${clearButtonDisplayed ? 'pr-12' : 'pr-2'} text-hello-csv-text outline-hello-csv-border-strong pl-3 text-left outline-1 -outline-offset-1 focus:outline-2 focus:-outline-offset-2 sm:text-sm`}
             displayValue={getDisplayValue}

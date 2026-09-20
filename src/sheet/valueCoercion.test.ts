@@ -163,3 +163,71 @@ describe('emptyValueForColumn', () => {
     expect(emptyValueForColumn(numberCol)).toBe('');
   });
 });
+
+const dateCol = {
+  id: 'd',
+  label: 'D',
+  type: 'date',
+} as SheetColumnDefinition;
+const dateCustomCol = {
+  id: 'd2',
+  label: 'D2',
+  type: 'date',
+  typeArguments: { outputFormat: 'DD/MM/YYYY' },
+} as SheetColumnDefinition;
+const datetimeCol = {
+  id: 'dt',
+  label: 'DT',
+  type: 'datetime',
+} as SheetColumnDefinition;
+const timeCol = {
+  id: 't',
+  label: 'T',
+  type: 'time',
+} as SheetColumnDefinition;
+
+describe('coerceCellValue - date types', () => {
+  it('normalizes ISO date input', () => {
+    expect(coerceCellValue(dateCol, '2026-12-31')).toBe('2026-12-31');
+  });
+
+  it('normalizes to a custom output format', () => {
+    expect(coerceCellValue(dateCustomCol, '2026-12-31')).toBe('31/12/2026');
+  });
+
+  it('normalizes datetime and time, dropping seconds by default', () => {
+    expect(coerceCellValue(datetimeCol, '2026-12-31T10:30:00')).toBe(
+      '2026-12-31T10:30'
+    );
+    expect(coerceCellValue(timeCol, '10:30:00')).toBe('10:30');
+  });
+
+  it('keeps seconds when the column sets showSeconds', () => {
+    const timeSecondsCol = {
+      id: 'ts',
+      label: 'TS',
+      type: 'time',
+      typeArguments: { showSeconds: true },
+    } as SheetColumnDefinition;
+    expect(coerceCellValue(timeSecondsCol, '10:30:15')).toBe('10:30:15');
+  });
+
+  it('keeps empty empty and unparseable verbatim', () => {
+    expect(coerceCellValue(dateCol, '')).toBe('');
+    expect(coerceCellValue(dateCol, 'not a date')).toBe('not a date');
+  });
+
+  it('round-trips through formatCellValue -> coerceCellValue', () => {
+    const cases: [SheetColumnDefinition, ImporterOutputFieldType][] = [
+      [dateCol, '2026-12-31'],
+      [dateCustomCol, '31/12/2026'],
+      [datetimeCol, '2026-12-31T10:30'],
+      [timeCol, '10:30'],
+    ];
+    for (const [column, value] of cases) {
+      expect(coerceCellValue(column, formatCellValue(column, value))).toEqual(
+        value
+      );
+    }
+  });
+});

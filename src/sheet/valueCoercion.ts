@@ -1,6 +1,7 @@
 import { ImporterOutputFieldType } from '@/types';
 import { SheetColumnDefinition } from './types';
 import { DEFAULT_TRUE_TOKENS, DEFAULT_FALSE_TOKENS } from '@/constants';
+import { coerceDateValue } from '@/components/dateUtils';
 
 // Numbers only within the safe-integer float range are treated as numeric; this
 // mirrors the previous CSV-mapping behavior (avoids turning huge/ID-like strings
@@ -87,6 +88,13 @@ export function coerceCellValue(
       if (raw.trim() === '') return raw;
       return resolveEnumToken(raw, values);
     }
+    case 'date':
+    case 'datetime':
+    case 'time':
+      // Parse against the column's formats and re-emit in the output format
+      // (default ISO). Unparseable input is kept verbatim so the automatic
+      // date validator can flag it.
+      return coerceDateValue(raw, column.type, column.typeArguments);
     default:
       // string / reference / calculated -> raw (reference is sourced from the
       // referenced sheet and calculated is computed elsewhere).

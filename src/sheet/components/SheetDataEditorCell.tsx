@@ -3,11 +3,13 @@ import {
   EnumLabelDict,
   ImporterOutputFieldType,
   SheetColumnDefinition,
+  SheetColumnDateTypeArguments,
+  isDateLikeColumn,
   SheetState,
   SelectOption,
   SheetDefinition,
 } from '@/types';
-import { Input, Select, SheetTooltip } from '@/components';
+import { Input, Select, DatePicker, SheetTooltip } from '@/components';
 import {
   buildMultiEnumEditorOptions,
   extractReferenceColumnPossibleValues,
@@ -22,6 +24,7 @@ import { useImporterDefinition } from '@/importer/hooks';
 import {
   DEFAULT_BOOLEAN_FALSE_LABEL,
   DEFAULT_BOOLEAN_TRUE_LABEL,
+  DATE_PICKER_PANEL_ATTR,
 } from '@/constants';
 import { useGridSelectionContext } from '../grid/GridSelectionContext';
 import { moveCoord } from '../grid/coordinates';
@@ -52,6 +55,15 @@ function isSelectTypeColumn(column: SheetColumnDefinition): boolean {
     column.type === 'enum' ||
     column.type === 'reference'
   );
+}
+
+/**
+ * Columns whose editor owns its own keyboard navigation and commit logic, so the
+ * generic Enter/Tab handler is skipped and edit ends only when focus leaves the
+ * cell (not on every internal close).
+ */
+function ownsKeyboardEditor(column: SheetColumnDefinition): boolean {
+  return isSelectTypeColumn(column) || isDateLikeColumn(column);
 }
 
 export default function SheetDataEditorCell({
@@ -155,8 +167,8 @@ export default function SheetDataEditorCell({
       return;
     }
 
-    // Combobox editors handle their own navigation/selection keys.
-    if (isSelectTypeColumn(columnDefinition)) return;
+    // Combobox / date-picker editors handle their own navigation/commit keys.
+    if (ownsKeyboardEditor(columnDefinition)) return;
 
     if (e.key === 'Enter' || e.key === 'Tab') {
       e.preventDefault();
@@ -196,10 +208,14 @@ export default function SheetDataEditorCell({
   // editing exit unexpectedly. Focus stays on the combobox input during those
   // interactions, so it only leaves when the user clicks another cell / outside.
   function handleTdBlur(e: FocusEvent) {
-    if (!editMode || !isSelectTypeColumn(columnDefinition)) return;
+    if (!editMode || !ownsKeyboardEditor(columnDefinition)) return;
 
     const next = e.relatedTarget as Node | null;
     if (next && tdRef.current?.contains(next)) return;
+    // The DatePicker's popover is portaled outside the cell; focus moving into
+    // it (e.g. onto a calendar day) must not end the edit.
+    if (next instanceof Element && next.closest(`[${DATE_PICKER_PANEL_ATTR}]`))
+      return;
 
     endEdit();
   }
@@ -360,6 +376,23 @@ export default function SheetDataEditorCell({
               (newValue ?? undefined) as ImporterOutputFieldType
             )
           }
+        />
+      );
+    }
+
+    if (isDateLikeColumn(columnDefinition)) {
+      // Widen to the superset: `date` omits showSeconds/hourFormat, but the
+      // DatePicker (and its `mode`) ignores them when there's no time part.
+      const typeArguments: SheetColumnDateTypeArguments =
+        columnDefinition.typeArguments ?? {};
+      return (
+        <DatePicker
+          mode={columnDefinition.type}
+          value={typeof value === 'string' ? value : ''}
+          seedText={typeToEditChar}
+          {...typeArguments}
+          aria-label={`edit row ${Number(rowId) + 1}'s ${columnDefinition.label}`}
+          onCommit={(storedValue) => commitInputValue(storedValue)}
         />
       );
     }

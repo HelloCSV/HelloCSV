@@ -51,6 +51,102 @@ For a CSV cell containing `"on"`, the stored value will be `true`.
 
 ---
 
+## date
+
+**Description:**  
+A calendar date, edited with a calendar picker.
+
+**Additional:**  
+`typeArguments?: { outputFormat?: string, displayFormat?: string, min?: string, max?: string }`
+
+**Notes:**
+- Values are **stored and returned as normalized strings** in `outputFormat`. `displayFormat` controls how the value is shown in the grid cell and the editor input. Both use [dayjs tokens](https://day.js.org/docs/en/display/format).
+- On import, cell text is parsed against `outputFormat`, `displayFormat`, and the ISO fallback. A parseable value is normalized to `outputFormat`; anything else is kept as-is and flagged by the automatic [date](/v0.5.0/api-reference/validators#date) validator.
+- `min` / `max` bound the allowed range: out-of-range values are flagged by the validator, and out-of-range days are disabled in the picker (`date` / `datetime`). For `datetime` / `time` the comparison includes the time portion.
+- **`min` / `max` format:** they're parsed leniently — accepted in **ISO** (`YYYY-MM-DD`, `YYYY-MM-DDTHH:mm:ss`, `HH:mm:ss`), in the column's `outputFormat` or `displayFormat`, or in a default format. **ISO is always accepted even if you override `outputFormat` / `displayFormat`**, so it's the recommended way to specify bounds. A bound that matches none of these is silently ignored (treated as no bound).
+
+**Default formats** (used when `outputFormat` / `displayFormat` are omitted) — these apply to all three date-like types:
+
+| Type | Default `outputFormat` (stored & returned) | Default `displayFormat` (shown) |
+|------|--------------------------------------------|---------------------------------|
+| `date` | `YYYY-MM-DD` | `MMM D, YYYY` |
+| `datetime` | `YYYY-MM-DDTHH:mm` (`…:ss` with `showSeconds`) | `MMM D, YYYY h:mm A` |
+| `time` | `HH:mm` (`HH:mm:ss` with `showSeconds`) | `h:mm A` |
+
+The stored/returned value is always 24-hour; `hourFormat: '24h'` changes the default `displayFormat` time part to `HH:mm`.
+
+**Example:**
+```ts
+{
+  label: 'Start Date',
+  id: 'start_date',
+  type: 'date',
+  typeArguments: {
+    displayFormat: 'MMM D, YYYY',
+    min: '2000-01-01',
+  },
+}
+```
+
+For a CSV cell containing `"31/12/2026"` with `outputFormat: 'DD/MM/YYYY'`, the stored value will be `"2026-12-31"` (ISO) — or `"31/12/2026"` if that same `outputFormat` is used for output.
+
+---
+
+## datetime
+
+**Description:**  
+A date and time, edited with a combined calendar + time picker.
+
+**Additional:**  
+`typeArguments?: { outputFormat?: string, displayFormat?: string, min?: string, max?: string, showSeconds?: boolean, hourFormat?: '12h' | '24h' }`
+
+**Notes:**
+- Same behavior as [date](#date). By default seconds are omitted: `outputFormat` is `YYYY-MM-DDTHH:mm` and `displayFormat` is `MMM D, YYYY h:mm A`.
+- Set `showSeconds: true` to add a seconds field to the picker and include seconds in the default formats (`YYYY-MM-DDTHH:mm:ss`). Explicit `outputFormat` / `displayFormat` always take precedence.
+- `hourFormat` controls the picker clock and default display: `'12h'` (default) shows an AM/PM toggle; `'24h'` uses a 24-hour field. The stored `outputFormat` value is always 24-hour.
+
+**Example:**
+```ts
+{
+  label: 'Created At',
+  id: 'created_at',
+  type: 'datetime',
+}
+```
+
+For a CSV cell containing `"2026-12-31T10:30:00"`, the stored value will be `"2026-12-31T10:30"` (seconds dropped by default; use `showSeconds: true` to keep them).
+
+---
+
+## time
+
+**Description:**  
+A time of day, edited with a time picker.
+
+**Additional:**  
+`typeArguments?: { outputFormat?: string, displayFormat?: string, min?: string, max?: string, showSeconds?: boolean, hourFormat?: '12h' | '24h' }`
+
+**Notes:**
+- Same behavior as [date](#date). By default seconds are omitted: `outputFormat` is `HH:mm` and `displayFormat` is `h:mm A`.
+- Set `showSeconds: true` to add a seconds field to the picker and use `HH:mm:ss` as the default output.
+- `hourFormat` controls the picker clock and default display: `'12h'` (default) shows an AM/PM toggle; `'24h'` uses a 24-hour field. The stored `outputFormat` value is always 24-hour.
+
+**Example:**
+```ts
+{
+  label: 'Shift Start',
+  id: 'shift_start',
+  type: 'time',
+  typeArguments: {
+    displayFormat: 'h:mm A',
+  },
+}
+```
+
+For a CSV cell containing `"9:30 AM"` with `displayFormat: 'h:mm A'`, the stored value will be `"09:30"` (or `"09:30:00"` with `showSeconds: true`).
+
+---
+
 ## reference
 
 **Description:**  

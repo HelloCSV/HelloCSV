@@ -8,6 +8,7 @@ import {
 } from 'preact/compat';
 import { XMarkIcon } from '@heroicons/react/20/solid';
 import { ImporterOutputFieldType } from '../types';
+import { PASSWORD_MANAGER_IGNORE_PROPS } from '../constants';
 import { useTranslations } from '../i18';
 
 interface Props {
@@ -58,6 +59,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     return (
       <div className="grid grid-cols-1">
         <input
+          {...PASSWORD_MANAGER_IGNORE_PROPS}
           aria-label={props['aria-label']}
           ref={ref}
           type={type}
