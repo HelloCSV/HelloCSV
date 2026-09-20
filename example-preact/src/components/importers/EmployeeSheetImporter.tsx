@@ -6,7 +6,9 @@ import Importer, {
 } from 'hello-csv/preact';
 import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
+import Code from '../Code';
 import example2 from '../../assets/datasets/example-2.csv?url';
+import { useDarkMode } from '../../DarkModeContext';
 
 const COMPANY_SHEET: SheetDefinition = {
   id: 'companies',
@@ -110,6 +112,7 @@ const EMPLOYEE_SHEET: SheetDefinition = {
 };
 
 export default function EmployeeSheetImporter() {
+  const { darkMode } = useDarkMode();
   const [ready, setReady] = useState(false);
 
   const onComplete = async (
@@ -146,9 +149,8 @@ export default function EmployeeSheetImporter() {
         <div className="container leading-8">
           <p>Sometimes, you need to upload multiple sheets at once.</p>
           <p>
-            For example, imagine we want to upload both{' '}
-            <code className="rounded-md bg-gray-200 p-1">employees</code> and{' '}
-            <code className="rounded-md bg-gray-200 p-1">companies</code>.
+            For example, imagine we want to upload both <Code>employees</Code>{' '}
+            and <Code>companies</Code>.
           </p>
           <p>
             However, there is a{' '}
@@ -168,8 +170,15 @@ export default function EmployeeSheetImporter() {
           .
         </p>
       </DocumentContainer>
-      <div className="mt-4 flex h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
+      <div
+        className={`mt-4 flex h-[800px] rounded-lg border px-2 py-6 sm:px-8 ${
+          darkMode
+            ? 'border-slate-800 bg-slate-900'
+            : 'border-gray-200 bg-white'
+        }`}
+      >
         <Importer
+          theme={darkMode ? 'dark' : 'default'}
           allowManualDataEntry
           sheets={[EMPLOYEE_SHEET, COMPANY_SHEET]}
           onDataColumnsMapped={(sheets) => {

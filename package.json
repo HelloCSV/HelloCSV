@@ -1,6 +1,6 @@
 {
   "name": "hello-csv",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "A modern CSV importer written in Preact",
   "author": "HelloCSV",
   "license": "MIT",
@@ -81,6 +81,8 @@
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",
     "@tailwindcss/vite": "^4.0.4",
+    "@testing-library/preact": "^3.2.4",
+    "@testing-library/user-event": "^14.6.7",
     "@types/dropzone": "^5.7.9",
     "@types/papaparse": "5.3.15",
     "@typescript-eslint/eslint-plugin": "5.57.1",
@@ -96,6 +98,7 @@
     "eslint-plugin-jsx-a11y": "6.7.1",
     "eslint-plugin-prettier": "5.2.1",
     "gh-pages": "^6.3.0",
+    "happy-dom": "^15.11.7",
     "npm-run-all": "^4.1.5",
     "preact-render-to-string": "^6.5.13",
     "prettier": "^3.4.1",
@@ -115,6 +118,7 @@
     "@tanstack/react-table": "^8.21.2",
     "@tanstack/react-virtual": "^3.13.8",
     "cva": "npm:class-variance-authority@^0.7.1",
+    "dayjs": "^1.11.23",
     "papaparse": "^5.4.1"
   }
 }

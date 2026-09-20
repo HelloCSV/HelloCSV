@@ -18,12 +18,12 @@ export default function Checkbox({ checked, setChecked, label }: Props) {
             onChange={(e) => setChecked((e.target as HTMLInputElement).checked)}
             id={id}
             type="checkbox"
-            className="checked:border-hello-csv-primary checked:bg-hello-csv-primary indeterminate:border-hello-csv-primary indeterminate:bg-hello-csv-primary focus-visible:outline-hello-csv-hello-csv-primary col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white focus-visible:outline-2 focus-visible:outline-offset-2 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+            className="checked:border-hello-csv-primary checked:bg-hello-csv-primary indeterminate:border-hello-csv-primary indeterminate:bg-hello-csv-primary focus-visible:outline-hello-csv-hello-csv-primary border-hello-csv-border-strong bg-hello-csv-surface disabled:border-hello-csv-border-strong disabled:bg-hello-csv-surface-sunken disabled:checked:bg-hello-csv-surface-sunken col-start-1 row-start-1 appearance-none rounded-sm border focus-visible:outline-2 focus-visible:outline-offset-2 forced-colors:appearance-auto"
           />
           <svg
             fill="none"
             viewBox="0 0 14 14"
-            className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25"
+            className="stroke-hello-csv-primary-contrast group-has-disabled:stroke-hello-csv-text-subtle pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center"
           >
             <path
               d="M3 8L6 11L11 3.5"
@@ -44,7 +44,7 @@ export default function Checkbox({ checked, setChecked, label }: Props) {
       </div>
       {label && (
         <div className="text-sm/6">
-          <label htmlFor={id} className="font-medium text-gray-900">
+          <label htmlFor={id} className="text-hello-csv-text font-medium">
             {label}
           </label>
         </div>

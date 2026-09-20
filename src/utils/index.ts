@@ -7,6 +7,7 @@ import {
   SheetDefinition,
   SheetRow,
   SheetState,
+  isDateLikeColumn,
 } from '../types';
 import {
   DEFAULT_BOOLEAN_FALSE_LABEL,
@@ -14,6 +15,7 @@ import {
   DOWNLOADED_CSV_SEPARATOR,
 } from '../constants';
 import { applyTransformations } from '@/transformers';
+import { formatDisplay } from '@/components/dateUtils';
 
 export const isUndefinedOrNull = (a: any) => {
   return a === null || a === undefined;
@@ -24,6 +26,45 @@ export const isPresent = (a: any) => !isUndefinedOrNull(a);
 export const filterEmptyRows = (state: SheetState) => {
   return state.rows.filter((d) => Object.keys(d).length > 0);
 };
+
+export interface SheetRowLimitInfo {
+  sheetId: string;
+  label: string;
+  /** Effective (non-empty) row count for the sheet. */
+  count: number;
+  maxRows: number;
+  exceeded: boolean;
+}
+
+/**
+ * Returns row-limit info for every sheet that declares a `maxRows`. The count
+ * is the effective (non-empty) row count — matching what actually gets
+ * submitted via `getSubmittedSheetData` — so the manual-entry empty rows do not
+ * falsely trip the limit. Drives both the sheet-tab counter and the upload gate.
+ */
+export function getSheetRowLimitInfo(
+  sheets: SheetDefinition[],
+  sheetData: SheetState[]
+): SheetRowLimitInfo[] {
+  return sheets.flatMap((sheet) => {
+    if (sheet.maxRows == null) {
+      return [];
+    }
+
+    const state = sheetData.find((d) => d.sheetId === sheet.id);
+    const count = state != null ? filterEmptyRows(state).length : 0;
+
+    return [
+      {
+        sheetId: sheet.id,
+        label: sheet.label,
+        count,
+        maxRows: sheet.maxRows,
+        exceeded: count > sheet.maxRows,
+      },
+    ];
+  });
+}
 
 export function isEmptyCell(value: any): boolean {
   if (isUndefinedOrNull(value)) {
@@ -61,7 +102,10 @@ export function normalizeValue(value: ImporterOutputFieldType) {
     );
 }
 
-function escapeCsvCell(value: ImporterOutputFieldType): string {
+export function escapeDelimitedCell(
+  value: ImporterOutputFieldType,
+  delimiter: string
+): string {
   if (value == null) {
     return '';
   }
@@ -70,11 +114,22 @@ function escapeCsvCell(value: ImporterOutputFieldType): string {
 
   cell = cell.replace(/"/g, '""');
 
-  if (/[",\n\r]/.test(cell)) {
+  if (cell.includes('"') || cell.includes(delimiter) || /[\n\r]/.test(cell)) {
     cell = `"${cell}"`;
   }
 
   return cell;
+}
+
+export function serializeRows(
+  rows: ImporterOutputFieldType[][],
+  delimiter: string
+): string {
+  return rows
+    .map((row) =>
+      row.map((cell) => escapeDelimitedCell(cell, delimiter)).join(delimiter)
+    )
+    .join('\n');
 }
 
 export function generateCsvContent(
@@ -83,35 +138,28 @@ export function generateCsvContent(
   enumLabelDict: EnumLabelDict,
   csvDownloadMode: CsvDownloadMode
 ) {
-  const headers = sheetDefinition.columns
-    .map((column) =>
-      escapeCsvCell(csvDownloadMode === 'label' ? column.label : column.id)
-    )
-    .join(DOWNLOADED_CSV_SEPARATOR);
-
-  const rows = data.map((row) =>
-    sheetDefinition.columns
-      .map((column) => {
-        const value = row[column.id];
-        let processedValue: ImporterOutputFieldType;
-
-        if (csvDownloadMode === 'value' || value == null) {
-          processedValue = Array.isArray(value) ? value.join(', ') : value;
-        } else {
-          processedValue = getColumnDisplayValue(
-            sheetDefinition,
-            column,
-            value,
-            enumLabelDict
-          );
-        }
-
-        return escapeCsvCell(processedValue);
-      })
-      .join(DOWNLOADED_CSV_SEPARATOR)
+  const headerRow = sheetDefinition.columns.map((column) =>
+    csvDownloadMode === 'label' ? column.label : column.id
   );
 
-  const csv = [headers, ...rows].join('\n');
+  const dataRows = data.map((row) =>
+    sheetDefinition.columns.map((column) => {
+      const value = row[column.id];
+
+      if (csvDownloadMode === 'value' || value == null) {
+        return Array.isArray(value) ? value.join(', ') : value;
+      }
+
+      return getColumnDisplayValue(
+        sheetDefinition,
+        column,
+        value,
+        enumLabelDict
+      );
+    })
+  );
+
+  const csv = serializeRows([headerRow, ...dataRows], DOWNLOADED_CSV_SEPARATOR);
   return new Blob([csv], { type: 'text/csv' });
 }
 
@@ -191,6 +239,14 @@ export function getColumnDisplayValue(
         DEFAULT_BOOLEAN_FALSE_LABEL
       );
     }
+  }
+
+  if (isDateLikeColumn(columnDefinition) && typeof value === 'string') {
+    return formatDisplay(
+      value,
+      columnDefinition.type,
+      columnDefinition.typeArguments
+    );
   }
 
   return value;

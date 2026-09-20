@@ -2,9 +2,12 @@ import { useState } from 'preact/hooks';
 import Importer, { ImporterState } from 'hello-csv/preact';
 import Content from '../Content';
 import DocumentContainer from '../DocumentContainer';
+import Code from '../Code';
 import example1 from '../../assets/datasets/example-1.csv?url';
+import { useDarkMode } from '../../DarkModeContext';
 
 export default function EmployeeImporter() {
+  const { darkMode } = useDarkMode();
   const [ready, setReady] = useState(false);
 
   const onComplete = async (
@@ -28,7 +31,7 @@ export default function EmployeeImporter() {
         <div className="container leading-8">
           <p>
             Imagine we are trying to set up an uploader that uploads a CSV of{' '}
-            <code className="rounded-md bg-gray-200 p-1">employees</code>.
+            <Code>employees</Code>.
           </p>
           <p>HelloCSV makes this a breeze.</p>
         </div>
@@ -40,8 +43,15 @@ export default function EmployeeImporter() {
           .
         </p>
       </DocumentContainer>
-      <div className="mt-4 flex max-h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
+      <div
+        className={`mt-4 flex max-h-[800px] rounded-lg border px-2 py-6 sm:px-8 ${
+          darkMode
+            ? 'border-slate-800 bg-slate-900'
+            : 'border-gray-200 bg-white'
+        }`}
+      >
         <Importer
+          theme={darkMode ? 'dark' : 'default'}
           allowManualDataEntry
           maxFileSizeInBytes={10 * 1024 * 1024} // 10MB
           sheets={[

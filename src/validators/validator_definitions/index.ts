@@ -3,7 +3,9 @@ import {
   ImporterValidatorType,
 } from '../types';
 import { Validator } from './base';
+import { BooleanValidator } from './boolean_validator';
 import { CustomValidator } from './custom_validator';
+import { DateValidator } from './date_validator';
 import { EmailValidator } from './email_validator';
 import { IncludesValidator } from './includes_validator';
 import { IntegerValidator } from './integer_validator';
@@ -15,7 +17,9 @@ import { RequiredValidator } from './required_validator';
 import { UniqueValidator } from './unique_validator';
 
 export * from './base';
+export * from './boolean_validator';
 export * from './custom_validator';
+export * from './date_validator';
 export * from './email_validator';
 export * from './includes_validator';
 export * from './multi_includes_validator';
@@ -36,10 +40,12 @@ export function buildValidatorFromDefinition(
     unique: UniqueValidator,
     includes: IncludesValidator,
     multi_includes: MultiIncludesValidator,
+    boolean: BooleanValidator,
     is_integer: IntegerValidator,
     postal_code: PostalCodeValidator,
     phone_number: PhoneNumberValidator,
     email: EmailValidator,
+    date: DateValidator,
     custom: CustomValidator,
   };
   if (!(definition.validate in mapping)) {

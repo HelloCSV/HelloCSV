@@ -3,11 +3,14 @@ import Importer, { ImporterState } from 'hello-csv/preact';
 import Content from '../Content';
 import * as XLSX from 'xlsx';
 import DocumentContainer from '../DocumentContainer';
+import Code from '../Code';
 import example3 from '../../assets/datasets/example-3.xlsx?url';
+import { useDarkMode } from '../../DarkModeContext';
 const XLSX_FILE_MIME_TYPE =
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 export default function ExcelImporter() {
+  const { darkMode } = useDarkMode();
   const [ready, setReady] = useState(false);
 
   const onComplete = async (
@@ -47,14 +50,15 @@ export default function ExcelImporter() {
           <p>
             HelloCSV supports importing XLSX, PDF files, and anything else you
             can parse by implementing a{' '}
-            <code className="rounded-md bg-gray-200 p-1 hover:underline">
+            <Code className="hover:underline">
               <a
-                href="https://hellocsv.mintlify.app/v0.4.4/api-reference/importer-props#customfileloaders"
+                href="https://hellocsv.mintlify.app/v0.5.0/api-reference/importer-props#customfileloaders"
                 target="_blank"
+                rel="noreferrer noopener"
               >
                 CustomFileLoader
               </a>
-            </code>
+            </Code>
             .
           </p>
         </div>
@@ -66,8 +70,15 @@ export default function ExcelImporter() {
           .
         </p>
       </DocumentContainer>
-      <div className="mt-4 flex h-[800px] rounded-lg border border-gray-200 bg-white px-2 py-6 sm:px-8">
+      <div
+        className={`mt-4 flex h-[800px] rounded-lg border px-2 py-6 sm:px-8 ${
+          darkMode
+            ? 'border-slate-800 bg-slate-900'
+            : 'border-gray-200 bg-white'
+        }`}
+      >
         <Importer
+          theme={darkMode ? 'dark' : 'default'}
           allowManualDataEntry
           maxFileSizeInBytes={10 * 1024 * 1024} // 10MB
           sheets={[

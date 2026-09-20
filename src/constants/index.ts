@@ -1,5 +1,8 @@
 export const NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT = 100;
 
+// Maximum number of undo/redo snapshots kept in memory per importer session.
+export const MAX_UNDO_HISTORY = 50;
+
 export const NUMBER_OF_EXAMPLES_IN_MAPPING = 5;
 
 export const SUPPORTED_FILE_MIME_TYPES = [
@@ -17,6 +20,21 @@ export const HEALDESS_UI_PORTAL_ROOT_ID = 'headlessui-portal-root';
 
 export const ROOT_CLASS = 'hello-csv';
 
+/** Marks the portaled DatePicker popover so the grid cell's blur logic can tell
+ * focus is still "inside" the editor even though it's rendered outside the cell. */
+export const DATE_PICKER_PANEL_ATTR = 'data-hellocsv-datepicker';
+
+/** Spread onto every importer text input so password managers (Bitwarden,
+ * 1Password, LastPass, Dashlane) don't overlay autofill popups — importer
+ * fields are data cells, never credentials. */
+export const PASSWORD_MANAGER_IGNORE_PROPS = {
+  autoComplete: 'off',
+  'data-bwignore': true,
+  'data-1p-ignore': true,
+  'data-lpignore': 'true',
+  'data-form-type': 'other',
+} as const;
+
 // Used for virtualizer, should be updated if the row height changes
 export const ESTIMATED_ROW_HEIGHT = 52.62;
 
@@ -29,3 +47,6 @@ export const DATA_COLUMN_WIDTH = 150;
 
 export const DEFAULT_BOOLEAN_TRUE_LABEL = 'Yes';
 export const DEFAULT_BOOLEAN_FALSE_LABEL = 'No';
+
+export const DEFAULT_TRUE_TOKENS = ['true', '1', 'yes', 'y'];
+export const DEFAULT_FALSE_TOKENS = ['false', '0', 'no', 'n'];

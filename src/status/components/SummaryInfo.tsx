@@ -51,7 +51,7 @@ export default function SummaryInfo({
               <div className="text-md my-2 font-medium">
                 {rowFile?.name || 'Data entered manually'}
               </div>
-              <div className="my-2 text-sm text-gray-500">
+              <div className="text-hello-csv-text-muted my-2 text-sm">
                 {rowFile
                   ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`
                   : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`}
@@ -75,7 +75,7 @@ export default function SummaryInfo({
             </div>
           </div>
         </div>
-        <div className="border-b border-gray-200 pb-2"></div>
+        <div className="border-hello-csv-border border-b pb-2"></div>
         <div>
           <div className="flex flex-row">
             <div className="my-2 mr-5 text-center">
@@ -95,7 +95,7 @@ export default function SummaryInfo({
                 {t('importStatus.totalRows', { totalRows })}
               </div>
               {statistics && (
-                <div className="my-2 text-sm text-gray-500">
+                <div className="text-hello-csv-text-muted my-2 text-sm">
                   {statistics.skipped >= 0 && (
                     <span>
                       {t('importStatus.statisticsSkipped', {
@@ -122,7 +122,7 @@ export default function SummaryInfo({
                 </div>
               )}
               {mode === 'failed' && (
-                <div className="my-2 text-sm text-gray-500">
+                <div className="text-hello-csv-text-muted my-2 text-sm">
                   {t('importStatus.status')}:{' '}
                   <Badge variant="error">{t('importStatus.failed')}</Badge>
                 </div>

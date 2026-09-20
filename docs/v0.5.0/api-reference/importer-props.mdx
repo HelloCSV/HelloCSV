@@ -1,0 +1,268 @@
+---
+title: 'Importer Props'
+---
+
+This section details each property available for the Importer component.
+
+## sheets
+
+**Type:** `SheetDefinition[]`
+
+**Required:** Yes
+
+**Description:**
+Array of sheet definitions for importing data. This property defines the structure of the data to be imported.
+
+---
+
+## onComplete
+
+**Type:** `(data: ImporterState, onProgress: (progress: number) => void, submissionFiles: ImporterSubmissionFile[]) => Promise<ImportStatistics | void>`
+
+**Required:** Yes
+
+**Description:**
+A callback function invoked when the import process completes. It receives the final data and a progress callback.
+An `ImportStatistics` object can be returned to provide detailed information about the import results. The statistics object has the following properties:
+
+- `imported`: Number of rows successfully imported
+- `failed`: Number of rows that failed to import
+- `skipped`: Number of rows that were skipped
+
+These statistics will be displayed in the import summary and can be used to show detailed import results to the user.
+
+The `submissionFiles` parameter is an array of files that were submitted by the user. This can be used to provide the files to upload to the server.
+
+The `submissionFiles` is defined as
+
+```ts
+interface ImporterSubmissionFile {
+  file: Blob;
+  sheetId: string;
+}
+```
+
+The `file` is the file that was processed by the importer. The `sheetId` is the id of the sheet that the file belongs to.
+
+---
+
+## initialState
+
+**Type:** `ImporterState`
+
+**Required:** No
+
+**Description:**
+
+Initial state for the importer. If provided, the importer will start with this state instead of the default one.
+Please use the [CSV Importer State Builder](/v0.3.7/api-reference/csv-importer-state-builder) to build the initial state.
+
+When using `initialState` the persisted state will be ignored.
+
+---
+
+## theme
+
+**Type:** `'default' | 'theme-1' | 'theme-2' | 'dark'`
+
+**Required:** No (Default: `default`)
+
+**Description:**
+Determines the visual theme of the importer component. Use `dark` for the built-in
+dark theme — see [Dark Mode](/v0.5.0/customization/dark-mode). You can further
+customize any theme's colors via [Theme Styles](/v0.5.0/customization/theme-styles).
+
+---
+
+## onDataColumnsMapped
+
+**Type:** `(data: SheetState) => Promise<SheetState> | SheetState`
+
+**Required:** No
+
+**Description:**
+Callback executed after CSV columns are mapped to the sheet definitions. Allows for custom post-mapping processing.
+
+---
+
+## allowManualDataEntry
+
+**Type:** `boolean`
+
+**Required:** No (Default: `false`)
+
+**Description:**
+Indicates whether manual data entry is allowed during the preview phase.
+
+---
+
+## locale
+
+**Type:** `'en' | 'fr' | 'pt-BR'`
+
+**Required:** No (Default: `en`)
+
+**Description:**
+Specifies the locale for internationalization purposes.
+
+---
+
+## preventUploadOnValidationErrors
+
+**Type:** `boolean | (errors: ImporterValidationError[]) => boolean`
+
+**Required:** No (Default: `false`)
+
+**Description:**
+Controls whether file upload should be prevented when validation errors occur. Can be a boolean or a function that returns a boolean.
+
+---
+
+## maxFileSizeInBytes
+
+**Type:** `number`
+
+**Required:** No (Default: `20971520` i.e., 20MB)
+
+**Description:**
+Sets the maximum allowed file size in bytes. Files exceeding this limit will be rejected.
+
+---
+
+## customSuggestedMapper
+
+**Type:** `(sheetDefinitions: SheetDefinition[], csvHeaders: string[]) => ColumnMapping[] | Promise<ColumnMapping[]>`
+
+**Required:** No
+
+**Description:**
+Provides a custom function to generate suggested mappings based on CSV headers.
+
+---
+
+## onSummaryFinished
+
+**Type:** `() => void`
+
+**Required:** No
+
+**Description:**
+Callback executed when the user has finished reviewing the import summary. This can be used to navigate users to a results page, dashboard, or next step in the workflow after the import process completes successfully.
+
+---
+
+## persistenceConfig
+
+**Type:** `{ enabled: boolean; customKey?: string }`
+
+**Required:** No
+
+**Description:**
+Configuration for IndexedDB storage. When enabled, the importer state will be persisted in the browser's IndexedDB storage, allowing users to resume their import process if the page is refreshed or closed. The `customKey` option allows specifying a unique identifier for the stored data.
+
+Use cases for `customKey`:
+
+- **Multiple Import Sessions**: When you need to handle multiple import processes simultaneously in the same application, you can use different `customKey` values to keep their states separate.
+
+- **User-Specific Storage**: When implementing a multi-user system, you can use the user's ID as the `customKey` to maintain separate import states for each user.
+
+- **Session Management**: You can use the `customKey` to implement session-specific storage, allowing you to clear specific import sessions without affecting others.
+
+---
+
+## translationResources
+
+**Type:** `Record<string, Translation>`
+
+**Required:** No
+
+**Description:**
+A dictionary of translations for the importer component. The keys are the locale codes, and the values are the translations.
+
+---
+
+## customFileLoaders
+
+**Type:** `{ mimeType: string; label: string; convert: (loadEvent: ProgressEvent<FileReader>, file: File) => { fileName: string; csvData: string; } | Promise<{ fileName: string; csvData: string; }>; }[]`
+
+**Required:** No
+
+**Description:**
+A list of custom file loaders for the importer component.
+
+Use cases for `customFileLoaders`:
+
+- **Custom File Types**: When you need to import files with custom formats(like XLSX), you can create a custom file loader to handle the conversion process.
+
+**Example:**
+
+```typescript
+// Excel upload using xlsx library
+import * as XLSX from 'xlsx';
+
+const XLSX_FILE_MIME_TYPE =
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+<Importer
+  customFileLoaders={[
+    {
+      mimeType: XLSX_FILE_MIME_TYPE,
+      label: 'XLSX',
+      convert: (loadEvent, file) => {
+        const data = new Uint8Array(loadEvent.target?.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const csvData = XLSX.utils.sheet_to_csv(firstSheet);
+
+        return { fileName: file.name, csvData };
+      },
+    },
+  ]}
+/>
+```
+
+---
+
+## csvDownloadMode
+
+**Type:** `'value' | 'label'`
+
+**Required:** No (Default: `value`)
+
+**Description:**
+Determines the mode for CSV download.
+
+When set to `value`, the CSV will contain the raw values from the sheet. This includes enum fields values and column ids for CSV headers.
+
+When set to `label`, the CSV will contain the labels of the values as well as column labels for CSV headers.
+
+---
+
+## availableActions
+
+**Type:** `'addRows' | 'removeRows' | 'editRows' | 'downloadCsv' | 'search' | 'resetState' | 'backToPreviousStep' | 'undoRedo'[]`
+
+**Required:** No (Default: `['addRows', 'removeRows', 'editRows', 'downloadCsv', 'search', 'resetState', 'backToPreviousStep', 'undoRedo'] - all the actions`)
+
+**Description:**
+Determines which actions are available to the user on the preview screen.
+
+The `undoRedo` action enables the Back/Forward toolbar buttons **and** the
+undo/redo keyboard shortcuts (see
+[Keyboard & Clipboard](/v0.5.0/get-started/keyboard-and-clipboard#undo-redo)).
+Omitting it hides the buttons and disables the shortcuts.
+
+Use cases for `availableActions`:
+
+- **No actions**: You can use it to hide all the actions and make the preview screen read only.
+
+---
+
+## onStateChanged
+
+**Type:** `(previous: ImporterState, next: ImporterState) => void`
+
+**Required:** No
+
+**Description:**
+Callback executed whenever the importer state updates. It receives both the previous and the new state, enabling parent components to respond to state changes.

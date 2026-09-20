@@ -18,3 +18,27 @@ export async function parseCsv({ file }: { file: File }): Promise<ParsedFile> {
     });
   });
 }
+
+/**
+ * Parse quote-aware delimited text into a 2D string array (no header row).
+ *
+ * Shares the CSV parser (papaparse) so quoted cells containing the delimiter,
+ * newlines, or quotes round-trip correctly. Used for clipboard TSV paste.
+ */
+export function parseDelimitedText(
+  text: string,
+  delimiter: string
+): string[][] {
+  if (text === '') {
+    return [];
+  }
+
+  // eslint-disable-next-line import/no-named-as-default-member
+  const result = Papa.parse<string[]>(text, {
+    delimiter,
+    header: false,
+    skipEmptyLines: true,
+  });
+
+  return result.data;
+}
