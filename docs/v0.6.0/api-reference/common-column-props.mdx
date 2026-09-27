@@ -1,0 +1,109 @@
+---
+title: "Common Column Props"
+---
+
+All column types share these properties.
+
+## id
+
+**Type:** `string`
+
+**Required:** Yes
+
+**Description:**  
+Unique identifier for the column.
+
+---
+
+## type
+
+**Type:** `ColumnType`
+
+**Required:** Yes
+
+**Description:**  
+Defines the column type.
+
+---
+
+## label
+
+**Type:** `string`
+
+**Required:** Yes
+
+**Description:**  
+Display name for the column.
+
+---
+
+## suggestedMappingKeywords
+
+**Type:** `string[]`
+
+**Required:** No
+
+**Description:**  
+Keywords to assist in automatic mapping.
+
+---
+
+## isReadOnly
+
+**Type:** `boolean`
+
+**Required:** No
+
+**Description:**  
+Indicates whether the column is editable.
+
+---
+
+## validators
+
+**Type:** `ImporterValidatorDefinition[]`
+
+**Required:** No
+
+**Description:**  
+Array of validation rules.
+
+---
+
+## transformers
+
+**Type:** `ImporterTransformerDefinition[]`
+
+**Required:** No
+
+**Description:**  
+Array of transformation rules.
+
+---
+
+## customRender
+
+**Type:** `(value: ImporterOutputFieldType, displayValue: ImporterOutputFieldType) => ReactNode`
+
+**Required:** No
+
+**Description:**  
+Custom render function for the cell.
+
+The function gets passed
+
+- `value` - the row value of the cell
+- `displayValue` - the display value of the cell - that is a value that extracts enum labels and prevents empty values from being displayed. You should use this value to display the cell.
+
+The function should return a ReactNode.
+
+When rendering the cell you should remember that the background color of the cell could be
+- `hc:bg-hello-csv-danger-extra-light` - in case of validation errors
+- `hc:bg-hello-csv-muted` - in case of read only columns
+- default background colors - in other case
+
+<Note>
+  As of v0.6.0 all of HelloCSV's internal utility classes are namespaced with the
+  `hc:` prefix (e.g. `hc:bg-hello-csv-muted`). See
+  [Upgrade from v0.5.0](/v0.6.0/upgrade/from-v-0-5-0) for details.
+</Note>

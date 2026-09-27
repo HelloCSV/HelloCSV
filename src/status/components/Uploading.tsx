@@ -10,7 +10,7 @@ interface Props {
 
 function SuccessIcon() {
   return (
-    <CheckIcon className="text-hello-csv-success absolute inset-0 m-auto h-12 w-12 stroke-4" />
+    <CheckIcon className="hc:text-hello-csv-success hc:absolute hc:inset-0 hc:m-auto hc:h-12 hc:w-12 hc:stroke-4" />
   );
 }
 
@@ -20,25 +20,27 @@ export default function Completed({ resetState }: Props) {
   const { t } = useTranslations();
 
   return (
-    <div className="flex h-full p-10">
-      <div className="flex h-full w-full flex-col">
-        <div className="my-16 text-center">
-          <div className="relative mx-auto h-24 w-24">
+    <div className="hc:flex hc:h-full hc:p-10">
+      <div className="hc:flex hc:h-full hc:w-full hc:flex-col">
+        <div className="hc:my-16 hc:text-center">
+          <div className="hc:relative hc:mx-auto hc:h-24 hc:w-24">
             <CircularProgress progress={progress} pending={pending} />
             {pending && (
               <div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <b className="text-lg">{progress}%</b>
+                <div className="hc:absolute hc:inset-0 hc:flex hc:items-center hc:justify-center">
+                  <b className="hc:text-lg">{progress}%</b>
                 </div>
-                <h2 className="text-2xl">{t('importer.loader.uploading')}</h2>
+                <h2 className="hc:text-2xl">
+                  {t('importer.loader.uploading')}
+                </h2>
               </div>
             )}
             {!pending && <SuccessIcon />}
           </div>
           {!pending && (
-            <div className="flex flex-col items-center">
-              <h2 className="text-2xl">{t('importer.loader.success')}</h2>
-              <div className="h-5" />
+            <div className="hc:flex hc:flex-col hc:items-center">
+              <h2 className="hc:text-2xl">{t('importer.loader.success')}</h2>
+              <div className="hc:h-5" />
               <Button variant="secondary" onClick={resetState}>
                 {t('sheet.reset')}
               </Button>

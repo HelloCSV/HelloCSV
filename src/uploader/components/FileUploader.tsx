@@ -70,9 +70,9 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
   };
 
   return (
-    <Card variant="muted" withPadding={false} className="h-full">
+    <Card variant="muted" withPadding={false} className="hc:h-full">
       <div
-        className={`flex h-full flex-col p-5 transition-colors ${isDragging ? 'bg-hello-csv-muted-light' : 'bg-hello-csv-muted'}`}
+        className={`hc:flex hc:h-full hc:flex-col hc:p-5 hc:transition-colors ${isDragging ? 'hc:bg-hello-csv-muted-light' : 'hc:bg-hello-csv-muted'}`}
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => {
           e.preventDefault();
@@ -82,10 +82,10 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
         onDragLeave={() => setIsDragging(false)}
         onDrop={(e) => handleDrop(e)}
       >
-        <div className="flex flex-1 flex-col items-center justify-center">
-          <CloudArrowUpIcon className="text-hello-csv-primary h-12 w-12" />
-          <p className="mt-3 text-center">{t('uploader.dragAndDrop')}</p>
-          <div className="text-hello-csv-text-muted mt-3 text-sm">
+        <div className="hc:flex hc:flex-1 hc:flex-col hc:items-center hc:justify-center">
+          <CloudArrowUpIcon className="hc:text-hello-csv-primary hc:h-12 hc:w-12" />
+          <p className="hc:mt-3 hc:text-center">{t('uploader.dragAndDrop')}</p>
+          <div className="hc:text-hello-csv-text-muted hc:mt-3 hc:text-sm">
             {tHtml('uploader.maxFileSizeInBytes', {
               size: <b>{formatFileSize(maxFileSizeInBytes)}</b>,
             })}{' '}
@@ -94,16 +94,16 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
               .concat(customFileLoaders?.map((loader) => loader.label) ?? [])
               .join(', ')}
           </div>
-          <div className="mt-3">
+          <div className="hc:mt-3">
             <Button>{t('uploader.browseFiles')}</Button>
           </div>
           {fileError && (
-            <div className="mt-2">
+            <div className="hc:mt-2">
               <Error>{fileError}</Error>
             </div>
           )}
           {allowManualDataEntry && (
-            <div className="mt-3 text-sm">
+            <div className="hc:mt-3 hc:text-sm">
               <p
                 role="button"
                 tabIndex={0}
@@ -112,7 +112,7 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
                   e.stopPropagation();
                   onEnterDataManually?.();
                 }}
-                className="text-hello-csv-primary hover:text-hello-csv-primary cursor-pointer decoration-2 opacity-90 hover:underline focus:underline focus:outline-none"
+                className="hc:text-hello-csv-primary hc:hover:text-hello-csv-primary hc:cursor-pointer hc:decoration-2 hc:opacity-90 hc:hover:underline hc:focus:underline hc:focus:outline-none"
               >
                 {t('uploader.enterManually')}
               </p>
@@ -125,7 +125,7 @@ export default function FileUploader({ setFile, onEnterDataManually }: Props) {
           ref={fileInputRef}
           type="file"
           accept={supportedMimeTypes.concat(supportedExtensions).join(',')}
-          className="sr-only"
+          className="hc:sr-only"
           onChange={(e) => handleFileSelect(e)}
         />
       </div>

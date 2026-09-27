@@ -86,7 +86,7 @@ export default function SheetDataEditorActions({
     useState(false);
 
   const disabledButtonClasses =
-    'pointer-events-none cursor-not-allowed opacity-50';
+    'hc:pointer-events-none hc:cursor-not-allowed hc:opacity-50';
 
   function errorFilterOption(columnId: string) {
     const columnDefinition = sheetDefinition.columns.find(
@@ -153,8 +153,8 @@ export default function SheetDataEditorActions({
   }
 
   return (
-    <div className="my-5 flex items-center">
-      <div className="flex grow flex-wrap items-center gap-5">
+    <div className="hc:my-5 hc:flex hc:items-center">
+      <div className="hc:flex hc:grow hc:flex-wrap hc:items-center hc:gap-5">
         <div>
           <ButtonGroup activeButton={viewMode} buttons={viewModeButtons} />
         </div>
@@ -177,7 +177,7 @@ export default function SheetDataEditorActions({
                 tabIndex={0}
                 aria-label={t('sheet.undoTooltip')}
                 aria-disabled={!canUndo}
-                className={`h-6 w-6 ${canUndo ? 'cursor-pointer' : disabledButtonClasses}`}
+                className={`hc:h-6 hc:w-6 ${canUndo ? 'hc:cursor-pointer' : disabledButtonClasses}`}
                 onClick={() => canUndo && undo()}
               />
             </Tooltip>
@@ -188,7 +188,7 @@ export default function SheetDataEditorActions({
                 tabIndex={0}
                 aria-label={t('sheet.redoTooltip')}
                 aria-disabled={!canRedo}
-                className={`h-6 w-6 ${canRedo ? 'cursor-pointer' : disabledButtonClasses}`}
+                className={`hc:h-6 hc:w-6 ${canRedo ? 'hc:cursor-pointer' : disabledButtonClasses}`}
                 onClick={() => canRedo && redo()}
               />
             </Tooltip>
@@ -211,7 +211,7 @@ export default function SheetDataEditorActions({
                   ? 'sheet.removeRowsTooltipNoRowsSelected'
                   : 'sheet.removeRowsTooltip'
               )}
-              className={`h-6 w-6 ${selectedRows.length > 0 ? 'cursor-pointer' : disabledButtonClasses}`}
+              className={`hc:h-6 hc:w-6 ${selectedRows.length > 0 ? 'hc:cursor-pointer' : disabledButtonClasses}`}
               onClick={() => setRemoveConfirmationModalOpen(true)}
             />
           </Tooltip>
@@ -220,7 +220,7 @@ export default function SheetDataEditorActions({
         {availableActions.includes('addRows') && (
           <Tooltip tooltipText={t('sheet.addRowsTooltip')}>
             <PlusIcon
-              className="h-6 w-6 cursor-pointer"
+              className="hc:h-6 hc:w-6 hc:cursor-pointer"
               onClick={addEmptyRow}
             />
           </Tooltip>
@@ -229,8 +229,8 @@ export default function SheetDataEditorActions({
         {availableActions.includes('downloadCsv') && (
           <Tooltip tooltipText={t('sheet.downloadSheetTooltip')}>
             <ArrowDownTrayIcon
-              className={`h-6 w-6 ${
-                rowData.length > 0 ? 'cursor-pointer' : disabledButtonClasses
+              className={`hc:h-6 hc:w-6 ${
+                rowData.length > 0 ? 'hc:cursor-pointer' : disabledButtonClasses
               }`}
               onClick={() =>
                 downloadSheetAsCsv(
@@ -248,7 +248,7 @@ export default function SheetDataEditorActions({
           clearable
           displayPlaceholderWhenSelected
           placeholder={t('sheet.filterByError')}
-          classes="min-w-48"
+          classes="hc:min-w-48"
           options={filterByErrorOptions}
           value={errorColumnFilter}
           onChange={(value) => setErrorColumnFilter(value as string)}
@@ -270,11 +270,11 @@ export default function SheetDataEditorActions({
           />
         )}
       </div>
-      <div className="ml-5 flex items-center">
+      <div className="hc:ml-5 hc:flex hc:items-center">
         {validationInProgress && (
           <>
             <Spinner color="dark" />
-            <div className="mr-2" />
+            <div className="hc:mr-2" />
           </>
         )}
 
@@ -282,7 +282,7 @@ export default function SheetDataEditorActions({
           <>
             <Tooltip tooltipText={t('sheet.resetTooltip')}>
               <XMarkIcon
-                className="h-6 w-6 cursor-pointer"
+                className="hc:h-6 hc:w-6 hc:cursor-pointer"
                 onClick={() => setResetConfirmationModalOpen(true)}
               />
             </Tooltip>

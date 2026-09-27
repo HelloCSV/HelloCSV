@@ -222,8 +222,8 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
         )}
         {mode === 'preview' && (
           // TODO: Move these to separate component in future PR
-          <div className="flex h-full flex-col">
-            <div className="flex-none">
+          <div className="hc:flex hc:h-full hc:flex-col">
+            <div className="hc:flex-none">
               <SheetsSwitcher
                 idPrefix={idPrefix}
                 sheetCountDict={sheetCountDict}
@@ -233,7 +233,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
               />
             </div>
             <div
-              className="flex-1 overflow-auto"
+              className="hc:flex-1 hc:overflow-auto"
               role="tabpanel"
               id={`${idPrefix}-tabpanel-${currentSheetId}`}
               aria-labelledby={`${idPrefix}-tab-${currentSheetId}`}
@@ -257,9 +257,9 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
                 enumLabelDict={enumLabelDict}
               />
             </div>
-            <div className="flex-none">
+            <div className="hc:flex-none">
               {currentSheetData.rows.length > 0 && (
-                <div className="mt-5 flex justify-between">
+                <div className="hc:mt-5 hc:flex hc:justify-between">
                   <div>
                     {columnMappings != null &&
                       availableActions.includes('backToPreviousStep') && (

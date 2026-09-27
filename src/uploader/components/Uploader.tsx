@@ -18,14 +18,16 @@ export default function Uploader({
   const { t } = useTranslations();
 
   return (
-    <div className="flex h-full flex-col space-y-4">
-      <div className="flex-none text-2xl">{t('uploader.uploadAFile')}</div>
-      <div className="flex-auto md:min-h-0">
-        <div className="flex h-full flex-col-reverse gap-5 md:flex-row">
-          <div className="h-full flex-1 lg:flex-1">
+    <div className="hc:flex hc:h-full hc:flex-col hc:space-y-4">
+      <div className="hc:flex-none hc:text-2xl">
+        {t('uploader.uploadAFile')}
+      </div>
+      <div className="hc:flex-auto hc:md:min-h-0">
+        <div className="hc:flex hc:h-full hc:flex-col-reverse hc:gap-5 hc:md:flex-row">
+          <div className="hc:h-full hc:flex-1 hc:lg:flex-1">
             <ImporterRequirements importerRequirements={importerRequirements} />
           </div>
-          <div className="flex-1 lg:flex-2">
+          <div className="hc:flex-1 hc:lg:flex-2">
             <FileUploader
               setFile={onFileUploaded}
               onEnterDataManually={onEnterDataManually}

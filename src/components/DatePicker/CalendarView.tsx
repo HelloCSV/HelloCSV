@@ -54,23 +54,23 @@ export default function CalendarView({
         : `${decadeStart} - ${decadeStart + 9}`;
 
   return (
-    <div className="w-56">
-      <div className="mb-2 flex items-center justify-between">
+    <div className="hc:w-56">
+      <div className="hc:mb-2 hc:flex hc:items-center hc:justify-between">
         <button
           type="button"
           aria-label={t('components.datePicker.previous')}
           onMouseDown={(e) => e.preventDefault()}
           onClick={onPrev}
-          className="text-hello-csv-text-muted hover:text-hello-csv-text hover:bg-hello-csv-muted cursor-pointer rounded p-1"
+          className="hc:text-hello-csv-text-muted hc:hover:text-hello-csv-text hc:hover:bg-hello-csv-muted hc:cursor-pointer hc:rounded hc:p-1"
         >
-          <ChevronLeftIcon aria-hidden="true" className="size-5" />
+          <ChevronLeftIcon aria-hidden="true" className="hc:size-5" />
         </button>
         <button
           type="button"
           aria-live="polite"
           onMouseDown={(e) => e.preventDefault()}
           onClick={onTitleClick}
-          className="text-hello-csv-text hover:bg-hello-csv-muted cursor-pointer rounded px-2 py-1 font-semibold"
+          className="hc:text-hello-csv-text hc:hover:bg-hello-csv-muted hc:cursor-pointer hc:rounded hc:px-2 hc:py-1 hc:font-semibold"
         >
           {titleText}
         </button>
@@ -79,20 +79,20 @@ export default function CalendarView({
           aria-label={t('components.datePicker.next')}
           onMouseDown={(e) => e.preventDefault()}
           onClick={onNext}
-          className="text-hello-csv-text-muted hover:text-hello-csv-text hover:bg-hello-csv-muted cursor-pointer rounded p-1"
+          className="hc:text-hello-csv-text-muted hc:hover:text-hello-csv-text hc:hover:bg-hello-csv-muted hc:cursor-pointer hc:rounded hc:p-1"
         >
-          <ChevronRightIcon aria-hidden="true" className="size-5" />
+          <ChevronRightIcon aria-hidden="true" className="hc:size-5" />
         </button>
       </div>
 
       {view === 'days' && (
         <div role="grid" aria-label={t('components.datePicker.calendarLabel')}>
-          <div role="row" className="mb-1 grid grid-cols-7">
+          <div role="row" className="hc:mb-1 hc:grid hc:grid-cols-7">
             {WEEKDAY_KEYS.map((key) => (
               <div
                 key={key}
                 role="columnheader"
-                className="text-hello-csv-text-subtle flex h-8 w-8 items-center justify-center text-xs font-medium"
+                className="hc:text-hello-csv-text-subtle hc:flex hc:h-8 hc:w-8 hc:items-center hc:justify-center hc:text-xs hc:font-medium"
               >
                 {t(`components.datePicker.weekdays.${key}`)}
               </div>
@@ -102,7 +102,7 @@ export default function CalendarView({
             <div
               role="row"
               key={week[0].format('YYYY-MM-DD')}
-              className="grid grid-cols-7"
+              className="hc:grid hc:grid-cols-7"
             >
               {week.map((day) => {
                 const dayKey = day.format('YYYY-MM-DD');
@@ -126,15 +126,15 @@ export default function CalendarView({
                       aria-current={isToday ? 'date' : undefined}
                       onClick={() => onSelectDay(day)}
                       onKeyDown={(e: KeyboardEvent) => onDayKeyDown(e, day)}
-                      className={`flex h-8 w-8 items-center justify-center rounded text-sm ${
+                      className={`hc:flex hc:h-8 hc:w-8 hc:items-center hc:justify-center hc:rounded hc:text-sm ${
                         isSelected
-                          ? 'bg-hello-csv-primary text-hello-csv-primary-contrast cursor-pointer'
+                          ? 'hc:bg-hello-csv-primary hc:text-hello-csv-primary-contrast hc:cursor-pointer'
                           : isDisabled
-                            ? 'text-hello-csv-text-subtle cursor-not-allowed opacity-50'
+                            ? 'hc:text-hello-csv-text-subtle hc:cursor-not-allowed hc:opacity-50'
                             : isOutsideMonth
-                              ? 'text-hello-csv-text-subtle hover:bg-hello-csv-muted cursor-pointer'
-                              : 'text-hello-csv-text hover:bg-hello-csv-muted cursor-pointer'
-                      } ${isToday && !isSelected ? 'ring-hello-csv-primary ring-1' : ''}`}
+                              ? 'hc:text-hello-csv-text-subtle hc:hover:bg-hello-csv-muted hc:cursor-pointer'
+                              : 'hc:text-hello-csv-text hc:hover:bg-hello-csv-muted hc:cursor-pointer'
+                      } ${isToday && !isSelected ? 'hc:ring-hello-csv-primary hc:ring-1' : ''}`}
                     >
                       {day.date()}
                     </button>
@@ -147,7 +147,7 @@ export default function CalendarView({
       )}
 
       {view === 'months' && (
-        <div className="grid grid-cols-3 gap-1">
+        <div className="hc:grid hc:grid-cols-3 hc:gap-1">
           {Array.from({ length: 12 }, (_, m) => {
             const isCurrent = m === viewMonth.month();
             return (
@@ -156,10 +156,10 @@ export default function CalendarView({
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => onSelectMonth(m)}
-                className={`cursor-pointer rounded px-2 py-2 text-sm ${
+                className={`hc:cursor-pointer hc:rounded hc:px-2 hc:py-2 hc:text-sm ${
                   isCurrent
-                    ? 'bg-hello-csv-primary text-hello-csv-primary-contrast'
-                    : 'text-hello-csv-text hover:bg-hello-csv-muted'
+                    ? 'hc:bg-hello-csv-primary hc:text-hello-csv-primary-contrast'
+                    : 'hc:text-hello-csv-text hc:hover:bg-hello-csv-muted'
                 }`}
               >
                 {dayjs().month(m).format('MMM')}
@@ -170,7 +170,7 @@ export default function CalendarView({
       )}
 
       {view === 'years' && (
-        <div className="grid grid-cols-3 gap-1">
+        <div className="hc:grid hc:grid-cols-3 hc:gap-1">
           {Array.from({ length: 12 }, (_, i) => {
             const year = decadeStart - 1 + i;
             const isCurrent = year === viewMonth.year();
@@ -181,12 +181,12 @@ export default function CalendarView({
                 type="button"
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => onSelectYear(year)}
-                className={`cursor-pointer rounded px-2 py-2 text-sm ${
+                className={`hc:cursor-pointer hc:rounded hc:px-2 hc:py-2 hc:text-sm ${
                   isCurrent
-                    ? 'bg-hello-csv-primary text-hello-csv-primary-contrast'
+                    ? 'hc:bg-hello-csv-primary hc:text-hello-csv-primary-contrast'
                     : isOutside
-                      ? 'text-hello-csv-text-subtle hover:bg-hello-csv-muted'
-                      : 'text-hello-csv-text hover:bg-hello-csv-muted'
+                      ? 'hc:text-hello-csv-text-subtle hc:hover:bg-hello-csv-muted'
+                      : 'hc:text-hello-csv-text hc:hover:bg-hello-csv-muted'
                 }`}
               >
                 {year}

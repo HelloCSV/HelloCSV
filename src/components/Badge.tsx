@@ -8,20 +8,24 @@ interface Props {
   variant?: BadgeVariant;
 }
 
-const baseClasses = cva('inline-flex items-center rounded-md px-1.5 py-0.5', {
-  variants: {
-    variant: {
-      primary: 'bg-hello-csv-primary-extra-light text-xs font-medium',
-      success:
-        'bg-hello-csv-success-extra-light text-hello-csv-success text-xs font-medium',
-      error:
-        'bg-hello-csv-danger-extra-light text-hello-csv-danger text-xs font-medium',
+const baseClasses = cva(
+  'hc:inline-flex hc:items-center hc:rounded-md hc:px-1.5 hc:py-0.5',
+  {
+    variants: {
+      variant: {
+        primary:
+          'hc:bg-hello-csv-primary-extra-light hc:text-xs hc:font-medium',
+        success:
+          'hc:bg-hello-csv-success-extra-light hc:text-hello-csv-success hc:text-xs hc:font-medium',
+        error:
+          'hc:bg-hello-csv-danger-extra-light hc:text-hello-csv-danger hc:text-xs hc:font-medium',
+      },
     },
-  },
-  defaultVariants: {
-    variant: 'primary',
-  },
-});
+    defaultVariants: {
+      variant: 'primary',
+    },
+  }
+);
 
 export default function Badge({ children, variant }: Props) {
   const componentClassName = baseClasses({ variant });

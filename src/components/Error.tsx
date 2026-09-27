@@ -7,15 +7,15 @@ interface Props {
 
 export default function Error({ children }: Props) {
   return (
-    <div className="flex">
-      <div className="shrink-0">
+    <div className="hc:flex">
+      <div className="hc:shrink-0">
         <XCircleIcon
           aria-hidden="true"
-          className="text-hello-csv-danger size-5"
+          className="hc:text-hello-csv-danger hc:size-5"
         />
       </div>
-      <div className="ml-3 flex-1 md:flex md:justify-between">
-        <p className="text-hello-csv-danger text-sm">{children}</p>
+      <div className="hc:ml-3 hc:flex-1 hc:md:flex hc:md:justify-between">
+        <p className="hc:text-hello-csv-danger hc:text-sm">{children}</p>
       </div>
     </div>
   );
