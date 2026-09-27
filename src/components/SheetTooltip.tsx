@@ -18,16 +18,16 @@ interface Props {
 }
 
 const tooltipBaseClasses = cva(
-  'bg-hello-csv-tooltip-surface text-hello-csv-tooltip-text absolute left-0 z-20 hidden w-max max-w-xs whitespace-normal rounded-md border-l-4 py-2 pr-3 pl-2.5 text-xs shadow-lg group-focus-within:block group-hover:block',
+  'hc:bg-hello-csv-tooltip-surface hc:text-hello-csv-tooltip-text hc:absolute hc:left-0 hc:z-20 hc:hidden hc:w-max hc:max-w-xs hc:whitespace-normal hc:rounded-md hc:border-l-4 hc:py-2 hc:pr-3 hc:pl-2.5 hc:text-xs hc:shadow-lg hc:group-focus-within:block hc:group-hover:block',
   {
     variants: {
       variant: {
-        error: 'border-hello-csv-danger',
-        info: 'border-hello-csv-border-strong',
+        error: 'hc:border-hello-csv-danger',
+        info: 'hc:border-hello-csv-border-strong',
       },
       placement: {
-        bottom: 'top-full mt-2',
-        top: 'bottom-full mb-2',
+        bottom: 'hc:top-full hc:mt-2',
+        top: 'hc:bottom-full hc:mb-2',
       },
     },
     defaultVariants: {
@@ -37,17 +37,20 @@ const tooltipBaseClasses = cva(
   }
 );
 
-const tooltipWrapperBaseClasses = cva('group relative h-full w-full', {
-  variants: {
-    withOutline: {
-      true: 'hover:z-5 focus-within:z-5',
-      false: '',
+const tooltipWrapperBaseClasses = cva(
+  'hc:group hc:relative hc:h-full hc:w-full',
+  {
+    variants: {
+      withOutline: {
+        true: 'hc:hover:z-5 hc:focus-within:z-5',
+        false: '',
+      },
     },
-  },
-  defaultVariants: {
-    withOutline: false,
-  },
-});
+    defaultVariants: {
+      withOutline: false,
+    },
+  }
+);
 
 export default function SheetTooltip({
   variant,
@@ -61,8 +64,8 @@ export default function SheetTooltip({
     withOutline: !!tooltipText,
   });
 
-  const arrowClassName = `absolute left-3 h-2 w-2 rotate-45 bg-hello-csv-tooltip-surface ${
-    placement === 'top' ? '-bottom-1' : '-top-1'
+  const arrowClassName = `hc:absolute hc:left-3 hc:h-2 hc:w-2 hc:rotate-45 hc:bg-hello-csv-tooltip-surface ${
+    placement === 'top' ? 'hc:-bottom-1' : 'hc:-top-1'
   }`;
 
   // Add tabIndex to make the tooltip focusable (unless a focusable child does).

@@ -19,27 +19,28 @@ interface Props {
 }
 
 const baseClasses = cva(
-  'text-center inline-block font-semibold px-3 py-2 rounded-md text-sm',
+  'hc:text-center hc:inline-block hc:font-semibold hc:px-3 hc:py-2 hc:rounded-md hc:text-sm',
   {
     variants: {
       variant: {
         primary:
-          'shadow-xs bg-hello-csv-primary text-hello-csv-primary-contrast',
+          'hc:shadow-xs hc:bg-hello-csv-primary hc:text-hello-csv-primary-contrast',
         secondary:
-          'bg-hello-csv-surface text-hello-csv-primary ring-1 shadow-xs ring-bg-hello-csv-primary ring-inset',
+          'hc:bg-hello-csv-surface hc:text-hello-csv-primary hc:ring-1 hc:shadow-xs hc:ring-hello-csv-primary hc:ring-inset',
         tertiary:
-          'bg-hello-csv-surface text-hello-csv-text ring-1 shadow-xs ring-hello-csv-tertiary ring-inset',
+          'hc:bg-hello-csv-surface hc:text-hello-csv-text hc:ring-1 hc:shadow-xs hc:ring-hello-csv-tertiary hc:ring-inset',
         success:
-          'shadow-xs bg-hello-csv-success text-hello-csv-success-contrast',
-        danger: 'shadow-xs bg-hello-csv-danger text-hello-csv-danger-contrast',
+          'hc:shadow-xs hc:bg-hello-csv-success hc:text-hello-csv-success-contrast',
+        danger:
+          'hc:shadow-xs hc:bg-hello-csv-danger hc:text-hello-csv-danger-contrast',
       },
       withFullWidth: {
-        true: 'w-full',
+        true: 'hc:w-full',
         false: '',
       },
       disabled: {
-        true: 'opacity-50 cursor-not-allowed pointer-events-none',
-        false: 'cursor-pointer',
+        true: 'hc:opacity-50 hc:cursor-not-allowed hc:pointer-events-none',
+        false: 'hc:cursor-pointer',
       },
     },
     compoundVariants: [
@@ -47,30 +48,30 @@ const baseClasses = cva(
         variant: 'primary',
         disabled: false,
         className:
-          'hover:bg-hello-csv-primary-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hello-csv-primary',
+          'hc:hover:bg-hello-csv-primary-light hc:focus-visible:outline-2 hc:focus-visible:outline-offset-2 hc:focus-visible:outline-hello-csv-primary',
       },
       {
         variant: 'secondary',
         disabled: false,
         className:
-          'hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hello-csv-secondary',
+          'hc:hover:opacity-80 hc:focus-visible:outline-2 hc:focus-visible:outline-offset-2 hc:focus-visible:outline-hello-csv-secondary',
       },
       {
         variant: 'tertiary',
         disabled: false,
-        className: 'hover:bg-hello-csv-tertiary-light',
+        className: 'hc:hover:bg-hello-csv-tertiary-light',
       },
       {
         variant: 'success',
         disabled: false,
         className:
-          'hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hello-csv-success',
+          'hc:hover:opacity-80 hc:focus-visible:outline-2 hc:focus-visible:outline-offset-2 hc:focus-visible:outline-hello-csv-success',
       },
       {
         variant: 'danger',
         disabled: false,
         className:
-          'hover:bg-hello-csv-danger-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hello-csv-danger',
+          'hc:hover:bg-hello-csv-danger-light hc:focus-visible:outline-2 hc:focus-visible:outline-offset-2 hc:focus-visible:outline-hello-csv-danger',
       },
     ],
     defaultVariants: {

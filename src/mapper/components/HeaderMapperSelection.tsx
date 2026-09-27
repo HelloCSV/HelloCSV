@@ -28,20 +28,20 @@ export default function HeaderMapperSelection({
 
   return (
     <div
-      className="hover:bg-hello-csv-muted rounded-sm"
+      className="hc:hover:bg-hello-csv-muted hc:rounded-sm"
       onMouseEnter={onMouseEnter}
     >
-      <div className="flex items-center py-2.5">
-        <div className="mx-2.5 flex flex-1 justify-between">
+      <div className="hc:flex hc:items-center hc:py-2.5">
+        <div className="hc:mx-2.5 hc:flex hc:flex-1 hc:justify-between">
           <div>
             <Badge>{csvHeader.slice(0, 30)}</Badge>
           </div>
-          <div className="mx-5">
-            <ArrowRightIcon className="h-4 w-4" />
+          <div className="hc:mx-5">
+            <ArrowRightIcon className="hc:h-4 hc:w-4" />
           </div>
         </div>
 
-        <div className="mx-2.5 flex-1">
+        <div className="hc:mx-2.5 hc:flex-1">
           <Select
             aria-label={`column mapping for ${csvHeader}`}
             searchable

@@ -27,10 +27,12 @@ export default function Completed({ resetState, enumLabelDict }: Props) {
   const completedWithErrors = !!statistics?.failed || !!statistics?.skipped;
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-none text-2xl">{t('importStatus.dataImport')}</div>
-      <div className="grow overflow-auto">
-        <div className="mt-4">
+    <div className="hc:flex hc:h-full hc:flex-col">
+      <div className="hc:flex-none hc:text-2xl">
+        {t('importStatus.dataImport')}
+      </div>
+      <div className="hc:grow hc:overflow-auto">
+        <div className="hc:mt-4">
           <Alert
             variant={completedWithErrors ? 'warning' : 'success'}
             header={t(
@@ -45,15 +47,15 @@ export default function Completed({ resetState, enumLabelDict }: Props) {
             )}
           />
         </div>
-        <div className="mt-6">
+        <div className="hc:mt-6">
           <Summary
             completedWithErrors={completedWithErrors}
             enumLabelDict={enumLabelDict}
           />
         </div>
       </div>
-      <div className="flex-none">
-        <div className="mt-5 flex justify-end">
+      <div className="hc:flex-none">
+        <div className="hc:mt-5 hc:flex hc:justify-end">
           <Button variant="primary" onClick={onSummaryFinished || resetState}>
             {t('importStatus.continue')}
           </Button>

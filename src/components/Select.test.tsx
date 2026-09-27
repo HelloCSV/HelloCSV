@@ -27,7 +27,7 @@ const options = [
 
 function highlightedOptions(doc: Document) {
   return Array.from(doc.querySelectorAll('[role="option"]')).filter((o) =>
-    (o.getAttribute('class') || '').includes('bg-hello-csv-primary')
+    (o.getAttribute('class') || '').includes('hc:bg-hello-csv-primary')
   );
 }
 

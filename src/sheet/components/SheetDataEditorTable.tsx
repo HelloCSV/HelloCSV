@@ -62,9 +62,9 @@ export default function SheetDataEditorTable({
   }
 
   const headerClass =
-    'bg-hello-csv-muted py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-hello-csv-text whitespace-nowrap border-y border-hello-csv-border-strong';
+    'hc:bg-hello-csv-muted hc:py-3.5 hc:pr-3 hc:pl-4 hc:text-left hc:text-sm hc:font-semibold hc:text-hello-csv-text hc:whitespace-nowrap hc:border-y hc:border-hello-csv-border-strong';
   const cellClass =
-    'text-sm font-medium whitespace-nowrap text-hello-csv-text border-b border-hello-csv-border-strong';
+    'hc:text-sm hc:font-medium hc:whitespace-nowrap hc:text-hello-csv-text hc:border-b hc:border-hello-csv-border-strong';
 
   const rows = table.getRowModel().rows;
 
@@ -154,14 +154,14 @@ export default function SheetDataEditorTable({
 
   return (
     <table
-      className="w-full table-fixed border-separate border-spacing-0"
+      className="hc:w-full hc:table-fixed hc:border-separate hc:border-spacing-0"
       aria-label={t('sheet.sheetTitle')}
       role="grid"
       aria-multiselectable="true"
       aria-rowcount={rows.length + 1}
       aria-colcount={dataColCount + (hasCheckboxColumn ? 1 : 0)}
     >
-      <thead className="bg-hello-csv-muted sticky top-0 z-10">
+      <thead className="hc:bg-hello-csv-muted hc:sticky hc:top-0 hc:z-10">
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id} role="row" aria-rowindex={1}>
             {headerGroup.headers.map((header, headerIndex) => (
@@ -180,16 +180,16 @@ export default function SheetDataEditorTable({
                 }
                 className={
                   header.column.id === CHECKBOX_COLUMN_ID
-                    ? `${headerClass} sticky left-0 z-20`
-                    : `relative z-10 ${headerClass}`
+                    ? `${headerClass} hc:sticky hc:left-0 hc:z-20`
+                    : `hc:relative hc:z-10 ${headerClass}`
                 }
                 colSpan={header.colSpan}
                 style={{ width: header.getSize() }}
               >
                 <div
-                  className={`flex w-full ${
+                  className={`hc:flex hc:w-full ${
                     header.column.getCanSort()
-                      ? 'cursor-pointer select-none'
+                      ? 'hc:cursor-pointer hc:select-none'
                       : ''
                   }`}
                   onClick={header.column.getToggleSortingHandler()}
@@ -205,16 +205,19 @@ export default function SheetDataEditorTable({
 
                   <span
                     key={`sort-icon-${headerGroup.id}-${header.id}`}
-                    className="bg-hello-csv-text-muted text-hello-csv-surface ml-2 flex-none rounded-sm"
+                    className="hc:bg-hello-csv-text-muted hc:text-hello-csv-surface hc:ml-2 hc:flex-none hc:rounded-sm"
                   >
                     {{
                       asc: (
-                        <ChevronUpIcon aria-hidden="true" className="size-5" />
+                        <ChevronUpIcon
+                          aria-hidden="true"
+                          className="hc:size-5"
+                        />
                       ),
                       desc: (
                         <ChevronDownIcon
                           aria-hidden="true"
-                          className="size-5"
+                          className="hc:size-5"
                         />
                       ),
                     }[header.column.getIsSorted() as string] ?? null}
@@ -225,7 +228,7 @@ export default function SheetDataEditorTable({
                       key={`resize-icon-${headerGroup.id}-${header.id}`}
                       onMouseDown={header.getResizeHandler()}
                       onTouchStart={header.getResizeHandler()}
-                      className="bg-hello-csv-border absolute top-0 right-0 h-full w-0.5 cursor-col-resize touch-none select-none"
+                      className="hc:bg-hello-csv-border hc:absolute hc:top-0 hc:right-0 hc:h-full hc:w-0.5 hc:cursor-col-resize hc:touch-none hc:select-none"
                     />
                   )}
                 </div>
@@ -236,7 +239,7 @@ export default function SheetDataEditorTable({
       </thead>
 
       <tbody
-        className="divide-hello-csv-border divide-y"
+        className="hc:divide-hello-csv-border hc:divide-y"
         style={{
           height: `${rowVirtualizer.getTotalSize()}px`,
         }}
@@ -261,7 +264,7 @@ export default function SheetDataEditorTable({
                     role="gridcell"
                     aria-colindex={1}
                     aria-label={`Select row ${Number(row.id) + 1}`}
-                    className={`bg-hello-csv-muted ${cellClass} sticky left-0 z-6 pr-3 pl-4`}
+                    className={`hc:bg-hello-csv-muted ${cellClass} hc:sticky hc:left-0 hc:z-6 hc:pr-3 hc:pl-4`}
                     style={{ width: cell.column.getSize() }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

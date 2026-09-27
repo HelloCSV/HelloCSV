@@ -254,9 +254,9 @@ describe('SheetDataEditor keyboard grid', () => {
 
     // Active cell (1,0) shows a ring overlay; anchor (0,0) shows a tint overlay
     // — both are error cells, so the overlays must sit on top of the error bg.
-    expect(cellAt(1, 0).querySelector('.ring-2')).not.toBeNull();
+    expect(cellAt(1, 0).querySelector('.hc\\:ring-2')).not.toBeNull();
     expect(
-      cellAt(0, 0).querySelector('[class*="bg-hello-csv-primary/20"]')
+      cellAt(0, 0).querySelector('[class*="hc:bg-hello-csv-primary/20"]')
     ).not.toBeNull();
   });
 
@@ -280,10 +280,10 @@ describe('SheetDataEditor keyboard grid', () => {
     // The tooltip span is a sibling of the grid cell, inside the enclosing <td>.
     const tdOf = (row: number, col: number) => cellAt(row, col).closest('td')!;
     // 3 rows: row 0 opens down, last row (2) opens up.
-    expect(tdOf(0, 0).querySelector('.top-full')).not.toBeNull();
-    expect(tdOf(0, 0).querySelector('.bottom-full')).toBeNull();
-    expect(tdOf(2, 0).querySelector('.bottom-full')).not.toBeNull();
-    expect(tdOf(2, 0).querySelector('.top-full')).toBeNull();
+    expect(tdOf(0, 0).querySelector('.hc\\:top-full')).not.toBeNull();
+    expect(tdOf(0, 0).querySelector('.hc\\:bottom-full')).toBeNull();
+    expect(tdOf(2, 0).querySelector('.hc\\:bottom-full')).not.toBeNull();
+    expect(tdOf(2, 0).querySelector('.hc\\:top-full')).toBeNull();
   });
 
   it('clears the selection when clicking outside the grid', () => {
@@ -409,7 +409,7 @@ describe('SheetDataEditor keyboard grid', () => {
     expect(errorCell.getAttribute('tabindex')).toBe('0');
     // The focusable grid cell must live inside the `group` tooltip wrapper so
     // group-focus-within reveals the error message on keyboard focus.
-    expect(errorCell.closest('.group')).not.toBeNull();
+    expect(errorCell.closest('.hc\\:group')).not.toBeNull();
   });
 
   it('clicking the filter ✕ clears the filter but stays in edit mode', () => {

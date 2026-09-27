@@ -57,7 +57,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     }
 
     return (
-      <div className="grid grid-cols-1">
+      <div className="hc:grid hc:grid-cols-1">
         <input
           {...PASSWORD_MANAGER_IGNORE_PROPS}
           aria-label={props['aria-label']}
@@ -75,13 +75,13 @@ const Input = forwardRef<HTMLInputElement, Props>(
           onChange={(e) =>
             onChange?.(getParsedValue(e)) ?? setLocalValue(getParsedValue(e))
           }
-          className={`${classes} ${iconBuilder != null ? 'pl-10' : ''} ${clearable ? 'pr-10' : ''} focus:outline-hello-csv-primary bg-hello-csv-surface text-hello-csv-text outline-hello-csv-border-strong placeholder:text-hello-csv-text-subtle col-start-1 row-start-1 block rounded-md px-3 py-1.5 text-base outline-1 -outline-offset-1 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6`}
+          className={`${classes} ${iconBuilder != null ? 'hc:pl-10' : ''} ${clearable ? 'hc:pr-10' : ''} hc:focus:outline-hello-csv-primary hc:bg-hello-csv-surface hc:text-hello-csv-text hc:outline-hello-csv-border-strong hc:placeholder:text-hello-csv-text-subtle hc:col-start-1 hc:row-start-1 hc:block hc:rounded-md hc:px-3 hc:py-1.5 hc:text-base hc:outline-1 hc:-outline-offset-1 hc:focus:outline-2 hc:focus:-outline-offset-2 hc:sm:text-sm/6`}
           onBlur={(e) => onBlur?.(getParsedValue(e))}
         />
         {iconBuilder?.({
           'aria-hidden': 'true',
           className:
-            'pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-hello-csv-text-subtle sm:size-4',
+            'hc:pointer-events-none hc:col-start-1 hc:row-start-1 hc:ml-3 hc:size-5 hc:self-center hc:text-hello-csv-text-subtle hc:sm:size-4',
         })}
 
         {displayClearIcon && (
@@ -93,10 +93,10 @@ const Input = forwardRef<HTMLInputElement, Props>(
               e.stopPropagation();
               onChange?.('');
             }}
-            className="col-end-2 row-start-1 flex cursor-pointer items-center justify-self-end pr-2"
+            className="hc:col-end-2 hc:row-start-1 hc:flex hc:cursor-pointer hc:items-center hc:justify-self-end hc:pr-2"
           >
             <XMarkIcon
-              className="text-hello-csv-text-muted hover:text-hello-csv-text h-5 w-5"
+              className="hc:text-hello-csv-text-muted hc:hover:text-hello-csv-text hc:h-5 hc:w-5"
               aria-hidden="true"
             />
           </span>

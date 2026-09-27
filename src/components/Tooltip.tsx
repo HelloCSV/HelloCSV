@@ -19,15 +19,15 @@ const ARROW_SIZE = 8; // square before rotation
 const ARROW_OFFSET = -4;
 
 const baseClasses = cva(
-  'absolute z-50 w-max rounded-md bg-hello-csv-tooltip-surface px-3 py-2 text-xs text-hello-csv-tooltip-text shadow-lg transition-opacity duration-200',
+  'hc:absolute hc:z-50 hc:w-max hc:rounded-md hc:bg-hello-csv-tooltip-surface hc:px-3 hc:py-2 hc:text-xs hc:text-hello-csv-tooltip-text hc:shadow-lg hc:transition-opacity hc:duration-200',
   {
     variants: {
       visible: {
-        true: 'opacity-100',
-        false: 'opacity-0 pointer-events-none',
+        true: 'hc:opacity-100',
+        false: 'hc:opacity-0 hc:pointer-events-none',
       },
       hidden: {
-        true: 'hidden',
+        true: 'hc:hidden',
         false: '',
       },
     },
@@ -179,7 +179,7 @@ export default function Tooltip({
     <div
       ref={triggerRef}
       tabIndex={0}
-      className={`${className ?? ''} relative inline-block`}
+      className={`${className ?? ''} hc:relative hc:inline-block`}
       onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
       onFocus={showTooltip}
@@ -206,7 +206,7 @@ export default function Tooltip({
 
             {/* Arrow */}
             <div
-              className="bg-hello-csv-tooltip-surface absolute h-2 w-2 rotate-45"
+              className="hc:bg-hello-csv-tooltip-surface hc:absolute hc:h-2 hc:w-2 hc:rotate-45"
               style={
                 placement === 'bottom'
                   ? { top: ARROW_OFFSET, left: arrowOffset - ARROW_SIZE / 2 }

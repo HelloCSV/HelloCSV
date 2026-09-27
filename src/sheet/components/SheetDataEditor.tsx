@@ -211,8 +211,8 @@ export default function SheetDataEditor({
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-none">
+    <div className="hc:flex hc:h-full hc:flex-col">
+      <div className="hc:flex-none">
         <SheetDataEditorActions
           sheetDefinition={sheetDefinition}
           rowData={rowData}
@@ -239,7 +239,7 @@ export default function SheetDataEditor({
 
       <GridSelectionProvider value={selection}>
         <div
-          className="min-h-0 flex-1 overflow-auto"
+          className="hc:min-h-0 hc:flex-1 hc:overflow-auto"
           ref={tableContainerRef}
           tabIndex={0}
           onKeyDown={handleGridKeyDown}

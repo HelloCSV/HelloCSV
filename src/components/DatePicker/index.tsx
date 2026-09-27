@@ -32,7 +32,7 @@ export interface DatePickerProps {
 }
 
 const INPUT_CLASSES =
-  'focus:outline-hello-csv-primary bg-hello-csv-surface text-hello-csv-text outline-hello-csv-border-strong placeholder:text-hello-csv-text-subtle block w-full rounded-md py-1.5 pr-10 pl-3 text-base outline-1 -outline-offset-1 focus:outline-2 focus:-outline-offset-2 sm:text-sm/6';
+  'hc:focus:outline-hello-csv-primary hc:bg-hello-csv-surface hc:text-hello-csv-text hc:outline-hello-csv-border-strong hc:placeholder:text-hello-csv-text-subtle hc:block hc:w-full hc:rounded-md hc:py-1.5 hc:pr-10 hc:pl-3 hc:text-base hc:outline-1 hc:-outline-offset-1 hc:focus:outline-2 hc:focus:-outline-offset-2 hc:sm:text-sm/6';
 
 export default function DatePicker({
   value,
@@ -104,8 +104,8 @@ export default function DatePicker({
   }, [commitTextRef]);
 
   return (
-    <div ref={containerRef} className="relative w-full">
-      <div className="relative">
+    <div ref={containerRef} className="hc:relative hc:w-full">
+      <div className="hc:relative">
         <input
           {...PASSWORD_MANAGER_IGNORE_PROPS}
           ref={inputRef}
@@ -121,12 +121,15 @@ export default function DatePicker({
           aria-label={t('components.datePicker.pickerLabel')}
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className="text-hello-csv-text-muted hover:text-hello-csv-text absolute inset-y-0 right-0 flex cursor-pointer items-center pr-2 outline-hidden"
+          className="hc:text-hello-csv-text-muted hc:hover:text-hello-csv-text hc:absolute hc:inset-y-0 hc:right-0 hc:flex hc:cursor-pointer hc:items-center hc:pr-2 hc:outline-hidden"
         >
           {hasTime && !hasCalendar ? (
-            <ClockIcon aria-hidden="true" className="size-5 sm:size-4" />
+            <ClockIcon aria-hidden="true" className="hc:size-5 hc:sm:size-4" />
           ) : (
-            <CalendarDaysIcon aria-hidden="true" className="size-5 sm:size-4" />
+            <CalendarDaysIcon
+              aria-hidden="true"
+              className="hc:size-5 hc:sm:size-4"
+            />
           )}
         </button>
       </div>
@@ -162,7 +165,7 @@ export default function DatePicker({
                 }
               }}
               style={{ position: 'absolute', top: pos.top, left: pos.left }}
-              className="bg-hello-csv-surface-raised ring-hello-csv-border z-99 w-max rounded-md p-3 text-base ring-1 shadow-lg focus:outline-hidden sm:text-sm"
+              className="hc:bg-hello-csv-surface-raised hc:ring-hello-csv-border hc:z-99 hc:w-max hc:rounded-md hc:p-3 hc:text-base hc:ring-1 hc:shadow-lg hc:focus:outline-hidden hc:sm:text-sm"
               role="dialog"
               aria-label={t('components.datePicker.pickerLabel')}
             >
@@ -198,7 +201,7 @@ export default function DatePicker({
                 />
               )}
 
-              <div className="mt-3 flex justify-end">
+              <div className="hc:mt-3 hc:flex hc:justify-end">
                 <Button variant="primary" onClick={state.commitText}>
                   {t('components.datePicker.done')}
                 </Button>

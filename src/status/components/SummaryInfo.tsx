@@ -37,26 +37,26 @@ export default function SummaryInfo({
   const totalRows = getTotalRows(sheetData);
 
   return (
-    <div className="flex flex-row px-4 pt-3 pb-2">
-      <div className="flex-1 space-y-4">
+    <div className="hc:flex hc:flex-row hc:px-4 hc:pt-3 hc:pb-2">
+      <div className="hc:flex-1 hc:space-y-4">
         <div>
-          <div className="flex flex-row">
-            <div className="my-2 mr-5 text-center">
-              <DocumentTextIcon className="text-hello-csv-primary h-8 w-8" />
+          <div className="hc:flex hc:flex-row">
+            <div className="hc:my-2 hc:mr-5 hc:text-center">
+              <DocumentTextIcon className="hc:text-hello-csv-primary hc:h-8 hc:w-8" />
             </div>
-            <div className="flex-1">
-              <div className="my-2 text-sm font-light uppercase">
+            <div className="hc:flex-1">
+              <div className="hc:my-2 hc:text-sm hc:font-light hc:uppercase">
                 {t('importStatus.fileInformation')}
               </div>
-              <div className="text-md my-2 font-medium">
+              <div className="hc:text-base hc:my-2 hc:font-medium">
                 {rowFile?.name || 'Data entered manually'}
               </div>
-              <div className="text-hello-csv-text-muted my-2 text-sm">
+              <div className="hc:text-hello-csv-text-muted hc:my-2 hc:text-sm">
                 {rowFile
                   ? `${t('importStatus.original')}: ${formatFileSize(rowFile?.size || 0)} · ${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`
                   : `${t('importStatus.processed')}: ${formatFileSize(getDataSize(sheetData, sheetDefinitions, enumLabelDict, csvDownloadMode))}`}
               </div>
-              <div className="mt-5">
+              <div className="hc:mt-5">
                 <Button
                   variant="tertiary"
                   outline
@@ -75,27 +75,27 @@ export default function SummaryInfo({
             </div>
           </div>
         </div>
-        <div className="border-hello-csv-border border-b pb-2"></div>
+        <div className="hc:border-hello-csv-border hc:border-b hc:pb-2"></div>
         <div>
-          <div className="flex flex-row">
-            <div className="my-2 mr-5 text-center">
+          <div className="hc:flex hc:flex-row">
+            <div className="hc:my-2 hc:mr-5 hc:text-center">
               {mode === 'failed' ? (
-                <ExclamationTriangleIcon className="text-hello-csv-danger-light h-8 w-8" />
+                <ExclamationTriangleIcon className="hc:text-hello-csv-danger-light hc:h-8 hc:w-8" />
               ) : completedWithErrors ? (
-                <ExclamationCircleIcon className="text-hello-csv-warning-light h-8 w-8" />
+                <ExclamationCircleIcon className="hc:text-hello-csv-warning-light hc:h-8 hc:w-8" />
               ) : (
-                <CheckCircleIcon className="text-hello-csv-success-light h-8 w-8" />
+                <CheckCircleIcon className="hc:text-hello-csv-success-light hc:h-8 hc:w-8" />
               )}
             </div>
-            <div className="flex-1">
-              <div className="my-2 text-sm font-light uppercase">
+            <div className="hc:flex-1">
+              <div className="hc:my-2 hc:text-sm hc:font-light hc:uppercase">
                 {t('importStatus.importResults')}
               </div>
-              <div className="text-md my-2 font-medium">
+              <div className="hc:text-base hc:my-2 hc:font-medium">
                 {t('importStatus.totalRows', { totalRows })}
               </div>
               {statistics && (
-                <div className="text-hello-csv-text-muted my-2 text-sm">
+                <div className="hc:text-hello-csv-text-muted hc:my-2 hc:text-sm">
                   {statistics.skipped >= 0 && (
                     <span>
                       {t('importStatus.statisticsSkipped', {
@@ -122,7 +122,7 @@ export default function SummaryInfo({
                 </div>
               )}
               {mode === 'failed' && (
-                <div className="text-hello-csv-text-muted my-2 text-sm">
+                <div className="hc:text-hello-csv-text-muted hc:my-2 hc:text-sm">
                   {t('importStatus.status')}:{' '}
                   <Badge variant="error">{t('importStatus.failed')}</Badge>
                 </div>
