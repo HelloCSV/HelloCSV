@@ -349,3 +349,124 @@ describe('fieldIsRequired', () => {
     expect(fieldIsRequired(field)).toEqual(false);
   });
 });
+
+describe('async validators', () => {
+  it('awaits async custom validators', async () => {
+    const sheetDefinitions = [
+      {
+        id: 'a',
+        columns: [
+          {
+            id: 'name',
+            validators: [
+              {
+                validate: 'custom',
+                key: 'async_check',
+                validateFn: async (value) => {
+                  await Promise.resolve();
+                  return value === 'bad' ? 'validators.asyncError' : null;
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const errors = await applyValidations(sheetDefinitions, [
+      { sheetId: 'a', rows: [{ name: 'ok' }, { name: 'bad' }] },
+    ]);
+
+    expect(errors.find((e) => e.rowIndex === 0)).toBeUndefined();
+    expect(errors.find((e) => e.rowIndex === 1)?.message).toEqual(
+      'validators.asyncError'
+    );
+  });
+
+  it('surfaces a rejected async validator as a cell error', async () => {
+    const sheetDefinitions = [
+      {
+        id: 'a',
+        columns: [
+          {
+            id: 'name',
+            validators: [
+              {
+                validate: 'custom',
+                key: 'rejects',
+                error: 'validators.asyncError',
+                validateFn: async () => {
+                  throw new Error('network down');
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const errors = await applyValidations(sheetDefinitions, [
+      { sheetId: 'a', rows: [{ name: 'anything' }] },
+    ]);
+
+    expect(errors[0].message).toEqual('validators.asyncError');
+  });
+
+  it('only runs validators whose runOn matches the phase', async () => {
+    const sheetDefinitions = [
+      {
+        id: 'a',
+        columns: [
+          {
+            id: 'name',
+            validators: [
+              {
+                validate: 'custom',
+                key: 'submit_only',
+                runOn: 'submit',
+                validateFn: () => 'validators.asyncError',
+              },
+            ],
+          },
+        ],
+      },
+    ];
+    const data = [{ sheetId: 'a', rows: [{ name: 'x' }] }];
+
+    const changeErrors = await applyValidations(sheetDefinitions, data, {
+      phase: 'change',
+    });
+    expect(changeErrors).toHaveLength(0);
+
+    const submitErrors = await applyValidations(sheetDefinitions, data, {
+      phase: 'submit',
+    });
+    expect(submitErrors).toHaveLength(1);
+  });
+
+  it('keeps the unique validator deterministic under low concurrency', async () => {
+    const sheetDefinitions = [
+      {
+        id: 'a',
+        columns: [{ id: 'name', validators: [{ validate: 'unique' }] }],
+      },
+    ];
+
+    const errors = await applyValidations(
+      sheetDefinitions,
+      [
+        {
+          sheetId: 'a',
+          rows: [{ name: 'dup' }, { name: 'unique' }, { name: 'dup' }],
+        },
+      ],
+      { concurrency: 1 }
+    );
+
+    // The first occurrence passes; the later duplicate is flagged.
+    expect(errors.find((e) => e.rowIndex === 0)).toBeUndefined();
+    expect(errors.find((e) => e.rowIndex === 2)?.message).toEqual(
+      'validators.unique'
+    );
+  });
+});

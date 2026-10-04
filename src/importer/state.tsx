@@ -9,6 +9,7 @@ import {
   RemoveRowsPayload,
   CellChangedPayload,
   SheetState,
+  ProcessingPhase,
 } from '../types';
 import { getIndexedDBState, setIndexedDBState } from './storage';
 import { buildSuggestedHeaderMappings } from '@/mapper/utils';
@@ -16,7 +17,8 @@ import { convertCsvFile } from '@/uploader/utils';
 import { parseCsv } from '@/parser';
 import { reducer } from './reducer';
 import { applyValidations } from '../validators';
-import { generateValidationRunId } from '@/validators/utils';
+import { applyTransformations } from '../transformers';
+import { generateProcessingRunId } from '@/validators/utils';
 import { NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT } from '@/constants';
 import { getMappedData } from '@/mapper';
 
@@ -42,7 +44,7 @@ export function buildInitialState(
     currentSheetId: sheetDefinitions[0].id,
     mode: 'upload',
     validationErrors: [],
-    validationInProgress: false,
+    processingInProgress: false,
     sheetData: sheetDefinitions.map((sheet) => ({
       sheetId: sheet.id,
       rows: [],
@@ -86,19 +88,30 @@ class StateBuilder {
     this.buildSteps = [];
   }
 
-  public async getState(): Promise<ImporterState> {
+  public async getState(
+    phase: ProcessingPhase = 'change'
+  ): Promise<ImporterState> {
     let state = this.initialState;
 
     this.buildSteps.forEach((step) => {
       state = reducer(state, step);
     });
 
+    const concurrency = this.importerDefinition.maxConcurrentAsyncOperations;
+
+    const sheetData = await applyTransformations(
+      this.importerDefinition.sheets,
+      state.sheetData,
+      { phase, concurrency }
+    ).catch(() => state.sheetData);
+
     const validationErrors = await applyValidations(
       this.importerDefinition.sheets,
-      state.sheetData
+      sheetData,
+      { phase, concurrency }
     ).catch(() => state.validationErrors);
 
-    return { ...state, validationErrors };
+    return { ...state, sheetData, validationErrors };
   }
 
   public async uploadFile(file: File) {
@@ -186,6 +199,10 @@ class StateBuilder {
       payload: { sheetData },
     });
   }
+
+  public addEmptyRow() {
+    this.buildSteps.push({ type: 'ADD_EMPTY_ROW' });
+  }
 }
 
 export class OuterStateBuilder extends StateBuilder {
@@ -204,35 +221,40 @@ export class InnerStateBuilder extends StateBuilder {
     super(importerDefinition, initialState);
   }
 
-  private static readonly actionTypesThatRequireValidation: ReadonlySet<
+  private static readonly actionTypesThatRequireProcessing: ReadonlySet<
     ImporterAction['type']
   > = new Set<ImporterAction['type']>([
     'DATA_MAPPED',
     'CELL_CHANGED',
     'REMOVE_ROWS',
     'RESTORE_SHEET_DATA',
+    'ADD_EMPTY_ROW',
   ]);
 
   public async dispatchChange(dispatch: Dispatch<ImporterAction>) {
-    const shouldValidate = this.buildSteps.some((step) =>
-      InnerStateBuilder.actionTypesThatRequireValidation.has(step.type)
+    const shouldProcess = this.buildSteps.some((step) =>
+      InnerStateBuilder.actionTypesThatRequireProcessing.has(step.type)
     );
 
-    const runId = generateValidationRunId();
+    const runId = generateProcessingRunId();
 
-    if (shouldValidate) {
-      dispatch({ type: 'VALIDATION_STARTED', payload: { runId } });
+    if (shouldProcess) {
+      dispatch({ type: 'PROCESSING_STARTED', payload: { runId } });
     }
 
     this.buildSteps.forEach((step) => {
       dispatch(step);
     });
 
-    if (shouldValidate) {
+    if (shouldProcess) {
       const finalState = await this.getState();
       dispatch({
-        type: 'VALIDATION_COMPLETED',
-        payload: { errors: finalState.validationErrors, runId },
+        type: 'PROCESSING_COMPLETED',
+        payload: {
+          sheetData: finalState.sheetData,
+          errors: finalState.validationErrors,
+          runId,
+        },
       });
     }
   }

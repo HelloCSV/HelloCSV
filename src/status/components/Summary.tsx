@@ -12,15 +12,15 @@ export default function Summary({ completedWithErrors, enumLabelDict }: Props) {
   const { t } = useTranslations();
 
   return (
-    <Card withPadding={false} className="h-full">
-      <div className="flex flex-col py-5">
-        <div className="px-4 pb-2 text-xl">
+    <Card withPadding={false} className="hc:h-full">
+      <div className="hc:flex hc:flex-col hc:py-5">
+        <div className="hc:px-4 hc:pb-2 hc:text-xl">
           {t('importStatus.importDetails')}
         </div>
-        <div className="text-hello-csv-text-muted px-4 pb-2 text-sm">
+        <div className="hc:text-hello-csv-text-muted hc:px-4 hc:pb-2 hc:text-sm">
           {t('importStatus.importDetailsDescription')}
         </div>
-        <div className="border-hello-csv-border border-b pb-2"></div>
+        <div className="hc:border-hello-csv-border hc:border-b hc:pb-2"></div>
         <SummaryInfo
           completedWithErrors={completedWithErrors}
           enumLabelDict={enumLabelDict}

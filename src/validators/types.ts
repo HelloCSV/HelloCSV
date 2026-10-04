@@ -1,4 +1,9 @@
-import { DateColumnType, ImporterOutputFieldType, SheetRow } from '../types';
+import {
+  DateColumnType,
+  ImporterOutputFieldType,
+  ProcessingPhase,
+  SheetRow,
+} from '../types';
 
 export interface ImporterValidationError {
   sheetId: string;
@@ -48,6 +53,7 @@ export type ImporterValidatorDefinition =
 export interface ImporterValidatorDefinitionBase {
   validate: ImporterValidatorType;
   error?: string;
+  runOn?: ProcessingPhase;
 }
 
 export interface RequiredValidatorDefinition
@@ -105,4 +111,9 @@ export interface CustomValidatorDefinition
     fieldValue: ImporterOutputFieldType | undefined,
     row: SheetRow
   ) => ImporterValidatorOutput;
+}
+
+export interface ApplyValidationsOptions {
+  phase?: ProcessingPhase;
+  concurrency?: number;
 }

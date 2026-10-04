@@ -137,16 +137,16 @@ export default function SheetDataEditorCell({
   );
 
   const cellBackgroundColor = errorsText
-    ? 'bg-hello-csv-danger-extra-light'
+    ? 'hc:bg-hello-csv-danger-extra-light'
     : readOnly
-      ? 'bg-hello-csv-muted'
+      ? 'hc:bg-hello-csv-muted'
       : '';
 
   // Both highlights are rendered as overlays on top of the cell content, so they
   // remain visible over the opaque error/read-only cell backgrounds (an inset
   // ring or tint placed behind the content would be covered by those). The
   // active cell gets a ring; other selected cells get a translucent tint.
-  const activeClasses = isActive ? 'z-1' : '';
+  const activeClasses = isActive ? 'hc:z-1' : '';
 
   function commitInputValue(raw: ImporterOutputFieldType) {
     committedRef.current = true;
@@ -249,7 +249,20 @@ export default function SheetDataEditorCell({
       ? initial.char
       : undefined;
   })();
-  const seedValue: ImporterOutputFieldType = typeToEditChar ?? value;
+
+  // Freeze the value the editor was seeded with for the duration of the edit.
+  // `sheetData` is rewritten asynchronously by the processing pass (transformers
+  // then validators), so `value` can change underneath an open editor — e.g. a
+  // transform of a previous commit landing while the user is already retyping
+  // the cell. Without this freeze the editor's Input re-syncs to the new `value`
+  // and discards the in-progress text. The editor commits its own value, so the
+  // live `value` is only needed again once editing ends.
+  const editSeedRef = useRef(value);
+  if (!editMode) {
+    editSeedRef.current = value;
+  }
+  const seedValue: ImporterOutputFieldType =
+    typeToEditChar ?? editSeedRef.current;
 
   const gridCellProps = {
     ref: tdRef,
@@ -266,13 +279,13 @@ export default function SheetDataEditorCell({
     // focusout (bubbles) rather than blur (doesn't) so we catch the combobox
     // input losing focus to somewhere outside the cell.
     onFocusOut: handleTdBlur,
-    className: `relative flex h-full w-full items-stretch outline-none ${activeClasses}`,
+    className: `hc:relative hc:flex hc:h-full hc:w-full hc:items-stretch hc:outline-none ${activeClasses}`,
   };
 
   const highlightOverlay = isActive ? (
-    <div className="ring-hello-csv-primary pointer-events-none absolute inset-0 ring-2 ring-inset" />
+    <div className="hc:ring-hello-csv-primary hc:pointer-events-none hc:absolute hc:inset-0 hc:ring-2 hc:ring-inset" />
   ) : isSelected ? (
-    <div className="bg-hello-csv-primary/20 pointer-events-none absolute inset-0" />
+    <div className="hc:bg-hello-csv-primary/20 hc:pointer-events-none hc:absolute hc:inset-0" />
   ) : null;
 
   function renderEditor() {
@@ -339,7 +352,7 @@ export default function SheetDataEditorCell({
           values,
           (raw) => t('components.select.invalidOption', { value: raw }),
           <ExclamationTriangleIcon
-            className="text-hello-csv-danger mr-2 h-5 w-5 shrink-0"
+            className="hc:text-hello-csv-danger hc:mr-2 hc:h-5 hc:w-5 hc:shrink-0"
             aria-hidden="true"
           />
         );
@@ -401,7 +414,7 @@ export default function SheetDataEditorCell({
       <Input
         aria-label={`edit row ${Number(rowId) + 1}'s ${columnDefinition.label}`}
         type={columnDefinition.type === 'number' ? 'number' : 'text'}
-        classes="block w-full"
+        classes="hc:block hc:w-full"
         value={seedValue}
         onBlur={(v) => {
           if (committedRef.current) return;
@@ -420,7 +433,7 @@ export default function SheetDataEditorCell({
         style={{ width: widthPx }}
       >
         <div {...gridCellProps}>
-          <div className="w-full">{renderEditor()}</div>
+          <div className="hc:w-full">{renderEditor()}</div>
         </div>
       </td>
     );
@@ -445,7 +458,7 @@ export default function SheetDataEditorCell({
           <div
             aria-label={`row ${Number(rowId) + 1} ${columnDefinition.label} ${displayValue}`}
             {...longPressHandlers}
-            className={`h-full w-full py-4 pr-3 pl-4 ${cellBackgroundColor} touch-manipulation truncate overflow-hidden whitespace-nowrap`}
+            className={`hc:h-full hc:w-full hc:py-4 hc:pr-3 hc:pl-4 ${cellBackgroundColor} hc:touch-manipulation hc:truncate hc:overflow-hidden hc:whitespace-nowrap`}
             title={valueEmpty ? undefined : `${displayValue}`}
           >
             {columnDefinition.customRender

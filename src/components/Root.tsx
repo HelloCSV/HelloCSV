@@ -41,7 +41,7 @@ export default forwardRef<HTMLDivElement, Props>(function Root(
     >
       <div
         ref={ref}
-        className="bg-hello-csv-surface min-h-0 w-full overflow-auto"
+        className="hc:bg-hello-csv-surface hc:min-h-0 hc:w-full hc:overflow-auto"
       >
         {children}
       </div>

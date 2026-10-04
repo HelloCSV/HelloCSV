@@ -1,5 +1,7 @@
 export const NUMBER_OF_EMPTY_ROWS_FOR_MANUAL_DATA_INPUT = 100;
 
+export const DEFAULT_MAX_CONCURRENT_ASYNC_OPERATIONS = 8;
+
 // Maximum number of undo/redo snapshots kept in memory per importer session.
 export const MAX_UNDO_HISTORY = 50;
 

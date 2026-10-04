@@ -13,43 +13,43 @@ export type ButtonGroupDefinition = {
 };
 
 const buttonStyles = cva(
-  'relative inline-flex cursor-pointer items-center px-3 py-2 text-sm font-semibold ring-hello-csv-border-strong ring-1 ring-inset focus:z-10',
+  'hc:relative hc:inline-flex hc:cursor-pointer hc:items-center hc:px-3 hc:py-2 hc:text-sm hc:font-semibold hc:ring-hello-csv-border-strong hc:ring-1 hc:ring-inset hc:focus:z-10',
   {
     variants: {
       active: {
         true: '',
-        false: 'bg-hello-csv-surface hover:bg-hello-csv-surface-sunken',
+        false: 'hc:bg-hello-csv-surface hc:hover:bg-hello-csv-surface-sunken',
       },
       variant: {
         default: '',
-        danger: 'text-hello-csv-danger',
+        danger: 'hc:text-hello-csv-danger',
       },
       location: {
-        left: 'rounded-l-md',
-        center: '-ml-px',
-        right: 'rounded-r-md -ml-px ',
+        left: 'hc:rounded-l-md',
+        center: 'hc:-ml-px',
+        right: 'hc:rounded-r-md hc:-ml-px ',
       },
     },
     compoundVariants: [
       {
         active: true,
         variant: 'default',
-        className: 'bg-hello-csv-primary text-hello-csv-primary-contrast',
+        className: 'hc:bg-hello-csv-primary hc:text-hello-csv-primary-contrast',
       },
       {
         active: true,
         variant: 'danger',
-        className: 'bg-hello-csv-danger text-hello-csv-danger-contrast',
+        className: 'hc:bg-hello-csv-danger hc:text-hello-csv-danger-contrast',
       },
       {
         active: false,
         variant: 'default',
-        className: 'text-hello-csv-text',
+        className: 'hc:text-hello-csv-text',
       },
       {
         active: false,
         variant: 'danger',
-        className: 'text-hello-csv-danger',
+        className: 'hc:text-hello-csv-danger',
       },
     ],
   }
@@ -57,7 +57,7 @@ const buttonStyles = cva(
 
 export default function ButtonGroup({ activeButton, buttons }: Props) {
   return (
-    <span className="isolate inline-flex rounded-md shadow-xs">
+    <span className="hc:isolate hc:inline-flex hc:rounded-md hc:shadow-xs">
       {buttons.map((button, index) => (
         <button
           key={button.value}

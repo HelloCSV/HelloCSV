@@ -9,15 +9,15 @@ interface Props {
 }
 
 const baseClasses = cva(
-  'overflow-hidden rounded-md border border-hello-csv-border',
+  'hc:overflow-hidden hc:rounded-md hc:border hc:border-hello-csv-border',
   {
     variants: {
       variant: {
-        default: 'bg-hello-csv-surface',
-        muted: 'bg-hello-csv-muted',
+        default: 'hc:bg-hello-csv-surface',
+        muted: 'hc:bg-hello-csv-muted',
       },
       withPadding: {
-        true: 'px-4 py-5 sm:p-6',
+        true: 'hc:px-4 hc:py-5 hc:sm:p-6',
         false: '',
       },
     },

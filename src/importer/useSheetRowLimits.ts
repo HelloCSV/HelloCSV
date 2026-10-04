@@ -21,7 +21,8 @@ export interface SheetRowLimits {
 
 export function useSheetRowLimits(): SheetRowLimits {
   const { sheets, preventUploadOnValidationErrors } = useImporterDefinition();
-  const { sheetData, validationErrors } = useImporterState();
+  const { sheetData, validationErrors, processingInProgress } =
+    useImporterState();
   const { t } = useTranslations();
 
   return useMemo(() => {
@@ -58,14 +59,26 @@ export function useSheetRowLimits(): SheetRowLimits {
         ? (preventUploadOnValidationErrors(validationErrors) ?? false)
         : (preventUploadOnValidationErrors ?? false);
 
+    const dataBlocked =
+      (preventUploadOnErrors && validationErrors.length > 0) || hasExceeded;
+    const processing = processingInProgress === true;
+
     return {
       limits,
       byId,
       exceeded,
       hasExceeded,
-      preventUpload:
-        (preventUploadOnErrors && validationErrors.length > 0) || hasExceeded,
-      uploadBlockedTooltip: rowLimitTooltip ?? t('importer.uploadBlocked'),
+      preventUpload: dataBlocked || processing,
+      uploadBlockedTooltip: dataBlocked
+        ? (rowLimitTooltip ?? t('importer.uploadBlocked'))
+        : t('importer.processing'),
     };
-  }, [sheets, sheetData, validationErrors, preventUploadOnValidationErrors, t]);
+  }, [
+    sheets,
+    sheetData,
+    validationErrors,
+    processingInProgress,
+    preventUploadOnValidationErrors,
+    t,
+  ]);
 }

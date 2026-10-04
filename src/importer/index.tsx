@@ -3,7 +3,6 @@ import { useRef, useEffect, useMemo, useId } from 'preact/hooks';
 import HeaderMapper from '../mapper/components/HeaderMapper';
 import SheetDataEditor from '../sheet/components/SheetDataEditor';
 import ImportStatus from '../status/components/ImportStatus';
-import { delay } from '../utils/timing';
 import {
   ReducerProvider,
   useImporterState,
@@ -18,7 +17,6 @@ import {
   availableActionList,
 } from '../types';
 import { ThemeSetter } from '../theme/ThemeSetter';
-import { generateCsvContent, getSubmittedSheetData } from '../utils';
 import SheetsSwitcher from '../sheet/components/SheetsSwitcher';
 import { Button, Root, Tooltip } from '../components';
 import { TranslationProvider, useTranslations } from '../i18';
@@ -27,11 +25,12 @@ import { Uploader } from '../uploader';
 import { getEnumLabelDict } from '../sheet/utils';
 import { ImporterDefinitionProvider } from './hooks';
 import { InnerStateBuilder } from './state';
+import { submitImporter } from './submit';
 import { useUndoRedo } from './useUndoRedo';
 import { useSheetRowLimits } from './useSheetRowLimits';
 
 function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
-  const { onComplete, sheets, availableActions } = importerDefinition;
+  const { sheets, availableActions } = importerDefinition;
 
   const { t } = useTranslations();
 
@@ -131,7 +130,8 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
 
   function addEmptyRow() {
     recordHistory();
-    dispatch({ type: 'ADD_EMPTY_ROW' });
+    stateBuilder.addEmptyRow();
+    stateBuilder.dispatchChange(dispatch);
   }
 
   function onUndo() {
@@ -155,40 +155,8 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
     dispatch({ type: 'RESET' });
   }
 
-  async function onSubmit() {
-    dispatch({ type: 'PROGRESS', payload: { progress: 0 } });
-    dispatch({ type: 'SUBMIT' });
-    try {
-      // TODO: Should we filter invalid data?
-      const data = getSubmittedSheetData(sheets, sheetData);
-
-      const statistics = await onComplete(
-        { ...state, sheetData: data },
-        (progress) => {
-          dispatch({ type: 'PROGRESS', payload: { progress } });
-        },
-        state.sheetDefinitions.map((sheetDefinition) => ({
-          file: generateCsvContent(
-            sheetDefinition,
-            data.find((sheet) => sheet.sheetId === sheetDefinition.id)?.rows ??
-              [],
-            {},
-            'value'
-          ),
-          sheetId: sheetDefinition.id,
-        }))
-      );
-
-      await delay(400);
-      dispatch({ type: 'PROGRESS', payload: { progress: 100 } });
-      await delay(200);
-      dispatch({
-        type: 'COMPLETED',
-        payload: { importStatistics: statistics ?? undefined },
-      });
-    } catch (e) {
-      dispatch({ type: 'FAILED' });
-    }
+  function onSubmit() {
+    return submitImporter({ state, dispatch, importerDefinition });
   }
 
   function onBackToPreview() {
@@ -222,8 +190,8 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
         )}
         {mode === 'preview' && (
           // TODO: Move these to separate component in future PR
-          <div className="flex h-full flex-col">
-            <div className="flex-none">
+          <div className="hc:flex hc:h-full hc:flex-col">
+            <div className="hc:flex-none">
               <SheetsSwitcher
                 idPrefix={idPrefix}
                 sheetCountDict={sheetCountDict}
@@ -233,7 +201,7 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
               />
             </div>
             <div
-              className="flex-1 overflow-auto"
+              className="hc:flex-1 hc:overflow-auto"
               role="tabpanel"
               id={`${idPrefix}-tabpanel-${currentSheetId}`}
               aria-labelledby={`${idPrefix}-tab-${currentSheetId}`}
@@ -257,9 +225,9 @@ function ImporterBody(importerDefinition: ImporterDefinitionWithDefaults) {
                 enumLabelDict={enumLabelDict}
               />
             </div>
-            <div className="flex-none">
+            <div className="hc:flex-none">
               {currentSheetData.rows.length > 0 && (
-                <div className="mt-5 flex justify-between">
+                <div className="hc:mt-5 hc:flex hc:justify-between">
                   <div>
                     {columnMappings != null &&
                       availableActions.includes('backToPreviousStep') && (

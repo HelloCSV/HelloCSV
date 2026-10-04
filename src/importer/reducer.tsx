@@ -5,7 +5,6 @@ import {
   useContext,
   useRef,
 } from 'preact/hooks';
-import { applyTransformations } from '../transformers';
 import {
   CellChangedPayload,
   ImporterAction,
@@ -75,10 +74,7 @@ export const reducer = (
     case 'DATA_MAPPED': {
       return {
         ...state,
-        sheetData: applyTransformations(
-          state.sheetDefinitions,
-          action.payload.mappedData
-        ),
+        sheetData: action.payload.mappedData,
         mode: 'preview',
       };
     }
@@ -103,7 +99,7 @@ export const reducer = (
 
       return {
         ...state,
-        sheetData: applyTransformations(state.sheetDefinitions, newData),
+        sheetData: newData,
       };
     }
 
@@ -167,25 +163,26 @@ export const reducer = (
       return buildInitialState(state.sheetDefinitions);
     case 'SET_STATE':
       return action.payload.state;
-    case 'VALIDATION_STARTED':
+    case 'PROCESSING_STARTED':
       return {
         ...state,
-        validationInProgress: true,
-        validationRunId: action.payload.runId,
+        processingInProgress: true,
+        processingRunId: action.payload.runId,
       };
-    case 'VALIDATION_COMPLETED':
-      // Only apply validation results if they correspond to the latest
-      // validation run id recorded in state. This avoids race conditions
-      // where slower, earlier validations overwrite newer results.
-      if (state.validationRunId !== action.payload.runId) {
+    case 'PROCESSING_COMPLETED':
+      // Only apply results if they correspond to the latest run id recorded in
+      // state. This avoids race conditions where a slower, earlier pass
+      // overwrites newer results (both the transformed data and the errors).
+      if (state.processingRunId !== action.payload.runId) {
         return state;
       }
 
       return {
         ...state,
+        sheetData: action.payload.sheetData,
         validationErrors: action.payload.errors,
-        validationInProgress: false,
-        validationRunId: undefined,
+        processingInProgress: false,
+        processingRunId: undefined,
       };
     default:
       return state;

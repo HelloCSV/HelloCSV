@@ -1,13 +1,19 @@
 import { hasData, eachWithObject } from '../utils/functional';
+import { mapWithConcurrency } from '../utils/concurrency';
+import { DEFAULT_MAX_CONCURRENT_ASYNC_OPERATIONS } from '../constants';
 import {
+  ApplyValidationsOptions,
   ImporterValidationError,
   ImporterValidatorDefinition,
   RequiredValidatorDefinition,
 } from './types';
 import {
+  ImporterOutputFieldType,
+  ProcessingPhase,
   SheetColumnDefinition,
   SheetColumnDateTypeArguments,
   SheetDefinition,
+  SheetRow,
   SheetState,
   SelectOption,
   isDateLikeColumn,
@@ -15,6 +21,14 @@ import {
 import { Validator } from './validator_definitions/base';
 import { buildValidatorFromDefinition } from './validator_definitions';
 import { extractReferenceColumnPossibleValues } from '../sheet/utils';
+
+interface ValidationTask {
+  columnId: string;
+  rowIndex: number;
+  value: ImporterOutputFieldType;
+  row: SheetRow;
+  validator: Validator;
+}
 
 export function fieldIsRequired(
   columnDefinition: SheetColumnDefinition,
@@ -98,11 +112,10 @@ function automaticFieldValidators(
 async function validateSheet(
   sheetDefinition: SheetDefinition,
   sheetData: SheetState,
-  allData: SheetState[]
+  allData: SheetState[],
+  phase: ProcessingPhase,
+  concurrency: number
 ) {
-  const validationErrors: ImporterValidationError[] = [];
-  const validationPromises: Promise<void>[] = [];
-
   const validatorsByColumnId = eachWithObject<
     SheetColumnDefinition,
     Validator[]
@@ -110,8 +123,12 @@ async function validateSheet(
     obj[columnDefinition.id] = [];
 
     const validatorDefinitions = [
-      ...(columnDefinition.validators ?? []),
-      ...automaticFieldValidators(columnDefinition, allData),
+      ...(columnDefinition.validators ?? []).filter(
+        (v) => (v.runOn ?? 'change') === phase
+      ),
+      ...(phase === 'change'
+        ? automaticFieldValidators(columnDefinition, allData)
+        : []),
     ];
 
     validatorDefinitions.forEach((validatorDefinition) => {
@@ -121,7 +138,15 @@ async function validateSheet(
     });
   });
 
+  // Tasks are collected column-major, in row order, so order-dependent
+  // synchronous validators (e.g. `unique`) see rows deterministically even when
+  // the concurrency pool interleaves slow async validators.
+  const tasks: ValidationTask[] = [];
+
   sheetDefinition.columns.forEach((columnDefinition) => {
+    const validators = validatorsByColumnId[columnDefinition.id];
+    if (validators.length === 0) return;
+
     sheetData.rows.forEach((row, rowIndex) => {
       if (!hasData(row)) {
         return;
@@ -135,34 +160,56 @@ async function validateSheet(
       }
 
       const value = row[columnDefinition.id];
-      const validators = validatorsByColumnId[columnDefinition.id];
 
-      validators.forEach((v) => {
-        const promise = Promise.resolve(v.isValid(value, row)).then(
-          (result) => {
-            if (result != null) {
-              validationErrors.push({
-                sheetId: sheetDefinition.id,
-                columnId: columnDefinition.id,
-                rowIndex,
-                message: result,
-              });
-            }
-          }
-        );
-        validationPromises.push(promise);
+      validators.forEach((validator) => {
+        tasks.push({
+          columnId: columnDefinition.id,
+          rowIndex,
+          value,
+          row,
+          validator,
+        });
       });
     });
   });
 
-  await Promise.all(validationPromises);
-  return validationErrors;
+  const results = await mapWithConcurrency(
+    tasks,
+    concurrency,
+    async (task): Promise<ImporterValidationError | null> => {
+      let message: string | null | undefined;
+      try {
+        message = await task.validator.isValid(task.value, task.row);
+      } catch (_) {
+        message = task.validator.definition.error ?? 'validators.asyncError';
+      }
+
+      if (message != null) {
+        return {
+          sheetId: sheetDefinition.id,
+          columnId: task.columnId,
+          rowIndex: task.rowIndex,
+          message,
+        };
+      }
+      return null;
+    }
+  );
+
+  return results.filter(
+    (error): error is ImporterValidationError => error != null
+  );
 }
 
 export async function applyValidations(
   sheetDefinitions: SheetDefinition[],
-  sheetStates: SheetState[]
+  sheetStates: SheetState[],
+  options: ApplyValidationsOptions = {}
 ) {
+  const phase = options.phase ?? 'change';
+  const concurrency =
+    options.concurrency ?? DEFAULT_MAX_CONCURRENT_ASYNC_OPERATIONS;
+
   const promises = sheetDefinitions.map(async (sheetDefinition) => {
     const sheetData = sheetStates.find(
       (state) => state.sheetId === sheetDefinition.id
@@ -172,7 +219,9 @@ export async function applyValidations(
       const errors = await validateSheet(
         sheetDefinition,
         sheetData,
-        sheetStates
+        sheetStates,
+        phase,
+        concurrency
       );
       return errors;
     }

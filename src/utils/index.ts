@@ -14,7 +14,6 @@ import {
   DEFAULT_BOOLEAN_TRUE_LABEL,
   DOWNLOADED_CSV_SEPARATOR,
 } from '../constants';
-import { applyTransformations } from '@/transformers';
 import { formatDisplay } from '@/components/dateUtils';
 
 export const isUndefinedOrNull = (a: any) => {
@@ -252,12 +251,6 @@ export function getColumnDisplayValue(
   return value;
 }
 
-export function getSubmittedSheetData(
-  sheets: SheetDefinition[],
-  sheetData: SheetState[]
-) {
-  return applyTransformations(
-    sheets,
-    sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }))
-  );
+export function getSubmittedSheetData(sheetData: SheetState[]) {
+  return sheetData.map((d) => ({ ...d, rows: filterEmptyRows(d) }));
 }
