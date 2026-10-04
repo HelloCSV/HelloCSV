@@ -4,6 +4,31 @@ title: "Transformers"
 
 This section describes available transformation functions.
 
+## Async transformers & run timing
+
+Transformers may be **synchronous or asynchronous**. A `custom` `transformFn`
+may return either `ImporterOutputFieldType | undefined` or a
+`Promise<ImporterOutputFieldType | undefined>` — making it possible to transform
+a value by calling a remote service or an LLM.
+
+By default, transformers run reactively on every edit (`runOn: 'change'`). For
+slow or costly async work you usually don't want that to fire on each keystroke —
+set `runOn: 'submit'` so the transformer runs only in the final pass when the
+user submits:
+
+```ts
+{
+  transformer: 'custom',
+  key: 'normalize_with_llm',
+  runOn: 'submit', // deferred — runs once on submit, not on every edit
+  transformFn: async (value) => normalizeWithLlm(value),
+}
+```
+
+Async calls are throttled so a large sheet can't fire one request per cell at
+once; tune the cap with
+[`maxConcurrentAsyncOperations`](/v0.6.0/api-reference/importer-props).
+
 ## phone_number
 
 **Description:**  

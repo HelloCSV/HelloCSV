@@ -8,7 +8,11 @@ const mocks = vi.hoisted(() => ({
     sheets: any[];
     preventUploadOnValidationErrors?: any;
   },
-  state: {} as { sheetData: any[]; validationErrors: any[] },
+  state: {} as {
+    sheetData: any[];
+    validationErrors: any[];
+    processingInProgress?: boolean;
+  },
 }));
 
 vi.mock('./hooks', () => ({
@@ -42,14 +46,16 @@ function setup({
   sheetData,
   validationErrors = [],
   preventUploadOnValidationErrors,
+  processingInProgress = false,
 }: {
   sheets: any[];
   sheetData: any[];
   validationErrors?: any[];
   preventUploadOnValidationErrors?: any;
+  processingInProgress?: boolean;
 }) {
   mocks.definition = { sheets, preventUploadOnValidationErrors };
-  mocks.state = { sheetData, validationErrors };
+  mocks.state = { sheetData, validationErrors, processingInProgress };
   return renderHook(() => useSheetRowLimits()).result.current;
 }
 
@@ -183,5 +189,38 @@ describe('useSheetRowLimits', () => {
 
     expect(result.preventUpload).toBe(true);
     expect(result.uploadBlockedTooltip).toContain('importer.rowLimitExceeded');
+  });
+
+  it('disables upload while a processing pass is running', () => {
+    const result = setup({
+      sheets: [sheet('a')],
+      sheetData: [{ sheetId: 'a', rows: rows(2) }],
+      processingInProgress: true,
+    });
+
+    expect(result.preventUpload).toBe(true);
+    expect(result.uploadBlockedTooltip).toBe('importer.processing');
+  });
+
+  it('does not block upload when idle and valid', () => {
+    const result = setup({
+      sheets: [sheet('a')],
+      sheetData: [{ sheetId: 'a', rows: rows(2) }],
+    });
+
+    expect(result.preventUpload).toBe(false);
+  });
+
+  it('prefers the actionable data-problem reason over the processing message', () => {
+    const result = setup({
+      sheets: [sheet('a')],
+      sheetData: [{ sheetId: 'a', rows: rows(2) }],
+      validationErrors: [{ sheetId: 'a' }],
+      preventUploadOnValidationErrors: true,
+      processingInProgress: true,
+    });
+
+    expect(result.preventUpload).toBe(true);
+    expect(result.uploadBlockedTooltip).toBe('importer.uploadBlocked');
   });
 });

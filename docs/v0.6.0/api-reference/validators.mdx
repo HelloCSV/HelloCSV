@@ -4,6 +4,35 @@ title: 'Validators'
 
 This section describes the available validation rules.
 
+## Async validators & run timing
+
+Any validator may be **synchronous or asynchronous**. A `custom` `validateFn`
+(see [custom](#custom)) may return `string | null | undefined` or a
+`Promise<string | null | undefined>`, so you can validate against a remote
+service or an LLM.
+
+By default, validators run reactively on every edit (`runOn: 'change'`). For slow
+or costly async checks, set `runOn: 'submit'` so the validator runs only in the
+final pass when the user submits — if it reports errors (and
+`preventUploadOnValidationErrors` is set), submission is blocked and the errors
+appear in the grid:
+
+```ts
+{
+  validate: 'custom',
+  key: 'verify_with_llm',
+  runOn: 'submit', // deferred — runs once on submit, not on every edit
+  validateFn: async (value, row) => verifyWithLlm(value, row),
+}
+```
+
+Async calls are throttled so a large sheet can't fire one request per cell at
+once; tune the cap with
+[`maxConcurrentAsyncOperations`](/v0.6.0/api-reference/importer-props). If an
+async validator **rejects** (e.g. a failed network/LLM call), the cell is marked
+invalid with the validator's `error` message (or a default) rather than silently
+passing.
+
 ## required
 
 **Description:**  

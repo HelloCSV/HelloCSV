@@ -249,7 +249,20 @@ export default function SheetDataEditorCell({
       ? initial.char
       : undefined;
   })();
-  const seedValue: ImporterOutputFieldType = typeToEditChar ?? value;
+
+  // Freeze the value the editor was seeded with for the duration of the edit.
+  // `sheetData` is rewritten asynchronously by the processing pass (transformers
+  // then validators), so `value` can change underneath an open editor — e.g. a
+  // transform of a previous commit landing while the user is already retyping
+  // the cell. Without this freeze the editor's Input re-syncs to the new `value`
+  // and discards the in-progress text. The editor commits its own value, so the
+  // live `value` is only needed again once editing ends.
+  const editSeedRef = useRef(value);
+  if (!editMode) {
+    editSeedRef.current = value;
+  }
+  const seedValue: ImporterOutputFieldType =
+    typeToEditChar ?? editSeedRef.current;
 
   const gridCellProps = {
     ref: tdRef,

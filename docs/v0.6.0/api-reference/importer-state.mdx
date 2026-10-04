@@ -48,25 +48,25 @@ List of validation errors.
 
 ---
 
-## validationInProgress
+## processingInProgress
 
 **Type:** `boolean`
 
 **Required:** No
 
 **Description:**
-Indicates whether an asynchronous validation run is currently in progress. When `true`, the importer is computing validation results; components may use this to show global loading indicators.
+Indicates whether an asynchronous processing run (transformers followed by validators) is currently in progress. When `true`, the importer is transforming and validating data; components may use this to show global loading indicators.
 
 ---
 
-## validationRunId
+## processingRunId
 
 **Type:** `string`
 
 **Required:** No
 
 **Description:**
-Identifier for the currently running validation batch. This is a short-lived string (UUID or timestamp-based id) that can be used to correlate `VALIDATION_STARTED` / `VALIDATION_COMPLETED` lifecycle events and to ignore stale validation results when multiple validation runs overlap.
+Identifier for the currently running processing batch (transform + validate). This is a short-lived string (UUID or timestamp-based id) that can be used to correlate `PROCESSING_STARTED` / `PROCESSING_COMPLETED` lifecycle events and to ignore stale results when multiple runs overlap.
 
 ---
 

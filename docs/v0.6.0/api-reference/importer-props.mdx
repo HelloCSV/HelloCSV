@@ -129,6 +129,20 @@ Sets the maximum allowed file size in bytes. Files exceeding this limit will be 
 
 ---
 
+## maxConcurrentAsyncOperations
+
+**Type:** `number`
+
+**Required:** No (Default: `8`)
+
+**Description:**
+Maximum number of async [validator](/v0.6.0/api-reference/validators) /
+[transformer](/v0.6.0/api-reference/transformers) calls run at once during a
+processing pass. Lower it to respect strict API rate limits (e.g. an LLM
+endpoint); raise it to speed up fast local async work.
+
+---
+
 ## customSuggestedMapper
 
 **Type:** `(sheetDefinitions: SheetDefinition[], csvHeaders: string[]) => ColumnMapping[] | Promise<ColumnMapping[]>`

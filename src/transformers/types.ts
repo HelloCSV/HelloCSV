@@ -1,4 +1,10 @@
-import { ImporterOutputFieldType } from '../types';
+import { ImporterOutputFieldType, ProcessingPhase } from '../types';
+
+export type ImporterTransformerBaseOutput = ImporterOutputFieldType | undefined;
+
+export type ImporterTransformerOutput =
+  | ImporterTransformerBaseOutput
+  | Promise<ImporterTransformerBaseOutput>;
 
 export type ImporterTransformerDefinition =
   | ImporterTransformerDefinitionBase
@@ -13,12 +19,16 @@ export type ImporterTransformerType =
 
 export interface ImporterTransformerDefinitionBase {
   transformer: ImporterTransformerType;
+  runOn?: ProcessingPhase;
 }
 
 export interface CustomTransformerDefinition
   extends ImporterTransformerDefinitionBase {
   key: string;
-  transformFn: (
-    value: ImporterOutputFieldType
-  ) => ImporterOutputFieldType | undefined;
+  transformFn: (value: ImporterOutputFieldType) => ImporterTransformerOutput;
+}
+
+export interface ApplyTransformationsOptions {
+  phase?: ProcessingPhase;
+  concurrency?: number;
 }

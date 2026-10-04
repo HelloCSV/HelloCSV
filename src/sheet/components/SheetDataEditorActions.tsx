@@ -78,7 +78,7 @@ export default function SheetDataEditorActions({
   const { csvDownloadMode, availableActions } = useImporterDefinition();
   const { t } = useTranslations();
 
-  const { validationInProgress } = useImporterState();
+  const { processingInProgress } = useImporterState();
 
   const [removeConfirmationModalOpen, setRemoveConfirmationModalOpen] =
     useState(false);
@@ -271,7 +271,7 @@ export default function SheetDataEditorActions({
         )}
       </div>
       <div className="hc:ml-5 hc:flex hc:items-center">
-        {validationInProgress && (
+        {processingInProgress && (
           <>
             <Spinner color="dark" />
             <div className="hc:mr-2" />

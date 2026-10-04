@@ -5,7 +5,7 @@ import { render, fireEvent, waitFor, cleanup } from '@testing-library/preact';
 // Mutable holders so each test can control the mocked importer contexts.
 const holders = vi.hoisted(() => ({
   state: {
-    value: {} as { sheetData: unknown[]; validationInProgress: boolean },
+    value: {} as { sheetData: unknown[]; processingInProgress: boolean },
   },
   def: {
     value: {} as { availableActions: string[]; csvDownloadMode: string },
@@ -67,7 +67,7 @@ function setup(
   data: SheetState = makeData(),
   availableActions: string[] = ['editRows', 'removeRows']
 ) {
-  holders.state.value = { sheetData: [data], validationInProgress: false };
+  holders.state.value = { sheetData: [data], processingInProgress: false };
   holders.def.value = {
     availableActions,
     csvDownloadMode: 'value',
@@ -299,6 +299,80 @@ describe('SheetDataEditor keyboard grid', () => {
     expect(cellAt(1, 0).getAttribute('aria-selected')).toBe('false');
     // No cell remains active (roving tabindex resets).
     expect(cellAt(0, 0).getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('preserves an in-progress edit when the cell value changes underneath (async processing)', () => {
+    const data = makeData();
+    holders.state.value = { sheetData: [data], processingInProgress: false };
+    holders.def.value = {
+      availableActions: ['editRows', 'removeRows'],
+      csvDownloadMode: 'value',
+    };
+
+    const { container, rerender } = render(
+      <TranslationProvider>
+        <SheetDataEditor
+          sheetDefinition={sheetDefinition}
+          data={data}
+          sheetValidationErrors={[]}
+          setRowData={vi.fn()}
+          setRowsData={vi.fn()}
+          removeRows={vi.fn()}
+          addEmptyRow={vi.fn()}
+          resetState={vi.fn()}
+          undo={vi.fn()}
+          redo={vi.fn()}
+          canUndo={false}
+          canRedo={false}
+          enumLabelDict={{}}
+        />
+      </TranslationProvider>
+    );
+    const cellAt = (row: number, col: number) =>
+      container.querySelector<HTMLElement>(
+        `[data-cell-row="${row}"][data-cell-col="${col}"]`
+      )!;
+
+    fireEvent.click(cellAt(0, 0));
+    fireEvent.keyDown(cellAt(0, 0), { key: 'F2' });
+    const input = cellAt(0, 0).querySelector<HTMLInputElement>('input')!;
+    fireEvent.input(input, { target: { value: 'bbb' } });
+    expect(input.value).toBe('bbb');
+
+    // An async processing pass (transform + validate) rewrites sheetData for the
+    // cell currently being edited. This must NOT discard the user's typing.
+    const updated: SheetState = {
+      sheetId: 'people',
+      rows: [
+        { name: 'AAA', city: 'NY' },
+        { name: 'Bob', city: 'LA' },
+        { name: 'Cat', city: 'SF' },
+      ],
+    };
+    holders.state.value = { sheetData: [updated], processingInProgress: false };
+    rerender(
+      <TranslationProvider>
+        <SheetDataEditor
+          sheetDefinition={sheetDefinition}
+          data={updated}
+          sheetValidationErrors={[]}
+          setRowData={vi.fn()}
+          setRowsData={vi.fn()}
+          removeRows={vi.fn()}
+          addEmptyRow={vi.fn()}
+          resetState={vi.fn()}
+          undo={vi.fn()}
+          redo={vi.fn()}
+          canUndo={false}
+          canRedo={false}
+          enumLabelDict={{}}
+        />
+      </TranslationProvider>
+    );
+
+    expect(cellAt(0, 0).querySelector<HTMLInputElement>('input')!.value).toBe(
+      'bbb'
+    );
   });
 
   it('Escape cancels an edit without committing', () => {

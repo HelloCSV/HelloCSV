@@ -30,7 +30,7 @@ export default function SummaryInfo({
     sheetDefinitions,
   } = useImporterState();
 
-  const sheetData = getSubmittedSheetData(sheetDefinitions, stateSheetData);
+  const sheetData = getSubmittedSheetData(stateSheetData);
 
   const { csvDownloadMode } = useImporterDefinition();
   const { t } = useTranslations();
