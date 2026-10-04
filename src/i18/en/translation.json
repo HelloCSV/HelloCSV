@@ -43,6 +43,7 @@
     "rowLimitExceeded": "\"{{sheet}}\" has {{count}} rows, which exceeds the maximum of {{limit}}. Remove rows to continue.",
     "rowLimitExceededMultiple": "These sheets exceed their row limit: {{sheets}}. Remove rows to continue.",
     "sheetValidationErrors": "This sheet has validation errors. Fix them before uploading.",
+    "processing": "Processing data, please wait…",
     "back": "Back",
     "loader": {
       "failed": "Something went wrong",
@@ -121,7 +122,8 @@
     "date": "This is not a valid date",
     "datetime": "This is not a valid date and time",
     "time": "This is not a valid time",
-    "dateOutOfRange": "This date is outside the allowed range"
+    "dateOutOfRange": "This date is outside the allowed range",
+    "asyncError": "This value could not be validated"
   },
   "importStatus": {
     "success": "Success",

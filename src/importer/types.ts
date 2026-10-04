@@ -43,6 +43,7 @@ export interface ImporterDefinition {
   ) => ColumnMapping[] | Promise<ColumnMapping[]>;
   persistenceConfig?: PersistenceConfig;
   csvDownloadMode?: CsvDownloadMode;
+  maxConcurrentAsyncOperations?: number;
 }
 
 export const availableActionList = [
@@ -70,6 +71,7 @@ export type StateBuilderImporterDefinition = Pick<
   | 'customFileLoaders'
   | 'customSuggestedMapper'
   | 'onDataColumnsMapped'
+  | 'maxConcurrentAsyncOperations'
 >;
 
 /**
@@ -97,14 +99,15 @@ export interface ImporterState {
   rowFile?: File;
   columnMappings?: ColumnMapping[];
   importProgress: number;
-  validationInProgress?: boolean;
+  processingInProgress?: boolean;
   /**
-   * Monotonic id for the currently running validation batch. When async
-   * validations complete we only apply results if the runId matches the
-   * latest value stored in state. This avoids race conditions where slow
-   * validators from earlier runs overwrite newer results.
+   * Monotonic id for the currently running processing batch (transform +
+   * validate). When an async pass completes we only apply its results — both
+   * the transformed `sheetData` and `validationErrors` — if the runId matches
+   * the latest value stored in state. This avoids race conditions where a slow
+   * earlier run overwrites newer results (e.g. a later edit).
    */
-  validationRunId?: string;
+  processingRunId?: string;
   importStatistics?: ImportStatistics;
 }
 
@@ -119,6 +122,8 @@ export type ImporterOutputFieldType =
   | boolean
   | string[]
   | undefined;
+
+export type ProcessingPhase = 'change' | 'submit';
 
 export interface CellChangedPayload {
   sheetId: string;
@@ -169,11 +174,15 @@ export type ImporterAction =
   | { type: 'MAPPING' } // Changes the mode to 'mapping' - used to go back to mappings screen in case there were some mapping issues
   | { type: 'RESET' } // Resets the state to the initial state
   | { type: 'SET_STATE'; payload: { state: ImporterState } } // Fetches the state from the indexedDB
-  | { type: 'VALIDATION_STARTED'; payload: { runId: string } } // Sets validationInProgress flag to true and records run id
+  | { type: 'PROCESSING_STARTED'; payload: { runId: string } } // Sets processingInProgress flag to true and records run id
   | {
-      type: 'VALIDATION_COMPLETED';
-      payload: { errors: ImporterValidationError[]; runId: string };
-    }; // Sets validation errors and validationInProgress flag only if runId matches
+      type: 'PROCESSING_COMPLETED';
+      payload: {
+        sheetData: SheetState[];
+        errors: ImporterValidationError[];
+        runId: string;
+      };
+    }; // Applies transformed sheetData + validation errors and clears the in-progress flag, only if runId matches
 
 type WithRequired<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 

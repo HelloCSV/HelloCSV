@@ -43,6 +43,7 @@
     "rowLimitExceeded": "« {{sheet}} » comporte {{count}} lignes, ce qui dépasse le maximum de {{limit}}. Supprimez des lignes pour continuer.",
     "rowLimitExceededMultiple": "Ces feuilles dépassent leur limite de lignes : {{sheets}}. Supprimez des lignes pour continuer.",
     "sheetValidationErrors": "Cette feuille comporte des erreurs de validation. Corrigez-les avant de télécharger.",
+    "processing": "Traitement des données, veuillez patienter…",
     "back": "Retour",
     "loader": {
       "failed": "Quelque chose a mal tourné",
@@ -121,7 +122,8 @@
     "date": "Cette date n'est pas valide",
     "datetime": "Cette date et heure ne sont pas valides",
     "time": "Cette heure n'est pas valide",
-    "dateOutOfRange": "Cette date est en dehors de la plage autorisée"
+    "dateOutOfRange": "Cette date est en dehors de la plage autorisée",
+    "asyncError": "Cette valeur n'a pas pu être validée"
   },
   "importStatus": {
     "success": "Importation réussie",

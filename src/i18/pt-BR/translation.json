@@ -43,6 +43,7 @@
     "rowLimitExceeded": "\"{{sheet}}\" tem {{count}} linhas, o que excede o máximo de {{limit}}. Remova linhas para continuar.",
     "rowLimitExceededMultiple": "Estas planilhas excedem o limite de linhas: {{sheets}}. Remova linhas para continuar.",
     "sheetValidationErrors": "Esta planilha tem erros de validação. Corrija-os antes de enviar.",
+    "processing": "Processando dados, aguarde…",
     "back": "Voltar",
     "loader": {
       "failed": "Algo deu errado",
@@ -121,7 +122,8 @@
     "date": "Esta data não é válida",
     "datetime": "Esta data e hora não são válidas",
     "time": "Este horário não é válido",
-    "dateOutOfRange": "Esta data está fora do intervalo permitido"
+    "dateOutOfRange": "Esta data está fora do intervalo permitido",
+    "asyncError": "Não foi possível validar este valor"
   },
   "importStatus": {
     "success": "Sucesso",

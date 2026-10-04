@@ -13,15 +13,12 @@ interface Props {
 }
 
 export default function Completed({ resetState, enumLabelDict }: Props) {
-  const {
-    sheetDefinitions,
-    sheetData: stateSheetData,
-    importStatistics: statistics,
-  } = useImporterState();
+  const { sheetData: stateSheetData, importStatistics: statistics } =
+    useImporterState();
   const { onSummaryFinished } = useImporterDefinition();
   const { t } = useTranslations();
 
-  const sheetData = getSubmittedSheetData(sheetDefinitions, stateSheetData);
+  const sheetData = getSubmittedSheetData(stateSheetData);
   const totalRecords = getTotalRows(sheetData);
   const recordsImported = statistics?.imported ?? 0;
   const completedWithErrors = !!statistics?.failed || !!statistics?.skipped;
