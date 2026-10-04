@@ -58,7 +58,7 @@ export default function App() {
                 any Javascript application. <b>No React required.</b> (
                 <a
                   className="text-blue-500 underline"
-                  href="https://hellocsv.mintlify.app/v0.5.0/get-started/usage#react"
+                  href="https://hellocsv.mintlify.app/v0.6.0/get-started/usage#react"
                   target="_blank"
                   rel="noreferrer noopener"
                 >

@@ -52,7 +52,7 @@ export default function ExcelImporter() {
             can parse by implementing a{' '}
             <Code className="hover:underline">
               <a
-                href="https://hellocsv.mintlify.app/v0.5.0/api-reference/importer-props#customfileloaders"
+                href="https://hellocsv.mintlify.app/v0.6.0/api-reference/importer-props#customfileloaders"
                 target="_blank"
                 rel="noreferrer noopener"
               >
