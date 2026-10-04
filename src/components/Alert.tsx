@@ -18,42 +18,42 @@ const baseClasses: Record<VariantType, { icon?: ReactNode; classes?: string }> =
     info: {
       icon: (
         <InformationCircleIcon
-          className="text-hello-csv-primary-light size-5"
+          className="hc:text-hello-csv-primary-light hc:size-5"
           aria-hidden="true"
         />
       ),
       classes:
-        'bg-hello-csv-primary-extra-light text-hello-csv-primary rounded-md p-4',
+        'hc:bg-hello-csv-primary-extra-light hc:text-hello-csv-primary hc:rounded-md hc:p-4',
     },
     success: {
       icon: (
         <CheckCircleIcon
-          className="text-hello-csv-success-light size-5"
+          className="hc:text-hello-csv-success-light hc:size-5"
           aria-hidden="true"
         />
       ),
       classes:
-        'bg-hello-csv-success-extra-light text-hello-csv-success rounded-md p-4',
+        'hc:bg-hello-csv-success-extra-light hc:text-hello-csv-success hc:rounded-md hc:p-4',
     },
     error: {
       icon: (
         <ExclamationTriangleIcon
-          className="text-hello-csv-danger-light size-5"
+          className="hc:text-hello-csv-danger-light hc:size-5"
           aria-hidden="true"
         />
       ),
       classes:
-        'bg-hello-csv-danger-extra-light text-hello-csv-danger rounded-md p-4',
+        'hc:bg-hello-csv-danger-extra-light hc:text-hello-csv-danger hc:rounded-md hc:p-4',
     },
     warning: {
       icon: (
         <ExclamationTriangleIcon
-          className="text-hello-csv-warning-light size-5"
+          className="hc:text-hello-csv-warning-light hc:size-5"
           aria-hidden="true"
         />
       ),
       classes:
-        'bg-hello-csv-warning-extra-light text-hello-csv-warning rounded-md p-4',
+        'hc:bg-hello-csv-warning-extra-light hc:text-hello-csv-warning hc:rounded-md hc:p-4',
     },
   };
 
@@ -66,11 +66,11 @@ export default function Alert({
 
   return (
     <div className={classes}>
-      <div className="flex">
-        <div className="mt-1 shrink-0">{icon}</div>
-        <div className="ml-3">
-          {header && <div className="text-md">{header}</div>}
-          <div className="text-sm">{description}</div>
+      <div className="hc:flex">
+        <div className="hc:mt-1 hc:shrink-0">{icon}</div>
+        <div className="hc:ml-3">
+          {header && <div className="hc:text-base">{header}</div>}
+          <div className="hc:text-sm">{description}</div>
         </div>
       </div>
     </div>

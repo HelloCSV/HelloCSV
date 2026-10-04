@@ -11,11 +11,11 @@ export default function ImporterRequirements({ importerRequirements }: Props) {
   const { t } = useTranslations();
 
   return (
-    <div className="flex h-full flex-col space-y-5">
-      <div className="me-3">
+    <div className="hc:flex hc:h-full hc:flex-col hc:space-y-5">
+      <div className="hc:me-3">
         <Alert variant="info" description={t('uploader.importerInformation')} />
       </div>
-      <div className="flex min-h-0 flex-1 overflow-hidden">
+      <div className="hc:flex hc:min-h-0 hc:flex-1 hc:overflow-hidden">
         <RequirementsList importerRequirements={importerRequirements} />
       </div>
     </div>

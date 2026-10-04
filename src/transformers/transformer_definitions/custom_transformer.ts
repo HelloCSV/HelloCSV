@@ -1,15 +1,14 @@
+import { ImporterOutputFieldType } from '../../types';
 import {
   CustomTransformerDefinition,
-  ImporterOutputFieldType,
-} from '../../types';
+  ImporterTransformerOutput,
+} from '../types';
 import { Transformer } from './base';
 
 export class CustomTransformer extends Transformer {
   key: string;
 
-  parse: (
-    value: ImporterOutputFieldType
-  ) => ImporterOutputFieldType | undefined;
+  parse: (value: ImporterOutputFieldType) => ImporterTransformerOutput;
 
   constructor(definition: CustomTransformerDefinition) {
     super(definition);

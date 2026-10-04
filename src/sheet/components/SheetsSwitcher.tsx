@@ -45,8 +45,8 @@ export default function SheetsSwitcher({
           value: sheet.id,
           icon:
             iconTooltip != null ? (
-              <Tooltip className="mr-3" tooltipText={iconTooltip}>
-                <ExclamationCircleIcon className="h-4 w-4" />
+              <Tooltip className="hc:mr-3" tooltipText={iconTooltip}>
+                <ExclamationCircleIcon className="hc:h-4 hc:w-4" />
               </Tooltip>
             ) : undefined,
         };

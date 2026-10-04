@@ -14,14 +14,14 @@ export default function SheetDataEditorHeader({ column }: Props) {
 
   return (
     <div
-      className="flex items-center"
+      className="hc:flex hc:items-center"
       title={isReadOnly ? t('sheet.readOnly') : undefined}
     >
       {isReadOnly && (
-        <div className="relative mr-3 h-5 w-5">
-          <XMarkIcon className="text-hello-csv-text-subtle absolute top-0 left-0 h-5 w-5" />
+        <div className="hc:relative hc:mr-3 hc:h-5 hc:w-5">
+          <XMarkIcon className="hc:text-hello-csv-text-subtle hc:absolute hc:top-0 hc:left-0 hc:h-5 hc:w-5" />
 
-          <PencilIcon className="text-hello-csv-text-muted absolute top-0 left-0 h-5 w-5" />
+          <PencilIcon className="hc:text-hello-csv-text-muted hc:absolute hc:top-0 hc:left-0 hc:h-5 hc:w-5" />
         </div>
       )}
       {column.label} {fieldIsRequired(column) && '*'}

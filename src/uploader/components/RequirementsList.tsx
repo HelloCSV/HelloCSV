@@ -11,29 +11,29 @@ export default function RequirementsList({ importerRequirements }: Props) {
   const { t } = useTranslations();
 
   return (
-    <div className="h-full w-full space-y-5 overflow-y-auto">
+    <div className="hc:h-full hc:w-full hc:space-y-5 hc:overflow-y-auto">
       {Object.entries(importerRequirements)
         .filter(([, requirements]) => requirements.length > 0)
         .map(([groupName, requirements]) => {
           const group = groupName === 'required' ? 'required' : 'optional';
 
           return (
-            <div key={groupName} className="me-3">
-              <div className="border-hello-csv-border my-3 border-b pb-4 text-sm font-light uppercase">
+            <div key={groupName} className="hc:me-3">
+              <div className="hc:border-hello-csv-border hc:my-3 hc:border-b hc:pb-4 hc:text-sm hc:font-light hc:uppercase">
                 {t(`uploader.${group}Columns`)}
               </div>
-              <div className="mt-4">
+              <div className="hc:mt-4">
                 {requirements.map((requirement) => (
                   <div
                     key={`${requirement.sheetId}-${requirement.columnId}`}
-                    className="my-3 flex justify-between"
+                    className="hc:my-3 hc:flex hc:justify-between"
                   >
-                    <div className="text-xs">{requirement.columnLabel}</div>
-                    <div className="text-xs font-light">
+                    <div className="hc:text-xs">{requirement.columnLabel}</div>
+                    <div className="hc:text-xs hc:font-light">
                       <Tooltip
                         tooltipText={t(`uploader.${group}ColumnsTooltip`)}
                       >
-                        <InformationCircleIcon className="text-hello-csv-text-muted size-5" />
+                        <InformationCircleIcon className="hc:text-hello-csv-text-muted hc:size-5" />
                       </Tooltip>
                     </div>
                   </div>

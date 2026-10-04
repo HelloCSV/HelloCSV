@@ -15,16 +15,16 @@ export default function HeaderMapperDataPreview({
 
   return (
     csvHeader && (
-      <div className="border-hello-csv-border-strong bg-hello-csv-surface m-4 rounded-sm border px-4 sm:px-6 lg:px-8">
-        <div className="mt-6 flow-root">
-          <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div className="inline-block min-w-full py-2 align-middle">
-              <table className="divide-hello-csv-border-strong min-w-full divide-y">
+      <div className="hc:border-hello-csv-border-strong hc:bg-hello-csv-surface hc:m-4 hc:rounded-sm hc:border hc:px-4 hc:sm:px-6 hc:lg:px-8">
+        <div className="hc:mt-6 hc:flow-root">
+          <div className="hc:-mx-4 hc:-my-2 hc:overflow-x-auto hc:sm:-mx-6 hc:lg:-mx-8">
+            <div className="hc:inline-block hc:min-w-full hc:py-2 hc:align-middle">
+              <table className="hc:divide-hello-csv-border-strong hc:min-w-full hc:divide-y">
                 <thead>
                   <tr>
                     <th
                       scope="col"
-                      className="text-hello-csv-text py-3.5 pr-3 pl-4 text-left text-sm font-semibold sm:pl-6 lg:pl-8"
+                      className="hc:text-hello-csv-text hc:py-3.5 hc:pr-3 hc:pl-4 hc:text-left hc:text-sm hc:font-semibold hc:sm:pl-6 hc:lg:pl-8"
                     >
                       {tHtml('mapper.dataPreview', {
                         csvHeader: <Badge>{csvHeader}</Badge>,
@@ -32,13 +32,13 @@ export default function HeaderMapperDataPreview({
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-hello-csv-border-strong divide-y">
+                <tbody className="hc:divide-hello-csv-border-strong hc:divide-y">
                   {examples?.map((example, idx) => (
                     <tr key={idx}>
-                      <td className="text-hello-csv-text h-12 py-4 pr-3 pl-4 text-sm font-medium sm:pl-6 lg:pl-8">
+                      <td className="hc:text-hello-csv-text hc:h-12 hc:py-4 hc:pr-3 hc:pl-4 hc:text-sm hc:font-medium hc:sm:pl-6 hc:lg:pl-8">
                         {example ||
                           (idx === 0 && (
-                            <span className="text-hello-csv-text-muted italic">
+                            <span className="hc:text-hello-csv-text-muted hc:italic">
                               {t('mapper.noData')}
                             </span>
                           ))}

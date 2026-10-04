@@ -1,0 +1,112 @@
+---
+title: Upgrade from v0.5.0
+---
+
+Most projects need **no changes** to upgrade from v0.5.0 to v0.6.0. There are two
+breaking changes, and both only affect you if your code reaches into HelloCSV internals —
+its utility class names, or two transient `ImporterState` fields. There are also new,
+fully opt-in features (see [What's new](#whats-new)).
+
+## 1. Namespaced CSS utility classes
+
+### What changed
+
+HelloCSV is built with Tailwind CSS. Previously its utility classes (`text-center`,
+`bg-hello-csv-muted`, etc.) used the same names Tailwind generates everywhere, so they
+could clash with another CSS framework loaded on the same page — for example Bootstrap,
+whose global `.text-center` overrode HelloCSV's styles and broke the layout
+([#262](https://github.com/HelloCSV/HelloCSV/issues/262)).
+
+As of **v0.6.0**, every internal utility class is namespaced with an **`hc:` prefix**:
+
+| Before (v0.5.0)                   | After (v0.6.0)                       |
+| --------------------------------- | ------------------------------------ |
+| `bg-hello-csv-muted`              | `hc:bg-hello-csv-muted`              |
+| `bg-hello-csv-danger-extra-light` | `hc:bg-hello-csv-danger-extra-light` |
+| `text-center`, `flex`, `p-4`, …   | `hc:text-center`, `hc:flex`, `hc:p-4`, … |
+
+This makes HelloCSV's styles collision-proof against any host CSS framework, without
+resorting to `!important` (which would have made the styles hard for you to override).
+
+### Do I need to do anything?
+
+**No changes needed if you:**
+
+- Style the importer with the [`theme`](/v0.6.0/api-reference/importer-props#theme) prop.
+- Customize colors via the `--hello-csv-color-*` CSS variables
+  (see [Theme Styles](/v0.6.0/customization/theme-styles)) — variable names are unchanged.
+- Only render the importer and let it style itself.
+- Use your own Tailwind/CSS classes in your surrounding layout — your classes are untouched.
+
+**Action required only if you:**
+
+- Reference HelloCSV's internal utility classes in a
+  [`customRender`](/v0.6.0/api-reference/common-column-props#customrender) callback (or any
+  custom cell/component) — for example checking or reusing the cell background classes.
+  Add the `hc:` prefix:
+
+  ```diff
+  - <span className="bg-hello-csv-muted ...">
+  + <span className="hc:bg-hello-csv-muted ...">
+  ```
+
+  The classes a cell may carry are now
+  `hc:bg-hello-csv-danger-extra-light` (validation errors) and
+  `hc:bg-hello-csv-muted` (read-only columns).
+
+### Notes
+
+- The `hello-csv` root/scoping class is **not** prefixed — only Tailwind utility classes are.
+- CSS custom properties (`--hello-csv-color-*`) are **not** prefixed and keep their names.
+- You do **not** need to configure a Tailwind prefix in your own project; HelloCSV ships
+  pre-compiled CSS, so the prefix is entirely internal.
+
+## 2. Renamed `ImporterState` processing fields
+
+The async pass that runs after an edit now runs **transformers and then validators** (in
+v0.5.0 transformation happened synchronously and only validation was async). To reflect
+that it's a combined "processing" pass, two transient [`ImporterState`](/v0.6.0/api-reference/importer-state)
+fields were renamed:
+
+| Before (v0.5.0)        | After (v0.6.0)         |
+| ---------------------- | ---------------------- |
+| `validationInProgress` | `processingInProgress` |
+| `validationRunId`      | `processingRunId`      |
+
+`validationErrors` is **unchanged**. The internal reducer action types
+`VALIDATION_STARTED` / `VALIDATION_COMPLETED` were likewise renamed to
+`PROCESSING_STARTED` / `PROCESSING_COMPLETED` — only relevant if you dispatch importer
+actions directly, which is uncommon.
+
+### Do I need to do anything?
+
+**No changes needed if you:**
+
+- Only read `validationErrors` (unchanged) or don't inspect these fields at all.
+- Rely on [persistence](/v0.6.0/api-reference/importer-props#persistenceconfig) (IndexedDB).
+  **No migration is required** — these fields are transient and optional. A persisted
+  v0.5.0 state keeps its old keys harmlessly (nothing reads them), and the new fields
+  default to `undefined` (falsy = "not running"), which is the correct resting state.
+
+**Action required only if you:**
+
+- Read `state.validationInProgress` or `state.validationRunId` in
+  [`onStateChanged`](/v0.6.0/api-reference/importer-props#onstatechanged),
+  [`onComplete`](/v0.6.0/api-reference/importer-props#oncomplete), or a custom component
+  (e.g. via `useImporterState`). Rename the references:
+
+  ```diff
+  - if (state.validationInProgress) showSpinner();
+  + if (state.processingInProgress) showSpinner();
+  ```
+
+## What's new
+
+These are fully **opt-in** and require no changes to existing code:
+
+- **Async transformers.** A `custom` `transformFn` may now return a `Promise`
+  (see [Transformers](/v0.6.0/api-reference/transformers)).
+- **`runOn: 'change' | 'submit'`** on any validator or transformer — defer slow/costly
+  async work (e.g. an LLM call) to the submit pass instead of running it on every edit.
+- **[`maxConcurrentAsyncOperations`](/v0.6.0/api-reference/importer-props#maxconcurrentasyncoperations)**
+  to cap how many async validator/transformer calls run at once.

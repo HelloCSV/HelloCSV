@@ -23,10 +23,10 @@ export default function CircularProgress({ progress, pending }: Props) {
 
   if (progressUnavailable) {
     return (
-      <div className="flex justify-center">
+      <div className="hc:flex hc:justify-center">
         <div
-          className={`border-hello-csv-success-light h-22 w-22 rounded-full border-10 ${
-            pending && `animate-spin border-t-transparent`
+          className={`hc:border-hello-csv-success-light hc:h-22 hc:w-22 hc:rounded-full hc:border-10 ${
+            pending && `hc:animate-spin hc:border-t-transparent`
           }`}
         ></div>
       </div>
@@ -34,13 +34,17 @@ export default function CircularProgress({ progress, pending }: Props) {
   }
 
   return (
-    <svg className="mx-auto h-24 w-24 rotate-[-90deg]" width="100" height="100">
+    <svg
+      className="hc:mx-auto hc:h-24 hc:w-24 hc:rotate-[-90deg]"
+      width="100"
+      height="100"
+    >
       <circle
         cx="50"
         cy="50"
         r={radius}
         fill="transparent"
-        className="text-hello-csv-border"
+        className="hc:text-hello-csv-border"
         strokeWidth="10"
         stroke="currentColor"
       />
@@ -52,7 +56,7 @@ export default function CircularProgress({ progress, pending }: Props) {
         strokeWidth="10"
         strokeDasharray={circumference}
         strokeDashoffset={offset}
-        className="stroke-hello-csv-success-light transition-[stroke-dashoffset] duration-500"
+        className="hc:stroke-hello-csv-success-light hc:transition-[stroke-dashoffset] hc:duration-500"
       />
     </svg>
   );

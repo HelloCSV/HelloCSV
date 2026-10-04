@@ -17,18 +17,18 @@ export default function Tabs({
 }: Props) {
   return (
     <div>
-      <div className="grid grid-cols-1 sm:hidden">
+      <div className="hc:grid hc:grid-cols-1 hc:sm:hidden">
         <Select
           options={tabs}
           value={activeTab}
           onChange={(tab) => onTabChange(tab as string)}
         />
       </div>
-      <div className="hidden sm:block">
-        <div className="border-hello-csv-border border-b">
+      <div className="hc:hidden hc:sm:block">
+        <div className="hc:border-hello-csv-border hc:border-b">
           <nav
             aria-label="Tabs"
-            className="-mb-px flex space-x-8"
+            className="hc:-mb-px hc:flex hc:space-x-8"
             role="tablist"
           >
             {tabs.map((tab) => (
@@ -42,9 +42,9 @@ export default function Tabs({
                 onClick={() => onTabChange(tab.value)}
                 className={` ${
                   tab.value === activeTab
-                    ? 'border-hello-csv-primary text-hello-csv-primary'
-                    : 'text-hello-csv-text-muted hover:border-hello-csv-border-strong hover:text-hello-csv-text border-transparent'
-                } flex cursor-pointer items-center border-b-2 px-1 py-4 text-sm font-medium whitespace-nowrap`}
+                    ? 'hc:border-hello-csv-primary hc:text-hello-csv-primary'
+                    : 'hc:text-hello-csv-text-muted hc:hover:border-hello-csv-border-strong hc:hover:text-hello-csv-text hc:border-transparent'
+                } hc:flex hc:cursor-pointer hc:items-center hc:border-b-2 hc:px-1 hc:py-4 hc:text-sm hc:font-medium hc:whitespace-nowrap`}
               >
                 {tab.icon}
                 {tab.label}

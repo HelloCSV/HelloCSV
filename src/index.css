@@ -1,5 +1,5 @@
 @layer theme {
-  @import 'tailwindcss/theme.css';
+  @import 'tailwindcss/theme.css' prefix(hc);
 }
 
 @layer base {
@@ -12,7 +12,7 @@
 
 @layer utilities {
   .hello-csv {
-    @import 'tailwindcss/utilities.css';
+    @import 'tailwindcss/utilities.css' prefix(hc);
   }
 }
 

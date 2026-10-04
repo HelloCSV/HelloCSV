@@ -62,16 +62,18 @@ export default function HeaderMapper({
   }
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex-none text-2xl">{t('mapper.reviewAndConfirm')}</div>
-      <div className="min-h-0 flex-auto">
-        <div className="flex h-full justify-between space-x-5">
-          <div className="flex flex-2 flex-col">
-            <div className="my-5 flex text-sm font-light uppercase">
-              <div className="flex-1">{t('mapper.importedColumn')}</div>
-              <div className="flex-1">{t('mapper.destinationColumn')}</div>
+    <div className="hc:flex hc:h-full hc:flex-col">
+      <div className="hc:flex-none hc:text-2xl">
+        {t('mapper.reviewAndConfirm')}
+      </div>
+      <div className="hc:min-h-0 hc:flex-auto">
+        <div className="hc:flex hc:h-full hc:justify-between hc:space-x-5">
+          <div className="hc:flex hc:flex-2 hc:flex-col">
+            <div className="hc:my-5 hc:flex hc:text-sm hc:font-light hc:uppercase">
+              <div className="hc:flex-1">{t('mapper.importedColumn')}</div>
+              <div className="hc:flex-1">{t('mapper.destinationColumn')}</div>
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="hc:flex-1 hc:overflow-y-auto">
               {csvHeaders.map((header, columnIndex) => {
                 const headerMapping =
                   currentMapping.find(
@@ -102,7 +104,7 @@ export default function HeaderMapper({
               })}
             </div>
           </div>
-          <div className="bg-hello-csv-muted hidden flex-1 overflow-y-auto sm:block">
+          <div className="hc:bg-hello-csv-muted hc:hidden hc:flex-1 hc:overflow-y-auto hc:sm:block">
             <HeaderMapperDataPreview
               examples={hoveredExamples}
               csvHeader={hoveredCsvHeader ?? ''}
@@ -111,12 +113,12 @@ export default function HeaderMapper({
         </div>
       </div>
       {!mapingsValid && (
-        <div className="mt-5 flex justify-end">
+        <div className="hc:mt-5 hc:flex hc:justify-end">
           <Error>{t('mapper.mappingsNotValid')}</Error>
         </div>
       )}
-      <div className="mt-auto flex-none">
-        <div className="mt-5 flex justify-between">
+      <div className="hc:mt-auto hc:flex-none">
+        <div className="hc:mt-5 hc:flex hc:justify-between">
           <Button
             variant="secondary"
             outline
@@ -129,11 +131,11 @@ export default function HeaderMapper({
             onClick={handleConfirm}
             disabled={!mapingsValid || isMappingInProgress}
           >
-            <div className="flex items-center">
+            <div className="hc:flex hc:items-center">
               {isMappingInProgress && (
                 <>
                   <Spinner color="light" />
-                  <div className="mr-2" />
+                  <div className="hc:mr-2" />
                 </>
               )}
               {t('mapper.confirm')}

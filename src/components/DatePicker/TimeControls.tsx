@@ -29,7 +29,7 @@ export default function TimeControls({
 
   return (
     <div
-      className={`flex items-end gap-2 ${hasCalendar ? 'border-hello-csv-border mt-3 border-t pt-3' : ''}`}
+      className={`hc:flex hc:items-end hc:gap-2 ${hasCalendar ? 'hc:border-hello-csv-border hc:mt-3 hc:border-t hc:pt-3' : ''}`}
     >
       <TimeField
         label={t('components.datePicker.hours')}
@@ -38,7 +38,7 @@ export default function TimeControls({
         value={hourFieldValue}
         onChange={onHourChange}
       />
-      <span className="text-hello-csv-text pb-1.5">:</span>
+      <span className="hc:text-hello-csv-text hc:pb-1.5">:</span>
       <TimeField
         label={t('components.datePicker.minutes')}
         max={59}
@@ -47,7 +47,7 @@ export default function TimeControls({
       />
       {showSeconds && (
         <>
-          <span className="text-hello-csv-text pb-1.5">:</span>
+          <span className="hc:text-hello-csv-text hc:pb-1.5">:</span>
           <TimeField
             label={t('components.datePicker.seconds')}
             max={59}
@@ -57,7 +57,7 @@ export default function TimeControls({
         </>
       )}
       {is12h && (
-        <div className="ring-hello-csv-border-strong ml-1 flex overflow-hidden rounded-md ring-1">
+        <div className="hc:ring-hello-csv-border-strong hc:ml-1 hc:flex hc:overflow-hidden hc:rounded-md hc:ring-1">
           {(['AM', 'PM'] as const).map((m, i) => (
             <button
               key={m}
@@ -65,12 +65,12 @@ export default function TimeControls({
               aria-pressed={meridiem === m}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => onMeridiem(m)}
-              className={`cursor-pointer px-2 py-1 text-sm ${
-                i === 1 ? 'border-hello-csv-border-strong border-l' : ''
+              className={`hc:cursor-pointer hc:px-2 hc:py-1 hc:text-sm ${
+                i === 1 ? 'hc:border-hello-csv-border-strong hc:border-l' : ''
               } ${
                 meridiem === m
-                  ? 'bg-hello-csv-primary text-hello-csv-primary-contrast'
-                  : 'text-hello-csv-text hover:bg-hello-csv-muted'
+                  ? 'hc:bg-hello-csv-primary hc:text-hello-csv-primary-contrast'
+                  : 'hc:text-hello-csv-text hc:hover:bg-hello-csv-muted'
               }`}
             >
               {t(`components.datePicker.${m === 'AM' ? 'am' : 'pm'}`)}
@@ -92,8 +92,8 @@ interface TimeFieldProps {
 
 function TimeField({ label, value, max, min = 0, onChange }: TimeFieldProps) {
   return (
-    <label className="flex flex-col text-xs">
-      <span className="text-hello-csv-text-subtle mb-1">{label}</span>
+    <label className="hc:flex hc:flex-col hc:text-xs">
+      <span className="hc:text-hello-csv-text-subtle hc:mb-1">{label}</span>
       <input
         {...PASSWORD_MANAGER_IGNORE_PROPS}
         type="number"
@@ -102,7 +102,7 @@ function TimeField({ label, value, max, min = 0, onChange }: TimeFieldProps) {
         aria-label={label}
         value={String(value).padStart(2, '0')}
         onInput={(e) => onChange((e.target as HTMLInputElement).value)}
-        className="focus:outline-hello-csv-primary bg-hello-csv-surface text-hello-csv-text outline-hello-csv-border-strong w-14 rounded-md px-2 py-1 text-center text-sm outline-1 -outline-offset-1 focus:outline-2 focus:-outline-offset-2"
+        className="hc:focus:outline-hello-csv-primary hc:bg-hello-csv-surface hc:text-hello-csv-text hc:outline-hello-csv-border-strong hc:w-14 hc:rounded-md hc:px-2 hc:py-1 hc:text-center hc:text-sm hc:outline-1 hc:-outline-offset-1 hc:focus:outline-2 hc:focus:-outline-offset-2"
       />
     </label>
   );
