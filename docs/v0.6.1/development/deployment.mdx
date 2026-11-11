@@ -15,15 +15,17 @@ For minor version release
 - update version in `docs/docs.json` file
 - update directory name of `docs/v{oldVersion}` to `docs/v{newVersion}`
 - make sure to update all references to the old version in the `docs/docs.json` file
+- update links to the old version in the docs pages (`/v{oldVersion}/` → `/v{newVersion}/`), otherwise they break after the rename. Keep text that describes history (e.g. "As of v{oldVersion}") as is
 
 For major version release
 
 - create a new directory in `docs` called `v{newVersion}`
 - copy all files from `docs/v{oldVersion}` to `docs/v{newVersion}`
+- update links in the copied pages from `/v{oldVersion}/` to `/v{newVersion}/`
 - create a new version entry in `docs/docs.json` file
 - write upgrade guide and put it in the docs
 
-4. Update version in `InstallTabs.tsx::no build`, `example-preact/index.html`, `README.md`, `example-preact/src/App.tsx` and `custom-file-loaders.mdx`
+4. Update version in `InstallTabs.tsx::no build`, `example-preact/index.html`, `README.md`, `example-preact/src/App.tsx`, `example-preact/src/components/importers/ExcelImporter.tsx` and `custom-file-loaders.mdx`
 
 5. Verify if `importer/storage.ts:DB_VERSION` needs to be bumped. It should be bumped anytime the release contains any breaking changes to `ImporterState`. If it is true, increment the `DB_VERSION`.
 
