@@ -32,16 +32,16 @@ resorting to `!important` (which would have made the styles hard for you to over
 
 **No changes needed if you:**
 
-- Style the importer with the [`theme`](/v0.6.0/api-reference/importer-props#theme) prop.
+- Style the importer with the [`theme`](/v0.6.1/api-reference/importer-props#theme) prop.
 - Customize colors via the `--hello-csv-color-*` CSS variables
-  (see [Theme Styles](/v0.6.0/customization/theme-styles)) — variable names are unchanged.
+  (see [Theme Styles](/v0.6.1/customization/theme-styles)) — variable names are unchanged.
 - Only render the importer and let it style itself.
 - Use your own Tailwind/CSS classes in your surrounding layout — your classes are untouched.
 
 **Action required only if you:**
 
 - Reference HelloCSV's internal utility classes in a
-  [`customRender`](/v0.6.0/api-reference/common-column-props#customrender) callback (or any
+  [`customRender`](/v0.6.1/api-reference/common-column-props#customrender) callback (or any
   custom cell/component) — for example checking or reusing the cell background classes.
   Add the `hc:` prefix:
 
@@ -65,7 +65,7 @@ resorting to `!important` (which would have made the styles hard for you to over
 
 The async pass that runs after an edit now runs **transformers and then validators** (in
 v0.5.0 transformation happened synchronously and only validation was async). To reflect
-that it's a combined "processing" pass, two transient [`ImporterState`](/v0.6.0/api-reference/importer-state)
+that it's a combined "processing" pass, two transient [`ImporterState`](/v0.6.1/api-reference/importer-state)
 fields were renamed:
 
 | Before (v0.5.0)        | After (v0.6.0)         |
@@ -83,7 +83,7 @@ actions directly, which is uncommon.
 **No changes needed if you:**
 
 - Only read `validationErrors` (unchanged) or don't inspect these fields at all.
-- Rely on [persistence](/v0.6.0/api-reference/importer-props#persistenceconfig) (IndexedDB).
+- Rely on [persistence](/v0.6.1/api-reference/importer-props#persistenceconfig) (IndexedDB).
   **No migration is required** — these fields are transient and optional. A persisted
   v0.5.0 state keeps its old keys harmlessly (nothing reads them), and the new fields
   default to `undefined` (falsy = "not running"), which is the correct resting state.
@@ -91,8 +91,8 @@ actions directly, which is uncommon.
 **Action required only if you:**
 
 - Read `state.validationInProgress` or `state.validationRunId` in
-  [`onStateChanged`](/v0.6.0/api-reference/importer-props#onstatechanged),
-  [`onComplete`](/v0.6.0/api-reference/importer-props#oncomplete), or a custom component
+  [`onStateChanged`](/v0.6.1/api-reference/importer-props#onstatechanged),
+  [`onComplete`](/v0.6.1/api-reference/importer-props#oncomplete), or a custom component
   (e.g. via `useImporterState`). Rename the references:
 
   ```diff
@@ -105,8 +105,8 @@ actions directly, which is uncommon.
 These are fully **opt-in** and require no changes to existing code:
 
 - **Async transformers.** A `custom` `transformFn` may now return a `Promise`
-  (see [Transformers](/v0.6.0/api-reference/transformers)).
+  (see [Transformers](/v0.6.1/api-reference/transformers)).
 - **`runOn: 'change' | 'submit'`** on any validator or transformer — defer slow/costly
   async work (e.g. an LLM call) to the submit pass instead of running it on every edit.
-- **[`maxConcurrentAsyncOperations`](/v0.6.0/api-reference/importer-props#maxconcurrentasyncoperations)**
+- **[`maxConcurrentAsyncOperations`](/v0.6.1/api-reference/importer-props#maxconcurrentasyncoperations)**
   to cap how many async validator/transformer calls run at once.
