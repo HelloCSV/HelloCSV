@@ -19,6 +19,7 @@ export class CustomValidator extends Validator {
 
     this.key = definition.key;
     this.validateFn = definition.validateFn;
+    this.validatesEmptyValues = definition.validatesEmptyValues ?? true;
   }
 
   isValid(fieldValue: ImporterOutputFieldType, row: SheetRow) {
