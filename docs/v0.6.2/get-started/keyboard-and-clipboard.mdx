@@ -39,7 +39,7 @@ shortcuts below. On macOS use <kbd>Cmd</kbd> wherever <kbd>Ctrl</kbd> is listed.
 | <kbd>Escape</kbd> | Cancel the edit |
 | <kbd>Delete</kbd> / <kbd>Backspace</kbd> | Clear the selected cells |
 
-Read-only cells (for example [calculated](/v0.6.1/api-reference/column-types#calculated)
+Read-only cells (for example [calculated](/v0.6.2/api-reference/column-types#calculated)
 columns) can't be edited or cleared.
 
 ## Clipboard & fill
@@ -53,7 +53,7 @@ columns) can't be edited or cleared.
 
 Copy/paste uses tab-separated values, so you can move data between HelloCSV and
 spreadsheet apps like Excel or Google Sheets. Multi-select
-[enum](/v0.6.1/api-reference/column-types#enum) cells are serialized using the
+[enum](/v0.6.2/api-reference/column-types#enum) cells are serialized using the
 column's `delimiter`, so copying and pasting them round-trips correctly.
 
 ## Undo & Redo
@@ -72,4 +72,4 @@ native text undo inside that cell.
 
 History is kept in memory only and is cleared on reload. Both the shortcuts and
 the toolbar buttons are controlled by the `undoRedo`
-[available action](/v0.6.1/api-reference/importer-props#availableactions).
+[available action](/v0.6.2/api-reference/importer-props#availableactions).
