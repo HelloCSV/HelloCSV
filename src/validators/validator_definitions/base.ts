@@ -7,6 +7,9 @@ import {
 export class Validator {
   definition: ImporterValidatorDefinitionBase;
 
+  // Empty cells only reach validators that opt in; presence is `required`'s job.
+  validatesEmptyValues = false;
+
   constructor(definition: ImporterValidatorDefinitionBase) {
     this.definition = definition;
   }

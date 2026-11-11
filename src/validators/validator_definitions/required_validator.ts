@@ -9,6 +9,8 @@ import { Validator } from './base';
 export class RequiredValidator extends Validator {
   when: (row: SheetRow) => boolean;
 
+  validatesEmptyValues = true;
+
   constructor(definition: RequiredValidatorDefinition) {
     super(definition);
     this.when = definition.when ?? (() => true);
