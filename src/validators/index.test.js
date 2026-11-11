@@ -470,3 +470,134 @@ describe('async validators', () => {
     );
   });
 });
+
+describe('empty cells', () => {
+  // `other` keeps every row non-blank, so only the cell under test varies.
+  const validateColumn = (column, rows, options) =>
+    applyValidations(
+      [{ id: 'a', columns: [{ id: 'other' }, { id: 'c', ...column }] }],
+      [{ sheetId: 'a', rows: rows.map((row) => ({ other: 'x', ...row })) }],
+      options
+    ).then((errors) => errors.map((e) => `${e.rowIndex}:${e.message}`));
+
+  const emptyRows = [
+    { c: '' },
+    { c: '   ' },
+    { c: null },
+    { c: undefined },
+    {},
+  ];
+
+  const spy = (seen) => ({
+    validate: 'custom',
+    key: 'spy',
+    validateFn: (value) => {
+      seen.push(value);
+      return null;
+    },
+  });
+
+  it.each([
+    { validate: 'is_integer' },
+    { validate: 'email' },
+    { validate: 'phone_number' },
+    { validate: 'postal_code' },
+    { validate: 'regex_matches', regex: /^a/ },
+    { validate: 'includes', values: ['a'] },
+    { validate: 'multi_includes', values: ['a'] },
+  ])('$validate skips empty cells but flags bad values', async (validator) => {
+    const errors = await validateColumn({ validators: [validator] }, [
+      ...emptyRows,
+      { c: 'bad!' },
+    ]);
+    expect(errors).toEqual([expect.stringMatching(/^5:/)]);
+  });
+
+  it('skips the automatic enum validator on empty cells', async () => {
+    const errors = await validateColumn(
+      { type: 'enum', typeArguments: { values: [{ label: 'A', value: 'a' }] } },
+      [{ c: '' }, {}, { c: 'b' }]
+    );
+    expect(errors).toEqual(['2:validators.includes']);
+  });
+
+  it('does not count empty cells as duplicates', async () => {
+    const errors = await validateColumn(
+      { validators: [{ validate: 'unique' }] },
+      [{ c: '' }, { c: '' }, {}, {}, { c: 'a' }, { c: 'a' }]
+    );
+    expect(errors).toEqual(['5:validators.unique']);
+  });
+
+  it('still validates falsy values that are present', async () => {
+    const errors = await validateColumn(
+      { validators: [{ validate: 'includes', values: ['a'] }] },
+      [{ c: 0 }, { c: false }]
+    );
+    expect(errors).toEqual(['0:validators.includes', '1:validators.includes']);
+  });
+
+  it('required flags every kind of empty cell', async () => {
+    const errors = await validateColumn(
+      { validators: [{ validate: 'required' }] },
+      emptyRows
+    );
+    expect(errors).toEqual(
+      [0, 1, 2, 3, 4].map((i) => `${i}:validators.required`)
+    );
+  });
+
+  it('runs only required on an empty cell when its condition holds', async () => {
+    const errors = await validateColumn(
+      {
+        validators: [
+          { validate: 'required', when: (row) => row.other === 'yes' },
+          { validate: 'email' },
+        ],
+      },
+      [{ other: 'yes' }, { other: 'no' }]
+    );
+    expect(errors).toEqual(['0:validators.required']);
+  });
+
+  it('passes empty and missing cells to custom validators', async () => {
+    const seen = [];
+    await validateColumn({ validators: [spy(seen)] }, [{ c: '' }, {}]);
+    expect(seen).toEqual(['', undefined]);
+  });
+
+  it('lets custom validators opt out of empty cells', async () => {
+    const seen = [];
+    await validateColumn(
+      { validators: [{ ...spy(seen), validatesEmptyValues: false }] },
+      [...emptyRows, { c: 'a' }]
+    );
+    expect(seen).toEqual(['a']);
+  });
+
+  it('skips rows with no data entirely', async () => {
+    const seen = [];
+    const errors = await applyValidations(
+      [
+        {
+          id: 'a',
+          columns: [
+            { id: 'c', validators: [{ validate: 'required' }, spy(seen)] },
+          ],
+        },
+      ],
+      [{ sheetId: 'a', rows: [{}, {}] }]
+    );
+    expect(errors).toEqual([]);
+    expect(seen).toEqual([]);
+  });
+
+  it('applies the same rule to submit-phase validators', async () => {
+    const errors = await validateColumn(
+      { validators: [{ validate: 'email', runOn: 'submit' }] },
+      [{ c: '' }, { c: 'bad!' }],
+      { phase: 'submit' }
+    );
+    expect(errors).toEqual(['1:validators.regex']);
+  });
+});

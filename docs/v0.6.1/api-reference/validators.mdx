@@ -4,6 +4,21 @@ title: 'Validators'
 
 This section describes the available validation rules.
 
+## Empty values
+
+A cell is empty when it is blank, contains only whitespace, is `null`, is an
+empty multi-select, or has no value at all (for example, its column wasn't
+mapped). Empty cells are only checked by [`required`](#required) and
+[`custom`](#custom); every other validator, including the automatic ones for
+`enum`, `reference`, `boolean`, and date/time columns, skips them. To reject
+empty values, add `required`.
+
+A `custom` `validateFn` receives empty cells as they are (`''`, whitespace,
+`null`, `[]`, or `undefined`), so it can apply its own rules. If it throws, the
+cell is marked invalid, so either guard against empty values or set
+`validatesEmptyValues: false` to skip them. Rows that were added but never
+edited are not validated at all.
+
 ## Async validators & run timing
 
 Any validator may be **synchronous or asynchronous**. A `custom` `validateFn`
@@ -22,13 +37,14 @@ appear in the grid:
   validate: 'custom',
   key: 'verify_with_llm',
   runOn: 'submit', // deferred — runs once on submit, not on every edit
+  validatesEmptyValues: false, // don't call the LLM for empty cells
   validateFn: async (value, row) => verifyWithLlm(value, row),
 }
 ```
 
 Async calls are throttled so a large sheet can't fire one request per cell at
 once; tune the cap with
-[`maxConcurrentAsyncOperations`](/v0.6.0/api-reference/importer-props). If an
+[`maxConcurrentAsyncOperations`](/v0.6.1/api-reference/importer-props). If an
 async validator **rejects** (e.g. a failed network/LLM call), the cell is marked
 invalid with the validator's `error` message (or a default) rather than silently
 passing.
@@ -60,7 +76,8 @@ Ensures the value is unique across rows.
 
 **Additional:**  
 Accepts an optional `error` message. Set `caseInsensitive` to `true` to compare
-string values case-insensitively.
+string values case-insensitively. Empty cells are skipped, so several blank rows
+don't count as duplicates.
 
 ---
 
@@ -102,7 +119,7 @@ that couldn't be coerced to a boolean (i.e. it matched neither the column's true
 nor false tokens) fails.
 
 **Additional:**  
-Added **automatically** to every [boolean](/v0.6.0/api-reference/column-types#boolean)
+Added **automatically** to every [boolean](/v0.6.1/api-reference/column-types#boolean)
 column, so you normally don't configure it. You can also add it explicitly to
 provide a custom `error` message.
 
@@ -116,9 +133,9 @@ configured range. Empty values pass; a value that couldn't be parsed against the
 column's format (or the ISO fallback) fails.
 
 **Additional:**  
-Added **automatically** to every [date](/v0.6.0/api-reference/column-types#date),
-[datetime](/v0.6.0/api-reference/column-types#datetime), and
-[time](/v0.6.0/api-reference/column-types#time) column, using that column's
+Added **automatically** to every [date](/v0.6.1/api-reference/column-types#date),
+[datetime](/v0.6.1/api-reference/column-types#datetime), and
+[time](/v0.6.1/api-reference/column-types#time) column, using that column's
 `outputFormat`, `displayFormat`, `min`, and `max`, so you normally don't
 configure it. Out-of-range values report a distinct error. You can also add it
 explicitly to provide a custom `error` message.
@@ -180,6 +197,7 @@ Custom validation function.
 
 **Additional:**  
  Requires a `key` and a `validateFn` that returns an error message if validation fails. The `validateFn` may be synchronous or asynchronous — it may return a `string | null | undefined` or a `Promise<string | null | undefined>`.
+Set `validatesEmptyValues: false` to skip empty cells instead of passing them to `validateFn` (defaults to `true`, see [Empty values](#empty-values)).
 
 Example (async):
 

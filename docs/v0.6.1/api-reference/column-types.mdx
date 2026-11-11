@@ -30,7 +30,7 @@ Boolean column.
 - `trueLabel` / `falseLabel` are the labels shown in the dropdown editor and in label-mode CSV export. Defaults are `Yes` and `No`.
 - On import, cell text is coerced to a boolean **case-insensitively**. By default, `true`, `1`, `yes`, `y` become `true` and `false`, `0`, `no`, `n` become `false`. The configured `trueLabel` / `falseLabel` are always accepted too.
 - `trueValues` / `falseValues` override the accepted tokens. When provided they **replace** the built-in defaults (the label still counts).
-- A value that matches neither set is kept as-is and flagged by the automatic [boolean](/v0.6.0/api-reference/validators#boolean) validator.
+- A value that matches neither set is kept as-is and flagged by the automatic [boolean](/v0.6.1/api-reference/validators#boolean) validator.
 
 **Example:**
 ```ts
@@ -61,7 +61,7 @@ A calendar date, edited with a calendar picker.
 
 **Notes:**
 - Values are **stored and returned as normalized strings** in `outputFormat`. `displayFormat` controls how the value is shown in the grid cell and the editor input. Both use [dayjs tokens](https://day.js.org/docs/en/display/format).
-- On import, cell text is parsed against `outputFormat`, `displayFormat`, and the ISO fallback. A parseable value is normalized to `outputFormat`; anything else is kept as-is and flagged by the automatic [date](/v0.6.0/api-reference/validators#date) validator.
+- On import, cell text is parsed against `outputFormat`, `displayFormat`, and the ISO fallback. A parseable value is normalized to `outputFormat`; anything else is kept as-is and flagged by the automatic [date](/v0.6.1/api-reference/validators#date) validator.
 - `min` / `max` bound the allowed range: out-of-range values are flagged by the validator, and out-of-range days are disabled in the picker (`date` / `datetime`). For `datetime` / `time` the comparison includes the time portion.
 - **`min` / `max` format:** they're parsed leniently — accepted in **ISO** (`YYYY-MM-DD`, `YYYY-MM-DDTHH:mm:ss`, `HH:mm:ss`), in the column's `outputFormat` or `displayFormat`, or in a default format. **ISO is always accepted even if you override `outputFormat` / `displayFormat`**, so it's the recommended way to specify bounds. A bound that matches none of these is silently ignored (treated as no bound).
 

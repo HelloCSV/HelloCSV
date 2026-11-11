@@ -111,6 +111,7 @@ export interface CustomValidatorDefinition
     fieldValue: ImporterOutputFieldType | undefined,
     row: SheetRow
   ) => ImporterValidatorOutput;
+  validatesEmptyValues?: boolean;
 }
 
 export interface ApplyValidationsOptions {
