@@ -286,6 +286,27 @@ describe('SheetDataEditor keyboard grid', () => {
     expect(tdOf(2, 0).querySelector('.hc\\:top-full')).toBeNull();
   });
 
+  it('opens the tooltip downward when the only row is also the last', () => {
+    const { cellAt } = setup(
+      {
+        sheetValidationErrors: [
+          {
+            sheetId: 'people',
+            rowIndex: 0,
+            columnId: 'name',
+            message: 'validations.required',
+          },
+        ],
+      },
+      sheetDefinition,
+      { sheetId: 'people', rows: [{ name: '', city: 'NY' }] }
+    );
+    // Opening upward would put the tooltip under the sticky header.
+    const td = cellAt(0, 0).closest('td')!;
+    expect(td.querySelector('.hc\\:top-full')).not.toBeNull();
+    expect(td.querySelector('.hc\\:bottom-full')).toBeNull();
+  });
+
   it('clears the selection when clicking outside the grid', () => {
     const { cellAt } = setup();
     fireEvent.click(cellAt(0, 0));

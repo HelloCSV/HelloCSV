@@ -9,7 +9,7 @@ page decides.
 
 ## Enabling dark mode
 
-Pass `dark` to the [`theme`](/v0.6.0/api-reference/importer-props#theme) prop:
+Pass `dark` to the [`theme`](/v0.6.2/api-reference/importer-props#theme) prop:
 
 ```tsx
 <Importer theme="dark" sheets={...} />
@@ -42,7 +42,7 @@ const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 ## How it works
 
 The dark theme simply reassigns the same CSS variables documented in
-[Theme Styles](/v0.6.0/customization/theme-styles) — both the accent colors and
+[Theme Styles](/v0.6.2/customization/theme-styles) — both the accent colors and
 the neutral surface/text/border tokens — so every part of the importer (including
 portalled dropdowns, tooltips, and modals) adapts automatically.
 
@@ -62,5 +62,5 @@ in your own CSS:
 }
 ```
 
-See [Theme Styles](/v0.6.0/customization/theme-styles) for the full list of
+See [Theme Styles](/v0.6.2/customization/theme-styles) for the full list of
 available tokens.

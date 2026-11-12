@@ -1,4 +1,5 @@
 import { hasData, eachWithObject } from '../utils/functional';
+import { isEmptyCell } from '../utils';
 import { mapWithConcurrency } from '../utils/concurrency';
 import { DEFAULT_MAX_CONCURRENT_ASYNC_OPERATIONS } from '../constants';
 import {
@@ -30,19 +31,14 @@ interface ValidationTask {
   validator: Validator;
 }
 
-export function fieldIsRequired(
-  columnDefinition: SheetColumnDefinition,
-  { skipConditionCheck }: { skipConditionCheck?: boolean } = {}
-) {
+export function fieldIsRequired(columnDefinition: SheetColumnDefinition) {
   if (columnDefinition.validators && columnDefinition.validators.length > 0) {
     const isRequired = columnDefinition.validators.find(
       (v) => v.validate === 'required'
     );
     return (
       isRequired != null &&
-      (skipConditionCheck
-        ? true
-        : (isRequired as RequiredValidatorDefinition).when == null)
+      (isRequired as RequiredValidatorDefinition).when == null
     );
   }
   return false;
@@ -152,16 +148,14 @@ async function validateSheet(
         return;
       }
 
-      if (
-        !(columnDefinition.id in row) &&
-        !fieldIsRequired(columnDefinition, { skipConditionCheck: true })
-      ) {
-        return;
-      }
-
       const value = row[columnDefinition.id];
+      const isEmpty = isEmptyCell(value);
 
       validators.forEach((validator) => {
+        if (isEmpty && !validator.validatesEmptyValues) {
+          return;
+        }
+
         tasks.push({
           columnId: columnDefinition.id,
           rowIndex,
