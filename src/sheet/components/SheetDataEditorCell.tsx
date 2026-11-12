@@ -448,8 +448,11 @@ export default function SheetDataEditorCell({
         focusable={false}
         variant={errorsText ? 'error' : 'info'}
         // Open upward on the last row so the popover isn't clipped by the
-        // bottom of the scroll container.
-        placement={coord.row >= gridDims.rowCount - 1 ? 'top' : 'bottom'}
+        // bottom of the scroll container, unless it's also the first row:
+        // there the popover would sit under the sticky header.
+        placement={
+          coord.row > 0 && coord.row >= gridDims.rowCount - 1 ? 'top' : 'bottom'
+        }
         tooltipText={
           errorsText ? errorsText : readOnly ? t('sheet.readOnly') : ''
         }
