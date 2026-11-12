@@ -35,4 +35,4 @@ For major version release
 
 8. Create a new release in Github - https://github.com/HelloCSV/HelloCSV/releases. Remember about creating a tag (`v{x.y.z}`) and writing release notes.
 
-9. Merge `main` to `production` branch - this would trigger docs deployment to Mintlify
+9. Merge `main` to `production` branch with a merge commit (not squash) - this would trigger docs deployment to Mintlify. Squashing drops `main`'s history from `production`, which makes the next release conflict
