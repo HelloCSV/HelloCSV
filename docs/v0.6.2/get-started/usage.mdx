@@ -195,7 +195,7 @@ import 'hello-csv/preact/index.css';
 ```jsx
 import { renderImporter } from 'hello-csv/bundled';
 
-renderImporter(document.querySelector('#app'), {
+const importer = renderImporter(document.querySelector('#app'), {
   sheets: [
     {
       id: 'employees',
@@ -217,4 +217,11 @@ renderImporter(document.querySelector('#app'), {
     },
   ],
 });
+
+// Later, e.g. when the page that shows it goes away:
+importer.unmount();
 ```
+
+`renderImporter` returns the importer: `render(props)` re-renders it with new props and keeps its state, and
+`unmount()` removes it, its listeners and the tooltips and dialogs it renders into `document.body`. The element can
+then be rendered into again.
