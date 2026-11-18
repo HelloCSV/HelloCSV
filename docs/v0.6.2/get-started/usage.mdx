@@ -222,6 +222,6 @@ const importer = renderImporter(document.querySelector('#app'), {
 importer.unmount();
 ```
 
-`renderImporter` returns the importer: `render(props)` re-renders it with new props and keeps its state, and
-`unmount()` removes it, its listeners and the tooltips and dialogs it renders into `document.body`. The element can
-then be rendered into again.
+`renderImporter` returns the importer: `render(props)` re-renders it with new props and keeps its state (unless the
+sheet or column ids change, in which case it starts fresh for the new sheets), and `unmount()` removes it, its
+listeners and the tooltips and dialogs it renders into `document.body`. The element can then be rendered into again.

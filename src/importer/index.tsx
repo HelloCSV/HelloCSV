@@ -273,9 +273,17 @@ export default function Importer(props: ImporterDefinition) {
     availableActions: props.availableActions ?? [...availableActionList],
   };
 
+  const sheetsKey = JSON.stringify(
+    props.sheets.map((sheet) => [
+      sheet.id,
+      sheet.columns.map((column) => column.id),
+    ])
+  );
+
   return (
     <ImporterDefinitionProvider importerDefintion={propsWithDefaults}>
       <ReducerProvider
+        key={sheetsKey}
         sheets={propsWithDefaults.sheets}
         persistenceConfig={propsWithDefaults.persistenceConfig}
         initialState={propsWithDefaults.initialState}
